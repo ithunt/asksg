@@ -3,29 +3,29 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Twilio;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 privileged aspect Twilio_Roo_Json {
-    
+
     public String Twilio.toJson() {
         return new JSONSerializer().exclude("*.class").serialize(this);
     }
-    
+
     public static Twilio Twilio.fromJsonToTwilio(String json) {
         return new JSONDeserializer<Twilio>().use(null, Twilio.class).deserialize(json);
     }
-    
+
     public static String Twilio.toJsonArray(Collection<Twilio> collection) {
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
-    
+
     public static Collection<Twilio> Twilio.fromJsonArrayToTwilios(String json) {
         return new JSONDeserializer<List<Twilio>>().use(null, ArrayList.class).use("values", Twilio.class).deserialize(json);
     }
-    
+
 }

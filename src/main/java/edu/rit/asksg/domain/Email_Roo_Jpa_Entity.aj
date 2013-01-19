@@ -3,11 +3,10 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Email;
 import javax.persistence.Entity;
 
 privileged aspect Email_Roo_Jpa_Entity {
-    
-    declare @type: Email: @Entity;
-    
+
+    declare @type: Email:@Entity;
+
 }

@@ -3,29 +3,29 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Email;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 privileged aspect Email_Roo_Json {
-    
+
     public String Email.toJson() {
         return new JSONSerializer().exclude("*.class").serialize(this);
     }
-    
+
     public static Email Email.fromJsonToEmail(String json) {
         return new JSONDeserializer<Email>().use(null, Email.class).deserialize(json);
     }
-    
+
     public static String Email.toJsonArray(Collection<Email> collection) {
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
-    
+
     public static Collection<Email> Email.fromJsonArrayToEmails(String json) {
         return new JSONDeserializer<List<Email>>().use(null, ArrayList.class).use("values", Email.class).deserialize(json);
     }
-    
+
 }

@@ -3,35 +3,34 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Conversation;
-import edu.rit.asksg.domain.Message;
-import java.util.Set;
 import org.joda.time.LocalDateTime;
 
+import java.util.Set;
+
 privileged aspect Conversation_Roo_JavaBean {
-    
+
     public Set<Message> Conversation.getMessages() {
         return this.messages;
     }
-    
+
     public void Conversation.setMessages(Set<Message> messages) {
         this.messages = messages;
     }
-    
+
     public LocalDateTime Conversation.getCreated() {
         return this.created;
     }
-    
+
     public void Conversation.setCreated(LocalDateTime created) {
         this.created = created;
     }
-    
+
     public LocalDateTime Conversation.getModified() {
         return this.modified;
     }
-    
+
     public void Conversation.setModified(LocalDateTime modified) {
         this.modified = modified;
     }
-    
+
 }

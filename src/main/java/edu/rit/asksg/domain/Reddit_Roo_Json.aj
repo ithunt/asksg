@@ -3,29 +3,29 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Reddit;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 privileged aspect Reddit_Roo_Json {
-    
+
     public String Reddit.toJson() {
         return new JSONSerializer().exclude("*.class").serialize(this);
     }
-    
+
     public static Reddit Reddit.fromJsonToReddit(String json) {
         return new JSONDeserializer<Reddit>().use(null, Reddit.class).deserialize(json);
     }
-    
+
     public static String Reddit.toJsonArray(Collection<Reddit> collection) {
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
-    
+
     public static Collection<Reddit> Reddit.fromJsonArrayToReddits(String json) {
         return new JSONDeserializer<List<Reddit>>().use(null, ArrayList.class).use("values", Reddit.class).deserialize(json);
     }
-    
+
 }

@@ -3,11 +3,10 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Twitter;
 import javax.persistence.Entity;
 
 privileged aspect Twitter_Roo_Jpa_Entity {
-    
-    declare @type: Twitter: @Entity;
-    
+
+    declare @type: Twitter:@Entity;
+
 }

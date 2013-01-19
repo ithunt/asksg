@@ -3,41 +3,35 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Analytics;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 privileged aspect Analytics_Roo_Jpa_Entity {
-    
-    declare @type: Analytics: @Entity;
-    
+
+    declare @type: Analytics:@Entity;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long Analytics.id;
-    
+
     @Version
     @Column(name = "version")
     private Integer Analytics.version;
-    
+
     public Long Analytics.getId() {
         return this.id;
     }
-    
+
     public void Analytics.setId(Long id) {
         this.id = id;
     }
-    
+
     public Integer Analytics.getVersion() {
         return this.version;
     }
-    
+
     public void Analytics.setVersion(Integer version) {
         this.version = version;
     }
-    
+
 }

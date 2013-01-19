@@ -3,14 +3,13 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Twilio;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 privileged aspect Twilio_Roo_ToString {
-    
+
     public String Twilio.toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
-    
+
 }

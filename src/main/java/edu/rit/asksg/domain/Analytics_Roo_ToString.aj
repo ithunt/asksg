@@ -3,14 +3,13 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Analytics;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 privileged aspect Analytics_Roo_ToString {
-    
+
     public String Analytics.toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
-    
+
 }

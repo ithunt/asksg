@@ -3,14 +3,13 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Service;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 privileged aspect Service_Roo_ToString {
-    
+
     public String Service.toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
-    
+
 }

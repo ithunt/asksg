@@ -3,18 +3,14 @@
 
 package edu.rit.asksg.repository;
 
-import edu.rit.asksg.domain.Conversation;
-import edu.rit.asksg.repository.ConversationRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 privileged aspect ConversationRepository_Roo_Jpa_Repository {
-    
-    declare parents: ConversationRepository extends JpaRepository<Conversation, Long>;
-    
-    declare parents: ConversationRepository extends JpaSpecificationExecutor<Conversation>;
-    
-    declare @type: ConversationRepository: @Repository;
-    
+
+    declare parents:ConversationRepository extends JpaRepository<Conversation,Long>;
+
+    declare parents:ConversationRepository extends JpaSpecificationExecutor<Conversation>;
+
+    declare @type: ConversationRepository:@Repository;
+
 }

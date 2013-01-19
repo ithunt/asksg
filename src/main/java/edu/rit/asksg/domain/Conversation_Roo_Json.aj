@@ -3,29 +3,29 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Conversation;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 privileged aspect Conversation_Roo_Json {
-    
+
     public String Conversation.toJson() {
         return new JSONSerializer().exclude("*.class").serialize(this);
     }
-    
+
     public static Conversation Conversation.fromJsonToConversation(String json) {
         return new JSONDeserializer<Conversation>().use(null, Conversation.class).deserialize(json);
     }
-    
+
     public static String Conversation.toJsonArray(Collection<Conversation> collection) {
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
-    
+
     public static Collection<Conversation> Conversation.fromJsonArrayToConversations(String json) {
         return new JSONDeserializer<List<Conversation>>().use(null, ArrayList.class).use("values", Conversation.class).deserialize(json);
     }
-    
+
 }

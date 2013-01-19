@@ -3,11 +3,10 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Reddit;
 import javax.persistence.Entity;
 
 privileged aspect Reddit_Roo_Jpa_Entity {
-    
-    declare @type: Reddit: @Entity;
-    
+
+    declare @type: Reddit:@Entity;
+
 }

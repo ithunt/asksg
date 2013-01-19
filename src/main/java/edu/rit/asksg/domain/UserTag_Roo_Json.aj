@@ -3,29 +3,29 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.UserTag;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 privileged aspect UserTag_Roo_Json {
-    
+
     public String UserTag.toJson() {
         return new JSONSerializer().exclude("*.class").serialize(this);
     }
-    
+
     public static UserTag UserTag.fromJsonToUserTag(String json) {
         return new JSONDeserializer<UserTag>().use(null, UserTag.class).deserialize(json);
     }
-    
+
     public static String UserTag.toJsonArray(Collection<UserTag> collection) {
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
-    
+
     public static Collection<UserTag> UserTag.fromJsonArrayToUserTags(String json) {
         return new JSONDeserializer<List<UserTag>>().use(null, ArrayList.class).use("values", UserTag.class).deserialize(json);
     }
-    
+
 }

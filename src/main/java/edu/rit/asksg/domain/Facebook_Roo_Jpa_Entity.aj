@@ -3,11 +3,10 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Facebook;
 import javax.persistence.Entity;
 
 privileged aspect Facebook_Roo_Jpa_Entity {
-    
-    declare @type: Facebook: @Entity;
-    
+
+    declare @type: Facebook:@Entity;
+
 }

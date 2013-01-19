@@ -3,29 +3,29 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Tag;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 privileged aspect Tag_Roo_Json {
-    
+
     public String Tag.toJson() {
         return new JSONSerializer().exclude("*.class").serialize(this);
     }
-    
+
     public static Tag Tag.fromJsonToTag(String json) {
         return new JSONDeserializer<Tag>().use(null, Tag.class).deserialize(json);
     }
-    
+
     public static String Tag.toJsonArray(Collection<Tag> collection) {
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
-    
+
     public static Collection<Tag> Tag.fromJsonArrayToTags(String json) {
         return new JSONDeserializer<List<Tag>>().use(null, ArrayList.class).use("values", Tag.class).deserialize(json);
     }
-    
+
 }

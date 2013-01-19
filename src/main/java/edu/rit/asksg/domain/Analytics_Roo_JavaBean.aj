@@ -3,25 +3,22 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Analytics;
-import edu.rit.asksg.domain.Message;
-
 privileged aspect Analytics_Roo_JavaBean {
-    
+
     public Double Analytics.getSentimentScore() {
         return this.sentimentScore;
     }
-    
+
     public void Analytics.setSentimentScore(Double sentimentScore) {
         this.sentimentScore = sentimentScore;
     }
-    
+
     public Message Analytics.getMessage() {
         return this.message;
     }
-    
+
     public void Analytics.setMessage(Message message) {
         this.message = message;
     }
-    
+
 }

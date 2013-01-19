@@ -5,23 +5,19 @@ package edu.rit.asksg.web;
 
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.repository.MessageRepository;
-import edu.rit.asksg.web.MessageController;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 privileged aspect MessageController_Roo_Controller_Json {
-    
+
     @Autowired
     MessageRepository MessageController.messageRepository;
-    
+
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<String> MessageController.showJson(@PathVariable("id") Long id) {
@@ -33,7 +29,7 @@ privileged aspect MessageController_Roo_Controller_Json {
         }
         return new ResponseEntity<String>(message.toJson(), headers, HttpStatus.OK);
     }
-    
+
     @RequestMapping(headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<String> MessageController.listJson() {
@@ -42,7 +38,7 @@ privileged aspect MessageController_Roo_Controller_Json {
         List<Message> result = messageRepository.findAll();
         return new ResponseEntity<String>(Message.toJsonArray(result), headers, HttpStatus.OK);
     }
-    
+
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> MessageController.createFromJson(@RequestBody String json) {
         Message message = Message.fromJsonToMessage(json);
@@ -51,17 +47,17 @@ privileged aspect MessageController_Roo_Controller_Json {
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
-    
+
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> MessageController.createFromJsonArray(@RequestBody String json) {
-        for (Message message: Message.fromJsonArrayToMessages(json)) {
+        for (Message message : Message.fromJsonArrayToMessages(json)) {
             messageRepository.save(message);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
-    
+
     @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
     public ResponseEntity<String> MessageController.updateFromJson(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
@@ -72,19 +68,19 @@ privileged aspect MessageController_Roo_Controller_Json {
         }
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
-    
+
     @RequestMapping(value = "/jsonArray", method = RequestMethod.PUT, headers = "Accept=application/json")
     public ResponseEntity<String> MessageController.updateFromJsonArray(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        for (Message message: Message.fromJsonArrayToMessages(json)) {
+        for (Message message : Message.fromJsonArrayToMessages(json)) {
             if (messageRepository.save(message) == null) {
                 return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
             }
         }
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
-    
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<String> MessageController.deleteFromJson(@PathVariable("id") Long id) {
         Message message = messageRepository.findOne(id);
@@ -96,5 +92,5 @@ privileged aspect MessageController_Roo_Controller_Json {
         messageRepository.delete(message);
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
-    
+
 }

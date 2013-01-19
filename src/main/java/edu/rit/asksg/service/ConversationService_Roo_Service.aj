@@ -4,16 +4,16 @@
 package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.Conversation;
-import edu.rit.asksg.service.ConversationService;
+
 import java.util.List;
 
 privileged aspect ConversationService_Roo_Service {
-    
-    public abstract long ConversationService.countAllConversations();    
-    public abstract void ConversationService.deleteConversation(Conversation conversation);    
-    public abstract Conversation ConversationService.findConversation(Long id);    
-    public abstract List<Conversation> ConversationService.findAllConversations();    
-    public abstract List<Conversation> ConversationService.findConversationEntries(int firstResult, int maxResults);    
-    public abstract void ConversationService.saveConversation(Conversation conversation);    
-    public abstract Conversation ConversationService.updateConversation(Conversation conversation);    
+
+    public abstract long ConversationService.countAllConversations();
+    public abstract void ConversationService.deleteConversation(Conversation conversation);
+    public abstract Conversation ConversationService.findConversation(Long id);
+    public abstract List<Conversation> ConversationService.findAllConversations();
+    public abstract List<Conversation> ConversationService.findConversationEntries(int firstResult, int maxResults);
+    public abstract void ConversationService.saveConversation(Conversation conversation);
+    public abstract Conversation ConversationService.updateConversation(Conversation conversation);
 }

@@ -3,41 +3,35 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Message;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 privileged aspect Message_Roo_Jpa_Entity {
-    
-    declare @type: Message: @Entity;
-    
+
+    declare @type: Message:@Entity;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long Message.id;
-    
+
     @Version
     @Column(name = "version")
     private Integer Message.version;
-    
+
     public Long Message.getId() {
         return this.id;
     }
-    
+
     public void Message.setId(Long id) {
         this.id = id;
     }
-    
+
     public Integer Message.getVersion() {
         return this.version;
     }
-    
+
     public void Message.setVersion(Integer version) {
         this.version = version;
     }
-    
+
 }

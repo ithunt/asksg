@@ -5,43 +5,43 @@ package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.repository.ConversationRepository;
-import edu.rit.asksg.service.ConversationServiceImpl;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 privileged aspect ConversationServiceImpl_Roo_Service {
-    
-    declare @type: ConversationServiceImpl: @Service;
-    
-    declare @type: ConversationServiceImpl: @Transactional;
-    
+
+    declare @type: ConversationServiceImpl:@Service;
+
+    declare @type: ConversationServiceImpl:@Transactional;
+
     @Autowired
     ConversationRepository ConversationServiceImpl.conversationRepository;
-    
+
     public long ConversationServiceImpl.countAllConversations() {
         return conversationRepository.count();
     }
-    
+
     public void ConversationServiceImpl.deleteConversation(Conversation conversation) {
         conversationRepository.delete(conversation);
     }
-    
+
     public Conversation ConversationServiceImpl.findConversation(Long id) {
         return conversationRepository.findOne(id);
     }
-    
+
     public List<Conversation> ConversationServiceImpl.findAllConversations() {
         return conversationRepository.findAll();
     }
-    
+
     public List<Conversation> ConversationServiceImpl.findConversationEntries(int firstResult, int maxResults) {
         return conversationRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
-    
+
     public Conversation ConversationServiceImpl.updateConversation(Conversation conversation) {
         return conversationRepository.save(conversation);
     }
-    
+
 }

@@ -3,18 +3,14 @@
 
 package edu.rit.asksg.repository;
 
-import edu.rit.asksg.domain.Message;
-import edu.rit.asksg.repository.MessageRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 privileged aspect MessageRepository_Roo_Jpa_Repository {
-    
-    declare parents: MessageRepository extends JpaRepository<Message, Long>;
-    
-    declare parents: MessageRepository extends JpaSpecificationExecutor<Message>;
-    
-    declare @type: MessageRepository: @Repository;
-    
+
+    declare parents:MessageRepository extends JpaRepository<Message,Long>;
+
+    declare parents:MessageRepository extends JpaSpecificationExecutor<Message>;
+
+    declare @type: MessageRepository:@Repository;
+
 }

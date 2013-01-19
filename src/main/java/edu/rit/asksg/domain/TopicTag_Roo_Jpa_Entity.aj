@@ -3,11 +3,10 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.TopicTag;
 import javax.persistence.Entity;
 
 privileged aspect TopicTag_Roo_Jpa_Entity {
-    
-    declare @type: TopicTag: @Entity;
-    
+
+    declare @type: TopicTag:@Entity;
+
 }

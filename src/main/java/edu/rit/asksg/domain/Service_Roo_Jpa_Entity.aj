@@ -3,41 +3,35 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Service;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 privileged aspect Service_Roo_Jpa_Entity {
-    
-    declare @type: Service: @MappedSuperclass;
-    
+
+    declare @type: Service:@MappedSuperclass;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long Service.id;
-    
+
     @Version
     @Column(name = "version")
     private Integer Service.version;
-    
+
     public Long Service.getId() {
         return this.id;
     }
-    
+
     public void Service.setId(Long id) {
         this.id = id;
     }
-    
+
     public Integer Service.getVersion() {
         return this.version;
     }
-    
+
     public void Service.setVersion(Integer version) {
         this.version = version;
     }
-    
+
 }
