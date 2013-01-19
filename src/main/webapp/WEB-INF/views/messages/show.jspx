@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_edu_rit_asksg_domain_Message" object="${message}" path="/messages" z="sgjTbXPj8Xnc9ejXQd93DrczL/s=">
+        <field:display field="author" id="s_edu_rit_asksg_domain_Message_author" object="${message}" z="VVYuaBFIosLNy+dSFfIqSKYeauM="/>
+        <field:display field="content" id="s_edu_rit_asksg_domain_Message_content" object="${message}" z="1SXtvSHSXN5e6agqKwtwb6bt/d4="/>
+        <field:display field="created" id="s_edu_rit_asksg_domain_Message_created" object="${message}" z="kAlAY5moCjv8L3VAjHRBMldW26A="/>
+        <field:display field="modified" id="s_edu_rit_asksg_domain_Message_modified" object="${message}" z="GHwqykfFBbfOM3UTmhrriyUQRzk="/>
+        <field:display field="analytics" id="s_edu_rit_asksg_domain_Message_analytics" object="${message}" z="twAOJ76YgDnn0qb/utfevimd7/A="/>
+    </page:show>
+</div>

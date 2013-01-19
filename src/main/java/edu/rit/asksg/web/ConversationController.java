@@ -18,36 +18,22 @@ import java.util.Set;
 @RequestMapping("/conversations")
 public class ConversationController {
 
-
     @RequestMapping(value = "/seed", method = RequestMethod.GET)
     public ResponseEntity<String> seed() {
-
-
         Conversation c1 = new Conversation();
         Message m1 = new Message();
-
         m1.setAuthor("Plato");
         m1.setContent("The unexamined life is not worth livng for man");
-
         Message m2 = new Message();
         m2.setAuthor("Murphy");
         m2.setContent("Anything that can go wrong will");
-
         Set<Message> messages = new HashSet<Message>();
         messages.add(m1);
         messages.add(m2);
-
         c1.setMessages(messages);
-
-
         conversationService.saveConversation(c1);
-
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "text/plain");
         return new ResponseEntity<String>("Your seed has been spread", headers, HttpStatus.OK);
-
     }
-
-
 }

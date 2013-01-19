@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_edu_rit_asksg_domain_Message" items="${messages}" z="cNgRTh79H2AoNopfu1uDwt7mbPw=">
+        <table:table data="${messages}" id="l_edu_rit_asksg_domain_Message" path="/messages" z="zadtfa1fF1l8lkOG1aT71o7ivfo=">
+            <table:column id="c_edu_rit_asksg_domain_Message_author" property="author" z="qFFIQTH8wsWNXhlPYQa3/zIlmEA="/>
+            <table:column id="c_edu_rit_asksg_domain_Message_content" property="content" z="tcXH6iumvkDzHqW8/jJTl4zldz4="/>
+            <table:column id="c_edu_rit_asksg_domain_Message_created" property="created" z="jftDahzk0eIl/N7OhbwDICUJJsA="/>
+            <table:column id="c_edu_rit_asksg_domain_Message_modified" property="modified" z="mlw7ycLBI07XK520xIg8NHuMTss="/>
+            <table:column id="c_edu_rit_asksg_domain_Message_analytics" property="analytics" z="MNOgigGlFMsktN2JeRdDdv1JdrU="/>
+        </table:table>
+    </page:list>
+</div>
