@@ -1,0 +1,15 @@
+/**
+ * jScroll jQuery Plugin v1.2
+ * http://jscroll.com/
+ * 
+ * Copyright 2011, Philip Klauzinski
+ * http://klauzinski.com/
+ * Dual licensed under the MIT and GPL Version 2 licenses.
+ * http://jscroll.com/#license
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ * 
+ * @author Philip Klauzinski
+ * @requires jQuery v1.4.3+
+ */
+(function(b){b.jscroll={defaults:{debug:false,autoTrigger:true,loadingHtml:"<small>Loading...</small>",padding:0,nextSelector:"a:last",contentSelector:""}};var a=function(c,o){var d=c.data("jscroll"),h=(typeof o==="function")?{callback:o}:o,m=b.extend({},b.jscroll.defaults,h,d||{}),i=c.find(m.nextSelector).first();c.data("jscroll",b.extend({},d,{initialized:true,waiting:false,nextHref:i.attr("href")}));c.contents().wrapAll('<div class="jscroll-inner" />');n();if(m.autoTrigger){g(i);c.bind("scroll.jscroll",function(){return f()})}else{i.bind("click.jscroll",function(){g(i);j();return false})}function n(){var q=b(m.loadingHtml).filter("img").attr("src");if(q){var p=new Image();p.src=q}}function g(p){var q=p.parent().not(".jscroll-inner").addClass("jscroll-next-parent").hide();if(!q.length){p.wrap('<div class="jscroll-next-parent" />').parent().hide()}}function k(){return c.unbind(".jscroll").removeData("jscroll").find(".jscroll-inner").children().unwrap().filter(".jscroll-added").children().unwrap()}function f(){var t=c.find("div.jscroll-inner").first(),s=c.data("jscroll"),q=parseInt(c.css("paddingTop"))+parseInt(c.css("borderTopWidth")),p=Math.ceil(c.offset().top-t.offset().top+c.height()+q),r=b.trim(s.nextHref+" "+m.contentSelector);if(l(s)&&!s.waiting&&p+m.padding>=t.outerHeight()){e("info","jScroll:",t.outerHeight()-p,"from bottom. Loading next request...");return j()}}function l(p){p=p||c.data("jscroll");if(!p.nextHref){e("warn","jScroll: nextSelector not found - destroying");c.jscroll.destroy();return false}else{return true}}function j(){var q=c.find("div.jscroll-inner").first(),p=c.data("jscroll");p.waiting=true;q.append('<div class="jscroll-added" />').children(".jscroll-added").last().html('<div class="jscroll-loading">'+m.loadingHtml+"</div>");return l(p)&&c.animate({scrollTop:q.outerHeight()},0,function(){q.find("div.jscroll-added").last().load(p.nextHref,function(u,t,v){var s=b(this).find(m.nextSelector).first();p.waiting=false;p.nextHref=s.attr("href");b(".jscroll-next-parent",c).remove();if(m.autoTrigger){g(s)}else{s.bind("click.jscroll",function(){g(s);f();return false})}e("dir",p)})})}function e(p){if(m.debug&&typeof console==="object"&&(typeof p==="object"||typeof console[p]==="function")){if(typeof p==="object"){var r=[];for(var q in p){if(typeof console[q]==="function"){r=(p[q].length)?p[q]:[p[q]];console[q].apply(console,r)}else{console.log.apply(console,r)}}}else{console[p].apply(console,Array.prototype.slice.call(arguments,1))}}}b.extend(c.jscroll,{destroy:k});return c};b.fn.jscroll=function(c){return this.each(function(){var f=b(this),e=f.data("jscroll");if(e&&e.initialized){return}var d=new a(f,c)})}})(jQuery);

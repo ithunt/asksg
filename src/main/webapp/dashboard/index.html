@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" ng-app> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+        <link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="../css/main.css">
+        <!--<link rel="stylesheet" href="../bootstrap-toggle-buttons.css">-->
+
+        <!-- Link in angular and our controller files -->
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script> <!-- ../js/angular/angular.min.js -->
+        <script src="../js/controllers.js"></script>
+        <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Service selector controller -->
+        <div id="fl_menu" class="navbar navbar-inverse navbar-fixed-top" ng-controller="MenuController">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="/">ASKSG</a>
+                    <div class="nav-collapse collapse">
+                        <!--<ul class="nav">
+                            <li><a href="/students/index.html">Students</a></li>
+                        </ul>
+                        -->
+                        <a href="#" class="btn pull-right">Logout {{userName}}</a>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <!-- The conversation controller -->
+        <div class="container" ng-controller="ConversationController">
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="well sidebar-nav">
+                        <!--<h3 class="nav-list-header">Services</h3>-->
+                        <ul class="nav nav-list">
+                            <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services</li>
+                            <!--<li id="service-item-all" class="active service-menu-item" ng-click="filterAll()"><a href="#">All</a></li>-->
+                            <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()"><a href="#">Email</a></li>
+                            <li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()"><a href="#">SMS</a></li>
+                            <li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()"><a href="#">Facebook</a></li>
+                            <li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()"><a href="#">Twitter</a></li>
+                            <li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()"><a href="#">Reddit</a></li>
+                        </ul>
+                        <!--<div class="input-append icon-search"><input ng-model="convoFilter" type="text" placeholder="Filter" id="" name=""><span class="add-on"><i class="icon-search"></i></span></div>-->
+                        <!--Search: <input ng-model="convoFilter">-->
+                        <!--Display:
+                        <select ng-model="orderConvos">
+                            <option value="">All</option>
+                            <option value="email">Email</option>
+                            <option value="sms">SMS</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="twitter">Twitter</option>
+                            <option value="reddit">Reddit</option>
+                        </select>
+                        -->
+                    </div> <!-- well sidebar-nav -->
+                </div> <!-- span3 -->
+
+                <!-- The conversation controller -->
+                <div class="span8">
+                    <div class="convo-box">
+
+                        <!--<div id="text-toggle-button">
+                            <input type="checkbox" checked="checked">
+                        </div>-->
+
+                        <div id="convo-navbar" class="navbar">
+                            <div class="navbar-inner">
+                                <div class="container">
+                                    <ul class="nav">
+                                        <li><a href="#">Conversations</a></li>
+                                    </ul>
+                                    <form class="navbar-search pull-right">
+                                        <div class="input-append">
+                                            <!-- Hook up the search bar to the converation filter for the Angular controller -->
+                                            <div class="input-append"><input ng-model="refineFilterString" type="text" placeholder="Filter" id="" name=""><span class="add-on"><i class="icon-filter"></i></span></div>
+                                        </div> 
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TODO: plug in the infinite scroll jQuery plugin to give it the facebook feel -->
+
+                        <ul class="convo-list infinite-scroll">
+                            <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:refineFilterString"> 
+                                <!--filter:convoCategory | filter:filterArray[convo.service]">-->
+                                <h3>{{convo.name}}</h3>
+                                <p class="msg-header">
+                                    {{convo.msg}}
+                                </p>
+
+                                <!--<p>
+                                    <script type="text/javascript">
+                                        renderTree(convo.reply);
+                                    </script>
+                                </p>-->
+
+                                <p id="reply-tree-{{convo.id}}">
+                                    <!-- fill in the controller -->
+                                </p>
+
+                                <!-- Some useful(?) buttons -->
+                                <button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>
+                                <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
+
+                                <!-- The message/conversation response form -->
+                                <div id="response-form-{{convo.id}}" class="responseForm">
+                                    <form accept-charset="UTF-8" action="" method="POST"> <!-- change this to call the appropriate service -->
+                                        <textarea class="span6" id="new_message" name="new_message"
+                                        placeholder="Type in your message" rows="4"></textarea>
+                                        <br/>
+                                        <button class="btn" type="submit">Submit Message</button>
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div> <!-- span8 -->
+            </div> <!-- row-fluid -->
+
+            <hr>
+
+            <footer>
+                <p>&copy; ASKSG</p>
+            </footer>
+        </div> <!-- container -->
+
+        <!-- le infinite scroll -->
+        <script src="../js/jquery.jscroll.min.js"></script>
+        <script>
+            //$('.infinite-scroll').jscroll();
+
+            // you can customize the infinite scroll options as follows
+            /* 
+            $('.infinite-scroll').jscroll({
+                loadingHtml: '<img src="loading.gif" alt="Loading" /> Loading...',
+                padding: 20,
+                nextSelector: 'a.jscroll-next:last',
+                contentSelector: 'li'
+            });
+            */
+        </script>
+
+        <!-- le jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
+
+        <!-- le Bootstrap -->
+        <script src="../js/vendor/bootstrap.min.js"></script>
+
+        <!-- Toggle buttons -->
+        <!--<script src="../js/jquery.toggle.buttons.js"></script>-->
+
+        <!-- le dashboard script -->
+        <script src="../js/dashboard.js"></script>
+
+        <!-- le Analytics -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>
