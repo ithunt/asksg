@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/messages")
 public class MessageController {
 
-
-
     @RequestMapping(value = "/seed")
     public ResponseEntity<String> seed() {
 

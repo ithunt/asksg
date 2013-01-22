@@ -1,5 +1,7 @@
 package edu.rit.asksg.domain;
 
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,8 +14,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @RooJavaBean
 @RooToString
@@ -33,4 +34,9 @@ public class Conversation {
     @DateTimeFormat(style = "M-")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime modified = new LocalDateTime();
+
+    public String toJson() {
+        return new JSONSerializer().exclude("*.class").include("messages").serialize(this);
+    }
+
 }
