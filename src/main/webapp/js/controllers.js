@@ -144,9 +144,9 @@ function ConversationController($scope, $http) {
 }
 
 // The menu controller 
-function MenuController($scope) {
-	$scope.userName = "Admin";
-}
+//function MenuController($scope) {
+//	$scope.userName = "Admin";
+//}
 
 // super good example of setting up the angular modules
 // http://jsfiddle.net/ThomasBurleson/8Gzj9/

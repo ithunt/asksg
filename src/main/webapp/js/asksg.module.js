@@ -154,7 +154,7 @@ AsksgService = function() {
 		$provide.factory('$asksg', function($http, $log) {
 
 			// Store the service URLs locally here
-			var convoUrl('/asksg/conversations');
+			var convoUrl = '/asksg/conversations';
 
 			// Publish the $asksg API here
 			return {
@@ -185,6 +185,6 @@ AsksgService = function() {
 }
 
 // TODO: invoke the AsksgService constructor here...
-//AsksgService();
+AsksgService();
 
 
