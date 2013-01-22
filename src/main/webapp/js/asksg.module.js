@@ -158,6 +158,9 @@ AsksgService = function() {
 
 			// Publish the $asksg API here
 			return {
+				/**
+				 * Fetch all conversations with a specified ID (-1 or nil require us to fetch all of them...)
+				 */
 				fetchConvos : function(convoId) {
 
 					// Return an HTTP promise (a la Java future...)
@@ -177,6 +180,27 @@ AsksgService = function() {
 							// TODO: add more elements to this as needed
 						}
 					});
+				}
+
+				/**
+				 * Submit a message response to a conversation.
+				 * 
+				 * @param convoId - the host conversation ID
+				 * @param message - the message to insert
+				 * @param messageId - optional message, which indicates that this is a nested response (a la Reddit)
+				 */ 
+				submitResponse : function(convoId, message, messageId) {
+					// TODO: insert $http.post
+				}
+
+				/**
+				 * Log-in functionality.
+				 *
+				 * @param userName - the user name
+				 * @param password - password digest (using SHA-512)
+				 */
+				login : function(userName, password) {
+					// TODO: insert $http.post
 				}
 			}
 		});
