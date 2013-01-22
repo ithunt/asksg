@@ -24,6 +24,8 @@
 
         <!-- SHA-256 values can be produced using 'echo -n your_desired_password | sha256sum' (using normal *nix environments) -->
         <authentication-provider user-service-ref="userDetailsService">
+
+            <password-encoder hash="plaintext" />
         </authentication-provider>
     </authentication-manager>
 </beans:beans>

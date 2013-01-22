@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord(finders = { "findAsksgUsersByUserNameEquals" })
+@RooJson(deepSerialize = true)
 public class AsksgUser implements UserDetails {
 
     @NotNull
