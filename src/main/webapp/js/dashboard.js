@@ -25,6 +25,7 @@ $(document).ready(function() {
 		}
 	});
 
+/*
 	$('#text-toggle-button').toggleButtons({
     	width: 220,
     	label: {
@@ -32,6 +33,7 @@ $(document).ready(function() {
         	disabled: "Dolor Sit"
     	}
 	});
+*/
 });
 
 /*
