@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" ng-app> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" ng-app="ASKSG"> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -23,17 +23,17 @@
 
         <!-- Link in angular and our controller files -->
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script> <!-- ../js/angular/angular.min.js -->
-        <script src="../js/controllers.js"></script>
+        <script src="../js/asksg.module.js"></script>
         <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
-    <body>
+    <body ng-controller="ConversationController">
 
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
         <!-- Service selector controller -->
-        <div id="fl_menu" class="navbar navbar-inverse navbar-fixed-top" ng-controller="MenuController">
+        <div id="fl_menu" class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -54,7 +54,7 @@
         </div>
 
         <!-- The conversation controller -->
-        <div class="container" ng-controller="ConversationController">
+        <div class="container">
             <div class="row-fluid">
                 <div class="span3">
                     <div class="well sidebar-nav">
@@ -112,7 +112,10 @@
                         <ul class="convo-list infinite-scroll">
                             <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:refineFilterString"> 
                                 <!--filter:convoCategory | filter:filterArray[convo.service]">-->
-                                <h3>{{convo.name}}</h3>
+                                <h3>{{convo.id}}</h3>
+                                <p>
+                                    Created: {{convo.created_at}}<br/>Modified: {{convo.modified_at}} 
+                                </p>
                                 <p class="msg-header">
                                     {{convo.msg}}
                                 </p>
