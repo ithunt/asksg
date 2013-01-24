@@ -12,6 +12,8 @@ public class ConversationServiceImpl implements ConversationService {
     @Autowired
     MessageService messageService;
 
+
+
     public void saveConversation(Conversation conversation) {
         LocalDateTime now = new LocalDateTime();
         conversation.setCreated(now);

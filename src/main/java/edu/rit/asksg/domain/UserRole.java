@@ -9,5 +9,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaActiveRecord
 public class UserRole {
 
+    public UserRole(String name) {
+        this.name = name;
+    }
+
     private String name;
 }

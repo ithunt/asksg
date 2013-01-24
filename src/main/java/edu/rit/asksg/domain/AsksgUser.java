@@ -41,19 +41,29 @@ public class AsksgUser implements UserDetails {
 
     @Override
     public Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authoritiesList = new ArrayList<GrantedAuthority>();
         if (authorities == null) {
-            authorities = authoritiesList;
+            populateAuthorities();
         }
         return authorities;
     }
 
     public void setAuthorities(List<java.lang.String> roles) {
-        List<GrantedAuthority> listOfAuthorities = new ArrayList<GrantedAuthority>();
-        for (String role : roles) {
-            listOfAuthorities.add(new SimpleGrantedAuthority(role));
+        Set<UserRole> userRoles = new HashSet<UserRole>();
+        for(String r : roles) {
+            userRoles.add(new UserRole(r));
         }
-        authorities = listOfAuthorities;
+        this.roles = userRoles;
+        populateAuthorities();
+    }
+
+    protected void populateAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        for (UserRole role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+
+        this.authorities = authorities;
+
     }
 
     @Override
