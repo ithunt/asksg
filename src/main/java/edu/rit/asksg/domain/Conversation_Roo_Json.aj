@@ -17,7 +17,7 @@ privileged aspect Conversation_Roo_Json {
     }
     
     public static String Conversation.toJsonArray(Collection<Conversation> collection) {
-        return new JSONSerializer().exclude("*.class").include("messages").serialize(collection);
+        return new JSONSerializer().exclude("*.class").serialize(collection);
     }
     
     public static Collection<Conversation> Conversation.fromJsonArrayToConversations(String json) {

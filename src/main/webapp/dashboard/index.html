@@ -116,8 +116,10 @@
                                 <p>
                                     Created: {{convo.created_at}}<br/>Modified: {{convo.modified_at}} 
                                 </p>
-                                <p class="msg-header">
-                                    {{convo.msg}}
+
+                                <!-- List the messages -->
+                                <p class="msg-header" ng-repeat="message in convo.messages">
+                                    {{message}}
                                 </p>
 
                                 <!--<p>
