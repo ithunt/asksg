@@ -3,20 +3,13 @@ package edu.rit.asksg.dataio;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.ProviderConfig;
-import edu.rit.asksg.domain.TwilioSmsRequest;
 import edu.rit.asksg.service.ConversationService;
-import org.hsqldb.lib.StringInputStream;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TwilioProvider implements ContentProvider {
 
@@ -51,11 +44,12 @@ public class TwilioProvider implements ContentProvider {
 		return false;
 	}
 
-	public void handleMessage(TwilioSmsRequest request) {
+	public void handleMessage(Map<String, String> request) {
+		//Spring automagically gives the POST'd parameters in a Map.
 		Message msg = new Message();
 		msg.setCreated(LocalDateTime.now());
-		msg.setAuthor(request.from);
-		msg.setContent(request.body);
+		msg.setAuthor(request.get("from"));
+		msg.setContent(request.get("body"));
 
 		Conversation conv = new Conversation();
 		conv.getMessages().add(msg);
