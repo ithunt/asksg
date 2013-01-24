@@ -138,12 +138,17 @@
 
                                 <!-- The message/conversation response form -->
                                 <div id="response-form-{{convo.id}}" class="responseForm">
-                                    <form accept-charset="UTF-8" action="" method="POST"> <!-- change this to call the appropriate service -->
+                                    <form ng-submit="doPostMessage(convo, 0, messageResp, userName)">
+                                        <input class="input-xlarge focused" ng-model="messageResp"/>
+                                        <button class="btn" type="submit">Submit Message</button>
+                                    </form>
+                                    <!--
+                                    <form ng-model="message-resp-{{convo.id}}" accept-charset="UTF-8"> 
                                         <textarea class="span6" id="new_message" name="new_message"
                                         placeholder="Type in your message" rows="4"></textarea>
                                         <br/>
-                                        <button class="btn" type="submit">Submit Message</button>
                                     </form>
+                                    -->
                                 </div>
                             </li>
                         </ul>

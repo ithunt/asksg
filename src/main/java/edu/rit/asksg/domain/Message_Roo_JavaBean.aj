@@ -4,6 +4,7 @@
 package edu.rit.asksg.domain;
 
 import edu.rit.asksg.domain.Analytics;
+import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import org.joda.time.LocalDateTime;
 
@@ -47,6 +48,14 @@ privileged aspect Message_Roo_JavaBean {
     
     public void Message.setAnalytics(Analytics analytics) {
         this.analytics = analytics;
+    }
+    
+    public Conversation Message.getConversation() {
+        return this.conversation;
+    }
+    
+    public void Message.setConversation(Conversation conversation) {
+        this.conversation = conversation;
     }
     
 }

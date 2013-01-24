@@ -10,4 +10,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity(mappedSuperclass = true)
 @RooJson
 public abstract class Service {
+
+    public abstract String getServiceName();
+
 }

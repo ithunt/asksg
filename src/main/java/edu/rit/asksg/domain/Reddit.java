@@ -10,4 +10,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity
 @RooJson
 public class Reddit extends Service {
+
+	public String getServiceName() {
+		return "reddit";
+	}
 }

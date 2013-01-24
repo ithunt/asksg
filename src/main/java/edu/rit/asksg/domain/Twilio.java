@@ -10,4 +10,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaEntity
 @RooJson
 public class Twilio extends Service {
+
+	public String getServiceName() {
+		return "twilio";
+	}
+
 }

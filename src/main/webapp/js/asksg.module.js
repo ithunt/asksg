@@ -1,68 +1,41 @@
-// Create the conversation controller
+/**
+ * Message object definition.
+ */
+function Message(author, content, conversation) {
+	this.author = author;
+	this.content = content;
+	this.conversation = conversation;
+	this.analytics = null;
+}
+
+/**
+ * Construct the conversation controller. :-)
+ *
+ * @param scope - the angular scope
+ * @param asksg - the custom asksg service
+ * @param log - the log (optional, not currently used)
+ */
 function ConversationController($scope, $asksg, $log) {
-	// Feed some false data...
-	/*var testConvo = angular.fromJson('[{"created":{"centuryOfEra":20,"chronology":{"base":{"approxMillisAtEpochDividedByTwo":31083597720000,"averageMillisPerMonth":2629746000,"averageMillisPerYear":31556952000,"averageMillisPerYearDividedByTwo":15778476000,"base":null,"daysInMonthMax":31,"daysInYearMax":366,"maxMonth":12,"maxYear":292278993,"minYear":-292275054,"minimumDaysInFirstWeek":4,"param":null,"zone":{"ID":"UTC","fixed":true}},"param":null,"zone":{"ID":"UTC","fixed":true}},"dayOfMonth":18,"dayOfWeek":5,"dayOfYear":18,"era":1,"hourOfDay":19,"localMillis":1358536706230,"millisOfDay":69506230,"millisOfSecond":230,"minuteOfHour":18,"monthOfYear":1,"secondOfMinute":26,"weekOfWeekyear":3,"weekyear":2013,"year":2013,"yearOfCentury":13,"yearOfEra":2013},"id":1,"modified":{"centuryOfEra":20,"chronology":{"base":{"approxMillisAtEpochDividedByTwo":31083597720000,"averageMillisPerMonth":2629746000,"averageMillisPerYear":31556952000,"averageMillisPerYearDividedByTwo":15778476000,"base":null,"daysInMonthMax":31,"daysInYearMax":366,"maxMonth":12,"maxYear":292278993,"minYear":-292275054,"minimumDaysInFirstWeek":4,"param":null,"zone":{"ID":"UTC","fixed":true}},"param":null,"zone":{"ID":"UTC","fixed":true}},"dayOfMonth":18,"dayOfWeek":5,"dayOfYear":18,"era":1,"hourOfDay":19,"localMillis":1358536706230,"millisOfDay":69506230,"millisOfSecond":230,"minuteOfHour":18,"monthOfYear":1,"secondOfMinute":26,"weekOfWeekyear":3,"weekyear":2013,"year":2013,"yearOfCentury":13,"yearOfEra":2013},"version":0}]');
-	console.log(testConvo);
-
-	// Extract the relevant information from the JSON data
-	testConvo[0].created_at = new Date(testConvo[0].created.localMillis).toString('dddd, MMMM ,yyyy');
-	testConvo[0].modified_at = new Date(testConvo[0].modified.localMillis).toString('dddd, MMMM ,yyyy');
-
-	// Persist the test conversation data
-	$scope.convos = testConvo;*/
-
 	//***********************************
-	// Throw in some dummy data for local tests
+	// Expose a function to post a message to response
 	//***********************************
-	/*$scope.convos = [
-	{"id" : 1,
-	"name": "Convo 1",
-	 "service" : "twitter",
-	 "msg": "MSG 1 contents",
-		"reply" : ""},
-	{"id" : 2,
-		"name": "Convo 2",
-	 "service" : "facebook",
-	 "msg": "MSG 2 contents",
-		"reply" : ""},
-	{"id" : 3,
-		"name": "Convo 3",
-	 "service" : "reddit",
-	 "msg": "MSG 3 contents",
-	 "reply" : 
-	 [ {
-		"name": "Convo 2",
-	 	"msg": "Reply contents go here",
-			"reply" : ""
-	 }
-	 ]
-		}
-	];
-	*/
+	/*$scope.postResponse = function(convo, messageId, message) {
+		console.log("post response");
+		console.log(convo.id);
+		console.log(message);
+	};*/
 
-	//***********************************
-	// Fetch the initial batch of conversations
-	//***********************************
-	/*$http.jsonp('/asksg/conversations').success(function(data){
-        $scope.convos = data;
-    });*/
-
-	/*$http.get('/asksg/conversations').success(function(data) {
-		$scope.convos = data;
-	});*/
+	// Set the user name
+	$scope.userName = "Admin"; // this should be replaced by response from server
 
 	//***********************************
 	// Call the initial configuration functions
 	//***********************************
 	$asksg.fetchConvos(-1, true).
 		success(function(data, status, headers, config) {
-			// this callback will be called asynchronously
-			// when the response is available
 			console.log("Got conversation data back from the server...");
 			console.log(data);
-
 			// Parse the JSON response data
-			// TODO: recursively parse the nested messages?
 			var conversationList = angular.fromJson(data);
 			for (var i = 0; i < conversationList.length; i++) {
 				conversationList[i].created_at = new Date(conversationList[i].created.localMillis).toString('dddd, MMMM ,yyyy');
@@ -78,15 +51,24 @@ function ConversationController($scope, $asksg, $log) {
 		error(function(data, status, headers, config) {
 			return null;
 		});
-		/*
-	then(function(response) { 
-        //angular.bind($scope, updateTweets)(response.items, merge);
-        // Save the conversation list
-        console.log("Persisting the conversation list to the scope.");
-        console.log(response);
-        $scope.convos = response.conversations;
-        console.log($scope.convos);
-	});*/
+
+
+	/**
+	 * Perform a message post
+	 */
+	$scope.doPostMessage = function(convo, messageId, message, author) {
+		$asksg.postResponse(convo, messageId, message, author).
+			success(function(data, status, headers, config) {
+				console.log("Success");
+				console.log(data);
+				console.log(status);
+			}).
+			error(function(data, status, headers, config) {
+				console.log("Error... :(");
+			});
+	};
+
+
 
 	//***********************************
 	// Set up the default conversation filters
@@ -114,17 +96,8 @@ function ConversationController($scope, $asksg, $log) {
     };
 
 	//***********************************
-	// Fetch conversations from the server using HTTP request
-	//***********************************
-	/*$http.get('../test/convos.json').then(function(data) {
-		console.log(data);
-		$scope.convos = data;
-	});*/
-
-	//***********************************
 	// Filter functions
 	//***********************************
-
 	$scope.filterAll = function() {
 		$scope.convoCategory = "";
 	};
@@ -198,7 +171,9 @@ AsksgService = function() {
 
 			// Store the service URLs locally here
 			var convoUrl = '/asksg/conversations';
-			var seedConvoUrl = '/asksg/conversations/seed';
+			var convoSeedUrl = '/asksg/conversations/seed';
+			var messageUrl = '/asksg/messages';
+			var messageSeedUrl = '/asksg/messages/seed';
 
 			// Publish the $asksg API here
 			return {
@@ -211,41 +186,31 @@ AsksgService = function() {
 				fetchConvos : function(convoId, seed) {
 					// Check to see if we should seed the conversataion repository
 					if (seed == true) {
-						$http.post(seedConvoUrl).then(function(resp) {
+						$http.post(convoSeedUrl).then(function(resp) {
 							console.log("Conversations seeded.");
 						});
 					} else {
 						console.log("Conversations not seeded.");
 					}
 
-					/*console.log("about to return the promise...");
-					console.log(convoUrl);
-					$http.jsonp(convoUrl).then(function(resp) {
-						console.log("it worked here?..");
-					});*/
-
 					return $http({method: 'GET', url: convoUrl});
-
-					// Return an HTTP promise (a la Java future...)
-					/*return $http.jsonp(convoUrl).then(function(resp) {
-						// TODO
-					});*/
-				}
-
-				//, // DO NOT FORGET THE COMMA >.<
+				},
 
 				/**
 				 * Submit a message response to a conversation.
 				 * 
-				 * @param convoId - the host conversation ID
+				 * @param convo - the host conversation ID
 				 * @param messageId - optional message, which indicates that this is a nested response (a la Reddit)
-				 * @param msgResponse - the message to insert
+				 * @param message - the message to insert
 				 */ 
-				/*postResponse : function(convoId, messageId, msgResponse) {
-					console.log("Submitting response to (c,m) = (" + convoId + "," + messageId + ")");
+				postResponse : function(convo, messageId, message, author) {
+					console.log("Building message...");
+					messageResp = new Message(author, message, convo);
+					console.log(messageResp);
 
-					// TODO: insert $http.post, http://docs.angularjs.org/api/ng.$http
-				}*/
+					// Return the HTTP response
+					return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
+				}				
 			};
 		});
 	});

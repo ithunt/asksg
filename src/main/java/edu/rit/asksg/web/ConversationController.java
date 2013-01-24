@@ -19,8 +19,6 @@ import java.util.Set;
 @RequestMapping("/conversations")
 public class ConversationController {
 
-
-
     @RequestMapping(value = "/seed")
     public ResponseEntity<String> seed() {
 
