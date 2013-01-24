@@ -54,19 +54,39 @@ function ConversationController($scope, $asksg, $log) {
 	//***********************************
 	// Call the initial configuration functions
 	//***********************************
-	$asksg.fetchConvos(-1, true).then(function(response) {
-        //var merge = (searchTerm == $scope.refreshURL);
-        // Call private merge() method
-        //angular.bind($scope, updateTweets)(response.items, merge);
-        //$scope.countDown  = 180;
-        //$scope.lastQuery  = $scope.query;
-        //$scope.refreshURL = response.refreshURL;
-        //$scope.searching  = false;
+	$asksg.fetchConvos(-1, true).
+		success(function(data, status, headers, config) {
+			// this callback will be called asynchronously
+			// when the response is available
+			console.log("Got conversation data back from the server...");
+			console.log(data);
 
+			// Parse the JSON response data
+			// TODO: recursively parse the nested messages?
+			var conversationList = angular.fromJson(data);
+			for (var i = 0; i < conversationList.length; i++) {
+				conversationList[i].created_at = new Date(conversationList[i].created.localMillis).toString('dddd, MMMM ,yyyy');
+				conversationList[i].modified_at = new Date(conversationList[i].modified.localMillis).toString('dddd, MMMM ,yyyy');
+			}
+
+			console.log("updated conversations");
+			console.log(conversationList);
+
+			// Now return the result as an object
+			$scope.convos = conversationList;
+		}).
+		error(function(data, status, headers, config) {
+			return null;
+		});
+		/*
+	then(function(response) { 
+        //angular.bind($scope, updateTweets)(response.items, merge);
         // Save the conversation list
         console.log("Persisting the conversation list to the scope.");
+        console.log(response);
         $scope.convos = response.conversations;
-      });
+        console.log($scope.convos);
+	});*/
 
 	//***********************************
 	// Set up the default conversation filters
@@ -192,30 +212,27 @@ AsksgService = function() {
 					// Check to see if we should seed the conversataion repository
 					if (seed == true) {
 						$http.post(seedConvoUrl).then(function(resp) {
-							console.log("Conversation data seeded.");
+							console.log("Conversations seeded.");
 						});
+					} else {
+						console.log("Conversations not seeded.");
 					}
 
+					/*console.log("about to return the promise...");
+					console.log(convoUrl);
+					$http.jsonp(convoUrl).then(function(resp) {
+						console.log("it worked here?..");
+					});*/
+
+					return $http({method: 'GET', url: convoUrl});
+
 					// Return an HTTP promise (a la Java future...)
-					return $http.jsonp(convoUrl).then(function(resp) {
+					/*return $http.jsonp(convoUrl).then(function(resp) {
+						// TODO
+					});*/
+				}
 
-						console.log("Got conversation data back from the server...");
-
-						// Parse the JSON response data
-						// TODO: recursively parse the nested messages?
-						var conversationList = angular.fromJson(resp);
-						for (var i = 0; i < conversationList.length; i++) {
-							conversationList[i].created_at = new Date(conversationList[i].created.localMillis).toString('dddd, MMMM ,yyyy');
-							conversationList[i].modified_at = new Date(conversationList[i].modified.localMillis).toString('dddd, MMMM ,yyyy');
-						}
-
-						// Now return the result as an object
-						return {
-							conversations : conversationList
-							// TODO: add more elements to this as needed
-						};
-					});
-				}, // DO NOT FORGET THE COMMA >.<
+				//, // DO NOT FORGET THE COMMA >.<
 
 				/**
 				 * Submit a message response to a conversation.
@@ -224,11 +241,11 @@ AsksgService = function() {
 				 * @param messageId - optional message, which indicates that this is a nested response (a la Reddit)
 				 * @param msgResponse - the message to insert
 				 */ 
-				postResponse : function(convoId, messageId, msgResponse) {
+				/*postResponse : function(convoId, messageId, msgResponse) {
 					console.log("Submitting response to (c,m) = (" + convoId + "," + messageId + ")");
 
 					// TODO: insert $http.post, http://docs.angularjs.org/api/ng.$http
-				}
+				}*/
 			};
 		});
 	});
