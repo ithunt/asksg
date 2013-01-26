@@ -19,7 +19,7 @@ import java.util.*;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-@RooJson
+@RooJson(deepSerialize = true)
 public class Conversation {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -34,11 +34,5 @@ public class Conversation {
     @DateTimeFormat(style = "M-")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime modified = new LocalDateTime();
-
-    public String toJson() {
-        //System.out.println("Whats the result?");
-        //System.out.println(new JSONSerializer().include("messages").deepSerialize(this));
-        return new JSONSerializer().include("messages").deepSerialize(this);
-    }
 
 }

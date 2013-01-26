@@ -12,12 +12,16 @@ import java.util.List;
 
 privileged aspect Conversation_Roo_Json {
     
+    public String Conversation.toJson() {
+        return new JSONSerializer().exclude("*.class").deepSerialize(this);
+    }
+    
     public static Conversation Conversation.fromJsonToConversation(String json) {
         return new JSONDeserializer<Conversation>().use(null, Conversation.class).deserialize(json);
     }
     
     public static String Conversation.toJsonArray(Collection<Conversation> collection) {
-        return new JSONSerializer().exclude("*.class").serialize(collection);
+        return new JSONSerializer().exclude("*.class").deepSerialize(collection);
     }
     
     public static Collection<Conversation> Conversation.fromJsonArrayToConversations(String json) {
