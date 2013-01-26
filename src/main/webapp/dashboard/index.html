@@ -112,12 +112,14 @@
                         <ul class="convo-list infinite-scroll">
                             <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:refineFilterString"> 
                                 <!--filter:convoCategory | filter:filterArray[convo.service]">-->
-                                <h3>{{convo.id}}</h3>
+                                <h3>Conversation {{convo.id}}</h3>
                                 <p>
                                     Created: {{convo.created_at}}<br/>Modified: {{convo.modified_at}} 
                                 </p>
 
                                 <!-- List the messages -->
+                                <p>MESSAGES BELOW</p>
+                                {{convo.messages}}
                                 <p class="msg-header" ng-repeat="message in convo.messages">
                                     {{message}}
                                 </p>

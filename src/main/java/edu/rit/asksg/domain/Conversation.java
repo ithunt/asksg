@@ -36,7 +36,9 @@ public class Conversation {
     private LocalDateTime modified = new LocalDateTime();
 
     public String toJson() {
-        return new JSONSerializer().exclude("*.class").include("messages").serialize(this);
+        //System.out.println("Whats the result?");
+        //System.out.println(new JSONSerializer().include("messages").deepSerialize(this));
+        return new JSONSerializer().include("messages").deepSerialize(this);
     }
 
 }

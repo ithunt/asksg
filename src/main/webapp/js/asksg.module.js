@@ -17,58 +17,53 @@ function Message(author, content, conversation) {
  */
 function ConversationController($scope, $asksg, $log) {
 	//***********************************
-	// Expose a function to post a message to response
-	//***********************************
-	/*$scope.postResponse = function(convo, messageId, message) {
-		console.log("post response");
-		console.log(convo.id);
-		console.log(message);
-	};*/
-
-	// Set the user name
-	$scope.userName = "Admin"; // this should be replaced by response from server
-
-	//***********************************
 	// Call the initial configuration functions
 	//***********************************
-	$asksg.fetchConvos(-1, true).
-		success(function(data, status, headers, config) {
-			console.log("Got conversation data back from the server...");
-			console.log(data);
-			// Parse the JSON response data
-			var conversationList = angular.fromJson(data);
-			for (var i = 0; i < conversationList.length; i++) {
-				conversationList[i].created_at = new Date(conversationList[i].created.localMillis).toString('dddd, MMMM ,yyyy');
-				conversationList[i].modified_at = new Date(conversationList[i].modified.localMillis).toString('dddd, MMMM ,yyyy');
-			}
+	$scope.refreshConvos = function() {
+		$asksg.fetchConvos(-1, true).
+			success(function(data, status, headers, config) {
+				console.log("Got conversation data back from the server...");
+				console.log(data);
+				// Parse the JSON response data
+				var conversationList = angular.fromJson(data);
+				for (var i = 0; i < conversationList.length; i++) {
+					conversationList[i].created_at = new Date(conversationList[i].created.localMillis).toString('dddd, MMMM ,yyyy');
+					conversationList[i].modified_at = new Date(conversationList[i].modified.localMillis).toString('dddd, MMMM ,yyyy');
+				}
 
-			console.log("updated conversations");
-			console.log(conversationList);
+				console.log("updated conversations");
+				console.log(conversationList);
 
-			// Now return the result as an object
-			$scope.convos = conversationList;
-		}).
-		error(function(data, status, headers, config) {
-			return null;
-		});
-
+				// Now return the result as an object
+				$scope.convos = conversationList;
+			}).
+			error(function(data, status, headers, config) {
+				return null;
+			});	
+	}
 
 	/**
 	 * Perform a message post
 	 */
 	$scope.doPostMessage = function(convo, messageId, message, author) {
+		// post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
 		$asksg.postResponse(convo, messageId, message, author).
 			success(function(data, status, headers, config) {
 				console.log("Success");
 				console.log(data);
 				console.log(status);
+
+				// Refresh the conversation stuff...
+				$scope.refreshConvos();
 			}).
 			error(function(data, status, headers, config) {
 				console.log("Error... :(");
 			});
 	};
 
-
+	// Set the user name
+	$scope.userName = "Admin"; // this should be replaced by response from server
+	$scope.refreshConvos();
 
 	//***********************************
 	// Set up the default conversation filters
@@ -77,7 +72,6 @@ function ConversationController($scope, $asksg, $log) {
 	$scope.convoFilter = "";
 
 	// Array to store the state of active conversation filters
-	// We can hard-code this because it won't change...
 	$scope.filterArray = Array();
 	$scope.filterArray['email'] = false;
 	$scope.filterArray['sms'] = false;
@@ -101,7 +95,6 @@ function ConversationController($scope, $asksg, $log) {
 	$scope.filterAll = function() {
 		$scope.convoCategory = "";
 	};
-
 	$scope.filterEmail = function() {
 		//$scope.convoCategory = "EMAIL";
 		if ($scope.filterArray['email']) {
@@ -110,7 +103,6 @@ function ConversationController($scope, $asksg, $log) {
 			$scope.filterArray['email'] = true;
 		}
 	};
-
 	$scope.filterSms = function() {
 		//$scope.convoCategory = "SMS";
 		if ($scope.filterArray['sms']) {
@@ -119,7 +111,6 @@ function ConversationController($scope, $asksg, $log) {
 			$scope.filterArray['sms'] = true;
 		}
 	};
-
 	$scope.filterFacebook = function() {
 		//$scope.convoCategory = "FACEBOOK";
 		if ($scope.filterArray['facebook']) {
@@ -128,7 +119,6 @@ function ConversationController($scope, $asksg, $log) {
 			$scope.filterArray['facebook'] = true;
 		}
 	};
-
 	$scope.filterTwitter = function() {
 		//$scope.convoCategory = "TWITTER";
 		if ($scope.filterArray['twitter']) {
@@ -137,7 +127,6 @@ function ConversationController($scope, $asksg, $log) {
 			$scope.filterArray['twitter'] = true;
 		}
 	};
-
 	$scope.filterReddit = function() {
 		//$scope.convoCategory = "REDDIT";
 		if ($scope.filterArray['reddit']) {
@@ -216,7 +205,7 @@ AsksgService = function() {
 	});
 }
 
-// TODO: invoke the AsksgService constructor here...
+// Invoke the ASKSG service constructor...
 console.log("Jumping into the constructor...");
 AsksgService();
 
