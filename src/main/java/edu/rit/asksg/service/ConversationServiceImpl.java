@@ -12,6 +12,9 @@ public class ConversationServiceImpl implements ConversationService {
     @Autowired
     MessageService messageService;
 
+    @Autowired
+    MessageRepository messageRepository;
+
     public void saveConversation(Conversation conversation) {
         LocalDateTime now = new LocalDateTime();
         conversation.setCreated(now);
@@ -23,4 +26,16 @@ public class ConversationServiceImpl implements ConversationService {
 
         conversationRepository.save(conversation);
     }
+
+    public Conversation updateConversation(Conversation conversation) {
+        LocalDateTime now = new LocalDateTime();
+        conversation.setModified(now);
+
+//        for(Message m : conversation.getMessages()) {
+//            if(m.getId() == null) messageRepository.save(m);
+//        }
+
+        return conversationRepository.save(conversation);
+    }
+
 }

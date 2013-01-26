@@ -40,8 +40,4 @@ privileged aspect ConversationServiceImpl_Roo_Service {
         return conversationRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
-    public Conversation ConversationServiceImpl.updateConversation(Conversation conversation) {
-        return conversationRepository.save(conversation);
-    }
-    
 }

@@ -1,5 +1,6 @@
 package edu.rit.asksg.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;

@@ -16,6 +16,28 @@ import java.util.HashSet;
 @RequestMapping("/messages")
 public class MessageController {
 
+
+    @RequestMapping(value = "/test")
+    public ResponseEntity<String> test() {
+
+        Conversation c = new Conversation();
+        c.setId(1L);
+
+        Message m = new Message();
+        m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
+        m.setAuthor("Mark Twain");
+        m.setConversation(c);
+
+        messageService.saveMessage(m);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("content_type", "text/plain");
+
+        return new ResponseEntity<String>("Did it work?", headers, HttpStatus.OK);
+
+    }
+
+
     @RequestMapping(value = "/seed")
     public ResponseEntity<String> seed() {
 
