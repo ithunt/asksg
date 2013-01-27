@@ -1,5 +1,9 @@
 package edu.rit.asksg.dataio;
 
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.TwilioRestException;
+import com.twilio.sdk.resource.factory.SmsFactory;
+import com.twilio.sdk.resource.instance.Sms;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.ProviderConfig;
@@ -8,6 +12,7 @@ import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +36,22 @@ public class TwilioProvider implements ContentProvider {
 
 	@Override
 	public boolean postContent(Message message) {
-		return false;
+		// this assumes that the config will have our Twilio SID assigned to the username.
+		TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
+		Map<String, String> vars = new HashMap<String, String>();
+		vars.put("Body", message.getContent());
+		//TODO: not sure if we'll always want this phone number
+		vars.put("From", twc.getAccount().getAvailablePhoneNumbers().iterator().next().getPhoneNumber());
+		vars.put("To", message.getAuthor());
+
+		SmsFactory smsFactory = twc.getAccount().getSmsFactory();
+		try {
+			Sms sms = smsFactory.create(vars);
+			
+		} catch (TwilioRestException e) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
