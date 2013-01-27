@@ -25,10 +25,31 @@
 
 
     <int:channel id="recieveChannel">
+        <!--<int:interceptors>-->
+            <!--<int:wire-tap channel="logger" />-->
+
+        <!--</int:interceptors>-->
 
 
     </int:channel>
 
+    <int:service-activator input-channel="recieveChannel" ref="emailService" method="recieve" />
+
+    <!--<int:logging-channel-adapter id="logger" level="WARN"/>-->
+
+    <bean id="emailService" class="edu.rit.asksg.dataio.EmailProvider" />
+
+
+    <!--<int-mail:inbound-channel-adapter-->
+            <!--id="imapAdapter"-->
+            <!--channel="recieveChannel"-->
+            <!--store-uri="imaps://ritasksg:allHailSpring@imap.gmail.com/INBOX"-->
+            <!--should-mark-messages-as-read="true"-->
+            <!--should-delete-messages="false"-->
+            <!--auto-startup="true"-->
+            <!--java-mail-properties="javaMailProperties">-->
+            <!--<int:poller id="poller" fixed-delay="20" time-unit="SECONDS" />-->
+    <!--</int-mail:inbound-channel-adapter>-->
 
 
 

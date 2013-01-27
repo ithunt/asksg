@@ -10,6 +10,7 @@ import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.core.MessageHandler;
 
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ import java.util.List;
  * Date: 1/24/13
  * Time: 5:30 PM
  */
+
 
 public class EmailProvider implements ContentProvider, MessageHandler {
 
@@ -48,8 +50,13 @@ public class EmailProvider implements ContentProvider, MessageHandler {
         return false;
     }
 
-    @ServiceActivator
+    public void recieve(MimeMessage mimeMessage) {
+        logger.debug("New Mime Email!");
+        logger.debug(mimeMessage.toString());
+    }
+
     public void handleMessage(org.springframework.integration.Message<?> message) throws MessagingException {
+        logger.debug("New Email!");
         logger.debug(message.toString());
     }
 }
