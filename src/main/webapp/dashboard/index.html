@@ -112,16 +112,18 @@
                         <ul class="convo-list infinite-scroll">
                             <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:refineFilterString"> 
                                 <!--filter:convoCategory | filter:filterArray[convo.service]">-->
-                                <h3>Conversation {{convo.id}}</h3>
+                                <h3>{{convo.service}} - Conversation {{convo.id}}</h3>
+                                <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length - 1].content}}</i></b></h5>
                                 <p>
-                                    Created: {{convo.created_at}}<br/>Modified: {{convo.modified_at}} 
+                                    Created: {{convo.created_at}}
+                                    <br/>
+                                    Modified: {{convo.modified_at}} 
                                 </p>
 
                                 <!-- List the messages -->
-                                <p>MESSAGES BELOW</p>
-                                {{convo.messages}}
-                                <p class="msg-header" ng-repeat="message in convo.messages">
-                                    {{message}}
+                                <h5>Messages</h5>
+                                <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false"> <!-- put the messages in reverse order -->
+                                    {{messsage.author}}: {{message.content}}
                                 </p>
 
                                 <!--<p>
@@ -170,7 +172,7 @@
         <script>
             //$('.infinite-scroll').jscroll();
 
-            // you can customize the infinite scroll options as follows
+            // customize the infinite scroll options as follows
             /* 
             $('.infinite-scroll').jscroll({
                 loadingHtml: '<img src="loading.gif" alt="Loading" /> Loading...',

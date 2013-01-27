@@ -9,6 +9,24 @@ function Message(author, content, conversation) {
 }
 
 /**
+ * Construct the main page controller. >.<
+ */
+function MainController($scope, $asksg, $log) {
+
+	// Defaults until entered otherwise on the main page...
+	$scope.username = "";
+	$scope.password = "";
+
+	/**
+	 * Handle the login events.
+	 */
+	$scope.login = function () {
+		console.log("username and password: " + $scope.username + ", " + $scope.password);
+        /*$scope.$emit('event:loginRequest', $scope.username, $scope.password);*/
+    }
+}
+
+/**
  * Construct the conversation controller. :-)
  *
  * @param scope - the angular scope
@@ -20,15 +38,17 @@ function ConversationController($scope, $asksg, $log) {
 	// Call the initial configuration functions
 	//***********************************
 	$scope.refreshConvos = function() {
-		$asksg.fetchConvos(-1, true).
+		$asksg.fetchConvos(-1, false). // don't see every time...
 			success(function(data, status, headers, config) {
 				console.log("Got conversation data back from the server...");
 				console.log(data);
 				// Parse the JSON response data
 				var conversationList = angular.fromJson(data);
 				for (var i = 0; i < conversationList.length; i++) {
-					conversationList[i].created_at = new Date(conversationList[i].created.localMillis).toString('dddd, MMMM ,yyyy');
-					conversationList[i].modified_at = new Date(conversationList[i].modified.localMillis).toString('dddd, MMMM ,yyyy');
+					var createdDate = new Date(conversationList[i].created.localMillis);
+					var modifiedDate = new Date(conversationList[i].modified.localMillis);
+					conversationList[i].created_at = (createdDate.getMonth() + 1) + "/" + createdDate.getDate() + "/" + createdDate.getFullYear();
+					conversationList[i].modified_at = (modifiedDate.getMonth() + 1) + "/" + modifiedDate.getDate() + "/" + modifiedDate.getFullYear()
 				}
 
 				console.log("updated conversations");
