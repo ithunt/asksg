@@ -5,10 +5,6 @@ import edu.rit.asksg.domain.Message;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.integration.MessagingException;
-import org.springframework.integration.annotation.MessageEndpoint;
-import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.integration.core.MessageHandler;
 
 import javax.mail.internet.MimeMessage;
 import java.util.List;
@@ -20,7 +16,7 @@ import java.util.List;
  */
 
 
-public class EmailProvider implements ContentProvider, MessageHandler {
+public class EmailProvider implements ContentProvider {
 
     final public static Logger logger = LoggerFactory.getLogger(EmailProvider.class);
 
@@ -50,13 +46,9 @@ public class EmailProvider implements ContentProvider, MessageHandler {
         return false;
     }
 
-    public void recieve(MimeMessage mimeMessage) {
+    public void receive(MimeMessage mimeMessage) {
         logger.debug("New Mime Email!");
         logger.debug(mimeMessage.toString());
     }
 
-    public void handleMessage(org.springframework.integration.Message<?> message) throws MessagingException {
-        logger.debug("New Email!");
-        logger.debug(message.toString());
-    }
 }

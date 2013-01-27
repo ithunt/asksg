@@ -1,7 +1,5 @@
 package edu.rit.asksg.domain;
 
-import flexjson.JSONDeserializer;
-import flexjson.JSONSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +12,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @RooJavaBean
 @RooToString
