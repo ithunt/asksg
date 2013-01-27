@@ -9,13 +9,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.router.RecipientListRouter;
+import org.springframework.mail.MailMessage;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,8 +39,16 @@ public class EmailProvider implements ContentProvider {
     @Autowired
     ConversationService conversationService;
 
+    @Resource(name = "mailMessage")
+    MailMessage mailMessage;
+
+    @Autowired
+    MailGateway mailGateway;
+
     @Override
     public List<Conversation> fetchNewContent() {
+        //get unread imap messages that aren't picked up by the channel listener.. how?
+
         return null;
     }
 
@@ -46,7 +59,10 @@ public class EmailProvider implements ContentProvider {
 
     @Override
     public boolean postContent(Message message) {
-        return false;
+
+        mailGateway.sendMail(message);
+
+        return true;
     }
 
     @Override
@@ -58,6 +74,22 @@ public class EmailProvider implements ContentProvider {
     public boolean isAuthenticated() {
         return false;
     }
+
+    public MailMessage transform(Message m) {
+        if(m == null) return null;
+
+        mailMessage.setTo( m.getAuthor() );
+
+        mailMessage.setSubject("Your Response from SG Senator");
+
+        mailMessage.setSentDate( new Date(0));
+
+        mailMessage.setText( m.getContent());
+
+        return mailMessage;
+    }
+
+
 
     public void receive(MimeMessage mimeMessage) {
 

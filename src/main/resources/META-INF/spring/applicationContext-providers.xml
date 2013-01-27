@@ -23,6 +23,35 @@
 
     <int:annotation-config />
 
+    <int:channel id="outboundMailChannel" />
+    <int:channel id="xformMailChannel" />
+    <int:channel id="confirmationChannel" />
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="username" value="ritasksg" />
+        <property name="password" value="allHailSpring" />
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="javaMailProperties" ref="javaMailProperties" />
+
+    </bean>
+
+    <int:gateway id="mailGateway" service-interface="edu.rit.asksg.dataio.MailGateway"
+                 default-request-channel="xformMailChannel" default-reply-channel="confirmationChannel" />
+
+    <int:transformer input-channel="xformMailChannel" output-channel="outboundMailChannel"
+                     ref="mailTransformer" method="transform" />
+
+    <int-mail:outbound-channel-adapter channel="outboundMailChannel" mail-sender="mailSender" />
+
+    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage" >
+        <property name="from" value="ritasksg@gmail.com" />
+        <property name="replyTo" value="ritasksg@gmail.com" />
+    </bean>
+
+
+    <bean id="mailTransformer" class="edu.rit.asksg.dataio.EmailProvider" />
+
 
     <int:channel id="receiveChannel">
         <!--<int:interceptors>-->
@@ -66,6 +95,8 @@
         <prop key="mail.imap.socketFactory.fallback">false</prop>
         <prop key="mail.store.protocol">imaps</prop>
         <prop key="mail.debug">false</prop>
+        <prop key="mail.smtp.starttls.enable">true</prop>
+        <prop key="mail.smtp.auth">true</prop>
     </util:properties>
 
 
