@@ -4,10 +4,40 @@
 package edu.rit.asksg.domain;
 
 import edu.rit.asksg.domain.Facebook;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Version;
 
 privileged aspect Facebook_Roo_Jpa_Entity {
     
     declare @type: Facebook: @Entity;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long Facebook.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer Facebook.version;
+    
+    public Long Facebook.getId() {
+        return this.id;
+    }
+    
+    public void Facebook.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer Facebook.getVersion() {
+        return this.version;
+    }
+    
+    public void Facebook.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

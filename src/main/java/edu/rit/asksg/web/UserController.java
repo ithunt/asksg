@@ -34,7 +34,7 @@ public class UserController {
         ian.setPassword("ian");
 
         UserRole role = new UserRole();
-        role.setName("ROLE_admin");
+        role.setName("ROLE_ADMIN");
         Set<UserRole> roles = new HashSet<UserRole>();
         roles.add(role);
 

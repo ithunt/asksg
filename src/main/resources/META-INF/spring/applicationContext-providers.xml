@@ -11,6 +11,8 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd">
 
+    <bean id="twilioProvider" class="edu.rit.asksg.dataio.TwilioProvider" />
+
     <bean id="twilioConfig" class="edu.rit.asksg.domain.ProviderConfig">
         <property name="host" value=""/>
         <property name="port" value="0"/>
@@ -19,10 +21,15 @@
         <property name="authenticationToken" value=""/>
     </bean>
 
+    <int:annotation-config />
+
 
     <int:channel id="recieveChannel">
 
+
     </int:channel>
+
+
 
 
     <int-mail:imap-idle-channel-adapter id="gmailAdapter"

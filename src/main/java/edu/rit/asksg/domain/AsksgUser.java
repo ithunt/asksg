@@ -9,6 +9,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
@@ -24,6 +27,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RooJpaActiveRecord(finders = { "findAsksgUsersByUserNameEquals" })
 @RooJson(deepSerialize = true)
 public class AsksgUser implements UserDetails {
+
+    private static final Logger logger = LoggerFactory.getLogger(AsksgUser.class);
 
     @NotNull
     private String name;
@@ -41,8 +46,12 @@ public class AsksgUser implements UserDetails {
 
     @Override
     public Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authoritiesList = new ArrayList<GrantedAuthority>();
         if (authorities == null) {
+            List<GrantedAuthority> authoritiesList = new ArrayList<GrantedAuthority>();
+            for(UserRole role : roles) {
+                logger.debug("Adding " + role + " to user " + userName);
+                authoritiesList.add(new SimpleGrantedAuthority(role.getName()));
+            }
             authorities = authoritiesList;
         }
         return authorities;

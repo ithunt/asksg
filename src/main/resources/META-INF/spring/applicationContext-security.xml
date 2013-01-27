@@ -18,14 +18,12 @@
     <beans:bean id="userDetailsService" class="edu.rit.asksg.service.UserServiceImpl" />
 
 
-    <!-- Configure Authentication mechanism -->
     <authentication-manager alias="authenticationManager">
-
-
-        <!-- SHA-256 values can be produced using 'echo -n your_desired_password | sha256sum' (using normal *nix environments) -->
-        <authentication-provider user-service-ref="userDetailsService">
-
-            <password-encoder hash="plaintext" />
-        </authentication-provider>
+        <authentication-provider ref="daoAuthenticationProvider" />
     </authentication-manager>
+
+    <beans:bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <beans:property name="userDetailsService" ref="userDetailsService" />
+    </beans:bean>
+
 </beans:beans>
