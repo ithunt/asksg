@@ -1,11 +1,27 @@
 /**
- * Message object definition.
+ * Message object constructor.
  */
 function Message(author, content, conversation) {
 	this.author = author;
 	this.content = content;
 	this.conversation = conversation;
 	this.analytics = null;
+}
+
+/**
+ * Message object constructor.
+ */
+function Conversation(author, subject, messages, created, modified) {
+	this.author = author;
+	this.subject = subject;
+	this.created_at = created;
+	this.modified_at = modified;
+
+	// Run through the messages list and create the appropriate Message objects
+	this.messages = new Array();
+	for (var i = 0; i < messages.length; i++) {
+		this.messages[i] = new Message(messages[i].author, messages[i].content, this);
+	}
 }
 
 /**
@@ -22,7 +38,7 @@ function MainController($scope, $asksg, $log) {
 	 */
 	$scope.login = function () {
 		console.log("username and password: " + $scope.username + ", " + $scope.password);
-        /*$scope.$emit('event:loginRequest', $scope.username, $scope.password);*/
+        //$scope.$emit('event:loginRequest', $scope.username, $scope.password);
     }
 }
 
@@ -34,28 +50,34 @@ function MainController($scope, $asksg, $log) {
  * @param log - the log (optional, not currently used)
  */
 function ConversationController($scope, $asksg, $log) {
-	//***********************************
-	// Call the initial configuration functions
-	//***********************************
+	/*
+	 * Call the initial configuration functions
+	 */
 	$scope.refreshConvos = function() {
-		$asksg.fetchConvos(-1, false). // don't see every time...
+		$asksg.fetchConvos(-1, false). // don't seed every time...
 			success(function(data, status, headers, config) {
 				console.log("Got conversation data back from the server...");
 				console.log(data);
-				// Parse the JSON response data
+
+				// Parse the JSON response data and create a list of Conversation objects to store in the scope
 				var conversationList = angular.fromJson(data);
+				$scope.convos = new Array();
 				for (var i = 0; i < conversationList.length; i++) {
 					var createdDate = new Date(conversationList[i].created.localMillis);
 					var modifiedDate = new Date(conversationList[i].modified.localMillis);
-					conversationList[i].created_at = (createdDate.getMonth() + 1) + "/" + createdDate.getDate() + "/" + createdDate.getFullYear();
-					conversationList[i].modified_at = (modifiedDate.getMonth() + 1) + "/" + modifiedDate.getDate() + "/" + modifiedDate.getFullYear()
+					$scope.convos[i] = new Conversation(conversationList[i].author, 
+						conversationList[i].subject, conversationList[i].messages, 
+						conversationList[i].createdDate, conversationList[i].modifiedDate);
+
+					//conversationList[i].created_at = (createdDate.getMonth() + 1) + "/" + createdDate.getDate() + "/" + createdDate.getFullYear();
+					//conversationList[i].modified_at = (modifiedDate.getMonth() + 1) + "/" + modifiedDate.getDate() + "/" + modifiedDate.getFullYear();
 				}
 
 				console.log("updated conversations");
 				console.log(conversationList);
 
 				// Now return the result as an object
-				$scope.convos = conversationList;
+				//$scope.convos = conversationList;
 			}).
 			error(function(data, status, headers, config) {
 				return null;
@@ -85,80 +107,102 @@ function ConversationController($scope, $asksg, $log) {
 	$scope.userName = "Admin"; // this should be replaced by response from server
 	$scope.refreshConvos();
 
-	//***********************************
-	// Set up the default conversation filters
-	//***********************************
+	/*
+	 * Set up the default conversation filters.
+	 */
 	$scope.convoCategory = "";
 	$scope.convoFilter = "";
 
 	// Array to store the state of active conversation filters
-	$scope.filterArray = Array();
-	$scope.filterArray['email'] = false;
-	$scope.filterArray['sms'] = false;
-	$scope.filterArray['facebook'] = false;
-	$scope.filterArray['twitter'] = false;
-	$scope.filterArray['reddit'] = false;
-	//console.log("set up the filter array");
+	$scope.filterConvoArray = Array();
+	$scope.filterConvoArray['email'] = false;
+	$scope.filterConvoArray['sms'] = false;
+	$scope.filterConvoArray['facebook'] = false;
+	$scope.filterConvoArray['twitter'] = false;
+	$scope.filterConvoArray['reddit'] = false;
 
-	//***********************************
-	// Filter function for the conversations
-	//***********************************
+	// Array to store the state of the active tag filters
+	$scope.filterTagArray = Array();
+	$scope.filterTagArray['read'] = false;
+	$scope.filterTagArray['unread'] = false;
+
+	/*
+	 * Filter function for the conversations.
+	 */
 	$scope.filterConvo = function(convo) {
 		//console.log(convo.service);
 		//console.log($scope.filterArray[convo.service]);
-		return !($scope.filterArray[convo.service]);
+		return !($scope.filterConvoArray[convo.service]);
     };
 
-	//***********************************
-	// Filter functions
-	//***********************************
+    /*
+	 * Filter function for the conversations.
+	 */
+	$scope.filterTag = function(tag) {
+		//console.log(convo.service);
+		//console.log($scope.filterArray[convo.service]);
+		return !($scope.filterTagArray[tag]);
+    };
+
+	/*
+	 * Filter functions...
+	 */
 	$scope.filterAll = function() {
 		$scope.convoCategory = "";
 	};
 	$scope.filterEmail = function() {
-		//$scope.convoCategory = "EMAIL";
-		if ($scope.filterArray['email']) {
-			$scope.filterArray['email'] = false;
+		if ($scope.filterConvoArray['email']) {
+			$scope.filterConvoArray['email'] = false;
 		} else {
-			$scope.filterArray['email'] = true;
+			$scope.filterConvoArray['email'] = true;
 		}
 	};
 	$scope.filterSms = function() {
-		//$scope.convoCategory = "SMS";
-		if ($scope.filterArray['sms']) {
-			$scope.filterArray['sms'] = false;
+		if ($scope.filterConvoArray['sms']) {
+			$scope.filterConvoArray['sms'] = false;
 		} else {
-			$scope.filterArray['sms'] = true;
+			$scope.filterConvoArray['sms'] = true;
 		}
 	};
 	$scope.filterFacebook = function() {
-		//$scope.convoCategory = "FACEBOOK";
-		if ($scope.filterArray['facebook']) {
-			$scope.filterArray['facebook'] = false;
+		if ($scope.filterConvoArray['facebook']) {
+			$scope.filterConvoArray['facebook'] = false;
 		} else {
-			$scope.filterArray['facebook'] = true;
+			$scope.filterConvoArray['facebook'] = true;
 		}
 	};
 	$scope.filterTwitter = function() {
-		//$scope.convoCategory = "TWITTER";
-		if ($scope.filterArray['twitter']) {
-			$scope.filterArray['twitter'] = false;
+		if ($scope.filterConvoArray['twitter']) {
+			$scope.filterConvoArray['twitter'] = false;
 		} else {
-			$scope.filterArray['twitter'] = true;
+			$scope.filterConvoArray['twitter'] = true;
 		}
 	};
 	$scope.filterReddit = function() {
-		//$scope.convoCategory = "REDDIT";
-		if ($scope.filterArray['reddit']) {
-			$scope.filterArray['reddit'] = false;
+		if ($scope.filterConvoArray['reddit']) {
+			$scope.filterConvoArray['reddit'] = false;
 		} else {
-			$scope.filterArray['reddit'] = true;
+			$scope.filterConvoArray['reddit'] = true;
+		}
+	};
+	$scope.filterRead = function() {
+		if ($scope.filterTagArray['read']) {
+			$scope.filterTagArray['read'] = false;
+		} else {
+			$scope.filterTagArray['read'] = true;
+		}
+	};
+	$scope.filterUnread = function() {
+		if ($scope.filterTagArray['unread']) {
+			$scope.filterTagArray['unread'] = false;
+		} else {
+			$scope.filterTagArray['unread'] = true;
 		}
 	};
 
-	//***********************************
-	// Scope functons for handling user input (e.g. publish message)
-	//***********************************
+	/*
+	 * Scope functons for handling user input (e.g. publish message).
+	 */
 	$scope.postResponse = function(convoId, messageId, response) {
 		$asksg.postResponse(convoId, messageId, response);
 	};
@@ -228,5 +272,4 @@ AsksgService = function() {
 // Invoke the ASKSG service constructor...
 console.log("Jumping into the constructor...");
 AsksgService();
-
 

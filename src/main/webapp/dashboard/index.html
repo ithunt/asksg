@@ -58,28 +58,22 @@
             <div class="row-fluid">
                 <div class="span3">
                     <div class="well sidebar-nav">
-                        <!--<h3 class="nav-list-header">Services</h3>-->
                         <ul class="nav nav-list">
                             <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services</li>
-                            <!--<li id="service-item-all" class="active service-menu-item" ng-click="filterAll()"><a href="#">All</a></li>-->
                             <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()"><a href="#">Email</a></li>
                             <li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()"><a href="#">SMS</a></li>
                             <li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()"><a href="#">Facebook</a></li>
                             <li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()"><a href="#">Twitter</a></li>
                             <li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()"><a href="#">Reddit</a></li>
                         </ul>
-                        <!--<div class="input-append icon-search"><input ng-model="convoFilter" type="text" placeholder="Filter" id="" name=""><span class="add-on"><i class="icon-search"></i></span></div>-->
-                        <!--Search: <input ng-model="convoFilter">-->
-                        <!--Display:
-                        <select ng-model="orderConvos">
-                            <option value="">All</option>
-                            <option value="email">Email</option>
-                            <option value="sms">SMS</option>
-                            <option value="facebook">Facebook</option>
-                            <option value="twitter">Twitter</option>
-                            <option value="reddit">Reddit</option>
-                        </select>
-                        -->
+                    </div> <!-- well sidebar-nav -->
+
+                    <div class="well sidebar-nav">
+                        <ul class="nav nav-list">
+                            <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
+                            <li id="service-item-email" class="active service-menu-item" ng-click="filterRead()"><a href="#">Read</a></li>
+                            <li id="service-item-sms" class="active service-menu-item" ng-click="filterUnread()"><a href="#">Unread</a></li>
+                        </ul>
                     </div> <!-- well sidebar-nav -->
                 </div> <!-- span3 -->
 
@@ -91,12 +85,16 @@
                             <input type="checkbox" checked="checked">
                         </div>-->
 
+                        <!-- Look at well.. -->
+
                         <div id="convo-navbar" class="navbar">
                             <div class="navbar-inner">
                                 <div class="container">
+                                    <<!--div class="pagination pagination-centered">-->
                                     <ul class="nav">
-                                        <li><a href="#">Conversations</a></li>
+                                        <li class="disabled"><a style="size:18px">Conversations</a></li>
                                     </ul>
+                                    <!--</div>-->
                                     <form class="navbar-search pull-right">
                                         <div class="input-append">
                                             <!-- Hook up the search bar to the converation filter for the Angular controller -->
@@ -110,8 +108,11 @@
                         <!-- TODO: plug in the infinite scroll jQuery plugin to give it the facebook feel -->
 
                         <ul class="convo-list infinite-scroll">
-                            <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:refineFilterString"> 
+                            <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString"> 
                                 <!--filter:convoCategory | filter:filterArray[convo.service]">-->
+
+                                <!-- should replace service with an icon for the service name -->
+
                                 <h3>{{convo.service}} - Conversation {{convo.id}}</h3>
                                 <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length - 1].content}}</i></b></h5>
                                 <p>
@@ -126,12 +127,6 @@
                                     {{messsage.author}}: {{message.content}}
                                 </p>
 
-                                <!--<p>
-                                    <script type="text/javascript">
-                                        renderTree(convo.reply);
-                                    </script>
-                                </p>-->
-
                                 <p id="reply-tree-{{convo.id}}">
                                     <!-- fill in the controller -->
                                 </p>
@@ -140,19 +135,15 @@
                                 <button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>
                                 <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
 
+                                <!-- TODO: this should probably be put somewhere else -->
+                                <button class="btn btn-danger" onclick="deleteConvo({{convo.id}})">Delete</button>
+
                                 <!-- The message/conversation response form -->
                                 <div id="response-form-{{convo.id}}" class="responseForm">
                                     <form ng-submit="doPostMessage(convo, 0, messageResp, userName)">
                                         <input class="input-xlarge focused" ng-model="messageResp"/>
                                         <button class="btn" type="submit">Submit Message</button>
                                     </form>
-                                    <!--
-                                    <form ng-model="message-resp-{{convo.id}}" accept-charset="UTF-8"> 
-                                        <textarea class="span6" id="new_message" name="new_message"
-                                        placeholder="Type in your message" rows="4"></textarea>
-                                        <br/>
-                                    </form>
-                                    -->
                                 </div>
                             </li>
                         </ul>
