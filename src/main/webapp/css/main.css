@@ -2,8 +2,44 @@
    Custom styles
 ============================================================================= */
 
-.navbar {
+body {
+	/*background-color: #F36E21;*/
+}
+
+.navbar .navbar-inner {
 	background-color: #F36E21;
+ 	background-image: none;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.navbar-inner .container {
+	background-color: white;	
+	background-image: none;
+	padding-left: 20px;
+	padding-right: 20px;
+	-moz-border-radius: 15px;	
+	border-radius: 15px;
+}
+
+.navbar-inner .container li {
+	color:black;
+}
+
+.navbar-inner .container .a:link {
+	color:black;
+}
+
+.navbar-inner .container .a:hover {
+	color:black;
+}
+
+.navbar-inner .container .a:visited {
+	color:black;
+}
+
+.navbar-inner .container .a:active {
+	color:black;
 }
 
 /*
