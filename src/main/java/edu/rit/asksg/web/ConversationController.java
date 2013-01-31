@@ -2,6 +2,7 @@ package edu.rit.asksg.web;
 
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -11,7 +12,9 @@ import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.Resource;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @RooWebJson(jsonObject = Conversation.class)
@@ -19,8 +22,13 @@ import java.util.Set;
 @RequestMapping("/conversations")
 public class ConversationController {
 
+    @Resource
+    Map<String, Service> providerMap;
+
     @RequestMapping(value = "/seed")
     public ResponseEntity<String> seed() {
+
+
 
         Conversation c = new Conversation();
         Message m1 = new Message();
@@ -31,7 +39,7 @@ public class ConversationController {
         messages.add(m1);
 
         c.setMessages(messages);
-
+//        c.setProvider(providerMap.get("default"));
 
         conversationService.saveConversation(c);
 

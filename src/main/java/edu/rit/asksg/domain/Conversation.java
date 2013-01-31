@@ -34,6 +34,10 @@ public class Conversation {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
     private LocalDateTime modified = new LocalDateTime();
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private Service provider;
+
+    private transient String providerName;
+
 }

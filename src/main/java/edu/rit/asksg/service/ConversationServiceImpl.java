@@ -3,6 +3,7 @@ package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.repository.MessageRepository;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +39,10 @@ public class ConversationServiceImpl implements ConversationService {
         return conversationRepository.save(conversation);
     }
 
+    @Override
+    public void bootstrap() {
+
+
+
+    }
 }

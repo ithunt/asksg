@@ -44,4 +44,6 @@ public class Message {
 
     @NotNull
     private Boolean posted = Boolean.FALSE;
+
+    private String snippet;
 }

@@ -1,6 +1,7 @@
 package edu.rit.asksg.web;
 
-import edu.rit.asksg.dataio.TwilioProvider;
+import edu.rit.asksg.domain.Service;
+import edu.rit.asksg.domain.Twilio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/twilios")
 public class TwilioController {
 
-	@Autowired
-	TwilioProvider provider;
+	@Resource(name = "twilioProvider")
+    Twilio provider;
 
 	@RequestMapping(value = "/receive", method = RequestMethod.POST)//, produces = "text/xml")
 	//public ResponseEntity<String> receiveSMS(@RequestBody Map<String, String> request) {

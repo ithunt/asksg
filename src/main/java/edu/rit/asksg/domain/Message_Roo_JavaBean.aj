@@ -74,4 +74,12 @@ privileged aspect Message_Roo_JavaBean {
         this.posted = posted;
     }
     
+    public String Message.getSnippet() {
+        return this.snippet;
+    }
+    
+    public void Message.setSnippet(String snippet) {
+        this.snippet = snippet;
+    }
+    
 }

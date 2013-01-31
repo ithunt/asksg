@@ -3,6 +3,7 @@ package edu.rit.asksg.web;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -20,6 +22,8 @@ import java.util.HashSet;
 @RequestMapping("/messages")
 public class MessageController {
 
+    @Resource
+    Map<String, Service> providerMap;
 
     @Resource(name = "emailProvider")
     ContentProvider emailProvider;
@@ -29,6 +33,7 @@ public class MessageController {
 
         Conversation c = new Conversation();
         c.setId(1L);
+        //c.setProvider(providerMap.get("default"));
 
         Message m = new Message();
         m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
@@ -50,6 +55,7 @@ public class MessageController {
 
         Conversation convo = new Conversation();
         Set<Message> messages = new HashSet<Message>();
+        //convo.setProvider(providerMap.get("default"));
 
         Message m = new Message();
         m.setContent("Education is the path from cocky ignorance to miserable uncertainty");

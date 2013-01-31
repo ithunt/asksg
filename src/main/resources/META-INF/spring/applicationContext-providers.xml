@@ -11,7 +11,26 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd">
 
-    <bean id="twilioProvider" class="edu.rit.asksg.dataio.TwilioProvider" />
+
+    <bean id="twilioProvider" class="edu.rit.asksg.domain.Twilio">
+        <property name="identifier" value="twilio" />
+    </bean>
+
+    <bean id="emailProvider" class="edu.rit.asksg.domain.Email">
+        <property name="identifier" value="email" />
+    </bean>
+
+    <bean id="defaultProvider" class="edu.rit.asksg.domain.Service">
+        <property name="identifier" value="default" />
+    </bean>
+
+    <util:map id="providerMap" key-type="java.lang.String" value-type="edu.rit.asksg.domain.Service">
+        <entry key="email" value-ref="emailProvider" />
+        <entry key="twilio" value-ref="twilioProvider" />
+        <entry key="default" value-ref="defaultProvider" />
+    </util:map>
+
+    <!--TWILIO-->
 
     <bean id="twilioConfig" class="edu.rit.asksg.domain.ProviderConfig">
         <property name="host" value=""/>
@@ -21,11 +40,17 @@
         <property name="authenticationToken" value=""/>
     </bean>
 
-    <int:annotation-config />
 
+    <!--EMAIL-->
+    <int:annotation-config />
     <int:channel id="outboundMailChannel" />
     <int:channel id="xformMailChannel" />
     <int:channel id="confirmationChannel" />
+    <int:channel id="receiveChannel">
+        <!--<int:interceptors>-->
+        <!--<int:wire-tap channel="logger" />-->
+        <!--</int:interceptors>-->
+    </int:channel>
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="username" value="ritasksg" />
@@ -33,14 +58,15 @@
         <property name="host" value="smtp.gmail.com" />
         <property name="port" value="587" />
         <property name="javaMailProperties" ref="javaMailProperties" />
-
     </bean>
 
     <int:gateway id="mailGateway" service-interface="edu.rit.asksg.dataio.MailGateway"
                  default-request-channel="xformMailChannel" default-reply-channel="confirmationChannel" />
 
+
+
     <int:transformer input-channel="xformMailChannel" output-channel="outboundMailChannel"
-                     ref="mailTransformer" method="transform" />
+                     ref="emailProvider" method="transform" />
 
     <int-mail:outbound-channel-adapter channel="outboundMailChannel" mail-sender="mailSender" />
 
@@ -48,40 +74,6 @@
         <property name="from" value="ritasksg@gmail.com" />
         <property name="replyTo" value="ritasksg@gmail.com" />
     </bean>
-
-
-    <bean id="mailTransformer" class="edu.rit.asksg.dataio.EmailProvider" />
-
-
-    <int:channel id="receiveChannel">
-        <!--<int:interceptors>-->
-            <!--<int:wire-tap channel="logger" />-->
-
-        <!--</int:interceptors>-->
-
-
-    </int:channel>
-
-    <!--<int:service-activator input-channel="receiveChannel" ref="emailService" method="receive" />-->
-
-    <!--&lt;!&ndash;<int:logging-channel-adapter id="logger" level="WARN"/>&ndash;&gt;-->
-
-    <!--<bean id="emailService" class="edu.rit.asksg.dataio.EmailProvider" />-->
-
-
-    <!--&lt;!&ndash;<int-mail:inbound-channel-adapter&ndash;&gt;-->
-            <!--&lt;!&ndash;id="imapAdapter"&ndash;&gt;-->
-            <!--&lt;!&ndash;channel="recieveChannel"&ndash;&gt;-->
-            <!--&lt;!&ndash;store-uri="imaps://ritasksg:allHailSpring@imap.gmail.com/INBOX"&ndash;&gt;-->
-            <!--&lt;!&ndash;should-mark-messages-as-read="true"&ndash;&gt;-->
-            <!--&lt;!&ndash;should-delete-messages="false"&ndash;&gt;-->
-            <!--&lt;!&ndash;auto-startup="true"&ndash;&gt;-->
-            <!--&lt;!&ndash;java-mail-properties="javaMailProperties">&ndash;&gt;-->
-            <!--&lt;!&ndash;<int:poller id="poller" fixed-delay="20" time-unit="SECONDS" />&ndash;&gt;-->
-    <!--&lt;!&ndash;</int-mail:inbound-channel-adapter>&ndash;&gt;-->
-
-
-
 
     <int-mail:imap-idle-channel-adapter id="gmailAdapter"
                                         store-uri="imaps://ritasksg:allHailSpring@imap.gmail.com/INBOX"
