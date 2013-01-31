@@ -9,10 +9,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity
 @RooJson
-public class Email implements Service {
+public class Email extends Service {
 
-	public String getServiceName() {
-		return "email";
-	}
 
 }

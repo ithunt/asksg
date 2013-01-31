@@ -39,4 +39,9 @@ public class Message {
 
     @ManyToOne
     private Conversation conversation;
+
+    private String url;
+
+    @NotNull
+    private Boolean posted = Boolean.FALSE;
 }

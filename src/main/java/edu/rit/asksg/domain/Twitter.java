@@ -9,10 +9,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity
 @RooJson
-public class Twitter implements Service {
+public class Twitter extends Service {
 
-	public String getServiceName() {
-		return "twitter";
-	}
+
 
 }

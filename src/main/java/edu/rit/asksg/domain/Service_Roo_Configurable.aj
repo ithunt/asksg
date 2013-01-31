@@ -3,11 +3,11 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Email;
-import javax.persistence.Entity;
+import edu.rit.asksg.domain.Service;
+import org.springframework.beans.factory.annotation.Configurable;
 
-privileged aspect Email_Roo_Jpa_Entity {
+privileged aspect Service_Roo_Configurable {
     
-    declare @type: Email: @Entity;
+    declare @type: Service: @Configurable;
     
 }

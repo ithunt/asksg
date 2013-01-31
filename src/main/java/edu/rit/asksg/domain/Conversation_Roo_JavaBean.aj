@@ -5,6 +5,7 @@ package edu.rit.asksg.domain;
 
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.Service;
 import java.util.Set;
 import org.joda.time.LocalDateTime;
 
@@ -32,6 +33,14 @@ privileged aspect Conversation_Roo_JavaBean {
     
     public void Conversation.setModified(LocalDateTime modified) {
         this.modified = modified;
+    }
+    
+    public Service Conversation.getProvider() {
+        return this.provider;
+    }
+    
+    public void Conversation.setProvider(Service provider) {
+        this.provider = provider;
     }
     
 }

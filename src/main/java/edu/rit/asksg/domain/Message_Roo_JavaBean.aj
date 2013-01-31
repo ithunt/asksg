@@ -58,4 +58,20 @@ privileged aspect Message_Roo_JavaBean {
         this.conversation = conversation;
     }
     
+    public String Message.getUrl() {
+        return this.url;
+    }
+    
+    public void Message.setUrl(String url) {
+        this.url = url;
+    }
+    
+    public Boolean Message.getPosted() {
+        return this.posted;
+    }
+    
+    public void Message.setPosted(Boolean posted) {
+        this.posted = posted;
+    }
+    
 }

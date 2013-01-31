@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.mail.ImapIdleChannelAdapter;
 import org.springframework.integration.router.RecipientListRouter;
 import org.springframework.mail.MailMessage;
 import org.springframework.stereotype.Component;
@@ -48,6 +49,7 @@ public class EmailProvider implements ContentProvider {
     @Override
     public List<Conversation> fetchNewContent() {
         //get unread imap messages that aren't picked up by the channel listener.. how?
+        //javamail api?
 
         return null;
     }
@@ -59,9 +61,7 @@ public class EmailProvider implements ContentProvider {
 
     @Override
     public boolean postContent(Message message) {
-
         mailGateway.sendMail(message);
-
         return true;
     }
 

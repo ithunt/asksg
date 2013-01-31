@@ -9,10 +9,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity
 @RooJson
-public class Facebook implements Service {
+public class Facebook extends Service {
 
-	public String getServiceName() {
-		return "facebook";
-	}
+
 
 }
