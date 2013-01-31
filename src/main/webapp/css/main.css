@@ -42,6 +42,16 @@ body {
 	color:black;
 }
 
+.convo-well {
+	padding-top: 10px;
+	padding-bottom: 25px;
+}
+
+li.service-menu-item {
+	background-color: #0000;
+	background-image: none;
+}
+
 /*
 .nav-list > li > a {
   padding: 5px 15px !important;
