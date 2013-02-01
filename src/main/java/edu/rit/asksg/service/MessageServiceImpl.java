@@ -5,11 +5,15 @@ import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
 public class MessageServiceImpl implements MessageService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     @Autowired
     ConversationService conversationService;
@@ -26,12 +30,26 @@ public class MessageServiceImpl implements MessageService {
             Conversation c = conversationService.findConversation( message.getConversation().getId() );
             Set<Message> messages = c.getMessages();
             message.setConversation(c);
-            messages.add(message);
+
             c.setMessages(messages);
 
-            message.setPosted(postMessage(message));
 
-            conversationService.updateConversation(c);
+            //todo: make recipient hack less ugly and more formalized - pass in recipent from UI?
+            try {
+                final Message first = ((Message)messages.toArray()[0]);
+
+                if(first.getAuthor() != null)
+                    message.setRecipient(first.getAuthor());
+
+                message.setPosted(postMessage(message));
+
+                messages.add(message);
+                conversationService.updateConversation(c);
+            } catch (Exception e) {
+                logger.error(e.getLocalizedMessage());
+            }
+
+
         } else {
             messageRepository.save(message);
         }
@@ -41,7 +59,6 @@ public class MessageServiceImpl implements MessageService {
 
 
     protected boolean postMessage(Message message) {
-
         final Service service = message.getConversation().getProvider();
 
         return service.postContent(message);

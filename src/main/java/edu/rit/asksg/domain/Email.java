@@ -74,9 +74,9 @@ public class Email extends Service implements ContentProvider {
     public MailMessage transform(Message m) {
         if(m == null) return null;
 
-        mailMessage.setTo( m.getAuthor() );
+        mailMessage.setTo( m.getRecipient() );
 
-        mailMessage.setSubject("Your Response from SG Senator");
+        mailMessage.setSubject("Your Response from SG");
 
         mailMessage.setSentDate( new Date(0));
 

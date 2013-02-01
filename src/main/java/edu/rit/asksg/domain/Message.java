@@ -46,4 +46,6 @@ public class Message {
     private Boolean posted = Boolean.FALSE;
 
     private String snippet;
+
+    private String recipient;
 }
