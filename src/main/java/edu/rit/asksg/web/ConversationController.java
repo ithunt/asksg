@@ -25,10 +25,12 @@ public class ConversationController {
     @Resource
     Map<String, Service> providerMap;
 
+    private transient boolean strapped = false;
+
     @RequestMapping(value = "/seed")
     public ResponseEntity<String> seed() {
 
-
+        if(!strapped) conversationService.bootstrap();
 
         Conversation c = new Conversation();
         Message m1 = new Message();
@@ -39,7 +41,7 @@ public class ConversationController {
         messages.add(m1);
 
         c.setMessages(messages);
-//        c.setProvider(providerMap.get("default"));
+        c.setProvider(providerMap.get("default"));
 
         conversationService.saveConversation(c);
 

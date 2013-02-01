@@ -16,6 +16,9 @@ public class ConversationServiceImpl implements ConversationService {
     @Autowired
     MessageRepository messageRepository;
 
+    @Autowired
+    ProviderService providerService;
+
     public void saveConversation(Conversation conversation) {
         LocalDateTime now = new LocalDateTime();
         conversation.setCreated(now);
@@ -41,8 +44,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public void bootstrap() {
-
-
+        providerService.bootstrap();
 
     }
 }

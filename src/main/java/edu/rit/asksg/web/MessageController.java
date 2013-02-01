@@ -33,7 +33,7 @@ public class MessageController {
 
         Conversation c = new Conversation();
         c.setId(1L);
-        //c.setProvider(providerMap.get("default"));
+        c.setProvider(providerMap.get("default"));
 
         Message m = new Message();
         m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
@@ -55,7 +55,7 @@ public class MessageController {
 
         Conversation convo = new Conversation();
         Set<Message> messages = new HashSet<Message>();
-        //convo.setProvider(providerMap.get("default"));
+        convo.setProvider(providerMap.get("default"));
 
         Message m = new Message();
         m.setContent("Education is the path from cocky ignorance to miserable uncertainty");

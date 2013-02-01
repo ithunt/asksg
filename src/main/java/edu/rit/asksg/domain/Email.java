@@ -122,6 +122,8 @@ public class Email extends Service implements ContentProvider {
         messages.add(m);
         c.setMessages(messages);
 
+        c.setProvider(this);
+
         conversationService.saveConversation(c);
 
     }

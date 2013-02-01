@@ -26,7 +26,7 @@ public class Service {
     }
 
     public boolean postContent(Message message) {
-        return false;
+        return true;
     }
 
     public boolean authenticate() {

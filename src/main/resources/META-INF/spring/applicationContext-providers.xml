@@ -75,6 +75,8 @@
         <property name="replyTo" value="ritasksg@gmail.com" />
     </bean>
 
+    <int:service-activator input-channel="receiveChannel" ref="emailProvider" method="receive" />
+
     <int-mail:imap-idle-channel-adapter id="gmailAdapter"
                                         store-uri="imaps://ritasksg:allHailSpring@imap.gmail.com/INBOX"
                                         channel="receiveChannel"
