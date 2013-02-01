@@ -1,17 +1,28 @@
 /**
  * Message object constructor.
  */
-function Message(author, content, conversation) {
+function Message(author, content, conversationId) {
+	this.author = author;
+	this.content = content;
+	this.conversationId = conversationId;
+}
+
+/**
+ * MessageRespo object constructor.
+ */
+function MessageResp(author, content, conversation) {
 	this.author = author;
 	this.content = content;
 	this.conversation = conversation;
 	this.analytics = null;
+	this.posted = false; 
 }
 
 /**
- * Message object constructor.
+ * Conversation object constructor.
  */
-function Conversation(author, subject, messages, created, modified) {
+function Conversation(id, author, subject, snippet, messages, created, modified) {
+	this.id = id;
 	this.author = author;
 	this.subject = subject;
 	this.created_at = created;
@@ -20,8 +31,11 @@ function Conversation(author, subject, messages, created, modified) {
 	// Run through the messages list and create the appropriate Message objects
 	this.messages = new Array();
 	for (var i = 0; i < messages.length; i++) {
-		this.messages[i] = new Message(messages[i].author, messages[i].content, this);
+		this.messages[i] = new Message(messages[i].author, messages[i].content, id);
 	}
+
+	// The message snippet
+	this.snippet = snippet;
 }
 
 /**
@@ -60,32 +74,37 @@ function ConversationController($scope, $asksg, $log) {
 				console.log(data);
 
 				// Parse the JSON response data and create a list of Conversation objects to store in the scope
-				var conversationList = angular.fromJson(data);
+				console.log(data);
 				$scope.convos = new Array();
-				for (var i = 0; i < conversationList.length; i++) {
-					var createdDate = new Date(conversationList[i].created.localMillis);
-					var modifiedDate = new Date(conversationList[i].modified.localMillis);
-					$scope.convos[i] = new Conversation(conversationList[i].author, 
-						conversationList[i].subject, conversationList[i].messages, 
-						conversationList[i].createdDate, conversationList[i].modifiedDate);
+				$scope.convoMap = new Array();
+				for (var i = 0; i < data.length; i++) {
+					var conversation = angular.fromJson(data[i]);
+
+					var createdDate = new Date(conversation.created.localMillis);
+					var modifiedDate = new Date(conversation.modified.localMillis);
+
+					// Create the object and store it
+					$scope.convos[i] = new Conversation(conversation.id,
+						conversation.author, conversation.subject,
+						conversation.snippet, conversation.messages,
+						conversation.createdDate, conversation.modifiedDate);
+					$scope.convoMap[conversation.id] = $scope.convos[i];
 
 					//conversationList[i].created_at = (createdDate.getMonth() + 1) + "/" + createdDate.getDate() + "/" + createdDate.getFullYear();
 					//conversationList[i].modified_at = (modifiedDate.getMonth() + 1) + "/" + modifiedDate.getDate() + "/" + modifiedDate.getFullYear();
 				}
 
-				console.log("updated conversations");
-				console.log(conversationList);
-
 				// Now return the result as an object
 				//$scope.convos = conversationList;
 			}).
 			error(function(data, status, headers, config) {
+				console.log("Failed refreshing convos...");
 				return null;
 			});	
 	}
 
 	/**
-	 * Perform a message post
+	 * Perform a message post...
 	 */
 	$scope.doPostMessage = function(convo, messageId, message, author) {
 		// post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
@@ -256,9 +275,9 @@ AsksgService = function() {
 				 * @param messageId - optional message, which indicates that this is a nested response (a la Reddit)
 				 * @param message - the message to insert
 				 */ 
-				postResponse : function(convo, messageId, message, author) {
+				postResponse : function(convo, message, author) {
 					console.log("Building message...");
-					messageResp = new Message(author, message, convo);
+					messageResp = new MessageResp(author, message, convo);
 					console.log(messageResp);
 
 					// Return the HTTP response

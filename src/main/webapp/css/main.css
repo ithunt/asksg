@@ -413,41 +413,28 @@ ul.convo-list
 	-webkit-background-size: auto;
 	-webkit-border-image: none;
 	-webkit-box-shadow: rgba(0, 0, 0, 0.0980392) 0px 8px 8px -6px;
+
 	background-attachment: scroll;
 	background-clip: border-box;
 	background-color: transparent;
-	/*background-image: -webkit-linear-gradient(top, whiteSmoke 0%, white 15%, whiteSmoke 50%, white 85%, whiteSmoke 100%);*/
 	background-origin: padding-box;
 	background-size: auto;
+
+	box-shadow: rgba(0, 0, 0, 0.0980392) 0px 8px 8px -6px;
+	box-sizing: border-box;
+	display: list-item;
+	list-style-type: none;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+
 	border-bottom-color: #F3F3F3;
 	border-bottom-left-radius: 6px;
 	border-bottom-right-radius: 6px;
 	border-bottom-style: solid;
 	border-bottom-width: 3px;
-	border-left-color: #F3F3F3;
-	border-left-style: solid;
-	border-left-width: 3px;
-	border-right-color: #F3F3F3;
-	border-right-style: solid;
-	border-right-width: 3px;
-	border-top-color: #F3F3F3;
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
-	border-top-style: solid;
-	border-top-width: 3px;
-	box-shadow: rgba(0, 0, 0, 0.0980392) 0px 8px 8px -6px;
-	box-sizing: border-box;
-	display: list-item;
-	/*height: 445px;*/
-	list-style-type: none;
-	margin-bottom: 50px;
-	margin-left: 0px;
-	margin-right: 0px;
-	margin-top: 0px;
-	padding-bottom: 60px;
-	padding-left: 100px;
-	padding-right: 100px;
-	padding-top: 60px;
+
 	text-align: left;
 }
 

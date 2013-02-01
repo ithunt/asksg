@@ -16,7 +16,7 @@ $(document).ready(function() {
 		floatConvoMenu();
 	});*/
 	
-	// Handle the changing styles for the services item
+	// Handle the changing styles for the services item.
 	$(".service-menu-item").click(function() {
 		if ($(this).hasClass("active")) {
 			$(this).removeClass("active");	
@@ -24,6 +24,20 @@ $(document).ready(function() {
 			$(this).addClass("active");
 		}
 	});
+
+	// Hide/show the delete button when conversations are hovered over.
+	$('#deleteButton').hide(); // hide by default
+	$('.convo-list-item-msg').hover(
+		function() {
+			console.log("hover...");
+        	$(this).find('#deleteButton').show();
+    	},
+    	function () {
+        	$(this).find('#deleteButton').hide();
+    	}
+	);
+	console.log("set up show/hide");
+});
 
 /*
 	$('#text-toggle-button').toggleButtons({
@@ -34,7 +48,6 @@ $(document).ready(function() {
     	}
 	});
 */
-});
 
 /*
 function floatConvoMenu() {

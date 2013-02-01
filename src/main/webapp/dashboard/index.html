@@ -87,7 +87,7 @@
                             <div class="well convo-well">
                                 <!--div class="pagination pagination-centered">-->
                                 <ul class="nav">
-                                    <li class="disabled"><a style="size:18px">Conversations</a></li>
+                                    <li class="disabled"><a>Conversations</a></li>
                                 </ul>
                                 <!--</div>-->
                                 <form class="navbar-search pull-right">
@@ -107,7 +107,8 @@
 
                                 <!-- should replace service with an icon for the service name -->
 
-                                <h3>{{convo.service}} - Conversation {{convo.id}}</h3>
+                                <h3>{{convo.service}} - Conversation {{convo.author}} - {{convo.snippet}}</h3>
+                                <!-- Display the most recent web contents -->
                                 <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length - 1].content}}</i></b></h5>
                                 <p>
                                     Created: {{convo.created_at}}
@@ -130,11 +131,11 @@
                                 <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
 
                                 <!-- TODO: this should probably be put somewhere else -->
-                                <button class="btn btn-danger" onclick="deleteConvo({{convo.id}})">Delete</button>
+                                <button id="deleteButton" class="btn btn-danger" onclick="deleteConvo({{convo.id}})">Delete</button>
 
                                 <!-- The message/conversation response form -->
                                 <div id="response-form-{{convo.id}}" class="responseForm">
-                                    <form ng-submit="doPostMessage(convo, 0, messageResp, userName)">
+                                    <form ng-submit="doPostMessage(convo, messageResp, userName)">
                                         <input class="input-xlarge focused" ng-model="messageResp"/>
                                         <button class="btn" type="submit">Submit Message</button>
                                     </form>
