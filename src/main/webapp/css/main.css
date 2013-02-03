@@ -52,6 +52,11 @@ li.service-menu-item {
 	background-image: none;
 }
 
+.delete {
+	position:relative;
+	top:5px;
+}
+
 /*
 .nav-list > li > a {
   padding: 5px 15px !important;

@@ -7,17 +7,13 @@ $(document).ready(function() {
 	// Hide response boxes to start
 	$('.responseForm').hide();
 
-	// Hide the search bar to start
-	$("#conversationSearch").hide();
-	$searchBarHidden = true;
-
 	// Make the converation bar move with the stuff on the way down
 	/*$(window).scroll(function() {
 		floatConvoMenu();
 	});*/
 	
 	// Handle the changing styles for the services item.
-	$(".service-menu-item").click(function() {
+	$('.service-menu-item').click(function() {
 		if ($(this).hasClass("active")) {
 			$(this).removeClass("active");	
 		} else {
@@ -25,15 +21,20 @@ $(document).ready(function() {
 		}
 	});
 
+	// debug for peace of mind
+	$('.deleteButton').click(function() {
+		console.log("Trying to delete something");
+	});
+
 	// Hide/show the delete button when conversations are hovered over.
-	$('#deleteButton').hide(); // hide by default
+	$('.deleteButton').hide(); // hide by default
 	$('.convo-list-item-msg').hover(
 		function() {
 			console.log("hover...");
-        	$(this).find('#deleteButton').show();
+        	$(this).find('.deleteButton').show();
     	},
-    	function () {
-        	$(this).find('#deleteButton').hide();
+    	function() {
+        	$(this).find('.deleteButton').hide();
     	}
 	);
 	console.log("set up show/hide");

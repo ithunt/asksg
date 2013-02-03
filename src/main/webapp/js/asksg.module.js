@@ -27,15 +27,22 @@ function Conversation(id, author, subject, snippet, messages, created, modified)
 	this.subject = subject;
 	this.created_at = created;
 	this.modified_at = modified;
+	this.active = false;
 
 	// Run through the messages list and create the appropriate Message objects
 	this.messages = new Array();
-	for (var i = 0; i < messages.length; i++) {
+	for (var i = messages.length - 1; i >= 0; i--) {
 		this.messages[i] = new Message(messages[i].author, messages[i].content, id);
 	}
 
 	// The message snippet
 	this.snippet = snippet;
+
+	// Function to set this conversation as "active" in the UI
+	this.setActive = function(flag) {
+		console.log("toggling a convo...");
+		this.active = flag;
+	}
 }
 
 /**
@@ -65,7 +72,7 @@ function MainController($scope, $asksg, $log) {
  */
 function ConversationController($scope, $asksg, $log) {
 	/*
-	 * Call the initial configuration functions
+	 * Refresh the set of conversations on the page
 	 */
 	$scope.refreshConvos = function() {
 		$asksg.fetchConvos(-1, false). // don't seed every time...
@@ -104,7 +111,7 @@ function ConversationController($scope, $asksg, $log) {
 	}
 
 	/**
-	 * Perform a message post...
+	 * Invoke the ASKSG message post service
 	 */
 	$scope.doPostMessage = function(convo, messageId, message, author) {
 		// post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
@@ -121,6 +128,27 @@ function ConversationController($scope, $asksg, $log) {
 				console.log("Error... :(");
 			});
 	};
+
+	/*
+	 * Delete a conversation.
+	 */
+	$scope.deleteConvo = function(convoId) {
+		console.log("TODO: send HTML delete to server for convo id = " + convoId);
+	};
+
+	/*
+	 * Determine if a conversation is active.
+	 */
+	$scope.isConvoActive = function(convoId) {
+		return $scope.convoMap[convoId].active;
+	}
+
+	/*
+	 * Determine if a conversation is active (hovered over).
+	 */
+	//$scope.active = function(convoId) {
+	//	console.log("TODO: send HTML delete to server for convo id = " + convoId);
+	//};
 
 	// Set the user name
 	$scope.userName = "Admin"; // this should be replaced by response from server
@@ -218,13 +246,6 @@ function ConversationController($scope, $asksg, $log) {
 			$scope.filterTagArray['unread'] = true;
 		}
 	};
-
-	/*
-	 * Scope functons for handling user input (e.g. publish message).
-	 */
-	$scope.postResponse = function(convoId, messageId, response) {
-		$asksg.postResponse(convoId, messageId, response);
-	};
 }
 
 /**
@@ -236,7 +257,7 @@ AsksgService = function() {
 	console.log("Starting the AsksgService...");
 
 	// Create the ASKSG module
-	angular.module('ASKSG', [], function($provide) {
+	var directives = angular.module('ASKSG', [], function($provide) {
 
 		// Create and inject the asksg service into the ConversationController.
 		$provide.factory('$asksg', function($http, $log) {
@@ -282,10 +303,56 @@ AsksgService = function() {
 
 					// Return the HTTP response
 					return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
-				}				
+				}
 			};
 		});
 	});
+
+	/**
+	 * Insert the custom directives into the app for HTML markup to use...
+	 * The purpose of each directive is obvious based on the names
+	 */
+/*
+directives.directive('myMouseover', function() {
+    //var compiler = this;
+    //compiler.descend(true);
+    //compiler.directives(true);
+    //return function(linkElement) {
+    //	linkElement.mouseenter(function(event){
+      //    alert("yeah!");
+       //   event.stopPropagation();
+       // });
+      //};
+      //alert("in myMouseover directive");
+      return {
+	         link : function(element){
+        		element.mouseenter(function(event){
+          			alert("it worked!");
+        		});
+        	}
+      };
+});
+*/
+
+/*
+	directives.directive('showonhoverparent',
+	   function() {
+	      return {
+	         link : function(scope, element, attrs) {
+	         	console.log(element[0]);
+	         	console.log(element[0].parentNode);
+	            element[0].parentNode.bind('mouseenter', function() {
+	            	// TODO: why isn't this working?
+	            	console.log(element[0]);
+	            	console.log(element[0].parentNode);
+	                element[0].show();
+	            });
+	            element[0].parentNode.bind('mouseleave', function() {
+	                 element[0].hide();
+	            });
+	       }
+	   };
+	});*/
 }
 
 // Invoke the ASKSG service constructor...

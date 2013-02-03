@@ -22,7 +22,7 @@
         <!--<link rel="stylesheet" href="../bootstrap-toggle-buttons.css">-->
 
         <!-- Link in angular and our controller files -->
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script> <!-- ../js/angular/angular.min.js -->
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script> <!-- ../js/angular/angular.min.js -->
         <script src="../js/asksg.module.js"></script>
         <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
@@ -103,42 +103,47 @@
 
                         <ul class="convo-list infinite-scroll">
                             <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString"> 
-                                <!--filter:convoCategory | filter:filterArray[convo.service]">-->
+                                <div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
 
-                                <!-- should replace service with an icon for the service name -->
+                                    <!-- TODO: this should probably be put somewhere else -->
+                                    <div class="delete pull-right" ng-show="isConvoActive(convo.id)" showonhoverparent>
+                                        <button class="btn btn-danger">Delete</button> <!--onclick="deleteConvo({{convo.id}})" -->
+                                    </div>
 
-                                <h3>{{convo.service}} - Conversation {{convo.author}} - {{convo.snippet}}</h3>
-                                <!-- Display the most recent web contents -->
-                                <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length - 1].content}}</i></b></h5>
-                                <p>
-                                    Created: {{convo.created_at}}
-                                    <br/>
-                                    Modified: {{convo.modified_at}} 
-                                </p>
+                                    <!--filter:convoCategory | filter:filterArray[convo.service]">-->
 
-                                <!-- List the messages -->
-                                <h5>Messages</h5>
-                                <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false"> <!-- put the messages in reverse order -->
-                                    {{messsage.author}}: {{message.content}}
-                                </p>
+                                    <!-- should replace service with an icon for the service name -->
 
-                                <p id="reply-tree-{{convo.id}}">
-                                    <!-- fill in the controller -->
-                                </p>
+                                    <h3>{{convo.service}} - Conversation {{convo.author}} - {{convo.snippet}}</h3>
+                                    <!-- Display the most recent web contents -->
+                                    <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length - 1].content}}</i></b></h5>
+                                    <p>
+                                        Created: {{convo.created_at}}
+                                        <br/>
+                                        Modified: {{convo.modified_at}} 
+                                    </p>
 
-                                <!-- Some useful(?) buttons -->
-                                <button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>
-                                <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
+                                    <!-- List the messages -->
+                                    <h5>Messages</h5>
+                                    <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false"> <!-- put the messages in reverse order -->
+                                        <i class="icon-chevron-right"></i>{{messsage.author}}: {{message.content}}
+                                    </p>
 
-                                <!-- TODO: this should probably be put somewhere else -->
-                                <button id="deleteButton" class="btn btn-danger" onclick="deleteConvo({{convo.id}})">Delete</button>
+                                    <p id="reply-tree-{{convo.id}}">
+                                        <!-- fill in the controller -->
+                                    </p>
 
-                                <!-- The message/conversation response form -->
-                                <div id="response-form-{{convo.id}}" class="responseForm">
-                                    <form ng-submit="doPostMessage(convo, messageResp, userName)">
-                                        <input class="input-xlarge focused" ng-model="messageResp"/>
-                                        <button class="btn" type="submit">Submit Message</button>
-                                    </form>
+                                    <!-- Some useful(?) buttons -->
+                                    <button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>
+                                    <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
+
+                                    <!-- The message/conversation response form -->
+                                    <div id="response-form-{{convo.id}}" class="responseForm">
+                                        <form ng-submit="doPostMessage(convo, messageResp, userName)">
+                                            <input class="input-xlarge focused" ng-model="messageResp"/>
+                                            <button class="btn" type="submit">Submit Message</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </li>
                         </ul>
@@ -153,7 +158,11 @@
             </footer>
         </div> <!-- container -->
 
-        <!-- le infinite scroll -->
+        <!-- le jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
+
+         <!-- le infinite scroll -->
         <script src="../js/jquery.jscroll.min.js"></script>
         <script>
             //$('.infinite-scroll').jscroll();
@@ -168,10 +177,6 @@
             });
             */
         </script>
-
-        <!-- le jQuery -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
 
         <!-- le Bootstrap -->
         <script src="../js/vendor/bootstrap.min.js"></script>

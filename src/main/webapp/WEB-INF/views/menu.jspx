@@ -14,5 +14,8 @@
             <menu:item id="i_message_new" messageCode="global_menu_new" url="/messages?form" z="6ME+t1wCXxIe0ueapV28lZ5YUi0="/>
             <menu:item id="i_message_list" messageCode="global_menu_list" url="/messages?page=1&amp;size=${empty param.size ? 10 : param.size}" z="eGv0nXC/JpwInH30nZdjM2e3PxE="/>
         </menu:category>
+        <menu:category id="c_controller" z="nj8Dm3hojIyIEyPkwE1UMDIs+K8=">
+            <menu:item id="i_controller__testtwitterindex_id" messageCode="global_generic" url="/testtwitter/index" z="KYVV5i1471MQ+u609meVXo/6M2I="/>
+        </menu:category>
     </menu:menu>
 </div>
