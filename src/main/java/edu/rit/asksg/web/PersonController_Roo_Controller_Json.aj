@@ -3,9 +3,9 @@
 
 package edu.rit.asksg.web;
 
-import edu.rit.asksg.domain.AsksgUser;
-import edu.rit.asksg.service.UserService;
-import edu.rit.asksg.web.AsksgUserController;
+import edu.rit.asksg.domain.Person;
+import edu.rit.asksg.service.PersonService;
+import edu.rit.asksg.web.PersonController;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,45 +18,45 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-privileged aspect AsksgUserController_Roo_Controller_Json {
+privileged aspect PersonController_Roo_Controller_Json {
     
     @Autowired
-    UserService AsksgUserController.userService;
+    PersonService PersonController.personService;
     
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String> AsksgUserController.showJson(@PathVariable("id") Long id) {
-        AsksgUser asksgUser = userService.findAsksgUser(id);
+    public ResponseEntity<String> PersonController.showJson(@PathVariable("id") Long id) {
+        Person person = personService.findPerson(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        if (asksgUser == null) {
+        if (person == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<String>(asksgUser.toJson(), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(person.toJson(), headers, HttpStatus.OK);
     }
     
     @RequestMapping(headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String> AsksgUserController.listJson() {
+    public ResponseEntity<String> PersonController.listJson() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        List<AsksgUser> result = userService.findAllAsksgUsers();
-        return new ResponseEntity<String>(AsksgUser.toJsonArray(result), headers, HttpStatus.OK);
+        List<Person> result = personService.findAllPeople();
+        return new ResponseEntity<String>(Person.toJsonArray(result), headers, HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> AsksgUserController.createFromJson(@RequestBody String json) {
-        AsksgUser asksgUser = AsksgUser.fromJsonToAsksgUser(json);
-        userService.saveAsksgUser(asksgUser);
+    public ResponseEntity<String> PersonController.createFromJson(@RequestBody String json) {
+        Person person = Person.fromJsonToPerson(json);
+        personService.savePerson(person);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
     
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> AsksgUserController.createFromJsonArray(@RequestBody String json) {
-        for (AsksgUser asksgUser: AsksgUser.fromJsonArrayToAsksgUsers(json)) {
-            userService.saveAsksgUser(asksgUser);
+    public ResponseEntity<String> PersonController.createFromJsonArray(@RequestBody String json) {
+        for (Person person: Person.fromJsonArrayToPeople(json)) {
+            personService.savePerson(person);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -64,22 +64,22 @@ privileged aspect AsksgUserController_Roo_Controller_Json {
     }
     
     @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> AsksgUserController.updateFromJson(@RequestBody String json) {
+    public ResponseEntity<String> PersonController.updateFromJson(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        AsksgUser asksgUser = AsksgUser.fromJsonToAsksgUser(json);
-        if (userService.updateAsksgUser(asksgUser) == null) {
+        Person person = Person.fromJsonToPerson(json);
+        if (personService.updatePerson(person) == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/jsonArray", method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> AsksgUserController.updateFromJsonArray(@RequestBody String json) {
+    public ResponseEntity<String> PersonController.updateFromJsonArray(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        for (AsksgUser asksgUser: AsksgUser.fromJsonArrayToAsksgUsers(json)) {
-            if (userService.updateAsksgUser(asksgUser) == null) {
+        for (Person person: Person.fromJsonArrayToPeople(json)) {
+            if (personService.updatePerson(person) == null) {
                 return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
             }
         }
@@ -87,23 +87,39 @@ privileged aspect AsksgUserController_Roo_Controller_Json {
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<String> AsksgUserController.deleteFromJson(@PathVariable("id") Long id) {
-        AsksgUser asksgUser = userService.findAsksgUser(id);
+    public ResponseEntity<String> PersonController.deleteFromJson(@PathVariable("id") Long id) {
+        Person person = personService.findPerson(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        if (asksgUser == null) {
+        if (person == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        userService.deleteAsksgUser(asksgUser);
+        personService.deletePerson(person);
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     
-    @RequestMapping(params = "find=ByUserNameEquals", headers = "Accept=application/json")
+    @RequestMapping(params = "find=ByEmailEquals", headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String> AsksgUserController.jsonFindAsksgUsersByUserNameEquals(@RequestParam("userName") String userName) {
+    public ResponseEntity<String> PersonController.jsonFindPeopleByEmailEquals(@RequestParam("email") String email) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(AsksgUser.toJsonArray(AsksgUser.findAsksgUsersByUserNameEquals(userName).getResultList()), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByEmailEquals(email).getResultList()), headers, HttpStatus.OK);
+    }
+    
+    @RequestMapping(params = "find=ByNameEquals", headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<String> PersonController.jsonFindPeopleByNameEquals(@RequestParam("name") String name) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByNameEquals(name).getResultList()), headers, HttpStatus.OK);
+    }
+    
+    @RequestMapping(params = "find=ByPhoneNumberEquals", headers = "Accept=application/json")
+    @ResponseBody
+    public ResponseEntity<String> PersonController.jsonFindPeopleByPhoneNumberEquals(@RequestParam("phoneNumber") String phoneNumber) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByPhoneNumberEquals(phoneNumber).getResultList()), headers, HttpStatus.OK);
     }
     
 }
