@@ -10,7 +10,6 @@ import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -27,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RooToString
 @RooJpaActiveRecord(finders = { "findAsksgUsersByUserNameEquals" })
 @RooJson(deepSerialize = true)
-public class AsksgUser implements UserDetails {
+public class AsksgUser implements UserDetails, Identity {
 
     private static final Logger logger = LoggerFactory.getLogger(AsksgUser.class);
 
@@ -45,11 +44,15 @@ public class AsksgUser implements UserDetails {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserRole> roles = new HashSet<UserRole>();
 
+    private String phoneNumber;
+
+    private String email;
+
     @Override
     public Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
         if (authorities == null) {
             List<GrantedAuthority> authoritiesList = new ArrayList<GrantedAuthority>();
-            for(UserRole role : roles) {
+            for (UserRole role : roles) {
                 logger.debug("Adding " + role + " to user " + userName);
                 authoritiesList.add(new SimpleGrantedAuthority(role.getName()));
             }
@@ -94,5 +97,18 @@ public class AsksgUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

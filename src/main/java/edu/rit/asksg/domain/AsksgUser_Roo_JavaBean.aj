@@ -9,10 +9,6 @@ import java.util.Set;
 
 privileged aspect AsksgUser_Roo_JavaBean {
     
-    public String AsksgUser.getName() {
-        return this.name;
-    }
-    
     public void AsksgUser.setName(String name) {
         this.name = name;
     }
@@ -35,6 +31,14 @@ privileged aspect AsksgUser_Roo_JavaBean {
     
     public void AsksgUser.setRoles(Set<UserRole> roles) {
         this.roles = roles;
+    }
+    
+    public void AsksgUser.setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    
+    public void AsksgUser.setEmail(String email) {
+        this.email = email;
     }
     
 }

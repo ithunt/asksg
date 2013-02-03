@@ -102,11 +102,6 @@
             <artifactId>spring-social-twitter</artifactId>
             <version>1.0.2.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>2.2</version>
-        </dependency>
 
         <!-- General dependencies for standard applications -->
         <dependency>
