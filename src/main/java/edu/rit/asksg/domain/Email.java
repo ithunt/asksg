@@ -30,8 +30,7 @@ import java.util.Set;
 @RooJson
 public class Email extends Service implements ContentProvider {
 
-
-    final public static Logger logger = LoggerFactory.getLogger(Email.class);
+    private static final transient Logger logger = LoggerFactory.getLogger(Email.class);
 
     @Autowired
     transient ConversationService conversationService;

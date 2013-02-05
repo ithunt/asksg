@@ -1,4 +1,4 @@
-package edu.rit.asksg.web;
+package edu.rit.asksg.dataio;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

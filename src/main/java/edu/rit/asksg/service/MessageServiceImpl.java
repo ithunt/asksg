@@ -20,8 +20,8 @@ public class MessageServiceImpl implements MessageService {
 
     public void saveMessage(Message message) {
         LocalDateTime now = new LocalDateTime();
-        message.setCreated(now);
-        message.setModified(now);
+        if(message.getCreated() == null) message.setCreated(now);
+        if(message.getModified() == null) message.setModified(now);
 
 
         //Bind the appropriate conversation to an incoming message

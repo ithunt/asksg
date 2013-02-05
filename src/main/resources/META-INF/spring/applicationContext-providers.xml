@@ -3,13 +3,17 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:int-mail="http://www.springframework.org/schema/integration/mail"
        xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:twitter="http://www.springframework.org/schema/integration/twitter"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
 
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-        http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd">
+        http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd
+        http://www.springframework.org/schema/integration/twitter http://www.springframework.org/schema/integration/twitter/spring-integration-twitter.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd ">
 
 
     <bean id="twilioProvider" class="edu.rit.asksg.domain.Twilio">
@@ -20,6 +24,10 @@
         <property name="identifier" value="email" />
     </bean>
 
+    <bean id="twitterProvider" class="edu.rit.asksg.domain.Twitter">
+        <property name="identifier" value="twitter" />
+    </bean>
+
     <bean id="defaultProvider" class="edu.rit.asksg.domain.Service">
         <property name="identifier" value="default" />
     </bean>
@@ -27,6 +35,7 @@
     <util:map id="providerMap" key-type="java.lang.String" value-type="edu.rit.asksg.domain.Service">
         <entry key="email" value-ref="emailProvider" />
         <entry key="twilio" value-ref="twilioProvider" />
+        <entry key="twitter" value-ref="twitterProvider" />
         <entry key="default" value-ref="defaultProvider" />
     </util:map>
 
@@ -95,5 +104,21 @@
         <prop key="mail.smtp.auth">true</prop>
     </util:properties>
 
+    <!--Twitter-->
+
+    <!--<context:property-placeholder location="classpath*:META-INF/spring/twitter.properties" />-->
+
+    <int:channel id="twitterOutbound" />
+
+    <twitter:outbound-channel-adapter
+            twitter-template="twitterTemplate" channel="twitterOutbound" />
+
+    <bean id="twitterTemplate"
+          class="org.springframework.social.twitter.api.impl.TwitterTemplate">
+        <constructor-arg value="${twitter.consumer-key}" />
+        <constructor-arg value="${twitter.consumer-secret}" />
+        <constructor-arg value="${twitter.access-token}" />
+        <constructor-arg value="${twitter.access-token-secret}" />
+    </bean>
 
 </beans>

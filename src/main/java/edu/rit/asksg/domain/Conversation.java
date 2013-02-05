@@ -38,6 +38,4 @@ public class Conversation {
     @ManyToOne(fetch = FetchType.EAGER)
     private Service provider;
 
-    private transient String providerName;
-
 }

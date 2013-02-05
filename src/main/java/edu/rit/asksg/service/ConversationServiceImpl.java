@@ -21,8 +21,8 @@ public class ConversationServiceImpl implements ConversationService {
 
     public void saveConversation(Conversation conversation) {
         LocalDateTime now = new LocalDateTime();
-        conversation.setCreated(now);
-        conversation.setModified(now);
+        if(conversation.getCreated() == null) conversation.setCreated(now);
+        if(conversation.getModified() == null) conversation.setModified(now);
 
         for(Message m : conversation.getMessages()){
             messageService.saveMessage(m);
