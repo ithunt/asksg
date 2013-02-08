@@ -114,17 +114,13 @@
 
                                     <!-- should replace service with an icon for the service name -->
 
-                                    <h3>{{convo.service}} - Conversation {{convo.author}} - {{convo.snippet}}</h3>
+                                    <!--<h3>{{convo.service}} - Conversation {{convo.author}} - {{convo.snippet}}</h3>-->
                                     <!-- Display the most recent web contents -->
                                     <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length - 1].content}}</i></b></h5>
-                                    <p>
-                                        Created: {{convo.created_at}}
-                                        <br/>
-                                        Modified: {{convo.modified_at}} 
-                                    </p>
+
 
                                     <!-- List the messages -->
-                                    <h5>Messages</h5>
+                                    <!--<h5>Messages</h5>-->
                                     <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false"> <!-- put the messages in reverse order -->
                                         <i class="icon-chevron-right"></i>{{messsage.author}}: {{message.content}}
                                     </p>
@@ -136,6 +132,8 @@
                                     <!-- Some useful(?) buttons -->
                                     <button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>
                                     <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
+                                    Created: {{convo.created_at}}
+
 
                                     <!-- The message/conversation response form -->
                                     <div id="response-form-{{convo.id}}" class="responseForm">
