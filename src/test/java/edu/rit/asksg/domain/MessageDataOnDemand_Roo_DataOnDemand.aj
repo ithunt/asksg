@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -64,16 +63,6 @@ privileged aspect MessageDataOnDemand_Roo_DataOnDemand {
     public void MessageDataOnDemand.setContent(Message obj, int index) {
         String content = "content_" + index;
         obj.setContent(content);
-    }
-    
-    public void MessageDataOnDemand.setCreated(Message obj, int index) {
-        LocalDateTime created = null;
-        obj.setCreated(created);
-    }
-    
-    public void MessageDataOnDemand.setModified(Message obj, int index) {
-        LocalDateTime modified = null;
-        obj.setModified(modified);
     }
     
     public void MessageDataOnDemand.setPosted(Message obj, int index) {
