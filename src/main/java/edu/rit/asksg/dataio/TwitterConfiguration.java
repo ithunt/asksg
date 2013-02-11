@@ -10,6 +10,8 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 @Configuration
 public class TwitterConfiguration {
 
+
+	//todo: configurations shouldn't be static, eg:. multiple accounts
   private static Twitter twitter;
   private static String consumerkey = "wY0Aft0Gz410RtOqOHd7Q";
   private static String consumersecret = "rMxrTP9nqPzwU6UHIQufKR23be4w4NHIqY7VbwfzU";

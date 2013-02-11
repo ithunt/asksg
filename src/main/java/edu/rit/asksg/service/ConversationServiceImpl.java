@@ -20,10 +20,6 @@ public class ConversationServiceImpl implements ConversationService {
     ProviderService providerService;
 
     public void saveConversation(Conversation conversation) {
-        LocalDateTime now = new LocalDateTime();
-        if(conversation.getCreated() == null) conversation.setCreated(now);
-        if(conversation.getModified() == null) conversation.setModified(now);
-
         for(Message m : conversation.getMessages()){
             messageService.saveMessage(m);
         }
@@ -32,8 +28,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     public Conversation updateConversation(Conversation conversation) {
-        LocalDateTime now = new LocalDateTime();
-        conversation.setModified(now);
+        conversation.setModified(LocalDateTime.now());
 
 //        for(Message m : conversation.getMessages()) {
 //            if(m.getId() == null) messageRepository.save(m);
