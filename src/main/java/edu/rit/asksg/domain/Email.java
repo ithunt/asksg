@@ -42,7 +42,7 @@ public class Email extends Service implements ContentProvider {
     transient MailGateway mailGateway;
 
     @Override
-    public List<Conversation> fetchNewContent() {
+    public List<Conversation> getNewContent() {
         //get unread imap messages that aren't picked up by the channel listener.. how?
         //javamail api?
 
@@ -50,7 +50,7 @@ public class Email extends Service implements ContentProvider {
     }
 
     @Override
-    public List<Conversation> fetchContentSince(LocalDateTime datetime) {
+    public List<Conversation> getContentSince(LocalDateTime datetime) {
         return null;
     }
 

@@ -27,12 +27,12 @@ public class Twilio extends Service {
 	transient ConversationService conversationService;
 
 	@Override
-	public List<Conversation> fetchNewContent() {
+	public List<Conversation> getNewContent() {
 		return new ArrayList<Conversation>();
 	}
 
 	@Override
-	public List<Conversation> fetchContentSince(LocalDateTime datetime) {
+	public List<Conversation> getContentSince(LocalDateTime datetime) {
 		return new ArrayList<Conversation>();
 	}
 

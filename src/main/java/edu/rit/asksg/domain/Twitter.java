@@ -28,7 +28,7 @@ public class Twitter extends Service {
     private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
 
     @Override
-    public List<Conversation> fetchNewContent() {
+    public List<Conversation> getNewContent() {
 
         final TimelineOperations timelineOperations = this.twitter.timelineOperations();
         List<Tweet> tweets = timelineOperations.getMentions();
@@ -62,7 +62,16 @@ public class Twitter extends Service {
 
     @Override
     public boolean postContent(Message message) {
-        return super.postContent(message);
+
+        final TimelineOperations timelineOperations = this.twitter.timelineOperations();
+
+        final String tweet =
+                ((message.getRecipient() != null)? "@" + message.getRecipient() + " " : "") +
+                        message.getContent();
+
+        return !(timelineOperations.updateStatus(tweet) == null);
+
+
     }
 
     @Override

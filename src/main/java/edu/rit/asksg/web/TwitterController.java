@@ -1,6 +1,7 @@
 package edu.rit.asksg.web;
 
 import edu.rit.asksg.domain.Twitter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,4 +10,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/twitters")
 public class TwitterController {
+
 }
