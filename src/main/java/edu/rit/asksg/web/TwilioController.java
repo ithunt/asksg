@@ -19,16 +19,16 @@ public class TwilioController {
 	Twilio twilio;
 
 	@RequestMapping(method = RequestMethod.POST, value = "/sms")
-	public ResponseEntity<String> receiveSMS(@RequestParam(value = "body") String smsSid,
-											 @RequestParam(value = "body") String accountSid,
-											 @RequestParam(value = "body") String from,
-											 @RequestParam(value = "body") String to,
-											 @RequestParam(value = "from") String body) {
+	public ResponseEntity<String> receiveSMS(@RequestParam(value = "SmsSid") String smsSid,
+											 @RequestParam(value = "AccountSid") String accountSid,
+											 @RequestParam(value = "From") String from,
+											 @RequestParam(value = "To") String to,
+											 @RequestParam(value = "Body") String body) {
 
 		twilio.handleMessage(smsSid, accountSid, from, to, body);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", "test/plain");
+		headers.add("Content-Type", "text/plain");
 		return new ResponseEntity<String>("Thanks for contacting RIT Student Government.", headers, HttpStatus.OK);
 	}
 
