@@ -17,11 +17,11 @@ public class Service {
         return this.getClass().getSimpleName();
     }
 
-    public List<edu.rit.asksg.domain.Conversation> fetchNewContent() {
+    public List<edu.rit.asksg.domain.Conversation> getNewContent() {
         return null;
     }
 
-    public List<edu.rit.asksg.domain.Conversation> fetchContentSince(LocalDateTime datetime) {
+    public List<edu.rit.asksg.domain.Conversation> getContentSince(LocalDateTime datetime) {
         return null;
     }
 

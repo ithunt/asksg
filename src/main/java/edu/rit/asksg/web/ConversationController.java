@@ -58,7 +58,7 @@ public class ConversationController {
     public ResponseEntity<String> twats() {
 
         Service twitter = providerMap.get("twitter");
-        List<Conversation> twats = twitter.fetchNewContent();
+        List<Conversation> twats = twitter.getNewContent();
         for(Conversation c : twats) {
             conversationService.saveConversation(c);
         }

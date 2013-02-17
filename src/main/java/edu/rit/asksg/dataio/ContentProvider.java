@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ContentProvider {
 
-    public List<Conversation> fetchNewContent();
+    public List<Conversation> getNewContent();
 
-    public List<Conversation> fetchContentSince(LocalDateTime datetime);
+    public List<Conversation> getContentSince(LocalDateTime datetime);
 
     public boolean postContent(Message message);
 

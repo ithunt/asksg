@@ -21,6 +21,13 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson(deepSerialize = true)
 public class Conversation {
 
+    public Conversation() {}
+
+    public Conversation(Message m) {
+        this.messages = new HashSet<Message>();
+        this.messages.add(m);
+    }
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Message> messages = new HashSet<Message>();
 
