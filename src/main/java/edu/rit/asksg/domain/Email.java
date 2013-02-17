@@ -94,6 +94,7 @@ public class Email extends Service implements ContentProvider {
         try {
             final String sender = mimeMessage.getFrom()[0].toString();
 
+            //Look for email address. Sender can be of format: Jon Doe <jd@gmail.com>
             m.setAuthor( (sender.contains("<")? sender.substring(sender.indexOf('<')+1, sender.indexOf('>')) : sender));
 
             if(mimeMessage.getContent() instanceof MimeMultipart) {

@@ -31,30 +31,24 @@ public class Twitter extends Service {
     public List<Conversation> getNewContent() {
 
         final TimelineOperations timelineOperations = this.twitter.timelineOperations();
-        List<Tweet> tweets = timelineOperations.getMentions();
-
-        List<Conversation> convos = new ArrayList<Conversation>();
+        final List<Tweet> tweets = timelineOperations.getHomeTimeline();
+        final List<Conversation> convos = new ArrayList<Conversation>();
 
         for(Tweet tweet : tweets) {
             Message m = new Message();
             m.setAuthor(tweet.getFromUser());
             m.setPosted(true);
             m.setContent(tweet.getText());
-
             m.setUrl(tweet.getSource());
-
             m.setCreated(new LocalDateTime(tweet.getCreatedAt()));
 
-            Conversation c = new Conversation();
-            m.setConversation(c); //why is this causing serialization errors?
+            Conversation c = new Conversation(m);
+            m.setConversation(c);
+            c.setProvider(this);
+            convos.add(c);
 
             logger.debug("New Tweet:" + m.toString());
 
-            Set<Message> messages = new HashSet<Message>();
-            messages.add(m);
-            c.setMessages(messages);
-            c.setProvider(this);
-            convos.add(c);
         }
 
         return convos;
