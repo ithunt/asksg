@@ -81,10 +81,9 @@ public class Twilio extends Service implements ContentProvider {
 		msg.setContent(body);
 		msg.setAuthor(from);
 
-		Conversation conv = new Conversation();
-		conv.setMessages(new HashSet<Message>());
-		conv.getMessages().add(msg);
-		msg.setConversation(conv);
+
+		Conversation conv = new Conversation(msg);
+        msg.setConversation(conv);
 
 		conv.setProvider(this);
 

@@ -3,6 +3,7 @@
 
 package edu.rit.asksg.domain;
 
+import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.Person;
 import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.SocialSubscription;
@@ -31,6 +32,22 @@ privileged aspect SocialSubscription_Roo_JavaBean {
     
     public void SocialSubscription.setPerson(Person person) {
         this.person = person;
+    }
+    
+    public String SocialSubscription.getUrl() {
+        return this.url;
+    }
+    
+    public void SocialSubscription.setUrl(String url) {
+        this.url = url;
+    }
+    
+    public AsksgUser SocialSubscription.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void SocialSubscription.setCreatedBy(AsksgUser createdBy) {
+        this.createdBy = createdBy;
     }
     
 }

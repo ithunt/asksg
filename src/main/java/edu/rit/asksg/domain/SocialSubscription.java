@@ -22,4 +22,9 @@ public class SocialSubscription {
 
     @ManyToOne
     private Person person;
+
+    private String url;
+
+    @ManyToOne
+    private AsksgUser createdBy;
 }
