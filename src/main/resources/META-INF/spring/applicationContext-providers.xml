@@ -121,4 +121,8 @@
         <constructor-arg value="${twitter.access-token-secret}" />
     </bean>
 
+    <bean id="chatterboxConfig" class="edu.rit.asksg.domain.ProviderConfig">
+        <property name="authenticationToken" value="4heJuZtO5Ji43xk1uc0edKmDVgrSdheK" />
+    </bean>
+
 </beans>
