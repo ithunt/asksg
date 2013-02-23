@@ -51,103 +51,134 @@
 
         <!-- The conversation controller -->
         <div class="container">
-            <div class="row-fluid">
-                <div class="span3">
-                    <div class="well sidebar-nav">
-                        <ul class="nav nav-list">
-                            <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services</li>
-                            <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()"><a href="#">Email</a></li>
-                            <li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()"><a href="#">SMS</a></li>
-                            <li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()"><a href="#">Facebook</a></li>
-                            <li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()"><a href="#">Twitter</a></li>
-                            <li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()"><a href="#">Reddit</a></li>
-                        </ul>
-                    </div> <!-- well sidebar-nav -->
-
-                    <div class="well sidebar-nav">
-                        <ul class="nav nav-list">
-                            <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
-                            <li id="service-item-email" class="active service-menu-item" ng-click="filterRead()"><a href="#">Read</a></li>
-                            <li id="service-item-sms" class="active service-menu-item" ng-click="filterUnread()"><a href="#">Unread</a></li>
-                        </ul>
-                    </div> <!-- well sidebar-nav -->
-                </div> <!-- span3 -->
-
-                <!-- The conversation controller -->
-                <div class="span8">
-                    <div class="convo-box">
-
-                        <!--<div id="text-toggle-button">
-                            <input type="checkbox" checked="checked">
-                        </div>-->
-
-                        <!-- Look at well.. -->
-
-                        <div id="convo-navbar" class="navbar">
-                            <div class="well convo-well">
-                                <!--div class="pagination pagination-centered">-->
-                                <ul class="nav">
-                                    <li class="disabled"><a>Conversations</a></li>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#dashTab">Dashboard</a></li>
+                <li><a data-toggle="tab" href="#configTab">Configuration</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="dashTab">
+                    <div class="row-fluid">
+                        <div class="span3">
+                            <div class="well sidebar-nav">
+                                <ul class="nav nav-list">
+                                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services</li>
+                                    <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()"><a href="#">Email</a></li>
+                                    <li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()"><a href="#">SMS</a></li>
+                                    <li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()"><a href="#">Facebook</a></li>
+                                    <li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()"><a href="#">Twitter</a></li>
+                                    <li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()"><a href="#">Reddit</a></li>
                                 </ul>
-                                <!--</div>-->
-                                <form class="navbar-search pull-right">
-                                    <div class="input-append">
-                                        <!-- Hook up the search bar to the converation filter for the Angular controller -->
-                                        <div class="input-append"><input ng-model="refineFilterString" type="text" placeholder="Filter" id="" name=""><span class="add-on"><i class="icon-filter"></i></span></div>
-                                    </div> 
-                                </form>
-                            </div>
-                        </div>
+                            </div> <!-- well sidebar-nav -->
 
-                        <!-- TODO: plug in the infinite scroll jQuery plugin to give it the facebook feel -->
+                            <div class="well sidebar-nav">
+                                <ul class="nav nav-list">
+                                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
+                                    <li id="service-item-email" class="active service-menu-item" ng-click="filterRead()"><a href="#">Read</a></li>
+                                    <li id="service-item-sms" class="active service-menu-item" ng-click="filterUnread()"><a href="#">Unread</a></li>
+                                </ul>
+                            </div> <!-- well sidebar-nav -->
+                        </div> <!-- span3 -->
 
-                        <ul class="convo-list infinite-scroll">
-                            <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString"> 
-                                <div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
+                        <!-- The conversation controller -->
+                        <div class="span8">
+                            <div class="convo-box">
 
-                                    <!-- TODO: this should probably be put somewhere else -->
-                                    <div class="delete pull-right" ng-show="isConvoActive(convo.id)" showonhoverparent>
-                                        <button class="btn btn-danger">Delete</button> <!--onclick="deleteConvo({{convo.id}})" -->
-                                    </div>
+                                <!--<div id="text-toggle-button">
+                                    <input type="checkbox" checked="checked">
+                                </div>-->
 
-                                    <!--filter:convoCategory | filter:filterArray[convo.service]">-->
+                                <!-- Look at well.. -->
 
-                                    <!-- should replace service with an icon for the service name -->
-
-                                    <!--<h3>{{convo.service}} - Conversation {{convo.author}} - {{convo.snippet}}</h3>-->
-                                    <!-- Display the most recent web contents -->
-                                    <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length - 1].content}}</i></b></h5>
-
-
-                                    <!-- List the messages -->
-                                    <!--<h5>Messages</h5>-->
-                                    <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false"> <!-- put the messages in reverse order -->
-                                        <i class="icon-chevron-right"></i>{{messsage.author}}: {{message.content}}
-                                    </p>
-
-                                    <p id="reply-tree-{{convo.id}}">
-                                        <!-- fill in the controller -->
-                                    </p>
-
-                                    <!-- Some useful(?) buttons -->
-                                    <button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>
-                                    <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
-                                    Created: {{convo.created_at}}
-
-
-                                    <!-- The message/conversation response form -->
-                                    <div id="response-form-{{convo.id}}" class="responseForm">
-                                        <form ng-submit="doPostMessage(convo, messageResp, userName)">
-                                            <input class="input-xlarge focused" ng-model="messageResp"/>
-                                            <button class="btn" type="submit">Submit Message</button>
+                                <div id="convo-navbar" class="navbar">
+                                    <div class="well convo-well">
+                                        <!--div class="pagination pagination-centered">-->
+                                        <ul class="nav">
+                                            <li class="disabled"><a>Conversations</a></li>
+                                        </ul>
+                                        <!--</div>-->
+                                        <form class="navbar-search pull-right">
+                                            <div class="input-append">
+                                                <!-- Hook up the search bar to the converation filter for the Angular controller -->
+                                                <div class="input-append"><input ng-model="refineFilterString" type="text" placeholder="Filter" id="" name=""><span class="add-on"><i class="icon-filter"></i></span></div>
+                                            </div> 
                                         </form>
                                     </div>
                                 </div>
-                            </li>
-                        </ul>
+
+                                <!-- TODO: plug in the infinite scroll jQuery plugin to give it the facebook feel -->
+
+                                <ul class="convo-list infinite-scroll">
+                                    <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString"> 
+                                        <div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
+
+                                            <!-- TODO: this should probably be put somewhere else -->
+                                            <div class="delete pull-right" ng-show="isConvoActive(convo.id)" showonhoverparent>
+                                                <button class="btn btn-danger">Delete</button> <!--onclick="deleteConvo({{convo.id}})" -->
+                                            </div>
+
+                                            <!--filter:convoCategory | filter:filterArray[convo.service]">-->
+
+                                            <!-- should replace service with an icon for the service name -->
+
+                                            <!--<h3>{{convo.service}} - Conversation {{convo.author}} - {{convo.snippet}}</h3>-->
+                                            <!-- Display the most recent web contents -->
+                                            <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length - 1].content}}</i></b></h5>
+
+
+                                            <!-- List the messages -->
+                                            <!--<h5>Messages</h5>-->
+                                            <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false"> <!-- put the messages in reverse order -->
+                                                <i class="icon-chevron-right"></i>{{messsage.author}}: {{message.content}}
+                                            </p>
+
+                                            <p id="reply-tree-{{convo.id}}">
+                                                <!-- fill in the controller -->
+                                            </p>
+
+                                            <!-- Some useful(?) buttons -->
+                                            <button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>
+                                            <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
+                                            Created: {{convo.created_at}}
+
+                                            <!-- The message/conversation response form -->
+                                            <div id="response-form-{{convo.id}}" class="responseForm">
+                                                <form ng-submit="doPostMessage(convo, messageResp, userName)">
+                                                    <input class="input-xlarge focused" ng-model="messageResp"/>
+                                                    <button class="btn" type="submit">Submit Message</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div> <!-- span8 -->
                     </div>
-                </div> <!-- span8 -->
-            </div> <!-- row-fluid -->
+                </div> <!-- dashTab -->
+                <div id="configTab" class="tab-pane fade">
+                    <div class="row-fluid">
+                        <div class="span3">
+                            <div class="well sidebar-nav">
+                                <ul class="nav nav-list">
+                                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services</li>
+                                    <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()"><a href="#">Email</a></li>
+                                </ul>
+                            </div> <!-- well sidebar-nav -->
+
+                            <div class="well sidebar-nav">
+                                <ul class="nav nav-list">
+                                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
+                                    <li id="service-item-email" class="active service-menu-item" ng-click="filterRead()"><a href="#">Read</a></li>
+                                </ul>
+                            </div> <!-- well sidebar-nav -->
+                        </div> <!-- span3 -->
+
+                        <!-- Configuration settings -->
+                        <div class="span8">
+                            TODO: populate from socialsubscriptions
+                        </div> 
+                    </div>
+                </div> <!-- configTab -->
+            </div>
 
             <hr>
 

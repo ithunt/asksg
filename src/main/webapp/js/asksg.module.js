@@ -307,7 +307,7 @@ AsksgService = function() {
 			};
 		});
 	});
-
+ 
 	/**
 	 * Insert the custom directives into the app for HTML markup to use...
 	 * The purpose of each directive is obvious based on the names

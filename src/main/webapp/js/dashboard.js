@@ -6,11 +6,6 @@ $convo_navbar = $("#convo-navbar");
 $(document).ready(function() {
 	// Hide response boxes to start
 	$('.responseForm').hide();
-
-	// Make the converation bar move with the stuff on the way down
-	/*$(window).scroll(function() {
-		floatConvoMenu();
-	});*/
 	
 	// Handle the changing styles for the services item.
 	$('.service-menu-item').click(function() {
@@ -26,6 +21,12 @@ $(document).ready(function() {
 		console.log("Trying to delete something");
 	});
 
+	// Set up tabs
+	$('.nav-tabs a').click(function (e) {
+		e.preventDefault();
+		$(this).tab('show');
+	});
+
 	// Hide/show the delete button when conversations are hovered over.
 	$('.deleteButton').hide(); // hide by default
 	$('.convo-list-item-msg').hover(
@@ -39,27 +40,6 @@ $(document).ready(function() {
 	);
 	console.log("set up show/hide");
 });
-
-/*
-	$('#text-toggle-button').toggleButtons({
-    	width: 220,
-    	label: {
-        	enabled: "Lorem Ipsum",
-        	disabled: "Dolor Sit"
-    	}
-	});
-*/
-
-/*
-function floatConvoMenu() {
-    var scrollAmount = $(document).scrollTop();
-    var newPosition = $convo_navbar.height() + scrollAmount;
-    if($(window).height() < $convo_navbar.height() + $convo_navbar.height()){
-        $convo_navbar.css("top", menuPosition);
-    } else {
-        $convo_navbar.css("top", newPosition);
-    }
-}*/
 
 function showResponseForm(id) {
 	if ($responseForms.indexOf('#response-form-' + id) != -1) {
@@ -89,10 +69,6 @@ function renderTree(obj, id) {
   		for (f = 0; f < obj.reply.length; f++) {
     		li = document.createElement ("li");
     		li.appendChild (document.createTextNode (obj.reply[f].msg));
-    		// if the child has a 'reply' prop on its own, recurse...
-    		/*if (obj.reply[f].reply) {
-      			li.appendChild (to_ul (obj.reply[f].reply));
-    		}*/
     		ul.appendChild (li);
   		}
   		console.log(ul);
