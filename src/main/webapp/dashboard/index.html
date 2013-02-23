@@ -159,23 +159,31 @@
                         <div class="span3">
                             <div class="well sidebar-nav">
                                 <ul class="nav nav-list">
-                                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services</li>
-                                    <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()"><a href="#">Email</a></li>
-                                </ul>
-                            </div> <!-- well sidebar-nav -->
-
-                            <div class="well sidebar-nav">
-                                <ul class="nav nav-list">
-                                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
-                                    <li id="service-item-email" class="active service-menu-item" ng-click="filterRead()"><a href="#">Read</a></li>
+                                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Settings</li>
+                                    <li class="active"><a data-toggle="tab" href="#socialConfigTab">Social Subscriptions</a></li>
+                                    <li><a data-toggle="tab" href="#otherConfigTab">Other</a></li>
                                 </ul>
                             </div> <!-- well sidebar-nav -->
                         </div> <!-- span3 -->
 
                         <!-- Configuration settings -->
-                        <div class="span8">
-                            TODO: populate from socialsubscriptions
-                        </div> 
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="socialConfigTab">
+                                <div class="span8">
+                                    <ul>
+                                        <li ng-repeat="sub in subscriptions"> 
+                                            {{sub.provider}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="otherConfigTab" class="tab-pane fade">
+                                <div class="span8">
+                                    TODO: put other options here
+                                </div>
+                            </div>
+                            </div> 
+                        </div>
                     </div>
                 </div> <!-- configTab -->
             </div>

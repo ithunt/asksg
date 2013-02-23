@@ -8,7 +8,7 @@ function Message(author, content, conversationId) {
 }
 
 /**
- * MessageRespo object constructor.
+ * MessageResp object constructor.
  */
 function MessageResp(author, content, conversation) {
 	this.author = author;
@@ -46,6 +46,17 @@ function Conversation(id, author, subject, snippet, messages, created, modified)
 }
 
 /**
+ * Social subscription provider object constructor.
+ */
+function SocialSubscription(handle, provider, person, url, createdBy) {
+	this.handle = handle;
+	this.provider = provider;
+	this.person = person;
+	this.url = url;
+	this.createdBy = createdBy;
+}
+
+/**
  * Construct the main page controller. >.<
  */
 function MainController($scope, $asksg, $log) {
@@ -78,10 +89,8 @@ function ConversationController($scope, $asksg, $log) {
 		$asksg.fetchConvos(-1, false). // don't seed every time...
 			success(function(data, status, headers, config) {
 				console.log("Got conversation data back from the server...");
-				console.log(data);
 
 				// Parse the JSON response data and create a list of Conversation objects to store in the scope
-				console.log(data);
 				$scope.convos = new Array();
 				$scope.convoMap = new Array();
 				for (var i = 0; i < data.length; i++) {
@@ -96,16 +105,27 @@ function ConversationController($scope, $asksg, $log) {
 						conversation.snippet, conversation.messages,
 						conversation.createdDate, conversation.modifiedDate);
 					$scope.convoMap[conversation.id] = $scope.convos[i];
-
-					//conversationList[i].created_at = (createdDate.getMonth() + 1) + "/" + createdDate.getDate() + "/" + createdDate.getFullYear();
-					//conversationList[i].modified_at = (modifiedDate.getMonth() + 1) + "/" + modifiedDate.getDate() + "/" + modifiedDate.getFullYear();
 				}
-
-				// Now return the result as an object
-				//$scope.convos = conversationList;
 			}).
 			error(function(data, status, headers, config) {
 				console.log("Failed refreshing convos...");
+				return null;
+			});	
+	}
+
+	/*
+	 * Populate the social subscription content
+	 */
+	$scope.refreshSubscriptions = function() {
+		$asksg.fetchSubscriptions(). 
+			success(function(data, status, headers, config) {
+				console.log("Got social data back from the server");
+
+				// Parse the JSON response data and create a list of Conversation objects to store in the scope
+				console.log(data);
+			}).
+			error(function(data, status, headers, config) {
+				console.log("Failed grabbing the social subscriptions");
 				return null;
 			});	
 	}
@@ -152,7 +172,6 @@ function ConversationController($scope, $asksg, $log) {
 
 	// Set the user name
 	$scope.userName = "Admin"; // this should be replaced by response from server
-	$scope.refreshConvos();
 
 	/*
 	 * Set up the default conversation filters.
@@ -246,6 +265,10 @@ function ConversationController($scope, $asksg, $log) {
 			$scope.filterTagArray['unread'] = true;
 		}
 	};
+
+	// Populate the model with the initial data.
+	$scope.refreshConvos();
+	$scope.refreshSubscriptions();
 }
 
 /**
@@ -267,6 +290,7 @@ AsksgService = function() {
 			var convoSeedUrl = '/asksg/conversations/seed';
 			var messageUrl = '/asksg/messages';
 			var messageSeedUrl = '/asksg/messages/seed';
+			var subscriptionUrl = '/asksg/socialsubscriptions'
 
 			// Publish the $asksg API here
 			return {
@@ -303,56 +327,17 @@ AsksgService = function() {
 
 					// Return the HTTP response
 					return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
+				},
+
+				/**
+				 * Fetch the social subscriptions currently in use for the system.
+				 */
+				fetchSubscriptions : function() {
+					return $http({method: 'GET', url: convoUrl});
 				}
 			};
 		});
 	});
- 
-	/**
-	 * Insert the custom directives into the app for HTML markup to use...
-	 * The purpose of each directive is obvious based on the names
-	 */
-/*
-directives.directive('myMouseover', function() {
-    //var compiler = this;
-    //compiler.descend(true);
-    //compiler.directives(true);
-    //return function(linkElement) {
-    //	linkElement.mouseenter(function(event){
-      //    alert("yeah!");
-       //   event.stopPropagation();
-       // });
-      //};
-      //alert("in myMouseover directive");
-      return {
-	         link : function(element){
-        		element.mouseenter(function(event){
-          			alert("it worked!");
-        		});
-        	}
-      };
-});
-*/
-
-/*
-	directives.directive('showonhoverparent',
-	   function() {
-	      return {
-	         link : function(scope, element, attrs) {
-	         	console.log(element[0]);
-	         	console.log(element[0].parentNode);
-	            element[0].parentNode.bind('mouseenter', function() {
-	            	// TODO: why isn't this working?
-	            	console.log(element[0]);
-	            	console.log(element[0].parentNode);
-	                element[0].show();
-	            });
-	            element[0].parentNode.bind('mouseleave', function() {
-	                 element[0].hide();
-	            });
-	       }
-	   };
-	});*/
 }
 
 // Invoke the ASKSG service constructor...
