@@ -5,6 +5,8 @@ import edu.rit.asksg.service.ConversationService;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
@@ -19,7 +21,8 @@ import java.util.List;
 @RooJson
 public class Twilio extends Service implements ContentProvider {
 
-	//@Autowired
+	@Autowired
+	@Qualifier("twilioConfig")
 	transient ProviderConfig config;
 
 	//@Autowired

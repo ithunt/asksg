@@ -18,6 +18,7 @@
 
     <bean id="twilioProvider" class="edu.rit.asksg.domain.Twilio">
         <!--<property name="identifier" value="twilio" />-->
+        <qualifier type="edu.rit.asksg.domain.ProviderConfig" value="twilioConfig"/>
         <constructor-arg ref="twilioConfig"/>
         <constructor-arg ref="conversationService"/>
     </bean>
