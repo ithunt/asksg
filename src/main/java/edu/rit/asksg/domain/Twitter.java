@@ -22,59 +22,64 @@ import java.util.Set;
 @RooJson
 public class Twitter extends Service {
 
-    @Resource(name = "twitterTemplate")
-    transient org.springframework.social.twitter.api.Twitter twitter;
+	@Resource(name = "twitterTemplate")
+	transient org.springframework.social.twitter.api.Twitter twitter;
 
-    private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
 
-    @Override
-    public List<Conversation> getNewContent() {
+	@Override
+	public List<Conversation> getNewContent() {
 
-        final TimelineOperations timelineOperations = this.twitter.timelineOperations();
-        final List<Tweet> tweets = timelineOperations.getHomeTimeline();
-        final List<Conversation> convos = new ArrayList<Conversation>();
+		final TimelineOperations timelineOperations = this.twitter.timelineOperations();
+		final List<Tweet> tweets = timelineOperations.getHomeTimeline();
+		final List<Conversation> convos = new ArrayList<Conversation>();
 
-        for(Tweet tweet : tweets) {
-            Message m = new Message();
-            m.setAuthor(tweet.getFromUser());
-            m.setPosted(true);
-            m.setContent(tweet.getText());
-            m.setUrl(tweet.getSource());
-            m.setCreated(new LocalDateTime(tweet.getCreatedAt()));
+		for (Tweet tweet : tweets) {
+			Message m = new Message();
+			m.setAuthor(tweet.getFromUser());
+			m.setPosted(true);
+			m.setContent(tweet.getText());
+			m.setUrl(tweet.getSource());
+			m.setCreated(new LocalDateTime(tweet.getCreatedAt()));
 
-            Conversation c = new Conversation(m);
-            m.setConversation(c);
-            c.setProvider(this);
-            convos.add(c);
+			Conversation c = new Conversation(m);
+			m.setConversation(c);
+			c.setProvider(this);
+			convos.add(c);
 
-            logger.debug("New Tweet:" + m.toString());
+			logger.debug("New Tweet:" + m.toString());
 
-        }
+		}
 
-        return convos;
-    }
+		return convos;
+	}
 
-    @Override
-    public boolean postContent(Message message) {
+	@Override
+	public List<Conversation> fetchContentSince(LocalDateTime datetime) {
+		return null;
+	}
 
-        final TimelineOperations timelineOperations = this.twitter.timelineOperations();
+	@Override
+	public boolean postContent(Message message) {
 
-        final String tweet =
-                ((message.getRecipient() != null)? "@" + message.getRecipient() + " " : "") +
-                        message.getContent();
+		final TimelineOperations timelineOperations = this.twitter.timelineOperations();
 
-        return !(timelineOperations.updateStatus(tweet) == null);
+		final String tweet =
+				((message.getRecipient() != null) ? "@" + message.getRecipient() + " " : "") +
+						message.getContent();
+
+		return !(timelineOperations.updateStatus(tweet) == null);
 
 
-    }
+	}
 
-    @Override
-    public boolean authenticate() {
-        return super.authenticate();
-    }
+	@Override
+	public boolean authenticate() {
+		return super.authenticate();
+	}
 
-    @Override
-    public boolean isAuthenticated() {
-        return super.isAuthenticated();
-    }
+	@Override
+	public boolean isAuthenticated() {
+		return super.isAuthenticated();
+	}
 }

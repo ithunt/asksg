@@ -32,4 +32,13 @@ public class TwilioController {
 		return new ResponseEntity<String>("Thanks for contacting RIT Student Government.", headers, HttpStatus.OK);
 	}
 
+	@RequestMapping(method = RequestMethod.POST, value = "/call")
+	public ResponseEntity<String> bounceCall() {
+		// Phone calls are out of scope, but this method would be where to handle them.
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "text/plain");
+		return new ResponseEntity<String>("Thank you for contacting RIT Student Government. This phone number only" +
+				"supports text messages at this time. Thank you.", headers, HttpStatus.OK);
+	}
+
 }
