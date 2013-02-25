@@ -2,8 +2,11 @@ package edu.rit.asksg.web;
 
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.Conversation;
+import edu.rit.asksg.domain.Email;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
+import edu.rit.asksg.service.ProviderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,18 +24,18 @@ import java.util.Set;
 @RequestMapping("/messages")
 public class MessageController {
 
-    @Resource
-    Map<String, Service> providerMap;
-
     @Resource(name = "emailProvider")
     ContentProvider emailProvider;
+
+	@Autowired
+	ProviderService providerService;
 
     @RequestMapping(value = "/test")
     public ResponseEntity<String> test() {
 
         Conversation c = new Conversation();
         c.setId(1L);
-        c.setProvider(providerMap.get("default"));
+        c.setProvider(providerService.findServiceByTypeAndIdentifierEquals(Email.class, "ritasksg@gmail.com"));
 
         Message m = new Message();
         m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
@@ -54,7 +57,7 @@ public class MessageController {
 
         Conversation convo = new Conversation();
         Set<Message> messages = new HashSet<Message>();
-        convo.setProvider(providerMap.get("default"));
+        convo.setProvider(providerService.findServiceByTypeAndIdentifierEquals(Email.class, "ritasksg@gmail.com"));
 
         Message m = new Message();
         m.setContent("Education is the path from cocky ignorance to miserable uncertainty");

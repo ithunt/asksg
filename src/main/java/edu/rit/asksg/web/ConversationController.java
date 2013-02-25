@@ -3,8 +3,13 @@ package edu.rit.asksg.web;
 import edu.rit.asksg.common.Log;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.ProviderConfig;
 import edu.rit.asksg.domain.Service;
+import edu.rit.asksg.domain.Twilio;
+import edu.rit.asksg.domain.Twitter;
+import edu.rit.asksg.service.ProviderService;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +28,19 @@ import java.util.Set;
 @RequestMapping("/conversations")
 public class ConversationController {
 
-	@Resource
-	Map<String, Service> providerMap;
-
-	//  private static final Logger logger = LoggerFactory.getLogger(ConversationController.class);
 	@Log
-	transient
-	Logger logger;
+	private Logger logger;
 
-	private transient boolean strapped = false;
+	@Autowired ProviderService providerService;
 
 	@RequestMapping(value = "/seed")
 	public ResponseEntity<String> seed() {
+		Service twilio = new Twilio();
+		ProviderConfig twilioconfig = new ProviderConfig();
+		twilioconfig.setIdentifier("37321");
+		twilio.setConfig(twilioconfig);
+		providerService.saveService(twilio);
 
-		if (!strapped) conversationService.bootstrap();
 
 		Conversation c = new Conversation();
 		Message m1 = new Message();
@@ -47,8 +51,8 @@ public class ConversationController {
 		messages.add(m1);
 
 		c.setMessages(messages);
-		c.setProvider(providerMap.get("default"));
-
+		Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class,"37321");
+		c.setProvider(twiloprovider);
 		conversationService.saveConversation(c);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -60,7 +64,7 @@ public class ConversationController {
 	@RequestMapping(value = "/tweet")
 	public ResponseEntity<String> twats() {
 
-		Service twitter = providerMap.get("twitter");
+        Service twitter = providerService.findServiceByTypeAndIdentifierEquals(Twitter.class, "wY0Aft0Gz410RtOqOHd7Q");
 		List<Conversation> twats = twitter.getNewContent();
 		for (Conversation c : twats) {
 			conversationService.saveConversation(c);

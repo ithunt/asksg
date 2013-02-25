@@ -13,6 +13,8 @@ public class ProviderConfig {
 
     private String authenticationToken;
 
+	private String identifier;
+
     private String username;
 
     private String password;

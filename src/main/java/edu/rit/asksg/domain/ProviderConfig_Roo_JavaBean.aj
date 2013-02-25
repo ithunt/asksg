@@ -15,6 +15,14 @@ privileged aspect ProviderConfig_Roo_JavaBean {
         this.authenticationToken = authenticationToken;
     }
     
+    public String ProviderConfig.getIdentifier() {
+        return this.identifier;
+    }
+    
+    public void ProviderConfig.setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+    
     public String ProviderConfig.getUsername() {
         return this.username;
     }

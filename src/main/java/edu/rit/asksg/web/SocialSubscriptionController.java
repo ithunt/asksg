@@ -1,9 +1,13 @@
 package edu.rit.asksg.web;
 
+import edu.rit.asksg.common.Log;
 import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.SocialSubscription;
+import edu.rit.asksg.domain.Twitter;
+import edu.rit.asksg.service.ProviderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +23,19 @@ import java.util.Map;
 @RequestMapping("/socialsubscriptions")
 public class SocialSubscriptionController {
 
-    @Resource
-    Map<String, Service> providerMap;
+	@Autowired
+	ProviderService providerService;
+	@Log
+	private Logger logger;
 
-    public static final Logger logger = LoggerFactory.getLogger(SocialSubscriptionController.class);
-
+	//todo: consolidate seed methods
     @RequestMapping(value = "seed")
     public ResponseEntity<String> seed() {
 
-        SocialSubscription s = new SocialSubscription();
-        s.setHandle("RIT_SG");
-        s.setProvider(providerMap.get("twitter"));
+        final SocialSubscription s = new SocialSubscription();
+	    final String HANDLE = "RIT_SG";
+        s.setHandle(HANDLE);
+        s.setProvider(providerService.findServiceByTypeAndIdentifierEquals(Twitter.class, HANDLE));
         s.setUrl("https://twitter.com/RIT_SG"); //hmm https?
 
         socialSubscriptionService.saveSocialSubscription(s);

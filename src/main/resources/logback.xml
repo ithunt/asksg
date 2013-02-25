@@ -7,14 +7,19 @@
     </appender>
 
     <logger name="edu.rit.asksg">
-        <level value="DEBUG"/>
+        <level value="ERROR"/>
     </logger>
 
     <logger name="org.springframework">
-        <level value="DEBUG"/>
+        <level value="ERROR"/>
     </logger>
 
-    <root level="debug">
+    <logger name="org.hibernate">
+        <level value="ERROR"/>
+    </logger>
+
+
+    <root level="ERROR">
         <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>

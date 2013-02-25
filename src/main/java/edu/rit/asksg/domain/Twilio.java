@@ -23,13 +23,10 @@ import java.util.*;
 @RooJson
 public class Twilio extends Service implements ContentProvider {
 
-	/*@Autowired
-	transient ProviderConfig config;*/
-
 	@Autowired
 	transient ConversationService conversationService;
 
-	private static final Logger logger = LoggerFactory.getLogger(Twilio.class);
+	private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
 	@Override
 	public List<Conversation> getNewContent() {
@@ -89,10 +86,4 @@ public class Twilio extends Service implements ContentProvider {
 
 		conversationService.saveConversation(conv);
 	}
-
-	public void setConfig(ProviderConfig config) {
-		//this.config = config;
-	}
-
-
 }

@@ -36,10 +36,4 @@ public class ConversationServiceImpl implements ConversationService {
 
         return conversationRepository.save(conversation);
     }
-
-    @Override
-    public void bootstrap() {
-        providerService.bootstrap();
-
-    }
 }
