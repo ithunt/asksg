@@ -1,10 +1,10 @@
 package edu.rit.asksg.web;
 
+import edu.rit.asksg.common.Log;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,9 @@ public class ConversationController {
     @Resource
     Map<String, Service> providerMap;
 
-    private static final Logger logger = LoggerFactory.getLogger(ConversationController.class);
+  //  private static final Logger logger = LoggerFactory.getLogger(ConversationController.class);
+	@Log transient
+	Logger logger;
 
     private transient boolean strapped = false;
 
@@ -36,7 +38,7 @@ public class ConversationController {
         if(!strapped) conversationService.bootstrap();
 
         Conversation c = new Conversation();
-        Message m1 = new Message();
+	    Message m1 = new Message();
         m1.setAuthor("Socrates");
         m1.setContent("For the unexamined life is not worth living");
 
