@@ -3,10 +3,12 @@ package edu.rit.asksg.domain;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.social.ServiceProvider;
 import org.springframework.social.twitter.api.TimelineOperations;
 import org.springframework.social.twitter.api.Tweet;
 
@@ -32,6 +34,25 @@ public class Twitter extends Service {
 
         final TimelineOperations timelineOperations = this.twitter.timelineOperations();
         final List<Tweet> tweets = timelineOperations.getHomeTimeline();
+
+        return parseTweets(tweets);
+    }
+
+    @Override
+    public boolean postContent(Message message) {
+
+        final TimelineOperations timelineOperations = this.twitter.timelineOperations();
+
+        final String tweet =
+                ((message.getRecipient() != null)? "@" + message.getRecipient() + " " : "") +
+                        message.getContent();
+
+        return !(timelineOperations.updateStatus(tweet) == null);
+
+
+    }
+
+    protected List<Conversation> parseTweets(List<Tweet> tweets) {
         final List<Conversation> convos = new ArrayList<Conversation>();
 
         for(Tweet tweet : tweets) {
@@ -52,19 +73,6 @@ public class Twitter extends Service {
         }
 
         return convos;
-    }
-
-    @Override
-    public boolean postContent(Message message) {
-
-        final TimelineOperations timelineOperations = this.twitter.timelineOperations();
-
-        final String tweet =
-                ((message.getRecipient() != null)? "@" + message.getRecipient() + " " : "") +
-                        message.getContent();
-
-        return !(timelineOperations.updateStatus(tweet) == null);
-
 
     }
 
