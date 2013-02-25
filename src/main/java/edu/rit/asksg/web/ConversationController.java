@@ -23,53 +23,54 @@ import java.util.Set;
 @RequestMapping("/conversations")
 public class ConversationController {
 
-    @Resource
-    Map<String, Service> providerMap;
+	@Resource
+	Map<String, Service> providerMap;
 
-  //  private static final Logger logger = LoggerFactory.getLogger(ConversationController.class);
-	@Log transient
+	//  private static final Logger logger = LoggerFactory.getLogger(ConversationController.class);
+	@Log
+	transient
 	Logger logger;
 
-    private transient boolean strapped = false;
+	private transient boolean strapped = false;
 
-    @RequestMapping(value = "/seed")
-    public ResponseEntity<String> seed() {
+	@RequestMapping(value = "/seed")
+	public ResponseEntity<String> seed() {
 
-        if(!strapped) conversationService.bootstrap();
+		if (!strapped) conversationService.bootstrap();
 
-        Conversation c = new Conversation();
-	    Message m1 = new Message();
-        m1.setAuthor("Socrates");
-        m1.setContent("For the unexamined life is not worth living");
+		Conversation c = new Conversation();
+		Message m1 = new Message();
+		m1.setAuthor("Socrates");
+		m1.setContent("For the unexamined life is not worth living");
 
-        Set<Message> messages = new HashSet<Message>();
-        messages.add(m1);
+		Set<Message> messages = new HashSet<Message>();
+		messages.add(m1);
 
-        c.setMessages(messages);
-        c.setProvider(providerMap.get("default"));
+		c.setMessages(messages);
+		c.setProvider(providerMap.get("default"));
 
-        conversationService.saveConversation(c);
+		conversationService.saveConversation(c);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content_type", "text/plain");
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("content_type", "text/plain");
 
-        return new ResponseEntity<String>("your seed has been spread", headers, HttpStatus.OK);
-    }
+		return new ResponseEntity<String>("your seed has been spread", headers, HttpStatus.OK);
+	}
 
-    @RequestMapping(value = "/tweet")
-    public ResponseEntity<String> twats() {
+	@RequestMapping(value = "/tweet")
+	public ResponseEntity<String> twats() {
 
-        Service twitter = providerMap.get("twitter");
-        List<Conversation> twats = twitter.getNewContent();
-        for(Conversation c : twats) {
-            conversationService.saveConversation(c);
-        }
+		Service twitter = providerMap.get("twitter");
+		List<Conversation> twats = twitter.getNewContent();
+		for (Conversation c : twats) {
+			conversationService.saveConversation(c);
+		}
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content_type", "text/plain");
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("content_type", "text/plain");
 
-        return new ResponseEntity<String>("Show me your tweets!", headers, HttpStatus.OK);
-    }
+		return new ResponseEntity<String>("Show me your tweets!", headers, HttpStatus.OK);
+	}
 
 }
 
