@@ -39,7 +39,7 @@ public class ChatterboxIntegrationTest {
 		message.setContent("Test query to chatterbox");
 		when(service.updateMessage(eq(message))).thenReturn(message);
 		chatterbox.handleMessage(message);
-		await().atMost(2, TimeUnit.SECONDS).until(fieldIn(message.getAnalytics()).ofType(Double.class).andWithName("sentimentScore"), equalTo(testSentimentScore));
+		await().atMost(4, TimeUnit.SECONDS).until(fieldIn(message.getAnalytics()).ofType(Double.class).andWithName("sentimentScore"), equalTo(testSentimentScore));
 		assertNotNull(message.getAnalytics().getSentimentScore());
 		assertEquals(testSentimentScore, message.getAnalytics().getSentimentScore());
 	}

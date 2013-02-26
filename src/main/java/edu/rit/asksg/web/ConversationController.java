@@ -64,7 +64,14 @@ public class ConversationController {
 	@RequestMapping(value = "/tweet")
 	public ResponseEntity<String> twats() {
 
-        Service twitter = providerService.findServiceByTypeAndIdentifierEquals(Twitter.class, "wY0Aft0Gz410RtOqOHd7Q");
+        Service twitter = new Twitter();
+        ProviderConfig twitterConfig = new ProviderConfig();
+        twitterConfig.setIdentifier("wY0Aft0Gz410RtOqOHd7Q");
+        twitter.setConfig(twitterConfig);
+        providerService.saveService(twitter);
+
+
+        twitter = providerService.findServiceByTypeAndIdentifierEquals(Twitter.class, "wY0Aft0Gz410RtOqOHd7Q");
 		List<Conversation> twats = twitter.getNewContent();
 		for (Conversation c : twats) {
 			conversationService.saveConversation(c);
