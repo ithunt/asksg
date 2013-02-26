@@ -30,6 +30,7 @@ public class Twilio extends Service implements ContentProvider {
 
 	@Override
 	public List<Conversation> getNewContent() {
+		logger.debug("Twilio does not support fetching new content.");
 		return new ArrayList<Conversation>();
 	}
 
@@ -80,7 +81,7 @@ public class Twilio extends Service implements ContentProvider {
 
 
 		Conversation conv = new Conversation(msg);
-        msg.setConversation(conv);
+		msg.setConversation(conv);
 
 		conv.setProvider(this);
 
