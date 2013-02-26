@@ -10,4 +10,8 @@ privileged aspect Twilio_Roo_Jpa_Entity {
     
     declare @type: Twilio: @Entity;
     
+    public Twilio.new() {
+        super();
+    }
+
 }

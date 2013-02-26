@@ -14,14 +14,4 @@ import java.util.List;
 @RooJson
 public class Facebook extends Service {
 
-
-	@Override
-	public List<Conversation> fetchNewContent() {
-		return null;
-	}
-
-	@Override
-	public List<Conversation> fetchContentSince(LocalDateTime datetime) {
-		return null;
-	}
 }

@@ -55,11 +55,6 @@ public class Twitter extends Service {
 	}
 
 	@Override
-	public List<Conversation> fetchContentSince(LocalDateTime datetime) {
-		return null;
-	}
-
-	@Override
 	public boolean postContent(Message message) {
 
 		final TimelineOperations timelineOperations = this.twitter.timelineOperations();
