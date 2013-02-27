@@ -37,10 +37,10 @@
 
 
     <!--EMAIL-->
-    <int:annotation-config />
-    <int:channel id="outboundMailChannel" />
-    <int:channel id="xformMailChannel" />
-    <int:channel id="confirmationChannel" />
+    <int:annotation-config/>
+    <int:channel id="outboundMailChannel"/>
+    <int:channel id="xformMailChannel"/>
+    <int:channel id="confirmationChannel"/>
     <int:channel id="receiveChannel">
         <!--<int:interceptors>-->
         <!--<int:wire-tap channel="logger" />-->
@@ -48,29 +48,27 @@
     </int:channel>
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="username" value="ritasksg" />
-        <property name="password" value="allHailSpring" />
-        <property name="host" value="smtp.gmail.com" />
-        <property name="port" value="587" />
-        <property name="javaMailProperties" ref="javaMailProperties" />
+        <property name="username" value="ritasksg"/>
+        <property name="password" value="allHailSpring"/>
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="587"/>
+        <property name="javaMailProperties" ref="javaMailProperties"/>
     </bean>
 
     <int:gateway id="mailGateway" service-interface="edu.rit.asksg.dataio.MailGateway"
-                 default-request-channel="xformMailChannel" default-reply-channel="confirmationChannel" />
-
-
+                 default-request-channel="xformMailChannel" default-reply-channel="confirmationChannel"/>
 
     <int:transformer input-channel="xformMailChannel" output-channel="outboundMailChannel"
-                     ref="emailProvider" method="transform" />
+                     ref="emailProvider" method="transform"/>
 
-    <int-mail:outbound-channel-adapter channel="outboundMailChannel" mail-sender="mailSender" />
+    <int-mail:outbound-channel-adapter channel="outboundMailChannel" mail-sender="mailSender"/>
 
-    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage" >
-        <property name="from" value="ritasksg@gmail.com" />
-        <property name="replyTo" value="ritasksg@gmail.com" />
+    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="ritasksg@gmail.com"/>
+        <property name="replyTo" value="ritasksg@gmail.com"/>
     </bean>
 
-    <int:service-activator input-channel="receiveChannel" ref="emailProvider" method="receive" />
+    <int:service-activator input-channel="receiveChannel" ref="emailProvider" method="receive"/>
 
     <int-mail:imap-idle-channel-adapter id="gmailAdapter"
                                         store-uri="imaps://ritasksg:allHailSpring@imap.gmail.com/INBOX"
@@ -94,21 +92,21 @@
 
     <!--<context:property-placeholder location="classpath*:META-INF/spring/twitter.properties" />-->
 
-    <int:channel id="twitterOutbound" />
+    <int:channel id="twitterOutbound"/>
 
     <twitter:outbound-channel-adapter
-            twitter-template="twitterTemplate" channel="twitterOutbound" />
+            twitter-template="twitterTemplate" channel="twitterOutbound"/>
 
     <bean id="twitterTemplate"
           class="org.springframework.social.twitter.api.impl.TwitterTemplate">
-        <constructor-arg value="${twitter.consumer-key}" />
-        <constructor-arg value="${twitter.consumer-secret}" />
-        <constructor-arg value="${twitter.access-token}" />
-        <constructor-arg value="${twitter.access-token-secret}" />
+        <constructor-arg value="${twitter.consumer-key}"/>
+        <constructor-arg value="${twitter.consumer-secret}"/>
+        <constructor-arg value="${twitter.access-token}"/>
+        <constructor-arg value="${twitter.access-token-secret}"/>
     </bean>
 
     <bean id="chatterboxConfig" class="edu.rit.asksg.domain.ProviderConfig">
-        <property name="authenticationToken" value="4heJuZtO5Ji43xk1uc0edKmDVgrSdheK" />
+        <property name="authenticationToken" value="4heJuZtO5Ji43xk1uc0edKmDVgrSdheK"/>
     </bean>
 
 </beans>

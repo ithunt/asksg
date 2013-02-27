@@ -1,21 +1,19 @@
 package edu.rit.asksg.domain;
 
-import com.twilio.sdk.TwilioRestClient;
-import com.twilio.sdk.TwilioRestException;
-import com.twilio.sdk.resource.factory.SmsFactory;
-import com.twilio.sdk.resource.instance.Sms;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.service.ConversationService;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RooJavaBean
 @RooToString

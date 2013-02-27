@@ -11,6 +11,4 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson
 public class Facebook extends Service {
 
-
-
 }
