@@ -5,15 +5,12 @@
        xmlns:int="http://www.springframework.org/schema/integration"
        xmlns:twitter="http://www.springframework.org/schema/integration/twitter"
        xmlns:util="http://www.springframework.org/schema/util"
-       xmlns:context="http://www.springframework.org/schema/context"
 
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd
-        http://www.springframework.org/schema/integration/twitter http://www.springframework.org/schema/integration/twitter/spring-integration-twitter.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd ">
+        http://www.springframework.org/schema/integration/twitter http://www.springframework.org/schema/integration/twitter/spring-integration-twitter.xsd">
 
 
     <bean id="twilioProvider" class="edu.rit.asksg.domain.Twilio">
@@ -122,6 +119,15 @@
         <constructor-arg value="${twitter.access-token}"/>
         <constructor-arg value="${twitter.access-token-secret}"/>
     </bean>
+
+    <!--Facebook-->
+
+    <bean id="facebookTemplate"
+          class="org.springframework.social.facebook.api.impl.FacebookTemplate">
+        <constructor-arg value="${facebook.access-token}"/>
+    </bean>
+
+    <!--Chatterbox-->
 
     <bean id="chatterboxConfig" class="edu.rit.asksg.domain.ProviderConfig">
         <property name="authenticationToken" value="4heJuZtO5Ji43xk1uc0edKmDVgrSdheK"/>
