@@ -45,6 +45,6 @@ public class Conversation {
 
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Service provider;
+	private Service service;
 
 }

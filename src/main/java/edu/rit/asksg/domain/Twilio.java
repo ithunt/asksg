@@ -6,7 +6,6 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
@@ -22,21 +21,13 @@ import java.util.List;
 public class Twilio extends Service implements ContentProvider {
 
 	@Autowired
-	@Qualifier("twilioConfig")
-	transient ProviderConfig config;
-
-	//@Autowired
 	transient ConversationService conversationService;
 
-	private static final Logger logger = LoggerFactory.getLogger(Twilio.class);
-
-	public Twilio(ProviderConfig config, ConversationService conversationService) {
-		this.config = config;
-		this.conversationService = conversationService;
-	}
+	private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
 	@Override
 	public List<Conversation> getNewContent() {
+		logger.debug("Twilio does not support fetching new content.");
 		return new ArrayList<Conversation>();
 	}
 
@@ -89,14 +80,8 @@ public class Twilio extends Service implements ContentProvider {
 		Conversation conv = new Conversation(msg);
 		msg.setConversation(conv);
 
-		conv.setProvider(this);
+		conv.setService(this);
 
 		conversationService.saveConversation(conv);
 	}
-
-	public void setConfig(ProviderConfig config) {
-		//this.config = config;
-	}
-
-
 }

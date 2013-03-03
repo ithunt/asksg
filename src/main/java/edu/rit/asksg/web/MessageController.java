@@ -2,8 +2,10 @@ package edu.rit.asksg.web;
 
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.Conversation;
+import edu.rit.asksg.domain.Email;
 import edu.rit.asksg.domain.Message;
-import edu.rit.asksg.domain.Service;
+import edu.rit.asksg.service.ProviderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @RooWebJson(jsonObject = Message.class)
@@ -21,77 +22,76 @@ import java.util.Set;
 @RequestMapping("/messages")
 public class MessageController {
 
-    @Resource
-    Map<String, Service> providerMap;
+	@Resource(name = "emailProvider")
+	ContentProvider emailProvider;
 
-    @Resource(name = "emailProvider")
-    ContentProvider emailProvider;
+	@Autowired
+	ProviderService providerService;
 
-    @RequestMapping(value = "/test")
-    public ResponseEntity<String> test() {
+	@RequestMapping(value = "/test")
+	public ResponseEntity<String> test() {
 
-        Conversation c = new Conversation();
-        c.setId(1L);
-        c.setProvider(providerMap.get("default"));
+		Conversation c = new Conversation();
+		c.setId(1L);
+		c.setService(providerService.findServiceByTypeAndIdentifierEquals(Email.class, "ritasksg@gmail.com"));
 
-        Message m = new Message();
-        m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
-        m.setAuthor("Mark Twain");
-        m.setConversation(c);
+		Message m = new Message();
+		m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
+		m.setAuthor("Mark Twain");
+		m.setConversation(c);
 
-        messageService.saveMessage(m);
+		messageService.saveMessage(m);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("content_type", "text/plain");
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("content_type", "text/plain");
 
-        return new ResponseEntity<String>("Did it work?", headers, HttpStatus.OK);
+		return new ResponseEntity<String>("Did it work?", headers, HttpStatus.OK);
 
-    }
-
-
-    @RequestMapping(value = "/seed")
-    public ResponseEntity<String> seed() {
-
-        Conversation convo = new Conversation();
-        Set<Message> messages = new HashSet<Message>();
-        convo.setProvider(providerMap.get("default"));
-
-        Message m = new Message();
-        m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
-        m.setAuthor("Mark Twain");
-        m.setConversation(convo);
-
-        messages.add(m);
-        convo.setMessages(messages);
-
-        messageService.saveMessage(m);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("content_type", "text/plain");
-
-        return new ResponseEntity<String>("Your seed has been spread", headers, HttpStatus.OK);
+	}
 
 
-    }
+	@RequestMapping(value = "/seed")
+	public ResponseEntity<String> seed() {
+
+		Conversation convo = new Conversation();
+		Set<Message> messages = new HashSet<Message>();
+		convo.setService(providerService.findServiceByTypeAndIdentifierEquals(Email.class, "ritasksg@gmail.com"));
+
+		Message m = new Message();
+		m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
+		m.setAuthor("Mark Twain");
+		m.setConversation(convo);
+
+		messages.add(m);
+		convo.setMessages(messages);
+
+		messageService.saveMessage(m);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("content_type", "text/plain");
+
+		return new ResponseEntity<String>("Your seed has been spread", headers, HttpStatus.OK);
 
 
-    @RequestMapping(value = "/email")
-    public ResponseEntity<String> email() {
-
-        Message m = new Message();
-        m.setAuthor("ithunt0@gmail.com");
-        m.setContent("Greetings from AskSG");
-
-        emailProvider.postContent(m);
+	}
 
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("content_type", "text/plain");
+	@RequestMapping(value = "/email")
+	public ResponseEntity<String> email() {
 
-        return new ResponseEntity<String>("Check your email", headers, HttpStatus.OK);
+		Message m = new Message();
+		m.setAuthor("ithunt0@gmail.com");
+		m.setContent("Greetings from AskSG");
+
+		emailProvider.postContent(m);
 
 
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("content_type", "text/plain");
 
-    }
+		return new ResponseEntity<String>("Check your email", headers, HttpStatus.OK);
+
+
+	}
 
 }

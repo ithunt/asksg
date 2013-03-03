@@ -3,17 +3,18 @@
 
 package edu.rit.asksg.service;
 
-import edu.rit.asksg.domain.ProviderConfig;
+import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.service.ConfigService;
+
 import java.util.List;
 
 privileged aspect ConfigService_Roo_Service {
-    
-    public abstract long ConfigService.countAllProviderConfigs();    
-    public abstract void ConfigService.deleteProviderConfig(ProviderConfig providerConfig);    
-    public abstract ProviderConfig ConfigService.findProviderConfig(Long id);    
-    public abstract List<ProviderConfig> ConfigService.findAllProviderConfigs();    
-    public abstract List<ProviderConfig> ConfigService.findProviderConfigEntries(int firstResult, int maxResults);    
-    public abstract void ConfigService.saveProviderConfig(ProviderConfig providerConfig);    
-    public abstract ProviderConfig ConfigService.updateProviderConfig(ProviderConfig providerConfig);    
+
+	public abstract long ConfigService.countAllProviderConfigs();
+	public abstract void ConfigService.deleteProviderConfig(ProviderConfig providerConfig);
+	public abstract ProviderConfig ConfigService.findProviderConfig(Long id);
+	public abstract List<ProviderConfig> ConfigService.findAllProviderConfigs();
+	public abstract List<ProviderConfig> ConfigService.findProviderConfigEntries(int firstResult, int maxResults);
+	public abstract void ConfigService.saveProviderConfig(ProviderConfig providerConfig);
+	public abstract ProviderConfig ConfigService.updateProviderConfig(ProviderConfig providerConfig);
 }

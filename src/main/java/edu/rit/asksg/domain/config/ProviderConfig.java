@@ -1,23 +1,26 @@
-package edu.rit.asksg.domain;
+package edu.rit.asksg.domain.config;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord
+@RooJpaEntity
 @RooJson
 public class ProviderConfig {
 
-    private String authenticationToken;
+	private String authenticationToken;
 
-    private String username;
+	private String identifier;
 
-    private String password;
+	private String username;
 
-    private String host;
+	private String password;
 
-    private int port;
+	private String host;
+
+	private int port;
 }

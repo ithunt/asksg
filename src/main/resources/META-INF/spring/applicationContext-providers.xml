@@ -5,53 +5,16 @@
        xmlns:int="http://www.springframework.org/schema/integration"
        xmlns:twitter="http://www.springframework.org/schema/integration/twitter"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
 
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-        http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd
-        http://www.springframework.org/schema/integration/twitter http://www.springframework.org/schema/integration/twitter/spring-integration-twitter.xsd">
-
-
-    <bean id="conversationService" class="edu.rit.asksg.service.ConversationServiceImpl">
-    </bean>
-
-    <bean id="twilioProvider" class="edu.rit.asksg.domain.Twilio">
-        <!--<property name="identifier" value="twilio" />-->
-        <qualifier type="edu.rit.asksg.domain.ProviderConfig" value="twilioConfig"/>
-        <constructor-arg ref="twilioConfig"/>
-        <constructor-arg ref="conversationService"/>
-    </bean>
+       http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd">
 
     <bean id="emailProvider" class="edu.rit.asksg.domain.Email">
-        <property name="identifier" value="email"/>
     </bean>
-
-    <bean id="twitterProvider" class="edu.rit.asksg.domain.Twitter">
-        <property name="identifier" value="twitter"/>
-    </bean>
-
-    <bean id="defaultProvider" class="edu.rit.asksg.domain.Service">
-        <property name="identifier" value="default"/>
-    </bean>
-
-    <util:map id="providerMap" key-type="java.lang.String" value-type="edu.rit.asksg.domain.Service">
-        <entry key="email" value-ref="emailProvider"/>
-        <entry key="twilio" value-ref="twilioProvider"/>
-        <entry key="twitter" value-ref="twitterProvider"/>
-        <entry key="default" value-ref="defaultProvider"/>
-    </util:map>
-
-    <!--TWILIO-->
-
-    <bean id="twilioConfig" class="edu.rit.asksg.domain.ProviderConfig">
-        <property name="host" value=""/>
-        <property name="port" value="0"/>
-        <property name="username" value=""/>
-        <property name="password" value=""/>
-        <property name="authenticationToken" value=""/>
-    </bean>
-
 
     <!--EMAIL-->
     <int:annotation-config/>
@@ -74,7 +37,6 @@
 
     <int:gateway id="mailGateway" service-interface="edu.rit.asksg.dataio.MailGateway"
                  default-request-channel="xformMailChannel" default-reply-channel="confirmationChannel"/>
-
 
     <int:transformer input-channel="xformMailChannel" output-channel="outboundMailChannel"
                      ref="emailProvider" method="transform"/>
@@ -106,33 +68,7 @@
         <prop key="mail.smtp.auth">true</prop>
     </util:properties>
 
-    <!--Twitter-->
-
-    <!--<context:property-placeholder location="classpath*:META-INF/spring/twitter.properties" />-->
-
-    <int:channel id="twitterOutbound"/>
-
-    <twitter:outbound-channel-adapter
-            twitter-template="twitterTemplate" channel="twitterOutbound"/>
-
-    <bean id="twitterTemplate"
-          class="org.springframework.social.twitter.api.impl.TwitterTemplate">
-        <constructor-arg value="${twitter.consumer-key}"/>
-        <constructor-arg value="${twitter.consumer-secret}"/>
-        <constructor-arg value="${twitter.access-token}"/>
-        <constructor-arg value="${twitter.access-token-secret}"/>
-    </bean>
-
-    <!--Facebook-->
-
-    <bean id="facebookTemplate"
-          class="org.springframework.social.facebook.api.impl.FacebookTemplate">
-        <constructor-arg value="${facebook.access-token}"/>
-    </bean>
-
-    <!--Chatterbox-->
-
-    <bean id="chatterboxConfig" class="edu.rit.asksg.domain.ProviderConfig">
+    <bean id="chatterboxConfig" class="edu.rit.asksg.domain.config.ProviderConfig">
         <property name="authenticationToken" value="4heJuZtO5Ji43xk1uc0edKmDVgrSdheK"/>
     </bean>
 

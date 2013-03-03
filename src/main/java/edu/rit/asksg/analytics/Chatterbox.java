@@ -4,19 +4,20 @@ import com.mashape.client.http.MashapeCallback;
 import com.mashape.client.http.MashapeResponse;
 import edu.rit.asksg.analytics.client.SentimentAnalysisForSocialMedia;
 import edu.rit.asksg.domain.Message;
-import edu.rit.asksg.domain.ProviderConfig;
+import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.service.MessageService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
-
 
 
 @RooJavaBean
 @RooToString
+@RooJpaEntity
 public class Chatterbox {
 
 
@@ -24,12 +25,12 @@ public class Chatterbox {
 	public final transient MessageService messageService;
 
 	@Autowired
-	public Chatterbox(@Qualifier("chatterboxConfig") final ProviderConfig config, final MessageService messageService){
+	public Chatterbox(@Qualifier("chatterboxConfig") final ProviderConfig config, final MessageService messageService) {
 		this.config = config;
 		this.messageService = messageService;
 	}
 
-	public void handleMessage(final Message message){
+	public void handleMessage(final Message message) {
 		SentimentAnalysisForSocialMedia client = new SentimentAnalysisForSocialMedia(config.getAuthenticationToken());
 		Thread thread = client.classifytext(message.getContent(), "en", null, null, new MashapeCallback<JSONObject>() {
 			@Override

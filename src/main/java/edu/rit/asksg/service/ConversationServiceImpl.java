@@ -10,36 +10,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ConversationServiceImpl implements ConversationService {
 
-    @Autowired
-    MessageService messageService;
+	@Autowired
+	MessageService messageService;
 
-    @Autowired
-    MessageRepository messageRepository;
+	@Autowired
+	MessageRepository messageRepository;
 
-    @Autowired
-    ProviderService providerService;
+	@Autowired
+	ProviderService providerService;
 
-    public void saveConversation(Conversation conversation) {
-        for(Message m : conversation.getMessages()){
-            messageService.saveMessage(m);
-        }
+	public void saveConversation(Conversation conversation) {
+		for (Message m : conversation.getMessages()) {
+			messageService.saveMessage(m);
+		}
 
-        conversationRepository.save(conversation);
-    }
+		conversationRepository.save(conversation);
+	}
 
-    public Conversation updateConversation(Conversation conversation) {
-        conversation.setModified(LocalDateTime.now());
+	public Conversation updateConversation(Conversation conversation) {
+		conversation.setModified(LocalDateTime.now());
 
 //        for(Message m : conversation.getMessages()) {
 //            if(m.getId() == null) messageRepository.save(m);
 //        }
 
-        return conversationRepository.save(conversation);
-    }
-
-    @Override
-    public void bootstrap() {
-        providerService.bootstrap();
-
-    }
+		return conversationRepository.save(conversation);
+	}
 }
