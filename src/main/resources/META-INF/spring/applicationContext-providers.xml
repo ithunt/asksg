@@ -13,6 +13,9 @@
         http://www.springframework.org/schema/integration/twitter http://www.springframework.org/schema/integration/twitter/spring-integration-twitter.xsd">
 
 
+    <bean id="conversationService" class="edu.rit.asksg.service.ConversationServiceImpl">
+    </bean>
+
     <bean id="twilioProvider" class="edu.rit.asksg.domain.Twilio">
         <!--<property name="identifier" value="twilio" />-->
         <qualifier type="edu.rit.asksg.domain.ProviderConfig" value="twilioConfig"/>
