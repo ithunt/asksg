@@ -3,10 +3,11 @@ package edu.rit.asksg.web;
 import edu.rit.asksg.common.Log;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
-import edu.rit.asksg.domain.ProviderConfig;
+import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.Twilio;
 import edu.rit.asksg.domain.Twitter;
+import edu.rit.asksg.domain.config.TwilioConfig;
 import edu.rit.asksg.service.ProviderService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,8 @@ import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @RooWebJson(jsonObject = Conversation.class)
@@ -31,14 +30,15 @@ public class ConversationController {
 	@Log
 	private Logger logger;
 
-	@Autowired ProviderService providerService;
+	@Autowired
+	ProviderService providerService;
 
 	@RequestMapping(value = "/seed")
 	public ResponseEntity<String> seed() {
-		Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class,"37321");
-		if(twiloprovider == null){
+		Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, "37321");
+		if (twiloprovider == null) {
 			Service twilio = new Twilio();
-			ProviderConfig twilioconfig = new ProviderConfig();
+			TwilioConfig twilioconfig = new TwilioConfig();
 			twilioconfig.setIdentifier("37321");
 			twilio.setConfig(twilioconfig);
 			providerService.saveService(twilio);
@@ -53,8 +53,8 @@ public class ConversationController {
 		messages.add(m1);
 
 		c.setMessages(messages);
-		twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class,"37321");
-		c.setProvider(twiloprovider);
+		twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, "37321");
+		c.setService(twiloprovider);
 		conversationService.saveConversation(c);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -66,14 +66,14 @@ public class ConversationController {
 	@RequestMapping(value = "/tweet")
 	public ResponseEntity<String> twats() {
 
-        Service twitter = new Twitter();
-        ProviderConfig twitterConfig = new ProviderConfig();
-        twitterConfig.setIdentifier("wY0Aft0Gz410RtOqOHd7Q");
-        twitter.setConfig(twitterConfig);
-        providerService.saveService(twitter);
+		Service twitter = new Twitter();
+		ProviderConfig twitterConfig = new ProviderConfig();
+		twitterConfig.setIdentifier("wY0Aft0Gz410RtOqOHd7Q");
+		twitter.setConfig(twitterConfig);
+		providerService.saveService(twitter);
 
 
-        twitter = providerService.findServiceByTypeAndIdentifierEquals(Twitter.class, "wY0Aft0Gz410RtOqOHd7Q");
+		twitter = providerService.findServiceByTypeAndIdentifierEquals(Twitter.class, "wY0Aft0Gz410RtOqOHd7Q");
 		List<Conversation> twats = twitter.getNewContent();
 		for (Conversation c : twats) {
 			conversationService.saveConversation(c);

@@ -1,11 +1,10 @@
 package edu.rit.asksg.analytics;
 
 import edu.rit.asksg.domain.Message;
-import edu.rit.asksg.domain.ProviderConfig;
+import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.service.MessageService;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.roo.addon.test.RooIntegrationTest;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,14 +25,14 @@ public class ChatterboxIntegrationTest {
 	private MessageService service;
 
 	@Before
-	public void setup(){
+	public void setup() {
 		config = mock(ProviderConfig.class);
 		when(config.getAuthenticationToken()).thenReturn(testAuthenticationToken);
 		service = mock(MessageService.class);
 	}
 
 	@Test
-	public void testIntegrationWithChatterboxAPI(){
+	public void testIntegrationWithChatterboxAPI() {
 		Chatterbox chatterbox = new Chatterbox(config, null);
 		Message message = new Message();
 		message.setContent("Test query to chatterbox");
@@ -43,7 +42,6 @@ public class ChatterboxIntegrationTest {
 		assertNotNull(message.getAnalytics().getSentimentScore());
 		assertEquals(testSentimentScore, message.getAnalytics().getSentimentScore());
 	}
-
 
 
 }

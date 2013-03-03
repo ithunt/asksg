@@ -1,5 +1,7 @@
 package edu.rit.asksg.domain;
 
+import edu.rit.asksg.dataio.ContentProvider;
+import edu.rit.asksg.domain.config.SpringSocialConfig;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.social.twitter.api.TimelineOperations;
 import org.springframework.social.twitter.api.Tweet;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,17 +19,14 @@ import java.util.List;
 @RooToString
 @RooJpaEntity
 @RooJson
-public class Twitter extends Service {
-
-	@Resource(name = "twitterTemplate")
-	transient org.springframework.social.twitter.api.Twitter twitter;
+public class Twitter extends Service implements ContentProvider {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
 
 	@Override
 	public List<Conversation> getNewContent() {
-
-		final TimelineOperations timelineOperations = this.twitter.timelineOperations();
+		final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
+		final TimelineOperations timelineOperations = twitterApi.timelineOperations();
 		final List<Tweet> tweets = timelineOperations.getHomeTimeline();
 		return parseTweets(tweets);
 	}
@@ -36,7 +34,8 @@ public class Twitter extends Service {
 	@Override
 	public boolean postContent(Message message) {
 
-		final TimelineOperations timelineOperations = this.twitter.timelineOperations();
+		final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
+		final TimelineOperations timelineOperations = twitterApi.timelineOperations();
 		final String tweet =
 				((message.getRecipient() != null) ? "@" + message.getRecipient() + " " : "") +
 						message.getContent();
@@ -57,7 +56,7 @@ public class Twitter extends Service {
 
 			Conversation c = new Conversation(m);
 			m.setConversation(c);
-			c.setProvider(this);
+			c.setService(this);
 			convos.add(c);
 
 			logger.debug("New Tweet:" + m.toString());
@@ -74,5 +73,10 @@ public class Twitter extends Service {
 	@Override
 	public boolean isAuthenticated() {
 		return super.isAuthenticated();
+	}
+
+	private org.springframework.social.twitter.api.Twitter getTwitterApi() {
+		//todo make safe
+		return (org.springframework.social.twitter.api.Twitter) ((SpringSocialConfig) this.getConfig()).getApiBinding();
 	}
 }

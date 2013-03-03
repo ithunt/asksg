@@ -3,18 +3,18 @@
 
 package edu.rit.asksg.repository;
 
-import edu.rit.asksg.domain.ProviderConfig;
+import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.repository.ConfigRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 privileged aspect ConfigRepository_Roo_Jpa_Repository {
-    
-    declare parents: ConfigRepository extends JpaRepository<ProviderConfig, Long>;
-    
-    declare parents: ConfigRepository extends JpaSpecificationExecutor<ProviderConfig>;
-    
-    declare @type: ConfigRepository: @Repository;
-    
+
+	declare parents:ConfigRepository extends JpaRepository<ProviderConfig,Long>;
+
+	declare parents:ConfigRepository extends JpaSpecificationExecutor<ProviderConfig>;
+
+	declare @type: ConfigRepository:@Repository;
+
 }

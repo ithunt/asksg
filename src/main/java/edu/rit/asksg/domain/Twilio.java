@@ -6,7 +6,6 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
@@ -81,7 +80,7 @@ public class Twilio extends Service implements ContentProvider {
 		Conversation conv = new Conversation(msg);
 		msg.setConversation(conv);
 
-		conv.setProvider(this);
+		conv.setService(this);
 
 		conversationService.saveConversation(conv);
 	}
