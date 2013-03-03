@@ -35,12 +35,14 @@ public class ConversationController {
 
 	@RequestMapping(value = "/seed")
 	public ResponseEntity<String> seed() {
-		Service twilio = new Twilio();
-		ProviderConfig twilioconfig = new ProviderConfig();
-		twilioconfig.setIdentifier("37321");
-		twilio.setConfig(twilioconfig);
-		providerService.saveService(twilio);
-
+		Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class,"37321");
+		if(twiloprovider == null){
+			Service twilio = new Twilio();
+			ProviderConfig twilioconfig = new ProviderConfig();
+			twilioconfig.setIdentifier("37321");
+			twilio.setConfig(twilioconfig);
+			providerService.saveService(twilio);
+		}
 
 		Conversation c = new Conversation();
 		Message m1 = new Message();
@@ -51,7 +53,7 @@ public class ConversationController {
 		messages.add(m1);
 
 		c.setMessages(messages);
-		Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class,"37321");
+		twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class,"37321");
 		c.setProvider(twiloprovider);
 		conversationService.saveConversation(c);
 
