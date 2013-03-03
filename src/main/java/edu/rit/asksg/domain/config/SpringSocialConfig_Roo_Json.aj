@@ -6,27 +6,26 @@ package edu.rit.asksg.domain.config;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 privileged aspect SpringSocialConfig_Roo_Json {
-
-	public String SpringSocialConfig.toJson() {
-		return new JSONSerializer().exclude("*.class").deepSerialize(this);
-	}
-
-	public static SpringSocialConfig SpringSocialConfig.fromJsonToSpringSocialConfig(String json) {
-		return new JSONDeserializer<SpringSocialConfig>().use(null, SpringSocialConfig.class).deserialize(json);
-	}
-
-	public static String SpringSocialConfig.toJsonArray(Collection<SpringSocialConfig> collection) {
-		return new JSONSerializer().exclude("*.class").deepSerialize(collection);
-	}
-
-	public static Collection<SpringSocialConfig> SpringSocialConfig.fromJsonArrayToSpringSocialConfigs(String json) {
-		return new JSONDeserializer<List<SpringSocialConfig>>().use(null, ArrayList.class).use("values", SpringSocialConfig.class).deserialize(json);
-	}
-
+    
+    public String SpringSocialConfig.toJson() {
+        return new JSONSerializer().exclude("*.class").deepSerialize(this);
+    }
+    
+    public static SpringSocialConfig SpringSocialConfig.fromJsonToSpringSocialConfig(String json) {
+        return new JSONDeserializer<SpringSocialConfig>().use(null, SpringSocialConfig.class).deserialize(json);
+    }
+    
+    public static String SpringSocialConfig.toJsonArray(Collection<SpringSocialConfig> collection) {
+        return new JSONSerializer().exclude("*.class").deepSerialize(collection);
+    }
+    
+    public static Collection<SpringSocialConfig> SpringSocialConfig.fromJsonArrayToSpringSocialConfigs(String json) {
+        return new JSONDeserializer<List<SpringSocialConfig>>().use(null, ArrayList.class).use("values", SpringSocialConfig.class).deserialize(json);
+    }
+    
 }

@@ -11,25 +11,10 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-        http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd">
-
-
-    <bean id="twilioProvider" class="edu.rit.asksg.domain.Twilio">
-    </bean>
+       http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd">
 
     <bean id="emailProvider" class="edu.rit.asksg.domain.Email">
     </bean>
-
-    <!--TWILIO-->
-
-    <bean id="twilioConfig" class="edu.rit.asksg.domain.config.ProviderConfig">
-        <property name="host" value=""/>
-        <property name="port" value="0"/>
-        <property name="username" value=""/>
-        <property name="password" value=""/>
-        <property name="authenticationToken" value=""/>
-    </bean>
-
 
     <!--EMAIL-->
     <int:annotation-config/>

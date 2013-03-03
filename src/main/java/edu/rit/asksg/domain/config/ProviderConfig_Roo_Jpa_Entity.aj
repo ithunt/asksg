@@ -4,7 +4,6 @@
 package edu.rit.asksg.domain.config;
 
 import edu.rit.asksg.domain.config.ProviderConfig;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,32 +12,32 @@ import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect ProviderConfig_Roo_Jpa_Entity {
-
-	declare @type: ProviderConfig:@Entity;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
-	private Long ProviderConfig.id;
-
-	@Version
-	@Column(name = "version")
-	private Integer ProviderConfig.version;
-
-	public Long ProviderConfig.getId() {
-		return this.id;
-	}
-
-	public void ProviderConfig.setId(Long id) {
-		this.id = id;
-	}
-
-	public Integer ProviderConfig.getVersion() {
-		return this.version;
-	}
-
-	public void ProviderConfig.setVersion(Integer version) {
-		this.version = version;
-	}
-
+    
+    declare @type: ProviderConfig: @Entity;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long ProviderConfig.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer ProviderConfig.version;
+    
+    public Long ProviderConfig.getId() {
+        return this.id;
+    }
+    
+    public void ProviderConfig.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer ProviderConfig.getVersion() {
+        return this.version;
+    }
+    
+    public void ProviderConfig.setVersion(Integer version) {
+        this.version = version;
+    }
+    
 }
