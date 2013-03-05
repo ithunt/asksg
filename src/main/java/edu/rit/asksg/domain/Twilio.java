@@ -1,6 +1,11 @@
 package edu.rit.asksg.domain;
 
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.TwilioRestException;
+import com.twilio.sdk.resource.factory.SmsFactory;
+import com.twilio.sdk.resource.instance.Sms;
 import edu.rit.asksg.dataio.ContentProvider;
+import edu.rit.asksg.domain.config.TwilioConfig;
 import edu.rit.asksg.service.ConversationService;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
@@ -12,7 +17,9 @@ import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RooJavaBean
 @RooToString
@@ -22,6 +29,8 @@ public class Twilio extends Service implements ContentProvider {
 
 	@Autowired
 	transient ConversationService conversationService;
+
+	private TwilioConfig config;
 
 	private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
@@ -40,7 +49,7 @@ public class Twilio extends Service implements ContentProvider {
 	public boolean postContent(Message message) {
 		// this assumes that the config will have our Twilio SID assigned to the username.
 		//TODO: the config won't work so this is commented out for now.
-		/*TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
+		TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("Body", message.getContent());
 		//TODO: not sure if we'll always want this phone number
@@ -50,12 +59,11 @@ public class Twilio extends Service implements ContentProvider {
 		SmsFactory smsFactory = twc.getAccount().getSmsFactory();
 		try {
 			Sms sms = smsFactory.create(vars);
-
+			//TODO: Twilio can use a callback to POST information to if sending fails
 		} catch (TwilioRestException e) {
 			return false;
 		}
-		return true;*/
-		return false;
+		return true;
 	}
 
 	@Override
@@ -83,5 +91,10 @@ public class Twilio extends Service implements ContentProvider {
 		conv.setService(this);
 
 		conversationService.saveConversation(conv);
+	}
+
+	@Override
+	public void setConfig(TwilioConfig config) {
+		this.config = config;
 	}
 }

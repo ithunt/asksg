@@ -28,7 +28,7 @@ public class MessageServiceImpl implements MessageService {
 			c.setMessages(messages);
 
 
-			//todo: make recipient hack less ugly and more formalized - pass in recipent from UI?
+			//TODO: make recipient hack less ugly and more formalized - pass in recipent from UI?
 			try {
 				final Message first = ((Message) messages.toArray()[0]);
 
@@ -41,6 +41,7 @@ public class MessageServiceImpl implements MessageService {
 				conversationService.updateConversation(c);
 			} catch (Exception e) {
 				logger.error(e.getLocalizedMessage());
+				//TODO: indicate to user that the service they're using is unavailable and message might not have been sent
 			}
 
 
