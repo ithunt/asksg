@@ -1,77 +1,102 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" ng-app="ASKSG"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" ng-app="ASKSG"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="../css/bootstrap.min.css">
-        <style>
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
-        </style>
-        <link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
-        <link rel="stylesheet" href="../css/main.css">
-        <!--<link rel="stylesheet" href="../bootstrap-toggle-buttons.css">-->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
+    <link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <!--<link rel="stylesheet" href="../bootstrap-toggle-buttons.css">-->
 
-        <!-- Link in angular and our controller files -->
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script> <!-- ../js/angular/angular.min.js -->
-        <script src="../js/asksg.module.js"></script>
-        <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-    </head>
-    <body ng-controller="ConversationController">
+    <!-- Link in angular and our controller files -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script>
+    <!-- ../js/angular/angular.min.js -->
+    <script src="../js/asksg.module.js"></script>
+    <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+</head>
+<body ng-controller="ConversationController">
 
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
+<!--[if lt IE 7]>
+<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to
+    improve your experience.</p>
+<![endif]-->
 
-        <!-- Service selector controller -->
-        <div id="fl_menu" class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="/">ASKSG</a>
-                    <ul class="nav pull-right">
-                        <li><a data-toggle="modal" href="#loginModal" class="pull-right login-window">Logout {{userName}}</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- The conversation controller -->
+<!-- Service selector controller -->
+<div id="fl_menu" class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
         <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/">ASKSG</a>
+            <ul class="nav pull-right">
+                <li><a data-toggle="modal" href="#loginModal" class="pull-right login-window">Logout {{userName}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- The conversation controller -->
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#dashTab">Dashboard</a></li>
+        <li><a data-toggle="tab" href="#configTab">Configuration</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="dashTab">
             <div class="row-fluid">
                 <div class="span3">
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
-                            <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services</li>
-                            <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()"><a href="#">Email</a></li>
-                            <li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()"><a href="#">SMS</a></li>
-                            <li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()"><a href="#">Facebook</a></li>
-                            <li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()"><a href="#">Twitter</a></li>
-                            <li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()"><a href="#">Reddit</a></li>
+                            <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services
+                            </li>
+                            <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()"><a
+                                    href="#">Email</a></li>
+                            <li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()"><a
+                                    href="#">SMS</a></li>
+                            <li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()">
+                                <a href="#">Facebook</a></li>
+                            <li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()"><a
+                                    href="#">Twitter</a></li>
+                            <li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()"><a
+                                    href="#">Reddit</a></li>
                         </ul>
-                    </div> <!-- well sidebar-nav -->
+                    </div>
+                    <!-- well sidebar-nav -->
 
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
                             <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
-                            <li id="service-item-email" class="active service-menu-item" ng-click="filterRead()"><a href="#">Read</a></li>
-                            <li id="service-item-sms" class="active service-menu-item" ng-click="filterUnread()"><a href="#">Unread</a></li>
+                            <li id="service-item-email" class="active service-menu-item" ng-click="filterRead()"><a
+                                    href="#">Read</a></li>
+                            <li id="service-item-sms" class="active service-menu-item" ng-click="filterUnread()"><a
+                                    href="#">Unread</a></li>
                         </ul>
-                    </div> <!-- well sidebar-nav -->
-                </div> <!-- span3 -->
+                    </div>
+                    <!-- well sidebar-nav -->
+                </div>
+                <!-- span3 -->
 
                 <!-- The conversation controller -->
                 <div class="span8">
@@ -93,8 +118,10 @@
                                 <form class="navbar-search pull-right">
                                     <div class="input-append">
                                         <!-- Hook up the search bar to the converation filter for the Angular controller -->
-                                        <div class="input-append"><input ng-model="refineFilterString" type="text" placeholder="Filter" id="" name=""><span class="add-on"><i class="icon-filter"></i></span></div>
-                                    </div> 
+                                        <div class="input-append"><input ng-model="refineFilterString" type="text"
+                                                                         placeholder="Filter" id="" name=""><span
+                                                class="add-on"><i class="icon-filter"></i></span></div>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -102,12 +129,14 @@
                         <!-- TODO: plug in the infinite scroll jQuery plugin to give it the facebook feel -->
 
                         <ul class="convo-list infinite-scroll">
-                            <li class="convo-list-item-msg" ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString"> 
+                            <li class="convo-list-item-msg"
+                                ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString">
                                 <div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
 
                                     <!-- TODO: this should probably be put somewhere else -->
                                     <div class="delete pull-right" ng-show="isConvoActive(convo.id)" showonhoverparent>
-                                        <button class="btn btn-danger">Delete</button> <!--onclick="deleteConvo({{convo.id}})" -->
+                                        <button class="btn btn-danger">Delete</button>
+                                        <!--onclick="deleteConvo({{convo.id}})" -->
                                     </div>
 
                                     <!--filter:convoCategory | filter:filterArray[convo.service]">-->
@@ -116,12 +145,14 @@
 
                                     <!--<h3>{{convo.service}} - Conversation {{convo.author}} - {{convo.snippet}}</h3>-->
                                     <!-- Display the most recent web contents -->
-                                    <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length - 1].content}}</i></b></h5>
+                                    <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length
+                                        - 1].content}}</i></b></h5>
 
 
                                     <!-- List the messages -->
                                     <!--<h5>Messages</h5>-->
-                                    <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false"> <!-- put the messages in reverse order -->
+                                    <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false">
+                                        <!-- put the messages in reverse order -->
                                         <i class="icon-chevron-right"></i>{{messsage.author}}: {{message.content}}
                                     </p>
 
@@ -134,7 +165,6 @@
                                     <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
                                     Created: {{convo.created_at}}
 
-
                                     <!-- The message/conversation response form -->
                                     <div id="response-form-{{convo.id}}" class="responseForm">
                                         <form ng-submit="doPostMessage(convo, messageResp, userName)">
@@ -146,51 +176,97 @@
                             </li>
                         </ul>
                     </div>
-                </div> <!-- span8 -->
-            </div> <!-- row-fluid -->
+                </div>
+                <!-- span8 -->
+            </div>
+        </div>
+        <!-- dashTab -->
+        <div id="configTab" class="tab-pane fade">
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="well sidebar-nav">
+                        <ul class="nav nav-list">
+                            <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Settings
+                            </li>
+                            <li class="active"><a data-toggle="tab" href="#socialConfigTab">Social Subscriptions</a>
+                            </li>
+                            <li><a data-toggle="tab" href="#otherConfigTab">Other</a></li>
+                        </ul>
+                    </div>
+                    <!-- well sidebar-nav -->
+                </div>
+                <!-- span3 -->
 
-            <hr>
+                <!-- Configuration settings -->
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="socialConfigTab">
+                        <div class="span8">
+                            <ul>
+                                <li ng-repeat="sub in subscriptions">
+                                    {{sub.service}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="otherConfigTab" class="tab-pane fade">
+                        <div class="span8">
+                            TODO: put other options here
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- configTab -->
+</div>
 
-            <footer>
-                <p>&copy; ASKSG</p>
-            </footer>
-        </div> <!-- container -->
+<hr>
 
-        <!-- le jQuery -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
+<footer>
+    <p>&copy; ASKSG</p>
+</footer>
+</div> <!-- container -->
 
-         <!-- le infinite scroll -->
-        <script src="../js/jquery.jscroll.min.js"></script>
-        <script>
-            //$('.infinite-scroll').jscroll();
+<!-- le jQuery -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
 
-            // customize the infinite scroll options as follows
-            /* 
-            $('.infinite-scroll').jscroll({
-                loadingHtml: '<img src="loading.gif" alt="Loading" /> Loading...',
-                padding: 20,
-                nextSelector: 'a.jscroll-next:last',
-                contentSelector: 'li'
-            });
-            */
-        </script>
+<!-- le infinite scroll -->
+<script src="../js/jquery.jscroll.min.js"></script>
+<script>
+    //$('.infinite-scroll').jscroll();
 
-        <!-- le Bootstrap -->
-        <script src="../js/vendor/bootstrap.min.js"></script>
+    // customize the infinite scroll options as follows
+    /*
+     $('.infinite-scroll').jscroll({
+     loadingHtml: '<img src="loading.gif" alt="Loading" /> Loading...',
+     padding: 20,
+     nextSelector: 'a.jscroll-next:last',
+     contentSelector: 'li'
+     });
+     */
+</script>
 
-        <!-- Toggle buttons -->
-        <!--<script src="../js/jquery.toggle.buttons.js"></script>-->
+<!-- le Bootstrap -->
+<script src="../js/vendor/bootstrap.min.js"></script>
 
-        <!-- le dashboard script -->
-        <script src="../js/dashboard.js"></script>
+<!-- Toggle buttons -->
+<!--<script src="../js/jquery.toggle.buttons.js"></script>-->
 
-        <!-- le Analytics -->
-        <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
-        </script>
-    </body>
+<!-- le dashboard script -->
+<script src="../js/dashboard.js"></script>
+
+<!-- le Analytics -->
+<script>
+    var _gaq = [
+        ['_setAccount', 'UA-XXXXX-X'],
+        ['_trackPageview']
+    ];
+    (function (d, t) {
+        var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g, s)
+    }(document, 'script'));
+</script>
+</body>
 </html>

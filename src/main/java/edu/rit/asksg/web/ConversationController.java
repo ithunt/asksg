@@ -3,8 +3,14 @@ package edu.rit.asksg.web;
 import edu.rit.asksg.common.Log;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.Service;
+import edu.rit.asksg.domain.Twilio;
+import edu.rit.asksg.domain.Twitter;
+import edu.rit.asksg.domain.config.TwilioConfig;
+import edu.rit.asksg.service.ProviderService;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +18,8 @@ import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @RooWebJson(jsonObject = Conversation.class)
@@ -23,53 +27,63 @@ import java.util.Set;
 @RequestMapping("/conversations")
 public class ConversationController {
 
-    @Resource
-    Map<String, Service> providerMap;
+	@Log
+	private Logger logger;
 
-  //  private static final Logger logger = LoggerFactory.getLogger(ConversationController.class);
-	@Log transient
-	Logger logger;
+	@Autowired
+	ProviderService providerService;
 
-    private transient boolean strapped = false;
+	@RequestMapping(value = "/seed")
+	public ResponseEntity<String> seed() {
+		Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, "37321");
+		if (twiloprovider == null) {
+			Service twilio = new Twilio();
+			TwilioConfig twilioconfig = new TwilioConfig();
+			twilioconfig.setIdentifier("37321");
+			twilio.setConfig(twilioconfig);
+			providerService.saveService(twilio);
+		}
 
-    @RequestMapping(value = "/seed")
-    public ResponseEntity<String> seed() {
+		Conversation c = new Conversation();
+		Message m1 = new Message();
+		m1.setAuthor("Socrates");
+		m1.setContent("For the unexamined life is not worth living");
 
-        if(!strapped) conversationService.bootstrap();
+		Set<Message> messages = new HashSet<Message>();
+		messages.add(m1);
 
-        Conversation c = new Conversation();
-	    Message m1 = new Message();
-        m1.setAuthor("Socrates");
-        m1.setContent("For the unexamined life is not worth living");
+		c.setMessages(messages);
+		twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, "37321");
+		c.setService(twiloprovider);
+		conversationService.saveConversation(c);
 
-        Set<Message> messages = new HashSet<Message>();
-        messages.add(m1);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("content_type", "text/plain");
 
-        c.setMessages(messages);
-        c.setProvider(providerMap.get("default"));
+		return new ResponseEntity<String>("your seed has been spread", headers, HttpStatus.OK);
+	}
 
-        conversationService.saveConversation(c);
+	@RequestMapping(value = "/tweet")
+	public ResponseEntity<String> twats() {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content_type", "text/plain");
+		Service twitter = new Twitter();
+		ProviderConfig twitterConfig = new ProviderConfig();
+		twitterConfig.setIdentifier("wY0Aft0Gz410RtOqOHd7Q");
+		twitter.setConfig(twitterConfig);
+		providerService.saveService(twitter);
 
-        return new ResponseEntity<String>("your seed has been spread", headers, HttpStatus.OK);
-    }
 
-    @RequestMapping(value = "/tweet")
-    public ResponseEntity<String> twats() {
+		twitter = providerService.findServiceByTypeAndIdentifierEquals(Twitter.class, "wY0Aft0Gz410RtOqOHd7Q");
+		List<Conversation> twats = twitter.getNewContent();
+		for (Conversation c : twats) {
+			conversationService.saveConversation(c);
+		}
 
-        Service twitter = providerMap.get("twitter");
-        List<Conversation> twats = twitter.fetchNewContent();
-        for(Conversation c : twats) {
-            conversationService.saveConversation(c);
-        }
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("content_type", "text/plain");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content_type", "text/plain");
-
-        return new ResponseEntity<String>("Show me your tweets!", headers, HttpStatus.OK);
-    }
+		return new ResponseEntity<String>("Show me your tweets!", headers, HttpStatus.OK);
+	}
 
 }
 

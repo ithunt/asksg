@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface ContentProvider {
 
-    public List<Conversation> fetchNewContent();
+	public List<Conversation> getNewContent();
 
-    public List<Conversation> fetchContentSince(LocalDateTime datetime);
+	public List<Conversation> getContentSince(LocalDateTime datetime);
 
-    public boolean postContent(Message message);
+	public boolean postContent(Message message);
 
-    public boolean authenticate();
+	public boolean authenticate();
 
-    public boolean isAuthenticated();
+	public boolean isAuthenticated();
 
 }

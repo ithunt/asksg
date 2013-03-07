@@ -11,5 +11,4 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson
 public class Reddit extends Service {
 
-
 }

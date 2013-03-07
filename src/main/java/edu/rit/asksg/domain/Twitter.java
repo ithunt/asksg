@@ -1,5 +1,7 @@
 package edu.rit.asksg.domain;
 
+import edu.rit.asksg.dataio.ContentProvider;
+import edu.rit.asksg.domain.config.SpringSocialConfig;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,68 +12,71 @@ import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.social.twitter.api.TimelineOperations;
 import org.springframework.social.twitter.api.Tweet;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RooJavaBean
 @RooToString
 @RooJpaEntity
 @RooJson
-public class Twitter extends Service {
+public class Twitter extends Service implements ContentProvider {
 
-    @Resource(name = "twitterTemplate")
-    transient org.springframework.social.twitter.api.Twitter twitter;
+	private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
 
-    private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
+	@Override
+	public List<Conversation> getNewContent() {
+		final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
+		final TimelineOperations timelineOperations = twitterApi.timelineOperations();
+		final List<Tweet> tweets = timelineOperations.getHomeTimeline();
+		return parseTweets(tweets);
+	}
 
-    @Override
-    public List<Conversation> fetchNewContent() {
+	@Override
+	public boolean postContent(Message message) {
 
-        final TimelineOperations timelineOperations = this.twitter.timelineOperations();
-        List<Tweet> tweets = timelineOperations.getMentions();
+		final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
+		final TimelineOperations timelineOperations = twitterApi.timelineOperations();
+		final String tweet =
+				((message.getRecipient() != null) ? "@" + message.getRecipient() + " " : "") +
+						message.getContent();
 
-        List<Conversation> convos = new ArrayList<Conversation>();
+		return !(timelineOperations.updateStatus(tweet) == null);
+	}
 
-        for(Tweet tweet : tweets) {
-            Message m = new Message();
-            m.setAuthor(tweet.getFromUser());
-            m.setPosted(true);
-            m.setContent(tweet.getText());
+	protected List<Conversation> parseTweets(List<Tweet> tweets) {
+		final List<Conversation> convos = new ArrayList<Conversation>();
 
-            m.setUrl(tweet.getSource());
+		for (Tweet tweet : tweets) {
+			Message m = new Message();
+			m.setAuthor(tweet.getFromUser());
+			m.setPosted(true);
+			m.setContent(tweet.getText());
+			m.setUrl(tweet.getSource());
+			m.setCreated(new LocalDateTime(tweet.getCreatedAt()));
 
-            m.setCreated(new LocalDateTime(tweet.getCreatedAt()));
+			Conversation c = new Conversation(m);
+			m.setConversation(c);
+			c.setService(this);
+			convos.add(c);
 
-            Conversation c = new Conversation();
-            m.setConversation(c); //why is this causing serialization errors?
+			logger.debug("New Tweet:" + m.toString());
 
-            logger.debug("New Tweet:" + m.toString());
+		}
+		return convos;
+	}
 
-            Set<Message> messages = new HashSet<Message>();
-            messages.add(m);
-            c.setMessages(messages);
-            c.setProvider(this);
-            convos.add(c);
-        }
+	@Override
+	public boolean authenticate() {
+		return super.authenticate();
+	}
 
-        return convos;
-    }
+	@Override
+	public boolean isAuthenticated() {
+		return super.isAuthenticated();
+	}
 
-    @Override
-    public boolean postContent(Message message) {
-        return super.postContent(message);
-    }
-
-    @Override
-    public boolean authenticate() {
-        return super.authenticate();
-    }
-
-    @Override
-    public boolean isAuthenticated() {
-        return super.isAuthenticated();
-    }
+	private org.springframework.social.twitter.api.Twitter getTwitterApi() {
+		//todo make safe
+		return (org.springframework.social.twitter.api.Twitter) ((SpringSocialConfig) this.getConfig()).getApiBinding();
+	}
 }

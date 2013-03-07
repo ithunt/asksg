@@ -35,12 +35,12 @@ privileged aspect Conversation_Roo_JavaBean {
         this.modified = modified;
     }
     
-    public Service Conversation.getProvider() {
-        return this.provider;
+    public Service Conversation.getService() {
+        return this.service;
     }
     
-    public void Conversation.setProvider(Service provider) {
-        this.provider = provider;
+    public void Conversation.setService(Service service) {
+        this.service = service;
     }
     
 }

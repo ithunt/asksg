@@ -30,101 +30,101 @@ import java.util.Set;
 @RooJson
 public class Email extends Service implements ContentProvider {
 
-    private static final transient Logger logger = LoggerFactory.getLogger(Email.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(Email.class);
 
-    @Autowired
-    transient ConversationService conversationService;
+	@Autowired
+	transient ConversationService conversationService;
 
-    @Resource(name = "mailMessage")
-    transient MailMessage mailMessage;
+	@Resource(name = "mailMessage")
+	transient MailMessage mailMessage;
 
-    @Autowired
-    transient MailGateway mailGateway;
+	@Autowired
+	transient MailGateway mailGateway;
 
-    @Override
-    public List<Conversation> fetchNewContent() {
-        //get unread imap messages that aren't picked up by the channel listener.. how?
-        //javamail api?
+	@Override
+	public List<Conversation> getNewContent() {
+		//get unread imap messages that aren't picked up by the channel listener.. how?
+		//javamail api?
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public List<Conversation> fetchContentSince(LocalDateTime datetime) {
-        return null;
-    }
+	@Override
+	public List<Conversation> getContentSince(LocalDateTime datetime) {
+		return null;
+	}
 
-    @Override
-    public boolean postContent(Message message) {
-        mailGateway.sendMail(message);
-        return true;
-    }
+	@Override
+	public boolean postContent(Message message) {
+		mailGateway.sendMail(message);
+		return true;
+	}
 
-    @Override
-    public boolean authenticate() {
-        return false;
-    }
+	@Override
+	public boolean authenticate() {
+		return false;
+	}
 
-    @Override
-    public boolean isAuthenticated() {
-        return false;
-    }
+	@Override
+	public boolean isAuthenticated() {
+		return false;
+	}
 
-    public MailMessage transform(Message m) {
-        if(m == null) return null;
+	public MailMessage transform(Message m) {
+		if (m == null) return null;
 
-        mailMessage.setTo( m.getRecipient() );
+		mailMessage.setTo(m.getRecipient());
 
-        mailMessage.setSubject("Your Response from SG");
+		mailMessage.setSubject("Your Response from SG");
 
-        mailMessage.setSentDate( new Date(0));
+		mailMessage.setSentDate(new Date(0));
 
-        mailMessage.setText( m.getContent());
+		mailMessage.setText(m.getContent());
 
-        return mailMessage;
-    }
+		return mailMessage;
+	}
 
 
+	public void receive(MimeMessage mimeMessage) {
 
-    public void receive(MimeMessage mimeMessage) {
+		logger.debug("Received new MimeMessage... Parsing");
+		Message m = new Message();
 
-        logger.debug("Received new MimeMessage... Parsing");
-        Message m = new Message();
+		try {
+			final String sender = mimeMessage.getFrom()[0].toString();
 
-        try {
-            final String sender = mimeMessage.getFrom()[0].toString();
+			//Look for email address. Sender can be of format: Jon Doe <jd@gmail.com>
+			m.setAuthor((sender.contains("<") ? sender.substring(sender.indexOf('<') + 1, sender.indexOf('>')) : sender));
 
-            m.setAuthor( (sender.contains("<")? sender.substring(sender.indexOf('<')+1, sender.indexOf('>')) : sender));
+			if (mimeMessage.getContent() instanceof MimeMultipart) {
+				MimeMultipart body = (MimeMultipart) mimeMessage.getContent();
 
-            if(mimeMessage.getContent() instanceof MimeMultipart) {
-                MimeMultipart body = (MimeMultipart)mimeMessage.getContent();
+				for (int i = 0; i < body.getCount(); i++) {
+					BodyPart part = body.getBodyPart(i);
+					if (part.isMimeType("text/plain")) {
+						m.setContent(mimeMessage.getSubject() + " - " + part.getContent());
+						break;
+					}
+				}
+			}
 
-                for(int i = 0; i < body.getCount(); i++) {
-                    BodyPart part = body.getBodyPart(i);
-                    if(part.isMimeType("text/plain")) {
-                        m.setContent(mimeMessage.getSubject() + " - " + part.getContent() );
-                        break;
-                    }
-                }
-            }
+			logger.debug("MimeMessage from:" + m.getAuthor() + " - " + m.getContent());
+		} catch (MessagingException e) {
+			logger.error(e.getLocalizedMessage());
+		} catch (IOException e) {
+			logger.error(e.getLocalizedMessage());
+		}
 
-            logger.debug("MimeMessage from:" + m.getAuthor() + " - " + m.getContent());
-        } catch (MessagingException e) {
-            logger.error(e.getLocalizedMessage());
-        } catch (IOException e) {
-            logger.error(e.getLocalizedMessage());
-        }
+		Conversation c = new Conversation();
+		Set<Message> messages = new HashSet<Message>();
+		m.setConversation(c);
+		messages.add(m);
+		c.setMessages(messages);
 
-        Conversation c = new Conversation();
-        Set<Message> messages = new HashSet<Message>();
-        m.setConversation(c);
-        messages.add(m);
-        c.setMessages(messages);
+		c.setService(this);
 
-        c.setProvider(this);
+		conversationService.saveConversation(c);
 
-        conversationService.saveConversation(c);
-
-    }
+	}
 
 }

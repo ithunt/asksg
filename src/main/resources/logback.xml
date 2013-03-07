@@ -11,10 +11,18 @@
 	</logger>
 
 	<logger name="org.springframework">
-		<level value="DEBUG"/>
+		<level value="ERROR"/>
 	</logger>
 
-	<root level="debug">
+	<logger name="org.hibernate">
+		<level value="ERROR"/>
+	</logger>
+
+	<root level="DEBUG">
+		<appender-ref ref="CONSOLE"/>
+	</root>
+
+	<root level="ERROR">
 		<appender-ref ref="CONSOLE"/>
 	</root>
 </configuration>
