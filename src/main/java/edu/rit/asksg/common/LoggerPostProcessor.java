@@ -24,23 +24,12 @@ public class LoggerPostProcessor implements BeanPostProcessor {
 			@SuppressWarnings("unchecked")
 			public void doWith(Field field) throws IllegalArgumentException,
 					IllegalAccessException {
-				String name = "3";
 				ReflectionUtils.makeAccessible(field);
-
-				String s = bean.getClass().getSimpleName();
-				if (s.equals("ConversationController")) {
-					name = "5";
-				} else {
-					name = "6";
-				}
-				Logger logger = LoggerFactory.getLogger(bean.getClass());
-				logger.info(name);
-
 				//Check if the field is annoted with @Log
 				if (field.getAnnotation(Log.class) != null) {
 					Log logAnnotation = field.getAnnotation(Log.class);
+					Logger logger = LoggerFactory.getLogger(bean.getClass());
 					field.set(bean, logger);
-					logger.info(name + "");
 				}
 			}
 		});

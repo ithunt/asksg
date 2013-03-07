@@ -37,7 +37,6 @@
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<encoder>
-			<immediateFlush>false</immediateFlush>
 			<pattern>%d{yyyy-MM-dd HH:mm:ss}, %p, %c, %t, %M %m%n</pattern>
 		</encoder>
 	</appender>
@@ -68,12 +67,31 @@
 		</encoder>
 	</appender>
 
+	<appender name="allFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/all.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}, %p, %c, %t, %M %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="rootConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}, %p, %c, %t, %M %m%n</pattern>
+		</encoder>
+	</appender>
+
 	<!-- loggers -->
 	<logger name="org.hibernate">
 		<appender-ref ref="hibernateFileAppender"/>
 	</logger>
 
-	<logger name="edu.rit.asksg" level="TRACE">
+	<logger name="edu.rit.asksg">
 		<appender-ref ref="asksgFileAppender"/>
 		<appender-ref ref="asksgErrorFileAppender"/>
 	</logger>
@@ -82,7 +100,9 @@
 		<appender-ref ref="springFileAppender"/>
 	</logger>
 
-	<root level="WARN">
+	<root>
 		<appender-ref ref="errorFileAppender"/>
+		<appender-ref ref="allFileAppender"/>
+		<appender-ref ref="rootConsoleAppender"/>
 	</root>
 </configuration>

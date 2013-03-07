@@ -16,3 +16,5 @@ tasks.xml
 *.ear
 *.db
 *.class
+*.log
+*.log.gz
