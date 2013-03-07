@@ -5,6 +5,7 @@ import com.twilio.sdk.TwilioRestException;
 import com.twilio.sdk.resource.factory.SmsFactory;
 import com.twilio.sdk.resource.instance.Sms;
 import edu.rit.asksg.dataio.ContentProvider;
+import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
 import edu.rit.asksg.service.ConversationService;
 import org.joda.time.LocalDateTime;
@@ -52,8 +53,8 @@ public class Twilio extends Service implements ContentProvider {
 		TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("Body", message.getContent());
-		//TODO: not sure if we'll always want this phone number
-		vars.put("From", twc.getAccount().getAvailablePhoneNumbers().iterator().next().getPhoneNumber());
+		//TODO: magic string! need some way to get our phone number
+		vars.put("From", "5852865275");
 		vars.put("To", message.getAuthor());
 
 		SmsFactory smsFactory = twc.getAccount().getSmsFactory();
@@ -61,6 +62,8 @@ public class Twilio extends Service implements ContentProvider {
 			Sms sms = smsFactory.create(vars);
 			//TODO: Twilio can use a callback to POST information to if sending fails
 		} catch (TwilioRestException e) {
+			//logger.error("Failed to send outgoing message to " + message.getAuthor(), e);
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -94,7 +97,7 @@ public class Twilio extends Service implements ContentProvider {
 	}
 
 	@Override
-	public void setConfig(TwilioConfig config) {
-		this.config = config;
+	public void setConfig(ProviderConfig config) {
+		this.config = (TwilioConfig) config;
 	}
 }
