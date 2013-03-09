@@ -3,6 +3,7 @@ package edu.rit.asksg.domain;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.dataio.MailGateway;
 import edu.rit.asksg.service.ConversationService;
+import flexjson.JSON;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,7 @@ public class Email extends Service implements ContentProvider {
 	@Autowired
 	transient MailGateway mailGateway;
 
+	@JSON(include = false)
 	@Override
 	public List<Conversation> getNewContent() {
 		//get unread imap messages that aren't picked up by the channel listener.. how?
@@ -49,6 +51,7 @@ public class Email extends Service implements ContentProvider {
 		return null;
 	}
 
+	@JSON(include = false)
 	@Override
 	public List<Conversation> getContentSince(LocalDateTime datetime) {
 		return null;

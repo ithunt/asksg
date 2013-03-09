@@ -2,6 +2,7 @@ package edu.rit.asksg.domain;
 
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
+import flexjson.JSON;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ public class Twitter extends Service implements ContentProvider {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
 
+	@JSON(include = false)
 	@Override
 	public List<Conversation> getNewContent() {
 		final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
@@ -75,6 +77,7 @@ public class Twitter extends Service implements ContentProvider {
 		return super.isAuthenticated();
 	}
 
+	@JSON(include = false)
 	private org.springframework.social.twitter.api.Twitter getTwitterApi() {
 		//todo make safe
 		return (org.springframework.social.twitter.api.Twitter) ((SpringSocialConfig) this.getConfig()).getApiBinding();

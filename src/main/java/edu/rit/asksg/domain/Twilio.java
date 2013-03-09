@@ -2,6 +2,7 @@ package edu.rit.asksg.domain;
 
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.service.ConversationService;
+import flexjson.JSON;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,14 @@ public class Twilio extends Service implements ContentProvider {
 
 	private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
+	@JSON(include = false)
 	@Override
 	public List<Conversation> getNewContent() {
 		logger.debug("Twilio does not support fetching new content.");
 		return new ArrayList<Conversation>();
 	}
 
+	@JSON(include = false)
 	@Override
 	public List<Conversation> getContentSince(LocalDateTime datetime) {
 		return new ArrayList<Conversation>();
