@@ -28,6 +28,7 @@
     <!-- Link in angular and our controller files -->
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script>
     <!-- ../js/angular/angular.min.js -->
+    <!--<script src="../js/underscore-min.js"></script>-->
     <script src="../js/asksg.module.js"></script>
     <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 </head>
@@ -188,7 +189,7 @@
                         <ul class="nav nav-list">
                             <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Settings
                             </li>
-                            <li class="active"><a data-toggle="tab" href="#socialConfigTab">Social Subscriptions</a>
+                            <li class="active"><a data-toggle="tab" href="#serviceConfigTab">Service Configurations</a>
                             </li>
                             <li><a data-toggle="tab" href="#otherConfigTab">Other</a></li>
                         </ul>
@@ -199,17 +200,105 @@
 
                 <!-- Configuration settings -->
                 <div class="tab-content">
-                    <div class="tab-pane fade in active" id="socialConfigTab">
-                        <div class="span8">
+                    <div class="tab-pane fade in active" id="serviceConfigTab">
+                        <div class="span8" style="padding-left:20px;">
+                            <h2>Service Configurations</h2>
+
+                            <!-- hardcoded these assarray keys because walking them dynamically wasn't working >.< -->
+
+                            <div class="well">
+                            <h4>Twilio Subscription</h4>
+                            <p ng-repeat="service in subscriptions['Twilio']"> 
+                                Identifier: {{service.config.identifier}} <br/> 
+                                Username: {{service.config.username}} <br/>
+                                Password: {{service.config.password}}
+                            </p>
+
+                            <!-- TODO: add plus button to configure the new service information -->
+                            <button id="twilioSubmitButton" class="btn btn-primary">Add Service</button>
+                            <div id="twilioSubmit">
+                                <form ng-submit="doAddService(service)">
+                                    <input class="input-xlarge focused" ng-model="service"/>
+                                    <button class="btn" type="submit">Go</button>
+                                </form>
+                            </div>
+                            </div>
+
+                            <div class="well">
+                            <h4>Email Subscriptions</h4>
                             <ul>
-                                <li ng-repeat="sub in subscriptions">
-                                    {{sub.service}}
+                                <li ng-repeat="service in subscriptions['Email']">
+                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
                                 </li>
                             </ul>
+
+                            <!-- TODO: add plus button to configure the new service information -->
+                            <button id="emailSubmitButton" class="btn btn-primary">Add Service</button>
+                            <div id="emailSubmit">
+                                <form ng-submit="doAddService(service)">
+                                    <input class="input-xlarge focused" ng-model="service"/>
+                                    <button class="btn" type="submit">Go</button>
+                                </form>
+                            </div>
+                            </div>
+
+                            <div class="well">
+                            <h4>Twitter Subscriptions</h4>
+                            <ul>
+                                <li ng-repeat="service in subscriptions['Twitter']">
+                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
+                                </li>
+                            </ul>
+
+                            <!-- TODO: add plus button to configure the new service information -->
+                            <button id="twitterSubmitButton" class="btn btn-primary">Add Service</button>
+                            <div id="twitterSubmit">
+                                <form ng-submit="doAddService(service)">
+                                    <input class="input-xlarge focused" ng-model="service"/>
+                                    <button class="btn" type="submit">Go</button>
+                                </form>
+                            </div>
+                            </div>
+
+                            <div class="well">
+                            <h4>Facebook Subscriptions</h4>
+                            <ul>
+                                <li ng-repeat="service in subscriptions['Facebook']">
+                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
+                                </li>
+                            </ul>
+
+                            <!-- TODO: add plus button to configure the new service information -->
+                            <button id="facebookSubmitButton" class="btn btn-primary">Add Service</button>
+                            <div id="facebookSubmit">
+                                <form ng-submit="doAddService(service)">
+                                    <input class="input-xlarge focused" ng-model="service"/>
+                                    <button class="btn" type="submit">Go</button>
+                                </form>
+                            </div>
+                            </div>
+
+                            <div class="well">
+                            <h4>Reddit Subscriptions</h4>
+                            <ul>
+                                <li ng-repeat="service in subscriptions['Reddit']">
+                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
+                                </li>
+                            </ul>
+
+                            <!-- TODO: add plus button to configure the new service information -->
+                            <button id="redditSubmitButton" class="btn btn-primary">Add Service</button>
+                            <div id="redditSubmit">
+                                <form ng-submit="doAddService(service)">
+                                    <input class="input-xlarge focused" ng-model="service"/>
+                                    <button class="btn" type="submit">Go</button>
+                                </form>
+                            </div>
+                            </div>
                         </div>
                     </div>
                     <div id="otherConfigTab" class="tab-pane fade">
-                        <div class="span8">
+                        <div class="span8" style="padding-left:20px;">
                             TODO: put other options here
                         </div>
                     </div>
@@ -217,14 +306,14 @@
             </div>
         </div>
     </div>
-    <!-- configTab -->
-</div>
 
-<hr>
+    <hr>
 
-<footer>
-    <p>&copy; ASKSG</p>
-</footer>
+    <footer>
+        <p>&copy; ASKSG</p>
+    </footer>
+    
+    </div><!-- configTab -->
 </div> <!-- container -->
 
 <!-- le jQuery -->

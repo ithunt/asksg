@@ -48,12 +48,12 @@ function Conversation(id, author, subject, snippet, messages, created, modified)
 /**
  * Social subscription provider object constructor.
  */
-function SocialSubscription(handle, provider, person, url, createdBy) {
-    this.handle = handle;
-    this.provider = provider;
-    this.person = person;
-    this.url = url;
-    this.createdBy = createdBy;
+function SocialSubscription(authenticated, config, id, name, version) {
+    this.authenticated = authenticated;
+    this.config = config;
+    this.id = id;
+    this.name = name;
+    this.version = version;
 }
 
 /**
@@ -120,9 +120,27 @@ function ConversationController($scope, $asksg, $log) {
         $asksg.fetchSubscriptions().
             success(function (data, status, headers, config) {
                 console.log("Got social data back from the server");
-
-                // Parse the JSON response data and create a list of Conversation objects to store in the scope
                 console.log(data);
+
+                // Always rebuild the social subscription data...
+                $scope.test = "it works...";
+                $scope.subscriptions = new Array();
+                for (var i = 0; i < data.length; i++) {
+                    var subData = angular.fromJson(data[i]);
+                    console.log(subData.name);
+                    if ((subData.name in $scope.subscriptions) == false) {
+                        $scope.subscriptions[subData.name] = new Array();
+                        console.log($scope.subscriptions[subData.name]);
+                    } 
+                    console.log($scope.subscriptions);
+                    console.log($scope.subscriptions[subData.name]);
+                    $scope.subscriptions[subData.name].push(
+                        new SocialSubscription(subData.authenticated, subData.config, 
+                            subData.id, subData.name, subData.version));
+                }
+
+                // debug
+                console.log($scope.subscriptions);
             }).
             error(function (data, status, headers, config) {
                 console.log("Failed grabbing the social subscriptions");
@@ -131,7 +149,7 @@ function ConversationController($scope, $asksg, $log) {
     }
 
     /**
-     * Invoke the ASKSG message post service
+     * Invoke the ASKSG message post function
      */
     $scope.doPostMessage = function (convo, messageId, message, author) {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
@@ -149,6 +167,23 @@ function ConversationController($scope, $asksg, $log) {
             });
     };
 
+    /**
+     * Invoke the ASKSG service post function
+     */
+    $scope.doAddService = function(service) {
+        // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
+        $asksg.postNewService(service).
+            success(function (data, status, headers, config) {
+                console.log("Success");
+                console.log(data);
+                console.log(status);
+                $scope.refreshSubscriptions();
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error... :(");
+            });
+    }
+
     /*
      * Delete a conversation.
      */
@@ -162,16 +197,6 @@ function ConversationController($scope, $asksg, $log) {
     $scope.isConvoActive = function (convoId) {
         return $scope.convoMap[convoId].active;
     }
-
-    /*
-     * Determine if a conversation is active (hovered over).
-     */
-    //$scope.active = function(convoId) {
-    //	console.log("TODO: send HTML delete to server for convo id = " + convoId);
-    //};
-
-    // Set the user name
-    $scope.userName = "Admin"; // this should be replaced by response from server
 
     /*
      * Set up the default conversation filters.
@@ -266,6 +291,9 @@ function ConversationController($scope, $asksg, $log) {
         }
     };
 
+    // Set the user name
+    $scope.userName = "Admin"; // this should be replaced by response from server
+
     // Populate the model with the initial data.
     $scope.refreshConvos();
     $scope.refreshSubscriptions();
@@ -290,7 +318,7 @@ AsksgService = function () {
             var convoSeedUrl = '/asksg/conversations/seed';
             var messageUrl = '/asksg/messages';
             var messageSeedUrl = '/asksg/messages/seed';
-            var subscriptionUrl = '/asksg/socialsubscriptions'
+            var servicesUrl = '/asksg/services'
 
             // Publish the $asksg API here
             return {
@@ -330,10 +358,21 @@ AsksgService = function () {
                 },
 
                 /**
+                 * Submit a new service to the system.
+                 *
+                 * @param service - new service to add
+                 */
+                postNewService: function (service) {
+                    console.log("TODO");
+                    // Return the HTTP response
+                    //return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
+                },
+
+                /**
                  * Fetch the social subscriptions currently in use for the system.
                  */
                 fetchSubscriptions: function () {
-                    return $http({method: 'GET', url: convoUrl});
+                    return $http({method: 'GET', url: servicesUrl});
                 }
             };
         });

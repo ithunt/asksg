@@ -27,6 +27,39 @@ $(document).ready(function () {
         $(this).tab('show');
     });
 
+    // Set up button expanstion for submitting new services
+    $('#twilioSubmit').css('display','none');
+    $('#twilioSubmitButton').click(function(){
+        $('#twilioSubmit').slideToggle('slow');
+        $(this).toggleClass('slideSign');
+        return false;
+    });
+    $('#emailSubmit').css('display','none');
+    $('#emailSubmitButton').click(function(){
+        $('#emailSubmit').slideToggle('slow');
+        $(this).toggleClass('slideSign');
+        return false;
+    });
+    $('#twitterSubmit').css('display','none');
+    $('#twitterSubmitButton').click(function(){
+        $('#twitterSubmit').slideToggle('slow');
+        $(this).toggleClass('slideSign');
+        return false;
+    });
+    $('#facebookSubmit').css('display','none');
+    $('#facebookSubmitButton').click(function(){
+        $('#facebookSubmit').slideToggle('slow');
+        $(this).toggleClass('slideSign');
+        return false;
+    });
+    $('#redditSubmit').css('display','none');
+    $('#redditSubmitButton').click(function(){
+        $('#redditSubmit').slideToggle('slow');
+        $(this).toggleClass('slideSign');
+        return false;
+    });
+
+
     // Hide/show the delete button when conversations are hovered over.
     $('.deleteButton').hide(); // hide by default
     $('.convo-list-item-msg').hover(

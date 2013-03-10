@@ -6,21 +6,21 @@ package edu.rit.asksg.domain.config;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 
 privileged aspect SpringSocialConfig_Roo_JavaBean {
-
-	public String SpringSocialConfig.getHandle() {
-		return this.handle;
-	}
-
-	public void SpringSocialConfig.setHandle(String handle) {
-		this.handle = handle;
-	}
-
-	public String SpringSocialConfig.getUrl() {
-		return this.url;
-	}
-
-	public void SpringSocialConfig.setUrl(String url) {
-		this.url = url;
-	}
-
+    
+    public String SpringSocialConfig.getHandle() {
+        return this.handle;
+    }
+    
+    public void SpringSocialConfig.setHandle(String handle) {
+        this.handle = handle;
+    }
+    
+    public String SpringSocialConfig.getUrl() {
+        return this.url;
+    }
+    
+    public void SpringSocialConfig.setUrl(String url) {
+        this.url = url;
+    }
+    
 }
