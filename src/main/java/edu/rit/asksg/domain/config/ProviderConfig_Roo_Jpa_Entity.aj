@@ -3,14 +3,7 @@
 
 package edu.rit.asksg.domain.config;
 
-import edu.rit.asksg.domain.config.ProviderConfig;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 privileged aspect ProviderConfig_Roo_Jpa_Entity {
 

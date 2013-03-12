@@ -3,14 +3,7 @@
 
 package edu.rit.asksg.analytics;
 
-import edu.rit.asksg.analytics.Chatterbox;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 privileged aspect Chatterbox_Roo_Jpa_Entity {
 

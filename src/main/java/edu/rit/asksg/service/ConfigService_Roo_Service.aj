@@ -4,7 +4,6 @@
 package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.config.ProviderConfig;
-import edu.rit.asksg.service.ConfigService;
 
 import java.util.List;
 

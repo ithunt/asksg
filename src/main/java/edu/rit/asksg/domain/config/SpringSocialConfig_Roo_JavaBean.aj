@@ -5,7 +5,6 @@ package edu.rit.asksg.domain.config;
 
 import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.Person;
-import edu.rit.asksg.domain.config.SpringSocialConfig;
 
 privileged aspect SpringSocialConfig_Roo_JavaBean {
 

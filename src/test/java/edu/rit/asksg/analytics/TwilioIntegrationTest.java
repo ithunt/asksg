@@ -15,19 +15,21 @@ public class TwilioIntegrationTest {
 
 	final private String testAccountSid = "AC932da9adfecf700aba37dba458fc9621";
 	final private String testAuthenticationToken = "9cda6e23aa46651c9759492b625e3f35";
-	private ProviderConfig config;
+	final private String twilioPhoneNumber = "5852865275";
+	private TwilioConfig config;
 
 	@Before
 	public void setup() {
 		config = mock(TwilioConfig.class);
 		when(config.getUsername()).thenReturn(testAccountSid);
 		when(config.getAuthenticationToken()).thenReturn(testAuthenticationToken);
+		when(config.getPhoneNumber()).thenReturn(twilioPhoneNumber);
 	}
 
 	@Test
 	public void testIntegrationWithTwilio() {
 		Twilio twilio = new Twilio();
-		twilio.setConfig(config);
+		twilio.setConfig((ProviderConfig) config);
 		Message message = new Message();
 		message.setContent("Test message to Twilio...");
 		message.setAuthor("6109990037");

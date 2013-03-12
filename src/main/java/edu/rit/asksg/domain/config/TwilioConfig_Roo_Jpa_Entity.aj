@@ -3,8 +3,6 @@
 
 package edu.rit.asksg.domain.config;
 
-import edu.rit.asksg.domain.config.TwilioConfig;
-
 import javax.persistence.Entity;
 
 privileged aspect TwilioConfig_Roo_Jpa_Entity {

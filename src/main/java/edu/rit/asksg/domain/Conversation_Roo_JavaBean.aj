@@ -3,13 +3,9 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Conversation;
-import edu.rit.asksg.domain.Message;
-import edu.rit.asksg.domain.Service;
+import org.joda.time.LocalDateTime;
 
 import java.util.Set;
-
-import org.joda.time.LocalDateTime;
 
 privileged aspect Conversation_Roo_JavaBean {
 

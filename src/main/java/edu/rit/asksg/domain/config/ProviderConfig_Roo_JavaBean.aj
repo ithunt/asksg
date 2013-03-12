@@ -3,8 +3,6 @@
 
 package edu.rit.asksg.domain.config;
 
-import edu.rit.asksg.domain.config.ProviderConfig;
-
 privileged aspect ProviderConfig_Roo_JavaBean {
 
 	public String ProviderConfig.getAuthenticationToken() {

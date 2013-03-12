@@ -3,7 +3,6 @@
 
 package edu.rit.asksg.domain.config;
 
-import edu.rit.asksg.domain.config.SpringSocialConfig;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 

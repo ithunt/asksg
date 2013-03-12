@@ -3,7 +3,6 @@
 
 package edu.rit.asksg.domain.config;
 
-import edu.rit.asksg.domain.config.TwilioConfig;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
