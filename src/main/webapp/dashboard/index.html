@@ -62,7 +62,7 @@
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#dashTab">Dashboard</a></li>
-        <li><a data-toggle="tab" href="#configTab">Configuration</a></li>
+        <li><a data-toggle="tab" href="#configTab">Settings</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane fade in active" id="dashTab">
@@ -216,9 +216,32 @@
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="twilioSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="twilioSubmit">
+                            <div id="twilioSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
-                                    <input class="input-xlarge focused" ng-model="service"/>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Authentication Token</label>
+                                        <input class="input-xlarge focused" ng-model="twitterAuthenticationToken"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Identifier</label>
+                                        <input class="input-xlarge focused" ng-model="twitterIdentifier"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Username</label>
+                                        <input class="input-xlarge focused" ng-model="twitterUsername"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Password</label>
+                                        <input class="input-xlarge focused" ng-model="twitterPassword"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Host</label>
+                                        <input class="input-xlarge focused" ng-model="twitterHost"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Port</label>
+                                        <input class="input-xlarge focused" ng-model="twitterPort"/>
+                                    </div>
                                     <button class="btn" type="submit">Go</button>
                                 </form>
                             </div>
@@ -226,15 +249,15 @@
 
                             <div class="well">
                             <h4>Email Subscriptions</h4>
-                            <ul>
-                                <li ng-repeat="service in subscriptions['Email']">
-                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
-                                </li>
-                            </ul>
+                            <p ng-repeat="service in subscriptions['Email']"> 
+                                Identifier: {{service.config.identifier}} <br/> 
+                                Username: {{service.config.username}} <br/>
+                                Password: {{service.config.password}}
+                            </p>
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="emailSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="emailSubmit">
+                            <div id="emailSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
                                     <input class="input-xlarge focused" ng-model="service"/>
                                     <button class="btn" type="submit">Go</button>
@@ -244,15 +267,15 @@
 
                             <div class="well">
                             <h4>Twitter Subscriptions</h4>
-                            <ul>
-                                <li ng-repeat="service in subscriptions['Twitter']">
-                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
-                                </li>
-                            </ul>
+                            <p ng-repeat="service in subscriptions['Twitter']"> 
+                                Identifier: {{service.config.identifier}} <br/> 
+                                Username: {{service.config.username}} <br/>
+                                Password: {{service.config.password}}
+                            </p>
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="twitterSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="twitterSubmit">
+                            <div id="twitterSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
                                     <input class="input-xlarge focused" ng-model="service"/>
                                     <button class="btn" type="submit">Go</button>
@@ -262,15 +285,15 @@
 
                             <div class="well">
                             <h4>Facebook Subscriptions</h4>
-                            <ul>
-                                <li ng-repeat="service in subscriptions['Facebook']">
-                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
-                                </li>
-                            </ul>
+                            <p ng-repeat="service in subscriptions['Facebook']"> 
+                                Identifier: {{service.config.identifier}} <br/> 
+                                Username: {{service.config.username}} <br/>
+                                Password: {{service.config.password}}
+                            </p>
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="facebookSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="facebookSubmit">
+                            <div id="facebookSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
                                     <input class="input-xlarge focused" ng-model="service"/>
                                     <button class="btn" type="submit">Go</button>
@@ -280,15 +303,15 @@
 
                             <div class="well">
                             <h4>Reddit Subscriptions</h4>
-                            <ul>
-                                <li ng-repeat="service in subscriptions['Reddit']">
-                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
-                                </li>
-                            </ul>
+                            <p ng-repeat="service in subscriptions['Reddit']"> 
+                                Identifier: {{service.config.identifier}} <br/> 
+                                Username: {{service.config.username}} <br/>
+                                Password: {{service.config.password}}
+                            </p>
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="redditSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="redditSubmit">
+                            <div id="redditSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
                                     <input class="input-xlarge focused" ng-model="service"/>
                                     <button class="btn" type="submit">Go</button>

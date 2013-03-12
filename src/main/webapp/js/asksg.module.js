@@ -21,13 +21,14 @@ function MessageResp(author, content, conversation) {
 /**
  * Conversation object constructor.
  */
-function Conversation(id, author, subject, snippet, messages, created, modified) {
+function Conversation(id, author, subject, snippet, messages, created, modified, service) {
     this.id = id;
     this.author = author;
     this.subject = subject;
     this.created_at = created;
     this.modified_at = modified;
     this.active = false;
+    this.service = service;
 
     // Run through the messages list and create the appropriate Message objects
     this.messages = new Array();
@@ -70,7 +71,6 @@ function MainController($scope, $asksg, $log) {
      */
     $scope.login = function () {
         console.log("username and password: " + $scope.username + ", " + $scope.password);
-        //$scope.$emit('event:loginRequest', $scope.username, $scope.password);
     }
 }
 
@@ -103,7 +103,8 @@ function ConversationController($scope, $asksg, $log) {
                     $scope.convos[i] = new Conversation(conversation.id,
                         conversation.author, conversation.subject,
                         conversation.snippet, conversation.messages,
-                        conversation.createdDate, conversation.modifiedDate);
+                        conversation.createdDate, conversation.modifiedDate,
+                        conversation.service);
                     $scope.convoMap[conversation.id] = $scope.convos[i];
                 }
             }).
@@ -206,11 +207,11 @@ function ConversationController($scope, $asksg, $log) {
 
     // Array to store the state of active conversation filters
     $scope.filterConvoArray = Array();
-    $scope.filterConvoArray['email'] = false;
-    $scope.filterConvoArray['sms'] = false;
-    $scope.filterConvoArray['facebook'] = false;
-    $scope.filterConvoArray['twitter'] = false;
-    $scope.filterConvoArray['reddit'] = false;
+    $scope.filterConvoArray['Email'] = false;
+    $scope.filterConvoArray['Twilio'] = false;
+    $scope.filterConvoArray['Facebook'] = false;
+    $scope.filterConvoArray['Twitter'] = false;
+    $scope.filterConvoArray['Reddit'] = false;
 
     // Array to store the state of the active tag filters
     $scope.filterTagArray = Array();
@@ -218,60 +219,55 @@ function ConversationController($scope, $asksg, $log) {
     $scope.filterTagArray['unread'] = false;
 
     /*
-     * Filter function for the conversations.
+     * Filter function for the conversations based on their service.
      */
     $scope.filterConvo = function (convo) {
-        //console.log(convo.service);
-        //console.log($scope.filterArray[convo.service]);
-        return !($scope.filterConvoArray[convo.service]);
+        return !($scope.filterConvoArray[convo.service.name]);
     };
 
     /*
      * Filter function for the conversations.
      */
     $scope.filterTag = function (tag) {
-        //console.log(convo.service);
-        //console.log($scope.filterArray[convo.service]);
         return !($scope.filterTagArray[tag]);
     };
 
     /*
      * Filter functions...
      */
-    $scope.filterAll = function () {
-        $scope.convoCategory = "";
-    };
     $scope.filterEmail = function () {
-        if ($scope.filterConvoArray['email']) {
-            $scope.filterConvoArray['email'] = false;
+        if ($scope.filterConvoArray['Email']) {
+            $scope.filterConvoArray['Email'] = false;
         } else {
-            $scope.filterConvoArray['email'] = true;
+            $scope.filterConvoArray['Email'] = true;
         }
     };
     $scope.filterSms = function () {
-        if ($scope.filterConvoArray['sms']) {
-            $scope.filterConvoArray['sms'] = false;
+        if ($scope.filterConvoArray['Twilio']) {
+            console.log("filtering disabled...");
+            $scope.filterConvoArray['Twilio'] = false;
         } else {
-            $scope.filterConvoArray['sms'] = true;
+            console.log("set to true???");
+            $scope.filterConvoArray['Twilio'] = true;
         }
     };
     $scope.filterFacebook = function () {
-        if ($scope.filterConvoArray['facebook']) {
-            $scope.filterConvoArray['facebook'] = false;
+        if ($scope.filterConvoArray['Facebook']) {
+            $scope.filterConvoArray['Facebook'] = false;
         } else {
-            $scope.filterConvoArray['facebook'] = true;
+            $scope.filterConvoArray['Facebook'] = true;
         }
     };
     $scope.filterTwitter = function () {
-        if ($scope.filterConvoArray['twitter']) {
-            $scope.filterConvoArray['twitter'] = false;
+        if ($scope.filterConvoArray['Twitter']) {
+            $scope.filterConvoArray['Twitter'] = false;
         } else {
-            $scope.filterConvoArray['twitter'] = true;
+            $scope.filterConvoArray['Twitter'] = true;
         }
     };
     $scope.filterReddit = function () {
-        if ($scope.filterConvoArray['reddit']) {
-            $scope.filterConvoArray['reddit'] = false;
+        if ($scope.filterConvoArray['Reddit']) {
+            $scope.filterConvoArray['Reddit'] = false;
         } else {
             $scope.filterConvoArray['reddit'] = true;
         }
