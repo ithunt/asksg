@@ -19,7 +19,11 @@ public class ScheduledPocessor {
 	ProviderService providerService;
 
 	@Autowired
-	AsyncPullWorker pullWorker;
+    RefreshWorker refreshWorker;
+
+    @Autowired
+    SubscriptionWorker subscriptionWorker;
+
 
 	/**
 	 * Launch async workers to update services.
@@ -29,8 +33,20 @@ public class ScheduledPocessor {
 		log.debug("Start execution of dataio refresh");
 		List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
 		for (edu.rit.asksg.domain.Service service : services) {
-			pullWorker.work(service);
+			refreshWorker.work(service);
 		}
 		log.debug("Scheduler finished dataio refresh");
 	}
+
+
+    @Scheduled(fixedDelay = 1100000, initialDelay = 10000)
+    public void executeSubscriptions() {
+        log.debug("Start execution of subscription pull");
+        List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
+        for (edu.rit.asksg.domain.Service service : services) {
+            subscriptionWorker.work(service);
+        }
+        log.debug("Scheduler finished subscription pull");
+    }
+
 }
