@@ -19,34 +19,34 @@ import javax.validation.constraints.NotNull;
 @RooJson
 public class Message {
 
-    @NotNull
-    private String author;
+	@NotNull
+	private String author;
 
-    @NotNull
-    private String content;
+	@NotNull
+	private String content;
 
-    @NotNull
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-    @DateTimeFormat(style = "M-")
-    private LocalDateTime created = new LocalDateTime();
+	@NotNull
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	@DateTimeFormat(style = "M-")
+	private LocalDateTime created = new LocalDateTime();
 
-    @NotNull
-    @DateTimeFormat(style = "M-")
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-    private LocalDateTime modified = new LocalDateTime();
+	@NotNull
+	@DateTimeFormat(style = "M-")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
+	private LocalDateTime modified = new LocalDateTime();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Analytics analytics = new Analytics();
+	@OneToOne(cascade = CascadeType.ALL)
+	private Analytics analytics = new Analytics();
 
-    @ManyToOne
-    private Conversation conversation;
+	@ManyToOne
+	private Conversation conversation;
 
-    private String url;
+	private String url;
 
-    @NotNull
-    private Boolean posted = Boolean.FALSE;
+	@NotNull
+	private Boolean posted = Boolean.FALSE;
 
-    private String snippet;
+	private String snippet;
 
-    private String recipient;
+	private String recipient;
 }

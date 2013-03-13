@@ -15,7 +15,7 @@ public class SentimentAnalysisForSocialMedia {
 	private final static String PUBLIC_DNS = "chatterbox-analytics-sentiment-analysis-free.p.mashape.com";
 	private List<Authentication> authenticationHandlers;
 
-	public SentimentAnalysisForSocialMedia (String mashapeKey) {
+	public SentimentAnalysisForSocialMedia(String mashapeKey) {
 		authenticationHandlers = new LinkedList<Authentication>();
 		authenticationHandlers.add(new MashapeAuthentication(mashapeKey));
 
@@ -32,11 +32,9 @@ public class SentimentAnalysisForSocialMedia {
 		}
 
 
-
 		if (text != null && !text.equals("")) {
 			parameters.put("text", text);
 		}
-
 
 
 		if (exclude != null && !exclude.equals("")) {
@@ -44,11 +42,9 @@ public class SentimentAnalysisForSocialMedia {
 		}
 
 
-
 		if (detectlang != null && !detectlang.equals("")) {
 			parameters.put("detectlang", detectlang);
 		}
-
 
 
 		return (MashapeResponse<JSONObject>) HttpClient.doRequest(JSONObject.class,
@@ -81,19 +77,16 @@ public class SentimentAnalysisForSocialMedia {
 		}
 
 
-
 		if (text != null && !text.equals("")) {
 
 			parameters.put("text", text);
 		}
 
 
-
 		if (exclude != null && !exclude.equals("")) {
 
 			parameters.put("exclude", exclude);
 		}
-
 
 
 		if (detectlang != null && !detectlang.equals("")) {

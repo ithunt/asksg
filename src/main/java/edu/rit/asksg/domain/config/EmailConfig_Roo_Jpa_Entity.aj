@@ -3,10 +3,14 @@
 
 package edu.rit.asksg.domain.config;
 
+<<<<<<< HEAD
+=======
+import edu.rit.asksg.domain.config.EmailConfig;
+>>>>>>> origin/master
 import javax.persistence.Entity;
 
 privileged aspect EmailConfig_Roo_Jpa_Entity {
-
-	declare @type: EmailConfig:@Entity;
-
+    
+    declare @type: EmailConfig: @Entity;
+    
 }

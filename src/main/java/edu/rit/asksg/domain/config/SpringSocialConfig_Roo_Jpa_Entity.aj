@@ -3,10 +3,14 @@
 
 package edu.rit.asksg.domain.config;
 
+<<<<<<< HEAD
+=======
+import edu.rit.asksg.domain.config.SpringSocialConfig;
+>>>>>>> origin/master
 import javax.persistence.Entity;
 
 privileged aspect SpringSocialConfig_Roo_Jpa_Entity {
-
-	declare @type: SpringSocialConfig:@Entity;
-
+    
+    declare @type: SpringSocialConfig: @Entity;
+    
 }

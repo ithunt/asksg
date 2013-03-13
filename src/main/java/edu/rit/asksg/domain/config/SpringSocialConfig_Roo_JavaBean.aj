@@ -3,41 +3,29 @@
 
 package edu.rit.asksg.domain.config;
 
+<<<<<<< HEAD
 import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.Person;
+=======
+import edu.rit.asksg.domain.config.SpringSocialConfig;
+>>>>>>> origin/master
 
 privileged aspect SpringSocialConfig_Roo_JavaBean {
-
-	public String SpringSocialConfig.getHandle() {
-		return this.handle;
-	}
-
-	public void SpringSocialConfig.setHandle(String handle) {
-		this.handle = handle;
-	}
-
-	public Person SpringSocialConfig.getPerson() {
-		return this.person;
-	}
-
-	public void SpringSocialConfig.setPerson(Person person) {
-		this.person = person;
-	}
-
-	public String SpringSocialConfig.getUrl() {
-		return this.url;
-	}
-
-	public void SpringSocialConfig.setUrl(String url) {
-		this.url = url;
-	}
-
-	public AsksgUser SpringSocialConfig.getCreatedBy() {
-		return this.createdBy;
-	}
-
-	public void SpringSocialConfig.setCreatedBy(AsksgUser createdBy) {
-		this.createdBy = createdBy;
-	}
-
+    
+    public String SpringSocialConfig.getHandle() {
+        return this.handle;
+    }
+    
+    public void SpringSocialConfig.setHandle(String handle) {
+        this.handle = handle;
+    }
+    
+    public String SpringSocialConfig.getUrl() {
+        return this.url;
+    }
+    
+    public void SpringSocialConfig.setUrl(String url) {
+        this.url = url;
+    }
+    
 }

@@ -6,13 +6,13 @@ package edu.rit.asksg.domain;
 import edu.rit.asksg.domain.config.ProviderConfig;
 
 privileged aspect Service_Roo_JavaBean {
-
-	public ProviderConfig Service.getConfig() {
-		return this.config;
-	}
-
-	public void Service.setConfig(ProviderConfig config) {
-		this.config = config;
-	}
-
+    
+    public ProviderConfig Service.getConfig() {
+        return this.config;
+    }
+    
+    public void Service.setConfig(ProviderConfig config) {
+        this.config = config;
+    }
+    
 }

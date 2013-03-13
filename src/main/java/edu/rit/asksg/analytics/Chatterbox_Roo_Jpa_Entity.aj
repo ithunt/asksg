@@ -4,38 +4,37 @@
 package edu.rit.asksg.analytics;
 
 import javax.persistence.*;
-
 privileged aspect Chatterbox_Roo_Jpa_Entity {
+    
+    declare @type: Chatterbox: @Entity;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long Chatterbox.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer Chatterbox.version;
+    
+    public Chatterbox.new() {
+        super();
+    }
 
-	declare @type: Chatterbox:@Entity;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
-	private Long Chatterbox.id;
-
-	@Version
-	@Column(name = "version")
-	private Integer Chatterbox.version;
-
-	public Chatterbox.new() {
-		super();
-	}
-
-	public Long Chatterbox.getId() {
-		return this.id;
-	}
-
-	public void Chatterbox.setId(Long id) {
-		this.id = id;
-	}
-
-	public Integer Chatterbox.getVersion() {
-		return this.version;
-	}
-
-	public void Chatterbox.setVersion(Integer version) {
-		this.version = version;
-	}
-
+    public Long Chatterbox.getId() {
+        return this.id;
+    }
+    
+    public void Chatterbox.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer Chatterbox.getVersion() {
+        return this.version;
+    }
+    
+    public void Chatterbox.setVersion(Integer version) {
+        this.version = version;
+    }
+    
 }

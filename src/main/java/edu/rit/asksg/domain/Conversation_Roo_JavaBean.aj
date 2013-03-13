@@ -3,42 +3,50 @@
 
 package edu.rit.asksg.domain;
 
+<<<<<<< HEAD
 import org.joda.time.LocalDateTime;
 
 import java.util.Set;
+=======
+import edu.rit.asksg.domain.Conversation;
+import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.Service;
+import java.util.Set;
+import org.joda.time.LocalDateTime;
+>>>>>>> origin/master
 
 privileged aspect Conversation_Roo_JavaBean {
-
-	public Set<Message> Conversation.getMessages() {
-		return this.messages;
-	}
-
-	public void Conversation.setMessages(Set<Message> messages) {
-		this.messages = messages;
-	}
-
-	public LocalDateTime Conversation.getCreated() {
-		return this.created;
-	}
-
-	public void Conversation.setCreated(LocalDateTime created) {
-		this.created = created;
-	}
-
-	public LocalDateTime Conversation.getModified() {
-		return this.modified;
-	}
-
-	public void Conversation.setModified(LocalDateTime modified) {
-		this.modified = modified;
-	}
-
-	public Service Conversation.getService() {
-		return this.service;
-	}
-
-	public void Conversation.setService(Service service) {
-		this.service = service;
-	}
-
+    
+    public Set<Message> Conversation.getMessages() {
+        return this.messages;
+    }
+    
+    public void Conversation.setMessages(Set<Message> messages) {
+        this.messages = messages;
+    }
+    
+    public LocalDateTime Conversation.getCreated() {
+        return this.created;
+    }
+    
+    public void Conversation.setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+    
+    public LocalDateTime Conversation.getModified() {
+        return this.modified;
+    }
+    
+    public void Conversation.setModified(LocalDateTime modified) {
+        this.modified = modified;
+    }
+    
+    public Service Conversation.getService() {
+        return this.service;
+    }
+    
+    public void Conversation.setService(Service service) {
+        this.service = service;
+    }
+    
 }

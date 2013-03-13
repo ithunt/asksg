@@ -52,7 +52,7 @@ public class TestTwitterController {
 		//List<Tweet> results = timelineOps.getUserTimeline(screenName);
 
 		/*
-	      List<Tweet> results = timelineOps.getMentions();
+		  List<Tweet> results = timelineOps.getMentions();
 		logger.info("Found Twitter timeline for :" + screenName + " adding " + results.size()
 				+ " tweets to model");
 		logger.info(results.get(0).getText());

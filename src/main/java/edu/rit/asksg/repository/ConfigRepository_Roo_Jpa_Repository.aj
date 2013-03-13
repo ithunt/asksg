@@ -6,11 +6,11 @@ package edu.rit.asksg.repository;
 import org.springframework.stereotype.Repository;
 
 privileged aspect ConfigRepository_Roo_Jpa_Repository {
-
-	declare parents:ConfigRepository extends JpaRepository<ProviderConfig,Long>;
-
-	declare parents:ConfigRepository extends JpaSpecificationExecutor<ProviderConfig>;
-
-	declare @type: ConfigRepository:@Repository;
-
+    
+    declare parents: ConfigRepository extends JpaRepository<ProviderConfig, Long>;
+    
+    declare parents: ConfigRepository extends JpaSpecificationExecutor<ProviderConfig>;
+    
+    declare @type: ConfigRepository: @Repository;
+    
 }

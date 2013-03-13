@@ -4,6 +4,7 @@ import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.service.MessageService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -31,7 +32,9 @@ public class ChatterboxIntegrationTest {
 		service = mock(MessageService.class);
 	}
 
+	//todo: add @Ignore until test is moved to an integration test suite
 	@Test
+	@Ignore
 	public void testIntegrationWithChatterboxAPI() {
 		Chatterbox chatterbox = new Chatterbox(config, null);
 		Message message = new Message();

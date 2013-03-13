@@ -2,6 +2,7 @@ package edu.rit.asksg.domain;
 
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
+import flexjson.JSON;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ public class Facebook extends Service implements ContentProvider {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(Facebook.class);
 
+	@JSON(include = false)
 	public List<Conversation> getNewContent() {
 		// Right now this only will get the posts on the wall of the authenticated user, but
 		// it's easy enough to tell getFeed to get posts from other users as well/instead.
@@ -49,6 +51,7 @@ public class Facebook extends Service implements ContentProvider {
 		return conversations;
 	}
 
+	@JSON(include = false)
 	public List<Conversation> getContentSince(LocalDateTime datetime) {
 		// Right now this only will get the posts on the wall of the authenticated user, but
 		// it's easy enough to tell getFeed to get posts from other users as well/instead.
@@ -96,6 +99,7 @@ public class Facebook extends Service implements ContentProvider {
 		return super.isAuthenticated();
 	}
 
+	@JSON(include = false)
 	private org.springframework.social.facebook.api.Facebook getFacebookApi() {
 		//todo make safe
 		return (org.springframework.social.facebook.api.Facebook) ((SpringSocialConfig) this.getConfig()).getApiBinding();

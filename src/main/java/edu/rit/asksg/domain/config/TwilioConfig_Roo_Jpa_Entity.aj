@@ -3,10 +3,14 @@
 
 package edu.rit.asksg.domain.config;
 
+<<<<<<< HEAD
+=======
+import edu.rit.asksg.domain.config.TwilioConfig;
+>>>>>>> origin/master
 import javax.persistence.Entity;
 
 privileged aspect TwilioConfig_Roo_Jpa_Entity {
-
-	declare @type: TwilioConfig:@Entity;
-
+    
+    declare @type: TwilioConfig: @Entity;
+    
 }
