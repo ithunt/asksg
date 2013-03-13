@@ -17,7 +17,6 @@ import java.util.List;
 
 /**
  */
-@Component
 public class SubscriptionWorker implements AsyncWorker {
 
     @Log

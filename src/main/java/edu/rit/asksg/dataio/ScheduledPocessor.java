@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
@@ -18,11 +19,11 @@ public class ScheduledPocessor {
 	@Autowired
 	ProviderService providerService;
 
-	@Autowired
-    RefreshWorker refreshWorker;
+	@Resource(name = "refreshWorker")
+    AsyncWorker refreshWorker;
 
-    @Autowired
-    SubscriptionWorker subscriptionWorker;
+    @Resource(name = "subscriptionWorker")
+    AsyncWorker subscriptionWorker;
 
 
 	/**
