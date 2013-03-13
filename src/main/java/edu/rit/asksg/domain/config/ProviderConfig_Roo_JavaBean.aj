@@ -4,7 +4,9 @@
 package edu.rit.asksg.domain.config;
 
 import edu.rit.asksg.domain.AsksgUser;
+import edu.rit.asksg.domain.SocialSubscription;
 import edu.rit.asksg.domain.config.ProviderConfig;
+import java.util.Set;
 
 privileged aspect ProviderConfig_Roo_JavaBean {
     
@@ -62,6 +64,14 @@ privileged aspect ProviderConfig_Roo_JavaBean {
     
     public void ProviderConfig.setCreatedBy(AsksgUser createdBy) {
         this.createdBy = createdBy;
+    }
+    
+    public Set<SocialSubscription> ProviderConfig.getSubscriptions() {
+        return this.subscriptions;
+    }
+    
+    public void ProviderConfig.setSubscriptions(Set<SocialSubscription> subscriptions) {
+        this.subscriptions = subscriptions;
     }
     
 }

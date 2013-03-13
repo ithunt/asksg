@@ -2,8 +2,10 @@ package edu.rit.asksg.dataio;
 
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.SocialSubscription;
 import org.joda.time.LocalDateTime;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface ContentProvider {
