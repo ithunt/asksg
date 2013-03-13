@@ -1,6 +1,7 @@
 package edu.rit.asksg.domain;
 
 import edu.rit.asksg.dataio.ContentProvider;
+import edu.rit.asksg.dataio.SubscriptionProvider;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import flexjson.JSON;
 import org.joda.time.LocalDateTime;
@@ -14,13 +15,14 @@ import org.springframework.social.twitter.api.TimelineOperations;
 import org.springframework.social.twitter.api.Tweet;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @RooJavaBean
 @RooToString
 @RooJpaEntity
 @RooJson
-public class Twitter extends Service implements ContentProvider {
+public class Twitter extends Service implements ContentProvider, SubscriptionProvider {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
 
@@ -82,4 +84,11 @@ public class Twitter extends Service implements ContentProvider {
 		//todo make safe
 		return (org.springframework.social.twitter.api.Twitter) ((SpringSocialConfig) this.getConfig()).getApiBinding();
 	}
+
+    @JSON(include = false)
+    public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
+        final TimelineOperations timelineOperations = getTwitterApi().timelineOperations();
+        final List<Tweet> tweets = timelineOperations.getUserTimeline(socialSubscription.getHandle());
+        return parseTweets(tweets);
+    }
 }
