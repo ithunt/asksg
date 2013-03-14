@@ -67,7 +67,6 @@
 		<property name="authenticationToken" value="4heJuZtO5Ji43xk1uc0edKmDVgrSdheK"/>
 	</bean>
 
-
     <bean id="emailConfig" class="edu.rit.asksg.domain.config.EmailConfig">
         <property name="username" value="ritasksg@gmail.com" />
         <property name="password" value="allHailSpring" />

@@ -1,6 +1,12 @@
 package edu.rit.asksg.domain;
 
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.TwilioRestException;
+import com.twilio.sdk.resource.factory.SmsFactory;
+import com.twilio.sdk.resource.instance.Sms;
 import edu.rit.asksg.dataio.ContentProvider;
+import edu.rit.asksg.domain.config.ProviderConfig;
+import edu.rit.asksg.domain.config.TwilioConfig;
 import edu.rit.asksg.service.ConversationService;
 import flexjson.JSON;
 import org.joda.time.LocalDateTime;
@@ -13,7 +19,9 @@ import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RooJavaBean
 @RooToString
@@ -42,23 +50,24 @@ public class Twilio extends Service implements ContentProvider {
 	@Override
 	public boolean postContent(Message message) {
 		// this assumes that the config will have our Twilio SID assigned to the username.
-		//TODO: the config won't work so this is commented out for now.
-		/*TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
+		final TwilioConfig config = (TwilioConfig) this.getConfig();
+		TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("Body", message.getContent());
-		//TODO: not sure if we'll always want this phone number
-		vars.put("From", twc.getAccount().getAvailablePhoneNumbers().iterator().next().getPhoneNumber());
+		//TODO: magic string! need some way to get our phone number
+		vars.put("From", config.getPhoneNumber());
 		vars.put("To", message.getAuthor());
 
 		SmsFactory smsFactory = twc.getAccount().getSmsFactory();
 		try {
 			Sms sms = smsFactory.create(vars);
-
+			//TODO: Twilio can use a callback to POST information to if sending fails
 		} catch (TwilioRestException e) {
+			//logger.error("Failed to send outgoing message to " + message.getAuthor(), e);
+			e.printStackTrace();
 			return false;
 		}
-		return true;*/
-		return false;
+		return true;
 	}
 
 	@Override
