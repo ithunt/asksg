@@ -3,12 +3,7 @@
 
 package edu.rit.asksg.domain.config;
 
-<<<<<<< HEAD
-import edu.rit.asksg.domain.AsksgUser;
-import edu.rit.asksg.domain.Person;
-=======
 import edu.rit.asksg.domain.config.SpringSocialConfig;
->>>>>>> origin/master
 
 privileged aspect SpringSocialConfig_Roo_JavaBean {
     

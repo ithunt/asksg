@@ -3,10 +3,7 @@
 
 package edu.rit.asksg.domain;
 
-<<<<<<< HEAD
-=======
 import edu.rit.asksg.domain.Twilio;
->>>>>>> origin/master
 import javax.persistence.Entity;
 
 privileged aspect Twilio_Roo_Jpa_Entity {

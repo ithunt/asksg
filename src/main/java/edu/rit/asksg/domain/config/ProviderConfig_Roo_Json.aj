@@ -3,6 +3,7 @@
 
 package edu.rit.asksg.domain.config;
 
+import edu.rit.asksg.domain.config.ProviderConfig;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 import java.util.ArrayList;

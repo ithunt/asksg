@@ -3,12 +3,9 @@
 
 package edu.rit.asksg.domain.config;
 
-<<<<<<< HEAD
-=======
 import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.config.ProviderConfig;
 
->>>>>>> origin/master
 privileged aspect ProviderConfig_Roo_JavaBean {
     
     public String ProviderConfig.getAuthenticationToken() {

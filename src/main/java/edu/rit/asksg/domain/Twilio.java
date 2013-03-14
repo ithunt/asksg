@@ -32,8 +32,6 @@ public class Twilio extends Service implements ContentProvider {
 	@Autowired
 	transient ConversationService conversationService;
 
-	private TwilioConfig config;
-
 	private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
 	@JSON(include = false)
@@ -52,6 +50,7 @@ public class Twilio extends Service implements ContentProvider {
 	@Override
 	public boolean postContent(Message message) {
 		// this assumes that the config will have our Twilio SID assigned to the username.
+		final TwilioConfig config = (TwilioConfig) this.getConfig();
 		TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("Body", message.getContent());
@@ -96,10 +95,5 @@ public class Twilio extends Service implements ContentProvider {
 		conv.setService(this);
 
 		conversationService.saveConversation(conv);
-	}
-
-	@Override
-	public void setConfig(ProviderConfig config) {
-		this.config = (TwilioConfig) config;
 	}
 }

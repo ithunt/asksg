@@ -4,10 +4,15 @@
 package edu.rit.asksg.domain.config;
 
 import edu.rit.asksg.domain.config.TwilioConfig;
-import javax.persistence.Entity;
 
-privileged aspect TwilioConfig_Roo_Jpa_Entity {
+privileged aspect TwilioConfig_Roo_JavaBean {
     
-    declare @type: TwilioConfig: @Entity;
+    public String TwilioConfig.getPhoneNumber() {
+        return this.phoneNumber;
+    }
+    
+    public void TwilioConfig.setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
     
 }

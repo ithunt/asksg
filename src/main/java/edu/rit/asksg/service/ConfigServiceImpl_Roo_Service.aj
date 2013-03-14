@@ -5,16 +5,11 @@ package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.repository.ConfigRepository;
-<<<<<<< HEAD
-=======
 import edu.rit.asksg.service.ConfigServiceImpl;
 import java.util.List;
->>>>>>> origin/master
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 privileged aspect ConfigServiceImpl_Roo_Service {
     

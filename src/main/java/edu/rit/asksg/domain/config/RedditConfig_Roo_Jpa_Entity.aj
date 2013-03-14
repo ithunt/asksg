@@ -3,10 +3,7 @@
 
 package edu.rit.asksg.domain.config;
 
-<<<<<<< HEAD
-=======
 import edu.rit.asksg.domain.config.RedditConfig;
->>>>>>> origin/master
 import javax.persistence.Entity;
 
 privileged aspect RedditConfig_Roo_Jpa_Entity {

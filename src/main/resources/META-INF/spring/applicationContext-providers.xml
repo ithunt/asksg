@@ -65,10 +65,10 @@
 		<property name="authenticationToken" value="4heJuZtO5Ji43xk1uc0edKmDVgrSdheK"/>
 	</bean>
 
-    <bean id="twilioConfig" class="edu.rit.asksg.domain.config.TwilioConfig">
+    <!--<bean id="twilioConfig" class="edu.rit.asksg.domain.config.TwilioConfig">
         <property name="phoneNumber" value="5852865275"/>
         <property name="authenticationToken" value="AC932da9adfecf700aba37dba458fc9621"/>
         <property name="username" value="9cda6e23aa46651c9759492b625e3f35"/>
-    </bean>
+    </bean>-->
 
 </beans>

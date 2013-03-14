@@ -3,6 +3,7 @@
 
 package edu.rit.asksg.domain;
 
+import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.config.ProviderConfig;
 
 privileged aspect Service_Roo_JavaBean {

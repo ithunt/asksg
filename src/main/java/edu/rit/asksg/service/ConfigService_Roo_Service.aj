@@ -4,11 +4,7 @@
 package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.config.ProviderConfig;
-<<<<<<< HEAD
-
-=======
 import edu.rit.asksg.service.ConfigService;
->>>>>>> origin/master
 import java.util.List;
 
 privileged aspect ConfigService_Roo_Service {
