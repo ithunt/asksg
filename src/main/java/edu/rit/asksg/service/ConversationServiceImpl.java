@@ -6,11 +6,9 @@ import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.repository.MessageRepository;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
-@Service
 public class ConversationServiceImpl implements ConversationService {
 
 	@Autowired

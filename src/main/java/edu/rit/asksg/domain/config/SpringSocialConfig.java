@@ -13,20 +13,16 @@ import javax.validation.constraints.NotNull;
 @RooJpaEntity
 public class SpringSocialConfig extends ProviderConfig {
 
-	@NotNull
-	private String handle;
-
 	private String url;
 
-	//todo implement JPA Repo version of userconfigrep, switch out apibinding to correct type - so transient for now
-	private transient ApiBinding apiBinding;
+    private String consumerkey;
 
-	@JSON(include = false)
-	public ApiBinding getApiBinding() {
-		return apiBinding;
-	}
+    private String consumersecret;
 
-	public void setApiBinding(ApiBinding apiBinding) {
-		this.apiBinding = apiBinding;
-	}
+    private String accesstoken;
+
+    private String accesstokensecret;
+
+
+
 }

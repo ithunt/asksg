@@ -68,8 +68,7 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 
 	@JSON(include = false)
 	private org.springframework.social.facebook.api.Facebook getFacebookApi() {
-		//todo make safe
-		return (org.springframework.social.facebook.api.Facebook) ((SpringSocialConfig) this.getConfig()).getApiBinding();
+        return null;
 	}
 
     @JSON(include = false)

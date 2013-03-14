@@ -13,6 +13,7 @@ import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.social.twitter.api.TimelineOperations;
 import org.springframework.social.twitter.api.Tweet;
+import org.springframework.social.twitter.api.impl.TwitterTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +33,9 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 		final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
 		final TimelineOperations timelineOperations = twitterApi.timelineOperations();
 		final List<Tweet> tweets = timelineOperations.getHomeTimeline();
-		return parseTweets(tweets);
+
+
+        return parseTweets(tweets);
 	}
 
 	@Override
@@ -81,8 +84,10 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 
 	@JSON(include = false)
 	private org.springframework.social.twitter.api.Twitter getTwitterApi() {
-		//todo make safe
-		return (org.springframework.social.twitter.api.Twitter) ((SpringSocialConfig) this.getConfig()).getApiBinding();
+
+        final SpringSocialConfig config = (SpringSocialConfig)this.getConfig();
+        return new TwitterTemplate(config.getConsumerkey(), config.getConsumersecret(), config.getAccesstoken(), config.getAccesstokensecret());
+
 	}
 
     @JSON(include = false)

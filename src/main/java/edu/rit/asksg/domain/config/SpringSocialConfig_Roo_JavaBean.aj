@@ -7,20 +7,44 @@ import edu.rit.asksg.domain.config.SpringSocialConfig;
 
 privileged aspect SpringSocialConfig_Roo_JavaBean {
     
-    public String SpringSocialConfig.getHandle() {
-        return this.handle;
-    }
-    
-    public void SpringSocialConfig.setHandle(String handle) {
-        this.handle = handle;
-    }
-    
     public String SpringSocialConfig.getUrl() {
         return this.url;
     }
     
     public void SpringSocialConfig.setUrl(String url) {
         this.url = url;
+    }
+    
+    public String SpringSocialConfig.getConsumerkey() {
+        return this.consumerkey;
+    }
+    
+    public void SpringSocialConfig.setConsumerkey(String consumerkey) {
+        this.consumerkey = consumerkey;
+    }
+    
+    public String SpringSocialConfig.getConsumersecret() {
+        return this.consumersecret;
+    }
+    
+    public void SpringSocialConfig.setConsumersecret(String consumersecret) {
+        this.consumersecret = consumersecret;
+    }
+    
+    public String SpringSocialConfig.getAccesstoken() {
+        return this.accesstoken;
+    }
+    
+    public void SpringSocialConfig.setAccesstoken(String accesstoken) {
+        this.accesstoken = accesstoken;
+    }
+    
+    public String SpringSocialConfig.getAccesstokensecret() {
+        return this.accesstokensecret;
+    }
+    
+    public void SpringSocialConfig.setAccesstokensecret(String accesstokensecret) {
+        this.accesstokensecret = accesstokensecret;
     }
     
 }
