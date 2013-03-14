@@ -13,6 +13,7 @@ import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.social.facebook.api.Comment;
 import org.springframework.social.facebook.api.Post;
+import org.springframework.social.facebook.api.impl.FacebookTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,7 +69,8 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 
 	@JSON(include = false)
 	private org.springframework.social.facebook.api.Facebook getFacebookApi() {
-        return null;
+		final SpringSocialConfig config = (SpringSocialConfig) this.getConfig();
+		return new FacebookTemplate(config.getAuthenticationToken());
 	}
 
     @JSON(include = false)
