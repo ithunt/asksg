@@ -26,8 +26,8 @@ public class Message {
 	private String author;
 
 	@NotNull
-    @Column(length = 1000)
-    @Size(max = 1000)
+    @Column(length = 2000)
+    @Size(max = 2000)
 	private String content;
 
 	@NotNull

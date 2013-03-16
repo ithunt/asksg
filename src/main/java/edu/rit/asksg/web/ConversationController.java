@@ -5,11 +5,13 @@ import edu.rit.asksg.dataio.ScheduledPocessor;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Email;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.Reddit;
 import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.SocialSubscription;
 import edu.rit.asksg.domain.Twilio;
 import edu.rit.asksg.domain.Twitter;
 import edu.rit.asksg.domain.config.EmailConfig;
+import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
 import edu.rit.asksg.service.ProviderService;
@@ -116,6 +118,20 @@ public class ConversationController {
 
             providerService.saveService(twitter);
         }
+
+        final Service redditProvider = providerService.findServiceByTypeAndIdentifierEquals(Reddit.class, "rit");
+        if(redditProvider == null) {
+
+
+            Service reddit = new Reddit();
+            ProviderConfig config = new ProviderConfig();
+            config.setIdentifier("rit");
+            reddit.setConfig(config);
+
+            providerService.saveService(reddit);
+
+        }
+
     }
 
     @RequestMapping(value = "/tweet")
