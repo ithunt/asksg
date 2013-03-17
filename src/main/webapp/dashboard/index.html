@@ -62,7 +62,7 @@
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#dashTab">Dashboard</a></li>
-        <li><a data-toggle="tab" href="#configTab">Configuration</a></li>
+        <li><a data-toggle="tab" href="#configTab">Settings</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane fade in active" id="dashTab">
@@ -135,43 +135,48 @@
                                 <div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
 
                                     <!-- TODO: this should probably be put somewhere else -->
-                                    <div class="delete pull-right" ng-show="isConvoActive(convo.id)" showonhoverparent>
-                                        <button class="btn btn-danger">Delete</button>
-                                        <!--onclick="deleteConvo({{convo.id}})" -->
+                                    <div class="dropdown delete pull-right" ng-show="isConvoActive(convo.id)" showonhoverparent>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                            <li role="presentation"><a ng-click="deleteConvo({{convo.id}})" role="menuitem" tabindex="-1" href="#">Mark as Read</a></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Hide</a></li>
+                                            <li role="presentation" class="divider"></li>
+                                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Delete</a></li>
+                                        </ul>
                                     </div>
-
+                                    
                                     <!--filter:convoCategory | filter:filterArray[convo.service]">-->
 
                                     <!-- should replace service with an icon for the service name -->
 
-                                    <!--<h3>{{convo.service}} - Conversation {{convo.author}} - {{convo.snippet}}</h3>-->
                                     <!-- Display the most recent web contents -->
                                     <h5><b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length
                                         - 1].content}}</i></b></h5>
 
+                                    <div ng-hide="{{!convo.read}}">
+                                        <!-- List the messages -->
+                                        <!--<h5>Messages</h5>-->
+                                        <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false">
+                                            <!-- put the messages in reverse order -->
+                                            <i class="icon-chevron-right"></i>{{messsage.author}}: {{message.content}}
+                                        </p>
 
-                                    <!-- List the messages -->
-                                    <!--<h5>Messages</h5>-->
-                                    <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false">
-                                        <!-- put the messages in reverse order -->
-                                        <i class="icon-chevron-right"></i>{{messsage.author}}: {{message.content}}
-                                    </p>
+                                        <p id="reply-tree-{{convo.id}}">
+                                            <!-- fill in the controller -->
+                                        </p>
 
-                                    <p id="reply-tree-{{convo.id}}">
-                                        <!-- fill in the controller -->
-                                    </p>
+                                        <!-- Some useful(?) buttons -->
+                                        <button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>
+                                        <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
+                                        Created: {{convo.created_at}}
 
-                                    <!-- Some useful(?) buttons -->
-                                    <button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>
-                                    <button class="btn" onclick="showResponseForm({{convo.id}})">Reply</button>
-                                    Created: {{convo.created_at}}
-
-                                    <!-- The message/conversation response form -->
-                                    <div id="response-form-{{convo.id}}" class="responseForm">
-                                        <form ng-submit="doPostMessage(convo, messageResp, userName)">
-                                            <input class="input-xlarge focused" ng-model="messageResp"/>
-                                            <button class="btn" type="submit">Submit Message</button>
-                                        </form>
+                                        <!-- The message/conversation response form -->
+                                        <div id="response-form-{{convo.id}}" class="responseForm">
+                                            <form ng-submit="doPostMessage(convo, messageResp, userName)">
+                                                <input class="input-xlarge focused" ng-model="messageResp"/>
+                                                <button class="btn" type="submit">Submit Message</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -216,9 +221,32 @@
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="twilioSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="twilioSubmit">
+                            <div id="twilioSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
-                                    <input class="input-xlarge focused" ng-model="service"/>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Authentication Token</label>
+                                        <input class="input-xlarge focused" ng-model="twitterAuthenticationToken"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Identifier</label>
+                                        <input class="input-xlarge focused" ng-model="twitterIdentifier"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Username</label>
+                                        <input class="input-xlarge focused" ng-model="twitterUsername"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Password</label>
+                                        <input class="input-xlarge focused" ng-model="twitterPassword"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Host</label>
+                                        <input class="input-xlarge focused" ng-model="twitterHost"/>
+                                    </div>
+                                    <div style="float:left;margin-right:20px;">
+                                        <label for="name">Port</label>
+                                        <input class="input-xlarge focused" ng-model="twitterPort"/>
+                                    </div>
                                     <button class="btn" type="submit">Go</button>
                                 </form>
                             </div>
@@ -226,15 +254,15 @@
 
                             <div class="well">
                             <h4>Email Subscriptions</h4>
-                            <ul>
-                                <li ng-repeat="service in subscriptions['Email']">
-                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
-                                </li>
-                            </ul>
+                            <p ng-repeat="service in subscriptions['Email']"> 
+                                Identifier: {{service.config.identifier}} <br/> 
+                                Username: {{service.config.username}} <br/>
+                                Password: {{service.config.password}}
+                            </p>
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="emailSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="emailSubmit">
+                            <div id="emailSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
                                     <input class="input-xlarge focused" ng-model="service"/>
                                     <button class="btn" type="submit">Go</button>
@@ -244,15 +272,15 @@
 
                             <div class="well">
                             <h4>Twitter Subscriptions</h4>
-                            <ul>
-                                <li ng-repeat="service in subscriptions['Twitter']">
-                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
-                                </li>
-                            </ul>
+                            <p ng-repeat="service in subscriptions['Twitter']"> 
+                                Identifier: {{service.config.identifier}} <br/> 
+                                Username: {{service.config.username}} <br/>
+                                Password: {{service.config.password}}
+                            </p>
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="twitterSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="twitterSubmit">
+                            <div id="twitterSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
                                     <input class="input-xlarge focused" ng-model="service"/>
                                     <button class="btn" type="submit">Go</button>
@@ -262,15 +290,15 @@
 
                             <div class="well">
                             <h4>Facebook Subscriptions</h4>
-                            <ul>
-                                <li ng-repeat="service in subscriptions['Facebook']">
-                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
-                                </li>
-                            </ul>
+                            <p ng-repeat="service in subscriptions['Facebook']"> 
+                                Identifier: {{service.config.identifier}} <br/> 
+                                Username: {{service.config.username}} <br/>
+                                Password: {{service.config.password}}
+                            </p>
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="facebookSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="facebookSubmit">
+                            <div id="facebookSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
                                     <input class="input-xlarge focused" ng-model="service"/>
                                     <button class="btn" type="submit">Go</button>
@@ -280,15 +308,15 @@
 
                             <div class="well">
                             <h4>Reddit Subscriptions</h4>
-                            <ul>
-                                <li ng-repeat="service in subscriptions['Reddit']">
-                                    {{service.config.identifier}} - {{service.config.username}} - {{service.config.password}}
-                                </li>
-                            </ul>
+                            <p ng-repeat="service in subscriptions['Reddit']"> 
+                                Identifier: {{service.config.identifier}} <br/> 
+                                Username: {{service.config.username}} <br/>
+                                Password: {{service.config.password}}
+                            </p>
 
                             <!-- TODO: add plus button to configure the new service information -->
                             <button id="redditSubmitButton" class="btn btn-primary">Add Service</button>
-                            <div id="redditSubmit">
+                            <div id="redditSubmit" style="padding-top: 5px;">
                                 <form ng-submit="doAddService(service)">
                                     <input class="input-xlarge focused" ng-model="service"/>
                                     <button class="btn" type="submit">Go</button>

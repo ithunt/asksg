@@ -43,4 +43,20 @@ privileged aspect Conversation_Roo_JavaBean {
         this.service = service;
     }
     
+    public boolean Conversation.isRead() {
+        return this.read;
+    }
+    
+    public void Conversation.setRead(boolean read) {
+        this.read = read;
+    }
+    
+    public boolean Conversation.isHidden() {
+        return this.hidden;
+    }
+    
+    public void Conversation.setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+    
 }
