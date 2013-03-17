@@ -43,8 +43,10 @@ public class Conversation {
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
 	private LocalDateTime modified = new LocalDateTime();
 
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Service service;
+
+	private boolean read; // the user has read the convo
+	private boolean hidden; // the user has marked the convo as hidden - a message can be not hidden but read
 
 }

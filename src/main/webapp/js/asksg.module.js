@@ -21,7 +21,7 @@ function MessageResp(author, content, conversation) {
 /**
  * Conversation object constructor.
  */
-function Conversation(id, author, subject, snippet, messages, created, modified, service) {
+function Conversation(id, author, subject, snippet, messages, created, modified, service, read) {
     this.id = id;
     this.author = author;
     this.subject = subject;
@@ -29,6 +29,7 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
     this.modified_at = modified;
     this.active = false;
     this.service = service;
+    this.read = read;
 
     // Run through the messages list and create the appropriate Message objects
     this.messages = new Array();
@@ -104,7 +105,7 @@ function ConversationController($scope, $asksg, $log) {
                         conversation.author, conversation.subject,
                         conversation.snippet, conversation.messages,
                         conversation.createdDate, conversation.modifiedDate,
-                        conversation.service);
+                        conversation.service, conversation.read);
                     $scope.convoMap[conversation.id] = $scope.convos[i];
                 }
             }).
@@ -197,6 +198,13 @@ function ConversationController($scope, $asksg, $log) {
      */
     $scope.isConvoActive = function (convoId) {
         return $scope.convoMap[convoId].active;
+    }
+
+    /*
+     * Hide the specified conversation (mark as read).
+     */
+    $scope.hideConvo = function (convoId) {
+        $scope.convoMap[convoId].read = true;
     }
 
     /*
