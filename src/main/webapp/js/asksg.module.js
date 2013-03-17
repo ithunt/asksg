@@ -21,7 +21,7 @@ function MessageResp(author, content, conversation) {
 /**
  * Conversation object constructor.
  */
-function Conversation(id, author, subject, snippet, messages, created, modified, service, read) {
+function Conversation(id, author, subject, snippet, messages, created, modified, service, read, hidden) {
     this.id = id;
     this.author = author;
     this.subject = subject;
@@ -30,6 +30,7 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
     this.active = false;
     this.service = service;
     this.read = read;
+    this.hidden = hidden;
 
     // Run through the messages list and create the appropriate Message objects
     this.messages = new Array();
@@ -105,7 +106,7 @@ function ConversationController($scope, $asksg, $log) {
                         conversation.author, conversation.subject,
                         conversation.snippet, conversation.messages,
                         conversation.createdDate, conversation.modifiedDate,
-                        conversation.service, conversation.read);
+                        conversation.service, conversation.read, conversation.hidden);
                     $scope.convoMap[conversation.id] = $scope.convos[i];
                 }
             }).
@@ -190,6 +191,7 @@ function ConversationController($scope, $asksg, $log) {
      * Delete a conversation.
      */
     $scope.deleteConvo = function (convoId) {
+        delete $scope.convos[$scope.convoMap[convoId]];
         console.log("TODO: send HTML delete to server for convo id = " + convoId);
     };
 
@@ -204,7 +206,8 @@ function ConversationController($scope, $asksg, $log) {
      * Hide the specified conversation (mark as read).
      */
     $scope.hideConvo = function (convoId) {
-        $scope.convoMap[convoId].read = true;
+        $scope.convoMap[convoId].hidden = true;
+        $asksg.updateConvo($scope.convoMap[convoId]);
     }
 
     /*
@@ -360,6 +363,16 @@ AsksgService = function () {
                     // Return the HTTP response
                     return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
                 },
+
+                /**
+                 * Update a conversation.
+                 *
+                 * @param convo - the conversation to update.
+                 */
+                updateConvo: function (convo) {
+                    return $http({method: 'UPDATE', url: convoUrl, data: JSON.stringify(convo)});
+                },
+
 
                 /**
                  * Submit a new service to the system.
