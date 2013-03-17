@@ -4,6 +4,7 @@ import edu.rit.asksg.common.Log;
 import edu.rit.asksg.dataio.ScheduledPocessor;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Email;
+import edu.rit.asksg.domain.Facebook;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.SocialSubscription;
@@ -59,8 +60,8 @@ public class ConversationController {
         messages.add(m2);
 
         c.setMessages(messages);
-        Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, "37321");
-        c.setService(twiloprovider);
+        Service twilioprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, "37321");
+        c.setService(twilioprovider);
         conversationService.saveConversation(c);
 
         pullContent();
@@ -78,6 +79,9 @@ public class ConversationController {
             Service twilio = new Twilio();
             TwilioConfig twilioconfig = new TwilioConfig();
             twilioconfig.setIdentifier("37321");
+			twilioconfig.setPhoneNumber("5852865275");
+			twilioconfig.setUsername("AC932da9adfecf700aba37dba458fc9621");
+			twilioconfig.setAuthenticationToken("9cda6e23aa46651c9759492b625e3f35");
             twilio.setConfig(twilioconfig);
             providerService.saveService(twilio);
         }
@@ -99,10 +103,10 @@ public class ConversationController {
             SpringSocialConfig twitterConfig = new SpringSocialConfig();
             twitterConfig.setIdentifier("wY0Aft0Gz410RtOqOHd7Q");
 
-            twitterConfig.setConsumerkey("wY0Aft0Gz410RtOqOHd7Q");
-            twitterConfig.setConsumersecret("rMxrTP9nqPzwU6UHIQufKR23be4w4NHIqY7VbwfzU");
-            twitterConfig.setAccesstoken("15724679-FUz0huThLIpEzm66QySG7exllaV1CWV9VqXxXeTOw");
-            twitterConfig.setAccesstokensecret("rFTEFz8tNX71V2nCo6pDtF38LhDEfO2f692xxzQxaA");
+            twitterConfig.setConsumerKey("wY0Aft0Gz410RtOqOHd7Q");
+            twitterConfig.setConsumerSecret("rMxrTP9nqPzwU6UHIQufKR23be4w4NHIqY7VbwfzU");
+            twitterConfig.setAccessToken("15724679-FUz0huThLIpEzm66QySG7exllaV1CWV9VqXxXeTOw");
+            twitterConfig.setAccessTokenSecret("rFTEFz8tNX71V2nCo6pDtF38LhDEfO2f692xxzQxaA");
 
             twitter.setConfig(twitterConfig);
 
@@ -116,6 +120,16 @@ public class ConversationController {
 
             providerService.saveService(twitter);
         }
+
+		final Service facebookProvider = providerService.findServiceByTypeAndIdentifierEquals(Facebook.class, "asksgfbapp");
+		if (facebookProvider == null) {
+			Service facebook = new Facebook();
+			SpringSocialConfig fbConfig = new SpringSocialConfig();
+			fbConfig.setIdentifier("asksgfbapp");
+
+			facebook.setConfig(fbConfig);
+			
+		}
     }
 
     @RequestMapping(value = "/tweet")

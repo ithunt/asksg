@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 public class FacebookIntegrationTest {
 
-	final private String fbAuthToken = "be86bd629380541d0aba9c9df5524fdb";
+	final private String fbAuthToken = "350631378375337|JbvisyGPqMuo6QH9229uc80sWnM";// "be86bd629380541d0aba9c9df5524fdb";
 	private SpringSocialConfig fbConfig;
 
 	@Before

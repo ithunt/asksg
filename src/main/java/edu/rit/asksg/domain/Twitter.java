@@ -86,7 +86,7 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 	private org.springframework.social.twitter.api.Twitter getTwitterApi() {
 
         final SpringSocialConfig config = (SpringSocialConfig)this.getConfig();
-        return new TwitterTemplate(config.getConsumerkey(), config.getConsumersecret(), config.getAccesstoken(), config.getAccesstokensecret());
+        return new TwitterTemplate(config.getConsumerKey(), config.getConsumerSecret(), config.getAccessToken(), config.getAccessTokenSecret());
 
 	}
 

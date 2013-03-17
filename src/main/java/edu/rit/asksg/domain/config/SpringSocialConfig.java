@@ -15,13 +15,13 @@ public class SpringSocialConfig extends ProviderConfig {
 
 	private String url;
 
-    private String consumerkey;
+    private String consumerKey;
 
-    private String consumersecret;
+    private String consumerSecret;
 
-    private String accesstoken;
+    private String accessToken;
 
-    private String accesstokensecret;
+    private String accessTokenSecret;
 
 
 
