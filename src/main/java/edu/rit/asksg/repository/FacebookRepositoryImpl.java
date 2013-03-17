@@ -15,7 +15,7 @@ import java.io.IOException;
 public class FacebookRepositoryImpl implements FacebookRepository {
 
 	@Override
-	public String makeAccessTokenRequest(Facebook facebook) {
+	public String makeAccessTokenRequest(final Facebook facebook) {
 		SpringSocialConfig config = (SpringSocialConfig) facebook.getConfig();
 		final String url = "https://graph.facebook.com/oauth/access_token?" + config.getConsumerKey() +
 				"&client_secret=" + config.getConsumerSecret() + "&code=" + config.getAccessToken();
@@ -31,5 +31,6 @@ public class FacebookRepositoryImpl implements FacebookRepository {
 			//TODO: handle Facebook's explosion properly :3
 			e.printStackTrace();
 		}
+		return null;
 	}
 }

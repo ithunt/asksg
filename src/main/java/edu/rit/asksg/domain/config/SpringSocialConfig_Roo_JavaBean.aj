@@ -3,6 +3,8 @@
 
 package edu.rit.asksg.domain.config;
 
+import edu.rit.asksg.domain.config.SpringSocialConfig;
+
 privileged aspect SpringSocialConfig_Roo_JavaBean {
     
     public String SpringSocialConfig.getUrl() {

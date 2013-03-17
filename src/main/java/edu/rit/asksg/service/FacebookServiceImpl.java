@@ -14,7 +14,7 @@ public class FacebookServiceImpl implements FacebookService {
 	private FacebookRepositoryImpl facebookRepository;
 
 	@Override
-	public String makeAccessTokenRequest(Facebook facebook) {
+	public String makeAccessTokenRequest(final Facebook facebook) {
 		return facebookRepository.makeAccessTokenRequest(facebook);
 	}
 }

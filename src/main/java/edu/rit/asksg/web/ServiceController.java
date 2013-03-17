@@ -22,8 +22,8 @@ public class ServiceController {
 	FacebookService facebookService;
 
 	@RequestMapping(method = RequestMethod.POST, value = "facebookToken")
-	public ResponseEntity<String> facebookToken(@RequestParam("id") String id,
-												@RequestParam("code") String code) {
+	public ResponseEntity<String> facebookToken(@RequestParam("id") final String id,
+												@RequestParam("code") final String code) {
 		//TODO: type safety
 		final Facebook facebook = (Facebook) providerService.findService(Long.parseLong(id));
 		((SpringSocialConfig)facebook.getConfig()).setAccessToken(code);
