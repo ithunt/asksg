@@ -51,10 +51,9 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 /**
  * Social subscription provider object constructor.
  */
-function SocialSubscription(authenticated, config, id, name, version) {
+function SocialSubscription(authenticated, config, name, version) {
     this.authenticated = authenticated;
     this.config = config;
-    this.id = id;
     this.name = name;
     this.version = version;
 }
@@ -139,7 +138,7 @@ function ConversationController($scope, $asksg, $log) {
                     console.log($scope.subscriptions[subData.name]);
                     $scope.subscriptions[subData.name].push(
                         new SocialSubscription(subData.authenticated, subData.config, 
-                            subData.id, subData.name, subData.version));
+                            subData.name, subData.version));
                 }
 
                 // debug
@@ -173,11 +172,16 @@ function ConversationController($scope, $asksg, $log) {
     /**
      * Invoke the ASKSG service post function
      */
-    $scope.doAddService = function(service) {
+    $scope.doAddServiceTwilio = function(twilioIdentifier, twilioUsername, twilioPassword, twilioNumber) {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-        $asksg.postNewService(service).
+        console.log(twilioIdentifier + " " + twilioUsername + " " + twilioPassword);
+        // config, name, version)
+        config = [authenticationToken : "", createdBy: "", host: "", identifier: twilioIdentifier, 
+            password: twilioPassword, username: twilioUsername, phoneNumber: twilioNumber]
+        newService = new SocialSubscription(false, config, "Twilio", 0);
+        $asksg.postNewService(newService).
             success(function (data, status, headers, config) {
-                console.log("Success");
+                console.log("Success adding the new service!");
                 console.log(data);
                 console.log(status);
                 $scope.refreshSubscriptions();
@@ -186,6 +190,74 @@ function ConversationController($scope, $asksg, $log) {
                 console.log("Error... :(");
             });
     }
+
+    /**
+     * Invoke the ASKSG service post function
+     */
+    $scope.doAddServiceEmail = function(twilioIdentifier, twilioUsername, twilioPassword, twilioNumber) {
+        // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
+        console.log(twilioIdentifier + " " + twilioUsername + " " + twilioPassword);
+        // config, name, version)
+        config = [authenticationToken : "", createdBy: "", host: "", identifier: twilioIdentifier, 
+            password: twilioPassword, username: twilioUsername, phoneNumber: twilioNumber]
+        newService = new SocialSubscription(false, config, "Twilio", 0);
+        $asksg.postNewService(newService).
+            success(function (data, status, headers, config) {
+                console.log("Success adding the new service!");
+                console.log(data);
+                console.log(status);
+                $scope.refreshSubscriptions();
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error... :(");
+            });
+    }
+
+
+    /**
+     * Invoke the ASKSG service post function
+     */
+    $scope.doAddServiceTwitter = function(twilioIdentifier, twilioUsername, twilioPassword, twilioNumber) {
+        // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
+        console.log(twilioIdentifier + " " + twilioUsername + " " + twilioPassword);
+        // config, name, version)
+        config = [authenticationToken : "", createdBy: "", host: "", identifier: twilioIdentifier, 
+            password: twilioPassword, username: twilioUsername, phoneNumber: twilioNumber]
+        newService = new SocialSubscription(false, config, "Twilio", 0);
+        $asksg.postNewService(newService).
+            success(function (data, status, headers, config) {
+                console.log("Success adding the new service!");
+                console.log(data);
+                console.log(status);
+                $scope.refreshSubscriptions();
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error... :(");
+            });
+    }
+
+    /**
+     * Invoke the ASKSG service post function
+     */
+    $scope.doAddServiceFacebook = function(twilioIdentifier, twilioUsername, twilioPassword, twilioNumber) {
+        // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
+        console.log(twilioIdentifier + " " + twilioUsername + " " + twilioPassword);
+        // config, name, version)
+        config = [authenticationToken : "", createdBy: "", host: "", identifier: twilioIdentifier, 
+            password: twilioPassword, username: twilioUsername, phoneNumber: twilioNumber]
+        newService = new SocialSubscription(false, config, "Twilio", 0);
+        $asksg.postNewService(newService).
+            success(function (data, status, headers, config) {
+                console.log("Success adding the new service!");
+                console.log(data);
+                console.log(status);
+                $scope.refreshSubscriptions();
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error... :(");
+            });
+    }
+
 
     /*
      * Delete a conversation.
@@ -315,6 +387,14 @@ function ConversationController($scope, $asksg, $log) {
         }
     };
 
+    /**
+     * Service configuration variables
+     */
+    $scope.twilioIdentifier = "";
+    $scope.twilioUsername = "";
+    $scope.twilioPassword = "";
+    $scope.twilioNumber = "";
+
     // Set the user name
     $scope.userName = "Admin"; // this should be replaced by response from server
 
@@ -405,9 +485,8 @@ AsksgService = function () {
                  * @param service - new service to add
                  */
                 postNewService: function (service) {
-                    console.log("TODO");
-                    // Return the HTTP response
-                    //return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
+                    console.log(JSON.stringify(service));
+                    return $http({method: 'POST', url: servicesUrl, data: JSON.stringify(service)});
                 },
 
                 /**

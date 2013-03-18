@@ -206,15 +206,14 @@
                                 Phone Number: {{service.config.phoneNumber}}
                             </p>
 
-                            <!-- TODO: add plus button to configure the new service information -->
-                            <a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>
-                            <div class="modal hide" id="twitterModal">
+                            <a data-toggle="modal" href="#twilioModal" class="btn">Add Service</a>
+                            <div class="modal hide" id="twilioModal">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">x</button>
                                     <h3>Configure new Twilio service</h3>
                                 </div>
                                 <div class="modal-body">
-                                    <form ng-submit="doAddService(service)">
+                                    <form ng-submit="doAddServiceTwilio(twilioIdentifier,twilioUsername,twilioPassword,twilioNumber)">
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Identifier</label>
                                         <input class="input-xlarge focused" ng-model="twilioIdentifier"/>   
@@ -252,7 +251,7 @@
                                     <h3>Configure new Email service</h3>
                                 </div>
                                 <div class="modal-body">
-                                    <form ng-submit="doAddService(service)">
+                                    <form ng-submit="doAddServiceEmail(emailIdentifier, emailUsername, emailPassword)">
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Identifier</label>
                                         <input class="input-xlarge focused" ng-model="emailIdentifier"/>
@@ -265,7 +264,7 @@
                                         <label for="name">Password</label>
                                         <input class="input-xlarge focused" ng-model="emailPassword"/>
                                     </div>
-                                    <button class="btn" type="submit">Go</button>
+                                    <button class="btn" type="submit" data-dismiss="modal">Go</button>
                                     </form>
                                 </div>
                             </div>
@@ -288,7 +287,7 @@
                                     <h3>Configure new Twitter service</h3>
                                 </div>
                                 <div class="modal-body">
-                                    <form ng-submit="doAddService(service)">
+                                    <form ng-submit="doAddServiceTwitter(twitterIdentifier, twitterConsumerKey, twitterConsumerSecret, twitterAccessToken, twitterAccessSecret)">
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Identifier (URL)</label>
                                         <input class="input-xlarge focused" ng-model="twitterIdentifier"/>
@@ -330,30 +329,30 @@
                                     <h3>Configure new Facebook service</h3>
                                 </div>
                                 <div class="modal-body">
-                                    <form ng-submit="doAddService(service)">
+                                    <form ng-submit="doAddServiceFacebook(service)">
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Authentication Token</label>
-                                        <input class="input-xlarge focused" ng-model="twitterAuthenticationToken"/>
+                                        <input class="input-xlarge focused" ng-model="facebookAuthenticationToken"/>
                                     </div>
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Identifier</label>
-                                        <input class="input-xlarge focused" ng-model="twitterIdentifier"/>   
+                                        <input class="input-xlarge focused" ng-model="facebookIdentifier"/>   
                                     </div>
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Username</label>
-                                        <input class="input-xlarge focused" ng-model="twitterUsername"/>
+                                        <input class="input-xlarge focused" ng-model="facebookUsername"/>
                                     </div>
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Password</label>
-                                        <input class="input-xlarge focused" ng-model="twitterPassword"/>
+                                        <input class="input-xlarge focused" ng-model="facebookPassword"/>
                                     </div>
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Host</label>
-                                        <input class="input-xlarge focused" ng-model="twitterHost"/>
+                                        <input class="input-xlarge focused" ng-model="facebookHost"/>
                                     </div>
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Port</label>
-                                        <input class="input-xlarge focused" ng-model="twitterPort"/>
+                                        <input class="input-xlarge focused" ng-model="facebookPort"/>
                                     </div>
                                     <button class="btn" type="submit">Go</button>
                                     </form>
@@ -361,6 +360,7 @@
                             </div>
                             </div>
 
+                            <!-- TODO: PUT BACK IN WHEN REDDIT API IS WORKING
                             <div class="well">
                             <h4>Reddit Subscriptions</h4>
                             <p ng-repeat="service in subscriptions['Reddit']"> 
@@ -376,7 +376,7 @@
                                     <h3>Configure new Reddit service</h3>
                                 </div>
                                 <div class="modal-body">
-                                    <form ng-submit="doAddService(service)">
+                                    <form ng-submit="doAddServiceReddit(service)">
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Authentication Token</label>
                                         <input class="input-xlarge focused" ng-model="twitterAuthenticationToken"/>
@@ -405,7 +405,7 @@
                                     </form>
                                 </div>
                             </div>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                     <!--<div id="otherConfigTab" class="tab-pane fade">
