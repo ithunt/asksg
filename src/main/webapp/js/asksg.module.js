@@ -21,13 +21,16 @@ function MessageResp(author, content, conversation) {
 /**
  * Conversation object constructor.
  */
-function Conversation(id, author, subject, snippet, messages, created, modified) {
+function Conversation(id, author, subject, snippet, messages, created, modified, service, read, hidden) {
     this.id = id;
     this.author = author;
     this.subject = subject;
     this.created_at = created;
     this.modified_at = modified;
     this.active = false;
+    this.service = service;
+    this.read = read;
+    this.hidden = hidden; // hidden
 
     // Run through the messages list and create the appropriate Message objects
     this.messages = new Array();
@@ -70,7 +73,6 @@ function MainController($scope, $asksg, $log) {
      */
     $scope.login = function () {
         console.log("username and password: " + $scope.username + ", " + $scope.password);
-        //$scope.$emit('event:loginRequest', $scope.username, $scope.password);
     }
 }
 
@@ -103,7 +105,8 @@ function ConversationController($scope, $asksg, $log) {
                     $scope.convos[i] = new Conversation(conversation.id,
                         conversation.author, conversation.subject,
                         conversation.snippet, conversation.messages,
-                        conversation.createdDate, conversation.modifiedDate);
+                        conversation.createdDate, conversation.modifiedDate,
+                        conversation.service, conversation.read, conversation.hidden);
                     $scope.convoMap[conversation.id] = $scope.convos[i];
                 }
             }).
@@ -188,7 +191,8 @@ function ConversationController($scope, $asksg, $log) {
      * Delete a conversation.
      */
     $scope.deleteConvo = function (convoId) {
-        console.log("TODO: send HTML delete to server for convo id = " + convoId);
+        $asksg.deleteConvo(convoId);
+        refreshConvos();
     };
 
     /*
@@ -196,6 +200,27 @@ function ConversationController($scope, $asksg, $log) {
      */
     $scope.isConvoActive = function (convoId) {
         return $scope.convoMap[convoId].active;
+    }
+
+    $scope.toggleReadConvo = function (convoId) {
+        if ($scope.convoMap[convoId].read == true) {
+            $scope.convoMap[convoId].read = false;
+        } else {
+            $scope.convoMap[convoId].read = true;
+        }
+        $asksg.updateConvo($scope.convoMap[convoId]);
+    }
+
+    /*
+     * Hide the specified conversation (mark as read).
+     */
+    $scope.toggleHideConvo = function (convoId) {
+        if ($scope.convoMap[convoId].hidden == true) {
+            $scope.convoMap[convoId].hidden = false;
+        } else {
+            $scope.convoMap[convoId].hidden = true;
+        }
+        $asksg.updateConvo($scope.convoMap[convoId]);
     }
 
     /*
@@ -206,11 +231,11 @@ function ConversationController($scope, $asksg, $log) {
 
     // Array to store the state of active conversation filters
     $scope.filterConvoArray = Array();
-    $scope.filterConvoArray['email'] = false;
-    $scope.filterConvoArray['sms'] = false;
-    $scope.filterConvoArray['facebook'] = false;
-    $scope.filterConvoArray['twitter'] = false;
-    $scope.filterConvoArray['reddit'] = false;
+    $scope.filterConvoArray['Email'] = false;
+    $scope.filterConvoArray['Twilio'] = false;
+    $scope.filterConvoArray['Facebook'] = false;
+    $scope.filterConvoArray['Twitter'] = false;
+    $scope.filterConvoArray['Reddit'] = false;
 
     // Array to store the state of the active tag filters
     $scope.filterTagArray = Array();
@@ -218,60 +243,59 @@ function ConversationController($scope, $asksg, $log) {
     $scope.filterTagArray['unread'] = false;
 
     /*
-     * Filter function for the conversations.
+     * Filter function for the conversations based on their service.
      */
     $scope.filterConvo = function (convo) {
-        //console.log(convo.service);
-        //console.log($scope.filterArray[convo.service]);
-        return !($scope.filterConvoArray[convo.service]);
+        return !($scope.filterConvoArray[convo.service.name]);
     };
 
     /*
-     * Filter function for the conversations.
+     * Filter function for the conversations based on read/unread tags.
      */
-    $scope.filterTag = function (tag) {
-        //console.log(convo.service);
-        //console.log($scope.filterArray[convo.service]);
-        return !($scope.filterTagArray[tag]);
+    $scope.filterTag = function (convo) {
+        if ($scope.filterTagArray['read'] && convo.read) {
+            return false;
+        } 
+        if ($scope.filterTagArray['unread'] && !(convo.read)) {
+            return false;
+        }
+        return true;
     };
 
     /*
      * Filter functions...
      */
-    $scope.filterAll = function () {
-        $scope.convoCategory = "";
-    };
     $scope.filterEmail = function () {
-        if ($scope.filterConvoArray['email']) {
-            $scope.filterConvoArray['email'] = false;
+        if ($scope.filterConvoArray['Email']) {
+            $scope.filterConvoArray['Email'] = false;
         } else {
-            $scope.filterConvoArray['email'] = true;
+            $scope.filterConvoArray['Email'] = true;
         }
     };
     $scope.filterSms = function () {
-        if ($scope.filterConvoArray['sms']) {
-            $scope.filterConvoArray['sms'] = false;
+        if ($scope.filterConvoArray['Twilio']) {
+            $scope.filterConvoArray['Twilio'] = false;
         } else {
-            $scope.filterConvoArray['sms'] = true;
+            $scope.filterConvoArray['Twilio'] = true;
         }
     };
     $scope.filterFacebook = function () {
-        if ($scope.filterConvoArray['facebook']) {
-            $scope.filterConvoArray['facebook'] = false;
+        if ($scope.filterConvoArray['Facebook']) {
+            $scope.filterConvoArray['Facebook'] = false;
         } else {
-            $scope.filterConvoArray['facebook'] = true;
+            $scope.filterConvoArray['Facebook'] = true;
         }
     };
     $scope.filterTwitter = function () {
-        if ($scope.filterConvoArray['twitter']) {
-            $scope.filterConvoArray['twitter'] = false;
+        if ($scope.filterConvoArray['Twitter']) {
+            $scope.filterConvoArray['Twitter'] = false;
         } else {
-            $scope.filterConvoArray['twitter'] = true;
+            $scope.filterConvoArray['Twitter'] = true;
         }
     };
     $scope.filterReddit = function () {
-        if ($scope.filterConvoArray['reddit']) {
-            $scope.filterConvoArray['reddit'] = false;
+        if ($scope.filterConvoArray['Reddit']) {
+            $scope.filterConvoArray['Reddit'] = false;
         } else {
             $scope.filterConvoArray['reddit'] = true;
         }
@@ -358,6 +382,24 @@ AsksgService = function () {
                 },
 
                 /**
+                 * Update a conversation.
+                 *
+                 * @param convo - the conversation to update.
+                 */
+                updateConvo: function (convo) {
+                    return $http({method: 'UPDATE', url: convoUrl, data: JSON.stringify(convo)});
+                },
+
+                /**
+                 * Delete a conversation.
+                 *
+                 * @param convo - the conversation to update.
+                 */
+                deleteConvo: function (convoId) {
+                    return $http({method: 'DELETE', url: (convoUrl + "/" + convoId)});
+                },
+
+                /**
                  * Submit a new service to the system.
                  *
                  * @param service - new service to add
@@ -382,4 +424,3 @@ AsksgService = function () {
 // Invoke the ASKSG service constructor...
 console.log("Jumping into the constructor...");
 AsksgService();
-
