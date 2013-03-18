@@ -2,16 +2,13 @@ package edu.rit.asksg.analytics;
 
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Facebook;
+import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
-import edu.rit.asksg.repository.FacebookRepository;
-import edu.rit.asksg.repository.FacebookRepositoryImpl;
-import edu.rit.asksg.service.FacebookServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -37,5 +34,14 @@ public class FacebookIntegrationTest {
 		facebook.setConfig(fbConfig);
 		List<Conversation> convos = facebook.getNewContent();
 		assertTrue(convos.size() != 0);
+	}
+
+	@Test
+	public void postOnFacebookWithoutAuthing() {
+		Facebook facebook = new Facebook();
+		facebook.setConfig(fbConfig);
+		Message message = new Message();
+		message.setContent("Test message for ASKSG.");
+		assertTrue(facebook.postContent(message));
 	}
 }
