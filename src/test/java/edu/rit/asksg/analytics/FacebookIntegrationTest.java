@@ -17,19 +17,21 @@ import static org.mockito.Mockito.when;
 
 public class FacebookIntegrationTest {
 
-	final private String fbAuthToken = "350631378375337|JbvisyGPqMuo6QH9229uc80sWnM";// "be86bd629380541d0aba9c9df5524fdb";
+	final private String fbApiKey = "350631378375337";
+	final private String fbAuthToken = "be86bd629380541d0aba9c9df5524fdb";
 	private SpringSocialConfig fbConfig;
 
 	@Before
 	public void setup() {
 		fbConfig = mock(SpringSocialConfig.class);
-		when(fbConfig.getAuthenticationToken()).thenReturn(fbAuthToken);
+		when(fbConfig.getConsumerKey()).thenReturn(fbApiKey);
+		when(fbConfig.getConsumerSecret()).thenReturn(fbAuthToken);
 	}
 
 	@Test
 	public void testIntegrationWithFacebook() {
 		Facebook facebook = new Facebook();
-		facebook.setConfig((ProviderConfig)fbConfig);
+		facebook.setConfig(fbConfig);
 		List<Conversation> convos = facebook.getNewContent ();
 		assertTrue(convos.size() != 0);
 	}
