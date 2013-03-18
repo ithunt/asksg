@@ -2,9 +2,10 @@ package edu.rit.asksg.analytics;
 
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Facebook;
-import edu.rit.asksg.domain.Message;
-import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
+import edu.rit.asksg.repository.FacebookRepository;
+import edu.rit.asksg.repository.FacebookRepositoryImpl;
+import edu.rit.asksg.service.FacebookServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,10 +32,10 @@ public class FacebookIntegrationTest {
 	}
 
 	@Test
-	public void testIntegrationWithFacebook() {
+	public void getConversationsWithoutAuthing() {
 		Facebook facebook = new Facebook();
 		facebook.setConfig(fbConfig);
-		List<Conversation> convos = facebook.getNewContent ();
+		List<Conversation> convos = facebook.getNewContent();
 		assertTrue(convos.size() != 0);
 	}
 }
