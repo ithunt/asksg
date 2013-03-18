@@ -96,15 +96,16 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
             message.setContent(post.getMessage());
             message.setAuthor(facebookApi.userOperations().getUserProfile(post.getFrom().getId()).getName());
             message.setCreated(new LocalDateTime(post.getCreatedTime()));
-
-            for (Comment comment : post.getComments()) {
-                Message commentMsg = new Message();
-                commentMsg.setConversation(conversation);
-                commentMsg.setContent(comment.getMessage());
-                commentMsg.setAuthor(facebookApi.userOperations().getUserProfile(comment.getFrom().getId()).getName());
-                commentMsg.setCreated(new LocalDateTime(comment.getCreatedTime()));
-                conversation.getMessages().add(commentMsg);
-            }
+			if (post.getComments() != null) {
+				for (Comment comment : post.getComments()) {
+					Message commentMsg = new Message();
+					commentMsg.setConversation(conversation);
+					commentMsg.setContent(comment.getMessage());
+					commentMsg.setAuthor(facebookApi.userOperations().getUserProfile(comment.getFrom().getId()).getName());
+					commentMsg.setCreated(new LocalDateTime(comment.getCreatedTime()));
+					conversation.getMessages().add(commentMsg);
+				}
+			}
             conversations.add(conversation);
         }
         return conversations;
