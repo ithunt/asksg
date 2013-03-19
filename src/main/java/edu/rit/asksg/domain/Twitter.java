@@ -35,7 +35,7 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 		final List<Tweet> tweets = timelineOperations.getHomeTimeline();
 
 
-        return parseTweets(tweets);
+		return parseTweets(tweets);
 	}
 
 	@Override
@@ -85,15 +85,15 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 	@JSON(include = false)
 	private org.springframework.social.twitter.api.Twitter getTwitterApi() {
 
-        final SpringSocialConfig config = (SpringSocialConfig)this.getConfig();
-        return new TwitterTemplate(config.getConsumerkey(), config.getConsumersecret(), config.getAccesstoken(), config.getAccesstokensecret());
+		final SpringSocialConfig config = (SpringSocialConfig) this.getConfig();
+		return new TwitterTemplate(config.getConsumerKey(), config.getConsumerSecret(), config.getAccessToken(), config.getAccessTokenSecret());
 
 	}
 
-    @JSON(include = false)
-    public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
-        final TimelineOperations timelineOperations = getTwitterApi().timelineOperations();
-        final List<Tweet> tweets = timelineOperations.getUserTimeline(socialSubscription.getHandle());
-        return parseTweets(tweets);
-    }
+	@JSON(include = false)
+	public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
+		final TimelineOperations timelineOperations = getTwitterApi().timelineOperations();
+		final List<Tweet> tweets = timelineOperations.getUserTimeline(socialSubscription.getHandle());
+		return parseTweets(tweets);
+	}
 }

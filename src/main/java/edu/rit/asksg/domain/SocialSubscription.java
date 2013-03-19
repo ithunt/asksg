@@ -17,11 +17,5 @@ public class SocialSubscription {
 	@NotNull
 	private String handle;
 
-	@ManyToOne
-	private Service service;
-
-	@ManyToOne
-	private AsksgUser createdBy;
-
 	private String name;
 }

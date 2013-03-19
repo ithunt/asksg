@@ -20,7 +20,8 @@ public class Chatterbox {
 
 
 	@Autowired
-	public transient ProviderConfig config;
+	public ProviderConfig config;
+
 	@Autowired
 	public transient MessageService messageService;
 
@@ -51,5 +52,8 @@ public class Chatterbox {
 		});
 	}
 
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
+	}
 
 }
