@@ -32,7 +32,6 @@ public class ChatterboxIntegrationTest {
 		service = mock(MessageService.class);
 	}
 
-	//todo: add @Ignore until test is moved to an integration test suite
 	@Test
 	@Ignore
 	public void testIntegrationWithChatterboxAPI() {
@@ -47,6 +46,5 @@ public class ChatterboxIntegrationTest {
 		assertNotNull(message.getAnalytics().getSentimentScore());
 		assertEquals(testSentimentScore, message.getAnalytics().getSentimentScore());
 	}
-
 
 }

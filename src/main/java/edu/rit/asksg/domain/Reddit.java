@@ -23,9 +23,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 @RooJavaBean
 @RooToString
@@ -39,18 +41,10 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
     @JSON(include = false)
     public List<Conversation> getNewContent() {
-
         List<Conversation> convos = new ArrayList<Conversation>();
 
         try {
             convos = getRedditPosts(REDDIT_DOMAIN + "/r/" + this.getConfig().getIdentifier());
-
-            if(this.getConfig().getSubscriptions() != null) {
-                for(SocialSubscription subscription : this.getConfig().getSubscriptions()) {
-                    convos.addAll(getRedditPosts(REDDIT_DOMAIN + "/r/" + subscription.getHandle()));
-                }
-            }
-
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -116,9 +110,13 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
         m.setUrl("http://reddit.com" + post.get("permalink"));
         m.setAuthor((String)post.get("author"));
 
-        //todo: Parse reddit's time
-        // m.setCreated( new LocalDateTime(post.get("created_utc")) );
-        m.setCreated(new LocalDateTime());
+
+        //parse reddits created_utc time to EST localdatetime
+        m.setCreated(
+                new LocalDateTime(
+                        new Date( ((Double)post.get("created_utc")).longValue() +
+                        TimeZone.getTimeZone("EST").getRawOffset())));
+
 
         return m;
     }
@@ -129,10 +127,11 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
         m.setAuthor((String)comment.get("author"));
         m.setContent((String)comment.get("body"));
 
-        //todo: proper created
-        m.setCreated(new LocalDateTime());
-
-        //isn't there more we could get here?
+        //parse reddits created_utc time to EST localdatetime
+        m.setCreated(
+                new LocalDateTime(
+                        new Date( ((Double)comment.get("created_utc")).longValue() +
+                                TimeZone.getTimeZone("EST").getRawOffset())));
 
         return m;
     }
@@ -174,6 +173,14 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
     @Override
     public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
-        return null;
+
+        List<Conversation> conversations = new ArrayList<Conversation>();
+        try {
+            conversations = getRedditPosts(REDDIT_DOMAIN + "/r/" + socialSubscription.getHandle());
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+
+        return conversations;
     }
 }

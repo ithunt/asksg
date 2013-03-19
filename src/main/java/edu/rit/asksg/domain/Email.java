@@ -147,16 +147,16 @@ public class Email extends Service implements ContentProvider {
         //to return
         List<Conversation> conversations = new ArrayList<Conversation>();
 
+        Store store = null;
+
         try {
             Session session = Session.getDefaultInstance(props, null);
             session.setDebug(true);
-            Store store = session.getStore("imaps");
+            store = session.getStore("imaps");
 
             /** USERNAME AND PASSWORD */
-            store.connect("imap.gmail.com", config.getUsername(), config.getPassword());
-
-            logger.debug("Store: " + store);
-
+            //store.connect("imap.gmail.com", config.getUsername(), config.getPassword());
+            store.connect("imap.gmail.com","ritasksg@gmail.com", "allHailSpring");
 
             Folder inbox = store.getFolder("Inbox");
             inbox.open(Folder.READ_ONLY);
@@ -178,7 +178,15 @@ public class Email extends Service implements ContentProvider {
             }
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
+        } finally {
+            try {
+                store.close();
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         }
+
+
 
         return conversations;
     }
