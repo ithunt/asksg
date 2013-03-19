@@ -43,19 +43,48 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 
     // Function to set this conversation as "active" in the UI
     this.setActive = function (flag) {
-        console.log("toggling a convo...");
         this.active = flag;
     }
 }
 
 /**
- * Social subscription provider object constructor.
+ * Provider config provider object constructor.
  */
-function SocialSubscription(authenticated, config, name, version) {
+ //TODO: DONT USE
+function ProviderConfig(authenticated, config, name) {
     this.authenticated = authenticated;
-    this.config = config;
     this.name = name;
-    this.version = version;
+    this.config = config;
+}
+
+function Twilio(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Twilio";
+}
+
+function Email(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Email";
+}
+
+function Facebook(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Facebook";
+}
+
+function Twitter(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Twitter";
+}
+
+function Reddit(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Reddit";
 }
 
 /**
@@ -99,6 +128,7 @@ function ConversationController($scope, $asksg, $log) {
 
                     var createdDate = new Date(conversation.created.localMillis);
                     var modifiedDate = new Date(conversation.modified.localMillis);
+                    console.log(createdDate);
 
                     // Create the object and store it
                     $scope.convos[i] = new Conversation(conversation.id,
@@ -113,7 +143,7 @@ function ConversationController($scope, $asksg, $log) {
                 console.log("Failed refreshing convos...");
                 return null;
             });
-    }
+    };
 
     /*
      * Populate the social subscription content
@@ -125,7 +155,6 @@ function ConversationController($scope, $asksg, $log) {
                 console.log(data);
 
                 // Always rebuild the social subscription data...
-                $scope.test = "it works...";
                 $scope.subscriptions = new Array();
                 for (var i = 0; i < data.length; i++) {
                     var subData = angular.fromJson(data[i]);
@@ -137,7 +166,7 @@ function ConversationController($scope, $asksg, $log) {
                     console.log($scope.subscriptions);
                     console.log($scope.subscriptions[subData.name]);
                     $scope.subscriptions[subData.name].push(
-                        new SocialSubscription(subData.authenticated, subData.config, 
+                        new ProviderConfig(subData.authenticated, subData.config, 
                             subData.name, subData.version));
                 }
 
@@ -148,7 +177,7 @@ function ConversationController($scope, $asksg, $log) {
                 console.log("Failed grabbing the social subscriptions");
                 return null;
             });
-    }
+    };
 
     /**
      * Invoke the ASKSG message post function
@@ -172,13 +201,13 @@ function ConversationController($scope, $asksg, $log) {
     /**
      * Invoke the ASKSG service post function
      */
-    $scope.doAddServiceTwilio = function(twilioIdentifier, twilioUsername, twilioPassword, twilioNumber) {
+    $scope.doAddServiceTwilio = function() {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-        console.log(twilioIdentifier + " " + twilioUsername + " " + twilioPassword);
-        // config, name, version)
-        config = [authenticationToken : "", createdBy: "", host: "", identifier: twilioIdentifier, 
-            password: twilioPassword, username: twilioUsername, phoneNumber: twilioNumber]
-        newService = new SocialSubscription(false, config, "Twilio", 0);
+        console.log($scope.twilioUsername + " " + $scope.twilioAuthToken + " " + $scope.twilioNumber);
+        config = {authenticationToken : $scope.twilioAuthToken, createdBy: null, host: "",
+            password: "", username: $scope.twilioUsername, phoneNumber: $scope.twilioNumber};
+        //newConfig = new ProviderConfig(false, config, "Twilio", 0);
+        newService = new Twilio(config, false);
         $asksg.postNewService(newService).
             success(function (data, status, headers, config) {
                 console.log("Success adding the new service!");
@@ -189,18 +218,17 @@ function ConversationController($scope, $asksg, $log) {
             error(function (data, status, headers, config) {
                 console.log("Error... :(");
             });
-    }
+    };
 
     /**
      * Invoke the ASKSG service post function
      */
-    $scope.doAddServiceEmail = function(twilioIdentifier, twilioUsername, twilioPassword, twilioNumber) {
+    $scope.doAddServiceEmail = function() {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-        console.log(twilioIdentifier + " " + twilioUsername + " " + twilioPassword);
+        console.log($scope.emailUsername + " " + $scope.emailPassword);
         // config, name, version)
-        config = [authenticationToken : "", createdBy: "", host: "", identifier: twilioIdentifier, 
-            password: twilioPassword, username: twilioUsername, phoneNumber: twilioNumber]
-        newService = new SocialSubscription(false, config, "Twilio", 0);
+        config = {createdBy: null, host: "", password: $scope.emailPassword, username: $scope.emailUsername};
+        newService = new Email(config, false);
         $asksg.postNewService(newService).
             success(function (data, status, headers, config) {
                 console.log("Success adding the new service!");
@@ -211,19 +239,20 @@ function ConversationController($scope, $asksg, $log) {
             error(function (data, status, headers, config) {
                 console.log("Error... :(");
             });
-    }
+    };
 
 
     /**
      * Invoke the ASKSG service post function
      */
-    $scope.doAddServiceTwitter = function(twilioIdentifier, twilioUsername, twilioPassword, twilioNumber) {
+    $scope.doAddServiceTwitter = function() {
+        //twitterUrl, twitterConsumerKey, twitterConsumerSecret, twitterAccessToken, twitterAccessSecret
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-        console.log(twilioIdentifier + " " + twilioUsername + " " + twilioPassword);
+        console.log($scope.twitterUrl + " " + $scope.twitterConsumerKey + " " + $scope.twitterConsumerSecret + " " + $scope.twitterAccessToken + " " + $scope.twitterAccessSecret);
         // config, name, version)
-        config = [authenticationToken : "", createdBy: "", host: "", identifier: twilioIdentifier, 
-            password: twilioPassword, username: twilioUsername, phoneNumber: twilioNumber]
-        newService = new SocialSubscription(false, config, "Twilio", 0);
+        config = {url : $scope.twitterUrl, consumerkey : $scope.twitterConsumerKey, consumersecret: $scope.twitterConsumerSecret, 
+            accesstoken: $scope.twitterAccessToken, accesstokensecret: $scope.twitterAccessSecret};
+        newService = new Twitter(config, false);
         $asksg.postNewService(newService).
             success(function (data, status, headers, config) {
                 console.log("Success adding the new service!");
@@ -234,18 +263,18 @@ function ConversationController($scope, $asksg, $log) {
             error(function (data, status, headers, config) {
                 console.log("Error... :(");
             });
-    }
+    };
 
     /**
      * Invoke the ASKSG service post function
      */
-    $scope.doAddServiceFacebook = function(twilioIdentifier, twilioUsername, twilioPassword, twilioNumber) {
+    $scope.doAddServiceFacebook = function() {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-        console.log(twilioIdentifier + " " + twilioUsername + " " + twilioPassword);
+        console.log($scope.facebookUrl + " " + $scope.facebookConsumerKey + " " + $scope.facebookConsumerSecret + " " + $scope.facebookAccessToken + " " + $scope.facebookAccessSecret);
         // config, name, version)
-        config = [authenticationToken : "", createdBy: "", host: "", identifier: twilioIdentifier, 
-            password: twilioPassword, username: twilioUsername, phoneNumber: twilioNumber]
-        newService = new SocialSubscription(false, config, "Twilio", 0);
+        config = {url : $scope.facebookUrl, consumerkey : $scope.facebookConsumerKey, consumersecret: $scope.facebookConsumerSecret, 
+            accesstoken: $scope.facebookAccessToken, accesstokensecret: $scope.facebookAccessSecret};
+        newService = new Facebook(config, false);
         $asksg.postNewService(newService).
             success(function (data, status, headers, config) {
                 console.log("Success adding the new service!");
@@ -256,8 +285,7 @@ function ConversationController($scope, $asksg, $log) {
             error(function (data, status, headers, config) {
                 console.log("Error... :(");
             });
-    }
-
+    };
 
     /*
      * Delete a conversation.
