@@ -71,6 +71,7 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
             try {
                 Conversation c = new Conversation(parsePost(post));
+                c.setService(this);
                 attachComments(c);
                 conversations.add(c);
             } catch (Exception e) {
