@@ -20,11 +20,11 @@ public class ConversationServiceImpl implements ConversationService {
 	@Autowired
 	ProviderService providerService;
 
-    public void saveConversations(Collection<Conversation> conversations) {
-        for(Conversation conversation : conversations ) {
-            saveConversation(conversation);
-        }
-    }
+	public void saveConversations(Collection<Conversation> conversations) {
+		for (Conversation conversation : conversations) {
+			saveConversation(conversation);
+		}
+	}
 
 	public void saveConversation(Conversation conversation) {
 		for (Message m : conversation.getMessages()) {

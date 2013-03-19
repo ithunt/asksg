@@ -7,5 +7,5 @@ import java.util.Collection;
 
 public interface SubscriptionProvider {
 
-    public Collection<Conversation> getContentFor(SocialSubscription socialSubscription);
+	public Collection<Conversation> getContentFor(SocialSubscription socialSubscription);
 }

@@ -3,8 +3,6 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.AsksgUser;
-import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.SocialSubscription;
 
 privileged aspect SocialSubscription_Roo_JavaBean {
@@ -15,22 +13,6 @@ privileged aspect SocialSubscription_Roo_JavaBean {
     
     public void SocialSubscription.setHandle(String handle) {
         this.handle = handle;
-    }
-    
-    public Service SocialSubscription.getService() {
-        return this.service;
-    }
-    
-    public void SocialSubscription.setService(Service service) {
-        this.service = service;
-    }
-    
-    public AsksgUser SocialSubscription.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void SocialSubscription.setCreatedBy(AsksgUser createdBy) {
-        this.createdBy = createdBy;
     }
     
     public String SocialSubscription.getName() {

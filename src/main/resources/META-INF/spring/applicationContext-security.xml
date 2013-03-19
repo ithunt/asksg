@@ -29,4 +29,3 @@
 		<beans:property name="userDetailsService" ref="userDetailsService"/>
 	</beans:bean>
 </beans:beans>
-

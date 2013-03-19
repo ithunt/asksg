@@ -5,6 +5,7 @@ import edu.rit.asksg.domain.Twilio;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -27,6 +28,7 @@ public class TwilioIntegrationTest {
 	}
 
 	@Test
+	@Ignore
 	public void testIntegrationWithTwilio() {
 		Twilio twilio = new Twilio();
 		twilio.setConfig((ProviderConfig) config);

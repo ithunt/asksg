@@ -3,11 +3,11 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.AsksgUser;
-import org.springframework.beans.factory.annotation.Configurable;
+import edu.rit.asksg.domain.IdentityTag;
+import javax.persistence.Entity;
 
-privileged aspect AsksgUser_Roo_Configurable {
+privileged aspect IdentityTag_Roo_Jpa_Entity {
     
-    declare @type: AsksgUser: @Configurable;
+    declare @type: IdentityTag: @Entity;
     
 }

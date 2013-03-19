@@ -8,9 +8,6 @@ import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @RooWebJson(jsonObject = UserRole.class)
 @Controller
 @RequestMapping("/roles")

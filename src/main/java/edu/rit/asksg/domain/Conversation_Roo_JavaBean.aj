@@ -43,4 +43,12 @@ privileged aspect Conversation_Roo_JavaBean {
         this.service = service;
     }
     
+    public String Conversation.getExternalId() {
+        return this.externalId;
+    }
+    
+    public void Conversation.setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+    
 }
