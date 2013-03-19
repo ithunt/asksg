@@ -4,10 +4,40 @@
 package edu.rit.asksg.domain;
 
 import edu.rit.asksg.domain.AsksgUser;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Version;
 
 privileged aspect AsksgUser_Roo_Jpa_Entity {
     
     declare @type: AsksgUser: @Entity;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long AsksgUser.id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer AsksgUser.version;
+    
+    public Long AsksgUser.getId() {
+        return this.id;
+    }
+    
+    public void AsksgUser.setId(Long id) {
+        this.id = id;
+    }
+    
+    public Integer AsksgUser.getVersion() {
+        return this.version;
+    }
+    
+    public void AsksgUser.setVersion(Integer version) {
+        this.version = version;
+    }
     
 }

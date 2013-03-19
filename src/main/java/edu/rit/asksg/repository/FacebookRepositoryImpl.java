@@ -17,8 +17,10 @@ public class FacebookRepositoryImpl implements FacebookRepository {
 	@Override
 	public String makeAccessTokenRequest(final Facebook facebook) {
 		SpringSocialConfig config = (SpringSocialConfig) facebook.getConfig();
-		final String url = "https://graph.facebook.com/oauth/access_token?" + config.getConsumerKey() +
-				"&client_secret=" + config.getConsumerSecret() + "&code=" + config.getAccessToken();
+		final String url = "https://graph.facebook.com/oauth/access_token?client_id=" + config.getConsumerKey() +
+				"&client_secret=" + config.getConsumerSecret() + "&code=" + config.getAccessToken() +
+				"&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html";
+				//TODO: this is terribad, must fix
 		final HttpClient httpClient = new DefaultHttpClient();
 		try {
 			final ResponseHandler<String> handler = new BasicResponseHandler();
