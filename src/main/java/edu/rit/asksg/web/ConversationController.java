@@ -115,12 +115,12 @@ public class ConversationController {
 			SocialSubscription ritsg = new SocialSubscription();
 			ritsg.setHandle("RIT_SG");
 
-            SocialSubscription ritHash = new SocialSubscription();
-            ritHash.setHandle("#RIT");
+			SocialSubscription ritHash = new SocialSubscription();
+			ritHash.setHandle("#RIT");
 
 			Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
 			subscriptions.add(ritsg);
-            subscriptions.add(ritHash);
+			subscriptions.add(ritHash);
 
 			twitterConfig.setSubscriptions(subscriptions);
 
@@ -139,17 +139,17 @@ public class ConversationController {
 		final Service redditProvider = providerService.findServiceByTypeAndIdentifierEquals(Reddit.class, "rit");
 		if (redditProvider == null) {
 			Service reddit = new Reddit();
-            ProviderConfig config = new ProviderConfig();
-            config.setIdentifier("rit");
-            reddit.setConfig(config);
+			ProviderConfig config = new ProviderConfig();
+			config.setIdentifier("rit");
+			reddit.setConfig(config);
 
 
-            SocialSubscription java = new SocialSubscription();
-            java.setHandle("java");
-            Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
-            subscriptions.add(java);
+			SocialSubscription java = new SocialSubscription();
+			java.setHandle("java");
+			Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
+			subscriptions.add(java);
 
-            config.setSubscriptions(subscriptions);
+			config.setSubscriptions(subscriptions);
 
 			providerService.saveService(reddit);
 
