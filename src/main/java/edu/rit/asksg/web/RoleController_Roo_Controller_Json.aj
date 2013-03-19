@@ -3,9 +3,9 @@
 
 package edu.rit.asksg.web;
 
-import edu.rit.asksg.domain.Person;
-import edu.rit.asksg.service.PersonService;
-import edu.rit.asksg.web.PersonController;
+import edu.rit.asksg.domain.UserRole;
+import edu.rit.asksg.service.RoleService;
+import edu.rit.asksg.web.RoleController;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,45 +17,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-privileged aspect PersonController_Roo_Controller_Json {
+privileged aspect RoleController_Roo_Controller_Json {
     
     @Autowired
-    PersonService PersonController.personService;
+    RoleService RoleController.roleService;
     
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String> PersonController.showJson(@PathVariable("id") Long id) {
-        Person person = personService.findPerson(id);
+    public ResponseEntity<String> RoleController.showJson(@PathVariable("id") Long id) {
+        UserRole userRole = roleService.findUserRole(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        if (person == null) {
+        if (userRole == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<String>(person.toJson(), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(userRole.toJson(), headers, HttpStatus.OK);
     }
     
     @RequestMapping(headers = "Accept=application/json")
     @ResponseBody
-    public ResponseEntity<String> PersonController.listJson() {
+    public ResponseEntity<String> RoleController.listJson() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        List<Person> result = personService.findAllPeople();
-        return new ResponseEntity<String>(Person.toJsonArray(result), headers, HttpStatus.OK);
+        List<UserRole> result = roleService.findAllUserRoles();
+        return new ResponseEntity<String>(UserRole.toJsonArray(result), headers, HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> PersonController.createFromJson(@RequestBody String json) {
-        Person person = Person.fromJsonToPerson(json);
-        personService.savePerson(person);
+    public ResponseEntity<String> RoleController.createFromJson(@RequestBody String json) {
+        UserRole userRole = UserRole.fromJsonToUserRole(json);
+        roleService.saveUserRole(userRole);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
     
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> PersonController.createFromJsonArray(@RequestBody String json) {
-        for (Person person: Person.fromJsonArrayToPeople(json)) {
-            personService.savePerson(person);
+    public ResponseEntity<String> RoleController.createFromJsonArray(@RequestBody String json) {
+        for (UserRole userRole: UserRole.fromJsonArrayToUserRoles(json)) {
+            roleService.saveUserRole(userRole);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -63,22 +63,22 @@ privileged aspect PersonController_Roo_Controller_Json {
     }
     
     @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> PersonController.updateFromJson(@RequestBody String json) {
+    public ResponseEntity<String> RoleController.updateFromJson(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        Person person = Person.fromJsonToPerson(json);
-        if (personService.updatePerson(person) == null) {
+        UserRole userRole = UserRole.fromJsonToUserRole(json);
+        if (roleService.updateUserRole(userRole) == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/jsonArray", method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> PersonController.updateFromJsonArray(@RequestBody String json) {
+    public ResponseEntity<String> RoleController.updateFromJsonArray(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        for (Person person: Person.fromJsonArrayToPeople(json)) {
-            if (personService.updatePerson(person) == null) {
+        for (UserRole userRole: UserRole.fromJsonArrayToUserRoles(json)) {
+            if (roleService.updateUserRole(userRole) == null) {
                 return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
             }
         }
@@ -86,14 +86,14 @@ privileged aspect PersonController_Roo_Controller_Json {
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<String> PersonController.deleteFromJson(@PathVariable("id") Long id) {
-        Person person = personService.findPerson(id);
+    public ResponseEntity<String> RoleController.deleteFromJson(@PathVariable("id") Long id) {
+        UserRole userRole = roleService.findUserRole(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        if (person == null) {
+        if (userRole == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        personService.deletePerson(person);
+        roleService.deleteUserRole(userRole);
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     

@@ -3,11 +3,12 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.UserTag;
+import edu.rit.asksg.domain.IdentityTag;
+
 import javax.persistence.Entity;
 
-privileged aspect UserTag_Roo_Jpa_Entity {
-    
-    declare @type: UserTag: @Entity;
-    
+privileged aspect IdentityTag_Roo_Jpa_Entity {
+
+	declare @type: IdentityTag:@Entity;
+
 }

@@ -16,6 +16,7 @@
         </menu:category>
         <menu:category id="c_controller" z="nj8Dm3hojIyIEyPkwE1UMDIs+K8=">
             <menu:item id="i_controller__testtwitterindex_id" messageCode="global_generic" url="/testtwitter/index" z="KYVV5i1471MQ+u609meVXo/6M2I="/>
+            <menu:item id="i_controller__roleindex_id" messageCode="global_generic" url="/role/index" z="I72BGhUK8lTQIy8gRlRdccpDqNU="/>
         </menu:category>
     </menu:menu>
 </div>
