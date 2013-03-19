@@ -44,6 +44,13 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
         try {
             convos = getRedditPosts(REDDIT_DOMAIN + "/r/" + this.getConfig().getIdentifier());
+
+            if(this.getConfig().getSubscriptions() != null) {
+                for(SocialSubscription subscription : this.getConfig().getSubscriptions()) {
+                    convos.addAll(getRedditPosts(REDDIT_DOMAIN + "/r/" + subscription.getHandle()));
+                }
+            }
+
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
