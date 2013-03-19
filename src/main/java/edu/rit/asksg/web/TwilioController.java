@@ -30,6 +30,7 @@ public class TwilioController {
 	                                         @RequestParam(value = "Body") String body) {
 
 		logger.debug("Trying to find Twilio Service using id: " + to);
+		logger.debug("Provider Service null?: " + (providerService == null));
 		Twilio twilio = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, to);
 		logger.debug("Twilio Service null?: " + (twilio==null));
 		twilio.handleMessage(smsSid, accountSid, from, to, body);
