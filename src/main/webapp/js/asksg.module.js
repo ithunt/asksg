@@ -507,9 +507,8 @@ function ConversationController($scope, $asksg, $log) {
     if (facebookCode != null) {
         var serviceID = getQueryVariable("state");
         if (serviceID != null) {
-            $asksg.authenticateFacebook(facebookCode, serviceID).success(
-                $scope.refreshSubscriptions();
-            );
+            $asksg.authenticateFacebook(facebookCode, serviceID);
+            $scope.refreshSubscriptions();
         }
     }
 }
