@@ -49,12 +49,10 @@ public class Twilio extends Service implements ContentProvider {
 
 	@Override
 	public boolean postContent(Message message) {
-		// this assumes that the config will have our Twilio SID assigned to the username.
 		final TwilioConfig config = (TwilioConfig) this.getConfig();
 		TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("Body", message.getContent());
-		//TODO: magic string! need some way to get our phone number
 		vars.put("From", config.getPhoneNumber());
 		vars.put("To", message.getAuthor());
 

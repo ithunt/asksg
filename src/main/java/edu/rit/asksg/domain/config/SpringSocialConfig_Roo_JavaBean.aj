@@ -15,36 +15,36 @@ privileged aspect SpringSocialConfig_Roo_JavaBean {
         this.url = url;
     }
     
-    public String SpringSocialConfig.getConsumerkey() {
-        return this.consumerkey;
+    public String SpringSocialConfig.getConsumerKey() {
+        return this.consumerKey;
     }
     
-    public void SpringSocialConfig.setConsumerkey(String consumerkey) {
-        this.consumerkey = consumerkey;
+    public void SpringSocialConfig.setConsumerKey(String consumerKey) {
+        this.consumerKey = consumerKey;
     }
     
-    public String SpringSocialConfig.getConsumersecret() {
-        return this.consumersecret;
+    public String SpringSocialConfig.getConsumerSecret() {
+        return this.consumerSecret;
     }
     
-    public void SpringSocialConfig.setConsumersecret(String consumersecret) {
-        this.consumersecret = consumersecret;
+    public void SpringSocialConfig.setConsumerSecret(String consumerSecret) {
+        this.consumerSecret = consumerSecret;
     }
     
-    public String SpringSocialConfig.getAccesstoken() {
-        return this.accesstoken;
+    public String SpringSocialConfig.getAccessToken() {
+        return this.accessToken;
     }
     
-    public void SpringSocialConfig.setAccesstoken(String accesstoken) {
-        this.accesstoken = accesstoken;
+    public void SpringSocialConfig.setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
     
-    public String SpringSocialConfig.getAccesstokensecret() {
-        return this.accesstokensecret;
+    public String SpringSocialConfig.getAccessTokenSecret() {
+        return this.accessTokenSecret;
     }
     
-    public void SpringSocialConfig.setAccesstokensecret(String accesstokensecret) {
-        this.accesstokensecret = accesstokensecret;
+    public void SpringSocialConfig.setAccessTokenSecret(String accessTokenSecret) {
+        this.accessTokenSecret = accessTokenSecret;
     }
     
 }

@@ -2,20 +2,20 @@
  * Message object constructor.
  */
 function Message(author, content, conversationId) {
-    this.author = author;
-    this.content = content;
-    this.conversationId = conversationId;
+	this.author = author;
+	this.content = content;
+	this.conversationId = conversationId;
 }
 
 /**
  * MessageResp object constructor.
  */
 function MessageResp(author, content, conversation) {
-    this.author = author;
-    this.content = content;
-    this.conversation = conversation;
-    this.analytics = null;
-    this.posted = false;
+	this.author = author;
+	this.content = content;
+	this.conversation = conversation;
+	this.analytics = null;
+	this.posted = false;
 }
 
 /**
@@ -87,21 +87,33 @@ function Reddit(providerConfig, authenticated) {
     this.name = "Reddit";
 }
 
+function User(name, username, phone, email, role) {
+	this.name = name;
+	this.username = username;
+	this.phone = phone;
+	this.email = email;
+	this.role = role;
+}
+
+function Role(name){
+	this.name = name;
+}
+
 /**
  * Construct the main page controller. >.<
  */
 function MainController($scope, $asksg, $log) {
+	// Defaults until entered otherwise on the main page...
+	$scope.username = "";
+	$scope.password = "";
 
-    // Defaults until entered otherwise on the main page...
-    $scope.username = "";
-    $scope.password = "";
-
-    /**
-     * Handle the login events.
-     */
-    $scope.login = function () {
-        console.log("username and password: " + $scope.username + ", " + $scope.password);
-    }
+	/**
+	 * Handle the login events.
+	 */
+	$scope.login = function () {
+		console.log("username and password: " + $scope.username + ", " + $scope.password);
+		//$scope.$emit('event:loginRequest', $scope.username, $scope.password);
+	}
 }
 
 /**
@@ -287,6 +299,56 @@ function ConversationController($scope, $asksg, $log) {
             });
     };
 
+    /**
+     * Populate the users content
+     */
+
+    $scope.refreshUsers = function () {
+        $asksg.fetchUsers().
+            success(function (data, status, headers, config) {
+                console.log("Retrieved user data from server");
+                console.log(data);
+                $scope.users = new Array();
+                //debugger;
+                for (var i = 0; i < data.length; i++) {
+                    var userData = angular.fromJson(data[i]);
+                    //debugger;
+                    $scope.users.push(new User(userData.name, userData.username, userData.phone, userData.email, new Role(angular.fromJson(data[i][role]).name)));
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Failed to retrieve users");
+                return null;
+            });
+    }
+
+    $scope.refreshRoles = function () {
+        $asksg.fetchRoles().
+            success(function (data, status, headers, config) {
+                console.log("Retrieved role data from server");
+                console.log(data);
+                $scope.roles = new Array();
+                for (var i = 0; i < data.length; i++) {
+                    var roleData = angular.fromJson(data[i]);
+                    $scope.roles.push(new Role(roleData.name));
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Failed to retrieve users");
+                return null;
+            });
+    }
+
+    $scope.addUser = function(){
+        $asksg.postNewUser(new User($scope.userName, $scope.userUsername, $scope.userPhone, $scope.userEmail, new Role($scope.userRole))).
+            success(function(data, status,headers,config){
+            $scope.refreshUsers();
+        });
+        $scope.userName = '';
+        $scope.userUsername = '';
+        $scope.userPhone = '';
+        $scope.userEmail = '';
+        $scope.userRole = '';
+    }
+
     /*
      * Delete a conversation.
      */
@@ -346,7 +408,10 @@ function ConversationController($scope, $asksg, $log) {
      * Filter function for the conversations based on their service.
      */
     $scope.filterConvo = function (convo) {
-        return !($scope.filterConvoArray[convo.service.name]);
+        if (convo.service != null) {
+            return !($scope.filterConvoArray[convo.service.name]);
+        }
+        return false;
     };
 
     /*
@@ -415,27 +480,20 @@ function ConversationController($scope, $asksg, $log) {
         }
     };
 
-    /**
-     * Service configuration variables
-     */
-    $scope.twilioIdentifier = "";
-    $scope.twilioUsername = "";
-    $scope.twilioPassword = "";
-    $scope.twilioNumber = "";
+	// Set the user name
+	$scope.userName = "Admin"; // this should be replaced by response from server
 
-    // Set the user name
-    $scope.userName = "Admin"; // this should be replaced by response from server
-
-    // Populate the model with the initial data.
-    $scope.refreshConvos();
-    $scope.refreshSubscriptions();
+	// Populate the model with the initial data.
+	$scope.refreshConvos();
+	$scope.refreshSubscriptions();
+	$scope.refreshUsers();
+	$scope.refreshRoles();
 }
 
 /**
  * Create the ASKSG module for the dashboard app.
  */
 AsksgService = function () {
-
     // Indicate that we're starting up...
     console.log("Starting the AsksgService...");
 
@@ -450,7 +508,9 @@ AsksgService = function () {
             var convoSeedUrl = '/asksg/conversations/seed';
             var messageUrl = '/asksg/messages';
             var messageSeedUrl = '/asksg/messages/seed';
-            var servicesUrl = '/asksg/services'
+            var servicesUrl = '/asksg/services';
+            var usersUrl = '/asksg/users';
+            var rolesUrl = '/asksg/roles';
 
             // Publish the $asksg API here
             return {
@@ -522,12 +582,28 @@ AsksgService = function () {
                  */
                 fetchSubscriptions: function () {
                     return $http({method: 'GET', url: servicesUrl});
+                }, 
+
+                postNewUser: function(user){
+                    return $http({method: 'POST', url: usersUrl, data: JSON.stringify(user)});
+                },
+
+                /**
+                 * Fetch users and roles on asksg side
+                 */
+                fetchUsers: function(){
+                    return $http({method: 'GET', url: usersUrl});
+                },
+
+                fetchRoles: function(){
+                    return $http({method:'GET', url: rolesUrl});
                 }
             };
         });
     });
-}
+};
 
 // Invoke the ASKSG service constructor...
 console.log("Jumping into the constructor...");
 AsksgService();
+

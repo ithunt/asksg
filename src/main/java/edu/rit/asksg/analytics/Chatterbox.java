@@ -14,21 +14,16 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
 
-
 @RooJavaBean
 @RooToString
-@RooJpaEntity
 public class Chatterbox {
 
 
-	public final transient ProviderConfig config;
-	public final transient MessageService messageService;
+	@Autowired
+	public ProviderConfig config;
 
 	@Autowired
-	public Chatterbox(@Qualifier("chatterboxConfig") final ProviderConfig config, final MessageService messageService) {
-		this.config = config;
-		this.messageService = messageService;
-	}
+	public transient MessageService messageService;
 
 	public void handleMessage(final Message message) {
 		SentimentAnalysisForSocialMedia client = new SentimentAnalysisForSocialMedia(config.getAuthenticationToken());
@@ -57,5 +52,8 @@ public class Chatterbox {
 		});
 	}
 
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
+	}
 
 }

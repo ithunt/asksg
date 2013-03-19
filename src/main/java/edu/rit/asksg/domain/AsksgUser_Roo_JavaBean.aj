@@ -4,8 +4,9 @@
 package edu.rit.asksg.domain;
 
 import edu.rit.asksg.domain.AsksgUser;
+import edu.rit.asksg.domain.Tag;
 import edu.rit.asksg.domain.UserRole;
-import java.util.Set;
+import java.util.Collection;
 
 privileged aspect AsksgUser_Roo_JavaBean {
     
@@ -25,12 +26,12 @@ privileged aspect AsksgUser_Roo_JavaBean {
         this.password = password;
     }
     
-    public Set<UserRole> AsksgUser.getRoles() {
-        return this.roles;
+    public UserRole AsksgUser.getRole() {
+        return this.role;
     }
     
-    public void AsksgUser.setRoles(Set<UserRole> roles) {
-        this.roles = roles;
+    public void AsksgUser.setRole(UserRole role) {
+        this.role = role;
     }
     
     public void AsksgUser.setPhoneNumber(String phoneNumber) {
@@ -39,6 +40,14 @@ privileged aspect AsksgUser_Roo_JavaBean {
     
     public void AsksgUser.setEmail(String email) {
         this.email = email;
+    }
+    
+    public Collection<Tag> AsksgUser.getTags() {
+        return this.tags;
+    }
+    
+    public void AsksgUser.setTags(Collection<Tag> tags) {
+        this.tags = tags;
     }
     
 }

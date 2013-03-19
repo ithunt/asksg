@@ -28,32 +28,32 @@ $(document).ready(function () {
     });
 
     // Set up button expanstion for submitting new services
-    $('#twilioSubmit').css('display','none');
-    $('#twilioSubmitButton').click(function(){
+    $('#twilioSubmit').css('display', 'none');
+    $('#twilioSubmitButton').click(function () {
         $('#twilioSubmit').slideToggle('slow');
         $(this).toggleClass('slideSign');
         return false;
     });
-    $('#emailSubmit').css('display','none');
-    $('#emailSubmitButton').click(function(){
+    $('#emailSubmit').css('display', 'none');
+    $('#emailSubmitButton').click(function () {
         $('#emailSubmit').slideToggle('slow');
         $(this).toggleClass('slideSign');
         return false;
     });
-    $('#twitterSubmit').css('display','none');
-    $('#twitterSubmitButton').click(function(){
+    $('#twitterSubmit').css('display', 'none');
+    $('#twitterSubmitButton').click(function () {
         $('#twitterSubmit').slideToggle('slow');
         $(this).toggleClass('slideSign');
         return false;
     });
-    $('#facebookSubmit').css('display','none');
-    $('#facebookSubmitButton').click(function(){
+    $('#facebookSubmit').css('display', 'none');
+    $('#facebookSubmitButton').click(function () {
         $('#facebookSubmit').slideToggle('slow');
         $(this).toggleClass('slideSign');
         return false;
     });
-    $('#redditSubmit').css('display','none');
-    $('#redditSubmitButton').click(function(){
+    $('#redditSubmit').css('display', 'none');
+    $('#redditSubmitButton').click(function () {
         $('#redditSubmit').slideToggle('slow');
         $(this).toggleClass('slideSign');
         return false;
@@ -72,6 +72,26 @@ $(document).ready(function () {
         }
     );
     console.log("set up show/hide");
+
+    //setup tagging
+    whenAddingTag = function (tag) {
+        console.log(tag);
+        // maybe fetch some content for the tag popover (can be HTML)
+    };
+    tagRemoved = function (tag) {
+        debugger;
+        //find tag context and remove from conversation
+    };
+    /*
+    $('.tag-list').tags({
+        suggestions: ["suggestions"],
+        tagData: ["tag a", "tag b", "tag c", "tag d"],
+        excludeList: ["the", "is", "a"],
+        whenAddingTag: whenAddingTag,
+        tagRemoved: tagRemoved
+    });*/
+
+
 });
 
 function showResponseForm(id) {

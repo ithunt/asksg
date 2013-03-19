@@ -36,7 +36,9 @@ public class ChatterboxIntegrationTest {
 	@Test
 	@Ignore
 	public void testIntegrationWithChatterboxAPI() {
-		Chatterbox chatterbox = new Chatterbox(config, null);
+		Chatterbox chatterbox = new Chatterbox();
+		chatterbox.setMessageService(service);
+		chatterbox.setConfig(config);
 		Message message = new Message();
 		message.setContent("Test query to chatterbox");
 		when(service.updateMessage(eq(message))).thenReturn(message);
