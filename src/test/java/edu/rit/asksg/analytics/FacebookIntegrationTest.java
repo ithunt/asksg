@@ -5,6 +5,7 @@ import edu.rit.asksg.domain.Facebook;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class FacebookIntegrationTest {
 	}
 
 	@Test
+	@Ignore
 	public void getConversationsWithoutAuthing() {
 		Facebook facebook = new Facebook();
 		facebook.setConfig(fbConfig);
@@ -37,6 +39,7 @@ public class FacebookIntegrationTest {
 	}
 
 	@Test
+	@Ignore
 	public void postOnFacebookWithoutAuthing() {
 		Facebook facebook = new Facebook();
 		facebook.setConfig(fbConfig);
@@ -46,6 +49,7 @@ public class FacebookIntegrationTest {
 	}
 
 	@Test
+	@Ignore
 	public void commentOnFirstPostWithoutAuthing() {
 		Facebook facebook = new Facebook();
 		facebook.setConfig(fbConfig);
