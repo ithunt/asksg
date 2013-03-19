@@ -3,7 +3,7 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.Tag;
+import edu.rit.asksg.domain.Identity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,32 +11,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Version;
 
-privileged aspect Tag_Roo_Jpa_Entity {
+privileged aspect Identity_Roo_Jpa_Entity {
     
-    declare @type: Tag: @Entity;
+    declare @type: Identity: @Entity;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Long Tag.id;
+    private Long Identity.id;
     
     @Version
     @Column(name = "version")
-    private Integer Tag.version;
+    private Integer Identity.version;
     
-    public Long Tag.getId() {
+    public Long Identity.getId() {
         return this.id;
     }
     
-    public void Tag.setId(Long id) {
+    public void Identity.setId(Long id) {
         this.id = id;
     }
     
-    public Integer Tag.getVersion() {
+    public Integer Identity.getVersion() {
         return this.version;
     }
     
-    public void Tag.setVersion(Integer version) {
+    public void Identity.setVersion(Integer version) {
         this.version = version;
     }
     

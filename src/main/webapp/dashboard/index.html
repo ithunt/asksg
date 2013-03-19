@@ -6,7 +6,7 @@
 <!--[if IE 8]>
 <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js" ng-app="ASKSG"> <!--<![endif]-->
+<html class="no-js" ng-app="ASKSG" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
     <link rel="stylesheet" href="../css/main.css">
     <!--<link rel="stylesheet" href="../bootstrap-toggle-buttons.css">-->
-
+    <link rel="stylesheet" href="../css/bootstrap-tags.css">
     <!-- Link in angular and our controller files -->
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script>
     <!-- ../js/angular/angular.min.js -->
@@ -133,7 +133,9 @@
                             <li class="convo-list-item-msg"
                                 ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString">
                                 <div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
-
+                                    <div class="tagcontainer">
+                                    <div class="tag-list"><div class="tags"></div></div><br />
+                                    </div>
                                     <!-- TODO: this should probably be put somewhere else -->
                                     <div class="delete pull-right" ng-show="isConvoActive(convo.id)" showonhoverparent>
                                         <button class="btn btn-danger">Delete</button>
@@ -342,6 +344,9 @@
 <!-- Toggle buttons -->
 <!--<script src="../js/jquery.toggle.buttons.js"></script>-->
 
+<!-- le bootstrap tagging -->
+<script src="../js/vendor/bootstrap-tags.js"></script>
+
 <!-- le dashboard script -->
 <script src="../js/dashboard.js"></script>
 
@@ -357,5 +362,6 @@
         s.parentNode.insertBefore(g, s)
     }(document, 'script'));
 </script>
+
 </body>
 </html>

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,9 +25,9 @@ import java.util.Set;
 
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord(finders = { "findAsksgUsersByUserNameEquals" })
+@RooJpaEntity
 @RooJson(deepSerialize = true)
-public class AsksgUser implements UserDetails, Identity {
+public class AsksgUser extends Identity implements UserDetails {
 
     private static final Logger logger = LoggerFactory.getLogger(AsksgUser.class);
 
@@ -46,6 +48,9 @@ public class AsksgUser implements UserDetails, Identity {
     private String phoneNumber;
 
     private String email;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Collection<Tag> tags = new HashSet<Tag>();
 
     @Override
     public Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {

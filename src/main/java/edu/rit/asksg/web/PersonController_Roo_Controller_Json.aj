@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 privileged aspect PersonController_Roo_Controller_Json {
@@ -96,30 +95,6 @@ privileged aspect PersonController_Roo_Controller_Json {
         }
         personService.deletePerson(person);
         return new ResponseEntity<String>(headers, HttpStatus.OK);
-    }
-    
-    @RequestMapping(params = "find=ByEmailEquals", headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<String> PersonController.jsonFindPeopleByEmailEquals(@RequestParam("email") String email) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByEmailEquals(email).getResultList()), headers, HttpStatus.OK);
-    }
-    
-    @RequestMapping(params = "find=ByNameEquals", headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<String> PersonController.jsonFindPeopleByNameEquals(@RequestParam("name") String name) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByNameEquals(name).getResultList()), headers, HttpStatus.OK);
-    }
-    
-    @RequestMapping(params = "find=ByPhoneNumberEquals", headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<String> PersonController.jsonFindPeopleByPhoneNumberEquals(@RequestParam("phoneNumber") String phoneNumber) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(Person.toJsonArray(Person.findPeopleByPhoneNumberEquals(phoneNumber).getResultList()), headers, HttpStatus.OK);
     }
     
 }

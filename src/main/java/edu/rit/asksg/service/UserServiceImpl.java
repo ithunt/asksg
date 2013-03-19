@@ -17,10 +17,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.debug( "loadUserByUsername called with " + username);
-        AsksgUser user = AsksgUser.findAsksgUsersByUserNameEquals(username).getSingleResult();
+        AsksgUser user = this.userRepository.findByUserName(username);
         logger.debug( "Returned user " + user.getUsername() + ":" + user.getPassword());
-
         return user;
-
     }
+
 }

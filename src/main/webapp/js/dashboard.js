@@ -72,6 +72,26 @@ $(document).ready(function () {
         }
     );
     console.log("set up show/hide");
+
+    //setup tagging
+    whenAddingTag = function (tag) {
+        console.log(tag);
+        // maybe fetch some content for the tag popover (can be HTML)
+    };
+    tagRemoved = function (tag) {
+        debugger;
+        //find tag context and remove from conversation
+    };
+    $('.tag-list').tags({
+        suggestions:["suggestions"],
+        tagData: ["tag a", "tag b", "tag c", "tag d"],
+        excludeList:["the", "is", "a"],
+        whenAddingTag:whenAddingTag,
+        tagRemoved:tagRemoved
+    });
+
+
+
 });
 
 function showResponseForm(id) {

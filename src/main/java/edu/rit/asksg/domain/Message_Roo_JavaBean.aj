@@ -5,7 +5,10 @@ package edu.rit.asksg.domain;
 
 import edu.rit.asksg.domain.Analytics;
 import edu.rit.asksg.domain.Conversation;
+import edu.rit.asksg.domain.Identity;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.Tag;
+import java.util.Set;
 import org.joda.time.LocalDateTime;
 
 privileged aspect Message_Roo_JavaBean {
@@ -88,6 +91,22 @@ privileged aspect Message_Roo_JavaBean {
     
     public void Message.setRecipient(String recipient) {
         this.recipient = recipient;
+    }
+    
+    public Set<Tag> Message.getTags() {
+        return this.tags;
+    }
+    
+    public void Message.setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+    
+    public Identity Message.getIdentity() {
+        return this.identity;
+    }
+    
+    public void Message.setIdentity(Identity identity) {
+        this.identity = identity;
     }
     
 }

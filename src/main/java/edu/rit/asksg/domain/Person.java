@@ -10,7 +10,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJson
 @RooJpaActiveRecord(finders = { "findPeopleByEmailEquals", "findPeopleByNameEquals", "findPeopleByPhoneNumberEquals" })
-public class Person implements Identity {
+public class Person extends Identity {
 
     @NotNull
     private String name;
