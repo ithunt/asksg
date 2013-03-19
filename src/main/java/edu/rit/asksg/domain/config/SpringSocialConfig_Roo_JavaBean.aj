@@ -6,45 +6,45 @@ package edu.rit.asksg.domain.config;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 
 privileged aspect SpringSocialConfig_Roo_JavaBean {
-
-	public String SpringSocialConfig.getUrl() {
-		return this.url;
-	}
-
-	public void SpringSocialConfig.setUrl(String url) {
-		this.url = url;
-	}
-
-	public String SpringSocialConfig.getConsumerKey() {
-		return this.consumerKey;
-	}
-
-	public void SpringSocialConfig.setConsumerKey(String consumerKey) {
-		this.consumerKey = consumerKey;
-	}
-
-	public String SpringSocialConfig.getConsumerSecret() {
-		return this.consumerSecret;
-	}
-
-	public void SpringSocialConfig.setConsumerSecret(String consumerSecret) {
-		this.consumerSecret = consumerSecret;
-	}
-
-	public String SpringSocialConfig.getAccessToken() {
-		return this.accessToken;
-	}
-
-	public void SpringSocialConfig.setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
-	}
-
-	public String SpringSocialConfig.getAccessTokenSecret() {
-		return this.accessTokenSecret;
-	}
-
-	public void SpringSocialConfig.setAccessTokenSecret(String accessTokenSecret) {
-		this.accessTokenSecret = accessTokenSecret;
-	}
-
+    
+    public String SpringSocialConfig.getUrl() {
+        return this.url;
+    }
+    
+    public void SpringSocialConfig.setUrl(String url) {
+        this.url = url;
+    }
+    
+    public String SpringSocialConfig.getConsumerKey() {
+        return this.consumerKey;
+    }
+    
+    public void SpringSocialConfig.setConsumerKey(String consumerKey) {
+        this.consumerKey = consumerKey;
+    }
+    
+    public String SpringSocialConfig.getConsumerSecret() {
+        return this.consumerSecret;
+    }
+    
+    public void SpringSocialConfig.setConsumerSecret(String consumerSecret) {
+        this.consumerSecret = consumerSecret;
+    }
+    
+    public String SpringSocialConfig.getAccessToken() {
+        return this.accessToken;
+    }
+    
+    public void SpringSocialConfig.setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+    
+    public String SpringSocialConfig.getAccessTokenSecret() {
+        return this.accessTokenSecret;
+    }
+    
+    public void SpringSocialConfig.setAccessTokenSecret(String accessTokenSecret) {
+        this.accessTokenSecret = accessTokenSecret;
+    }
+    
 }
