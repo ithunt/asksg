@@ -19,7 +19,7 @@ public class RoleController {
 	public ResponseEntity<String> seed() {
 
 		UserRole role1 = new UserRole();
-		role1.setName("ROLE_ADMIN");
+		role1.setName("Admin");
 		UserRole role2 = new UserRole();
 		role2.setName("Senator");
 		roleService.saveUserRole(role1);

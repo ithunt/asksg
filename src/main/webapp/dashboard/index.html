@@ -51,7 +51,7 @@
 			</a>
 			<a class="brand" href="/">ASKSG</a>
 			<ul class="nav pull-right">
-				<li><a data-toggle="modal" href="#loginModal" class="pull-right login-window">Logout {{userName}}</a>
+				<li><a data-toggle="modal" href="#loginModal" class="pull-right login-window">Logout {{localUserName}}</a>
 				</li>
 			</ul>
 		</div>
@@ -323,6 +323,7 @@
 			<form ng-submit="addUser()">
 				<input type="text" ng-model="userName" size="30" placeholder="Name">
 				<input type="text" ng-model="userUsername" size="10" placeholder="User Name">
+				<input type="text" ng-model="userPassword" size="15" placeholder="Password">
 				<input type="text" ng-model="userPhone" size="13" placeholder="Phone">
 				<input type="text" ng-model="userEmail" size="30" placeholder="Email">
 				<select ng-model="userRole" ng-options="role.name for role in roles"></select>
@@ -344,8 +345,8 @@
 						<tbody>
 						<tr ng-repeat="user in users">
 							<td>{{user.name}}</td>
-							<td>{{user.username}}</td>
-							<td>{{user.phone}}</td>
+							<td>{{user.userName}}</td>
+							<td>{{user.phoneNumber}}</td>
 							<td>{{user.email}}</td>
 							<td>{{user.role.name}}</td>
 						</tr>

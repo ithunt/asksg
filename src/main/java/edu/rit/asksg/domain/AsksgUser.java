@@ -1,6 +1,7 @@
 package edu.rit.asksg.domain;
 
 import com.google.common.base.Optional;
+import flexjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -47,6 +48,7 @@ public class AsksgUser implements UserDetails, Identity {
 
     private String email;
 
+	@JSON(include = false)
     @Override
     public Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
 	    if(!authorities.isPresent()) {
@@ -58,6 +60,7 @@ public class AsksgUser implements UserDetails, Identity {
         return authorities.get();
     }
 
+	@JSON(include = false)
     public void setAuthorities(List<java.lang.String> roles) {
         List<GrantedAuthority> listOfAuthorities = new ArrayList<GrantedAuthority>();
         for (String role : roles) {
@@ -66,11 +69,13 @@ public class AsksgUser implements UserDetails, Identity {
         authorities = Optional.of(listOfAuthorities);
     }
 
+	@JSON(include = false)
     @Override
     public String getPassword() {
         return password;
     }
 
+	@JSON(include = false)
     @Override
     public String getUsername() {
         return userName;

@@ -139,7 +139,7 @@
                 <div class="modal-body">
                     <form method="POST" action="/asksg/resources/j_spring_security_check" onsubmit="forceHttpsOnSubmit(this)" name="login_form"> <!-- ng-submit="login()" -->
                         <p>
-                            <input ng-model="username" type="text" class="span3" name="j_username" id="email" placeholder="Email">
+                            <input ng-model="localUserName" type="text" class="span3" name="j_username" id="email" placeholder="Username">
                         </p>
                         <p>
                             <input ng-model="password" type="password" class="span3" name="j_password" placeholder="Password">
@@ -163,7 +163,7 @@
                     <fieldset class="textbox">
                     <label class="username">
                     <span>Email</span>
-                    <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username">
+                    <input id="localUserName" name="localUserName" value="" type="text" autocomplete="on" placeholder="Username">
                     </label>
                     <label class="password">
                     <span>Password</span>

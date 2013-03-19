@@ -5,5 +5,5 @@ import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService( domainTypes = {UserRole.class})
 public interface RoleService {
-
+	UserRole findUserRole(String name);
 }

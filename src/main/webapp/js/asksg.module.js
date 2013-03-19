@@ -56,10 +56,11 @@ function SocialSubscription(authenticated, config, id, name, version) {
 	this.version = version;
 }
 
-function User(name, username, phone, email, role) {
+function User(name, username, password, phoneNumber, email, role) {
 	this.name = name;
-	this.username = username;
-	this.phone = phone;
+	this.userName = username;
+	this.password = password;
+	this.phoneNumber = phoneNumber;
 	this.email = email;
 	this.role = role;
 }
@@ -74,15 +75,15 @@ function Role(name){
 function MainController($scope, $asksg, $log) {
 
 	// Defaults until entered otherwise on the main page...
-	$scope.username = "";
+	$scope.localUserName = "";
 	$scope.password = "";
 
 	/**
 	 * Handle the login events.
 	 */
 	$scope.login = function () {
-		console.log("username and password: " + $scope.username + ", " + $scope.password);
-		//$scope.$emit('event:loginRequest', $scope.username, $scope.password);
+		console.log("username and password: " + $scope.localUserName + ", " + $scope.password);
+		//$scope.$emit('event:loginRequest', $scope.localUserName, $scope.password);
 	}
 }
 
@@ -170,11 +171,9 @@ function ConversationController($scope, $asksg, $log) {
 				console.log("Retrieved user data from server");
 				console.log(data);
 				$scope.users = new Array();
-				debugger;
 				for (var i = 0; i < data.length; i++) {
 					var userData = angular.fromJson(data[i]);
-					debugger;
-					$scope.users.push(new User(userData.name, userData.username, userData.phone, userData.email, new Role(angular.fromJson(data[i][role]).name)));
+					$scope.users.push(new User(userData.name,userData.username, '', userData.phoneNumber, userData.email, new Role(data[i].role.name)));
 				}
 			}).error(function (data, status, headers, config) {
 				console.log("Failed to retrieve users");
@@ -236,12 +235,13 @@ function ConversationController($scope, $asksg, $log) {
 	}
 
 	$scope.addUser = function(){
-		$asksg.postNewUser(new User($scope.userName, $scope.userUsername, $scope.userPhone, $scope.userEmail, new Role($scope.userRole))).
+		$asksg.postNewUser(new User($scope.userName, $scope.userUsername, $scope.userPassword, $scope.userPhone, $scope.userEmail, $scope.userRole)).
 			success(function(data, status,headers,config){
 			$scope.refreshUsers();
 		});
 		$scope.userName = '';
 		$scope.userUsername = '';
+		$scope.userPassword = '';
 		$scope.userPhone = '';
 		$scope.userEmail = '';
 		$scope.userRole = '';
@@ -355,7 +355,7 @@ function ConversationController($scope, $asksg, $log) {
 	};
 
 	// Set the user name
-	$scope.userName = "Admin"; // this should be replaced by response from server
+	$scope.localUserName = "Admin"; // this should be replaced by response from server
 
 	// Populate the model with the initial data.
 	$scope.refreshConvos();
