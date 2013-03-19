@@ -17,13 +17,20 @@ import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import javax.annotation.Resource;
-import javax.mail.*;
+import javax.mail.BodyPart;
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Store;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 @RooJavaBean
 @RooToString
@@ -77,16 +84,12 @@ public class Email extends Service implements ContentProvider {
 		if (m == null) return null;
 
 		mailMessage.setTo(m.getRecipient());
-
 		mailMessage.setSubject("Your Response from SG");
-
 		mailMessage.setSentDate(new Date(0));
-
 		mailMessage.setText(m.getContent());
 
 		return mailMessage;
 	}
-
 
 	public static Conversation makeConversation(javax.mail.Message mimeMessage) {
 		Message m = new Message();
@@ -118,20 +121,14 @@ public class Email extends Service implements ContentProvider {
 
 		Conversation c = new Conversation(m);
 		m.setConversation(c);
-
 		return c;
-
 	}
 
 	public void receive(MimeMessage mimeMessage) {
 
 		logger.debug("Received new MimeMessage... Parsing");
-
-
 		Conversation c = makeConversation(mimeMessage);
-
 		c.setService(this);
-
 		conversationService.saveConversation(c);
 
 	}
@@ -147,16 +144,16 @@ public class Email extends Service implements ContentProvider {
 		//to return
 		List<Conversation> conversations = new ArrayList<Conversation>();
 
+		Store store = null;
+
 		try {
 			Session session = Session.getDefaultInstance(props, null);
 			session.setDebug(true);
-			Store store = session.getStore("imaps");
+			store = session.getStore("imaps");
 
 			/** USERNAME AND PASSWORD */
-			store.connect("imap.gmail.com", config.getUsername(), config.getPassword());
-
-			logger.debug("Store: " + store);
-
+			//store.connect("imap.gmail.com", config.getUsername(), config.getPassword());
+			store.connect("imap.gmail.com", "ritasksg@gmail.com", "allHailSpring");
 
 			Folder inbox = store.getFolder("Inbox");
 			inbox.open(Folder.READ_ONLY);
@@ -173,13 +170,16 @@ public class Email extends Service implements ContentProvider {
 				} catch (Exception e) {
 					logger.error(e.getLocalizedMessage());
 				}
-
-
 			}
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
+		} finally {
+			try {
+				store.close();
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
 		}
-
 		return conversations;
 	}
 

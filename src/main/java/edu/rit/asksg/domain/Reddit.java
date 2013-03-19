@@ -23,9 +23,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 @RooJavaBean
 @RooToString
@@ -39,18 +41,10 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
 	@JSON(include = false)
 	public List<Conversation> getNewContent() {
-
 		List<Conversation> convos = new ArrayList<Conversation>();
 
 		try {
 			convos = getRedditPosts(REDDIT_DOMAIN + "/r/" + this.getConfig().getIdentifier());
-
-			if (this.getConfig().getSubscriptions() != null) {
-				for (SocialSubscription subscription : this.getConfig().getSubscriptions()) {
-					convos.addAll(getRedditPosts(REDDIT_DOMAIN + "/r/" + subscription.getHandle()));
-				}
-			}
-
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 		}
@@ -66,8 +60,8 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
 		final List<Conversation> conversations = new ArrayList<Conversation>();
 
-		for (Object o : posts) {
-			JSONObject post = (JSONObject) ((JSONObject) o).get("data");
+		for(Object o : posts) {
+			JSONObject post = (JSONObject)((JSONObject)o).get("data");
 
 			try {
 				Conversation c = new Conversation(parsePost(post));
@@ -84,15 +78,15 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
 	protected Conversation attachComments(Conversation c) throws IOException, ParseException {
 
-		if (c.getMessages() == null || c.getMessages().size() != 1) return c;
+		if(c.getMessages() == null || c.getMessages().size() != 1) return c;
 
-		Message m = Iterables.get(c.getMessages(), 0);
+		Message m = Iterables.get( c.getMessages(), 0 );
 		Set<Message> messages = new HashSet<Message>();
 		messages.add(m);
 
-		for (Object comment : getTopLevelComments(m.getUrl())) {
+		for(Object comment : getTopLevelComments(m.getUrl())) {
 			try {
-				JSONObject obj = (JSONObject) ((JSONObject) comment).get("data");
+				JSONObject obj = (JSONObject)((JSONObject)comment).get("data");
 				messages.add(parseComment(obj));
 			} catch (Exception e) {
 				logger.error("Error parsing reddit comment - " + e.getLocalizedMessage());
@@ -105,20 +99,24 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 	protected static Message parsePost(JSONObject post) {
 		Message m = new Message();
 
-		String title = (String) post.get("title");
+		String title = (String)post.get("title");
 
-		if (post.containsKey("selftext")) {
+		if(post.containsKey("selftext")) {
 			m.setContent(title + " - " + post.get("selftext"));
 		} else {
 			m.setContent(title + " - " + post.get("url"));
 		}
 
 		m.setUrl("http://reddit.com" + post.get("permalink"));
-		m.setAuthor((String) post.get("author"));
+		m.setAuthor((String)post.get("author"));
 
-		//todo: Parse reddit's time
-		// m.setCreated( new LocalDateTime(post.get("created_utc")) );
-		m.setCreated(new LocalDateTime());
+
+		//parse reddits created_utc time to EST localdatetime
+		m.setCreated(
+				new LocalDateTime(
+						new Date( ((Double)post.get("created_utc")).longValue() +
+								TimeZone.getTimeZone("EST").getRawOffset())));
+
 
 		return m;
 	}
@@ -126,26 +124,27 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 	protected static Message parseComment(JSONObject comment) {
 		Message m = new Message();
 
-		m.setAuthor((String) comment.get("author"));
-		m.setContent((String) comment.get("body"));
+		m.setAuthor((String)comment.get("author"));
+		m.setContent((String)comment.get("body"));
 
-		//todo: proper created
-		m.setCreated(new LocalDateTime());
-
-		//isn't there more we could get here?
+		//parse reddits created_utc time to EST localdatetime
+		m.setCreated(
+				new LocalDateTime(
+						new Date( ((Double)comment.get("created_utc")).longValue() +
+								TimeZone.getTimeZone("EST").getRawOffset())));
 
 		return m;
 	}
 
 	@JSON(include = false)
 	protected static JSONArray getTopLevelComments(String permalink) throws IOException, ParseException {
-		JSONArray arr = (JSONArray) getJSONResponse(new URL(permalink + "/.json"));
+		JSONArray arr = (JSONArray)getJSONResponse(new URL(permalink + "/.json"));
 		JSONArray retVal = new JSONArray();
 
-		if (arr.size() > 1) {
+		if(arr.size() > 1) {
 			try {
 
-				retVal = (JSONArray) ((JSONObject) ((JSONObject) arr.get(1)).get("data")).get("children");
+				retVal = (JSONArray)((JSONObject)((JSONObject)arr.get(1)).get("data")).get("children");
 			} catch (Exception e) {
 				logger.error("Error in getting top level comments" + e.getLocalizedMessage());
 			}
@@ -155,13 +154,13 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
 	@JSON(include = false)
 	protected static JSONArray getPostsFromSubreddit(String subreddit) throws IOException, ParseException {
-		JSONObject object = (JSONObject) getJSONResponse(new URL(subreddit + "/.json"));
-		return (JSONArray) ((JSONObject) object.get("data")).get("children");
+		JSONObject object = (JSONObject)getJSONResponse(new URL(subreddit + "/.json"));
+		return (JSONArray)((JSONObject)object.get("data")).get("children");
 	}
 
 	@JSON(include = false)
 	protected static Object getJSONResponse(URL url) throws IOException, ParseException {
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 		connection.setRequestMethod("GET");
 
 		JSONParser parser = new JSONParser();
@@ -174,6 +173,14 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
 	@Override
 	public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
-		return null;
+
+		List<Conversation> conversations = new ArrayList<Conversation>();
+		try {
+			conversations = getRedditPosts(REDDIT_DOMAIN + "/r/" + socialSubscription.getHandle());
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
+
+		return conversations;
 	}
 }
