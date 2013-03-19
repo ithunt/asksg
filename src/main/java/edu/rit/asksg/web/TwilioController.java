@@ -2,6 +2,8 @@ package edu.rit.asksg.web;
 
 import edu.rit.asksg.domain.Twilio;
 import edu.rit.asksg.service.ProviderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,8 @@ public class TwilioController {
 	@Autowired
 	ProviderService providerService;
 
+	private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
+
 	@RequestMapping(method = RequestMethod.POST, value = "/sms")
 	public ResponseEntity<String> receiveSMS(@RequestParam(value = "SmsSid") String smsSid,
 	                                         @RequestParam(value = "AccountSid") String accountSid,
@@ -25,6 +29,7 @@ public class TwilioController {
 	                                         @RequestParam(value = "To") String to,
 	                                         @RequestParam(value = "Body") String body) {
 
+		logger.debug("Trying to find Twilio Service using id: " + to);
 		providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, to).handleMessage(smsSid, accountSid, from, to, body);
 
 		HttpHeaders headers = new HttpHeaders();
