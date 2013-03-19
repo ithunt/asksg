@@ -58,7 +58,12 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 	public boolean postContent(Message message) {
 		final org.springframework.social.facebook.api.Facebook facebookApi = getFacebookApi();
 		try {
-			facebookApi.feedOperations().post(facebookApi.userOperations().getUserProfile().getId(), message.getContent());
+			if (message.getConversation() == null) {
+				facebookApi.feedOperations().post(facebookApi.userOperations().getUserProfile().getId(), message.getContent());
+			} else {
+				// If the message we got passed is attached to a conversation, comment on the thread instead of posting a new message
+				facebookApi.commentOperations().addComment(message.getConversation().getExternalId(), message.getContent());
+			}
 		} catch (Exception e) {
 			return false;
 		}
@@ -89,7 +94,6 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
     protected List<Conversation> parseFacebookFeed(List<Post> posts, org.springframework.social.facebook.api.Facebook facebookApi) {
         final List<Conversation> conversations = new ArrayList<Conversation>();
         for (Post post : posts) {
-
             Message message = new Message();
             Conversation conversation = new Conversation(message);
             message.setConversation(conversation);
@@ -106,6 +110,7 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 					conversation.getMessages().add(commentMsg);
 				}
 			}
+			conversation.setExternalId(post.getId());
             conversations.add(conversation);
         }
         return conversations;

@@ -44,4 +44,16 @@ public class FacebookIntegrationTest {
 		message.setContent("Test message for ASKSG.");
 		assertTrue(facebook.postContent(message));
 	}
+
+	@Test
+	public void commentOnFirstPostWithoutAuthing() {
+		Facebook facebook = new Facebook();
+		facebook.setConfig(fbConfig);
+		List<Conversation> convos = facebook.getNewContent();
+		Message message = new Message();
+		message.setContent("Test auto-generated comment from ASKSG");
+		convos.get(0).getMessages().add(message);
+		message.setConversation(convos.get(0));
+		assertTrue(facebook.postContent(message));
+	}
 }
