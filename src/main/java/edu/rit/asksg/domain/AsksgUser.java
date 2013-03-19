@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -14,14 +13,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RooJavaBean
 @RooToString
@@ -37,13 +35,12 @@ public class AsksgUser extends Identity implements UserDetails {
     @NotNull
     private String userName;
 
-    @NotNull
     private String password;
 
     private transient Optional<List<GrantedAuthority>> authorities = Optional.absent();
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<UserRole> roles = new HashSet<UserRole>();
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private UserRole role = new UserRole();
 
     private String phoneNumber;
 
@@ -56,10 +53,8 @@ public class AsksgUser extends Identity implements UserDetails {
     public Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
 	    if(!authorities.isPresent()) {
             List<GrantedAuthority> authoritiesList = new ArrayList<GrantedAuthority>();
-            for (UserRole role : roles) {
-                logger.debug("Adding " + role + " to user " + userName);
-                authoritiesList.add(new SimpleGrantedAuthority(role.getName()));
-            }
+            authoritiesList.add(new SimpleGrantedAuthority(role.getName()));
+
             authorities = Optional.of(authoritiesList);
         }
         return authorities.get();
@@ -72,7 +67,7 @@ public class AsksgUser extends Identity implements UserDetails {
         }
         authorities = Optional.of(listOfAuthorities);
     }
-
+	// Overrides for Roo fields because SpringUserDetails implements them
     @Override
     public String getPassword() {
         return password;
