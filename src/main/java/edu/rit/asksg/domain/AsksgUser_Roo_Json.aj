@@ -6,27 +6,26 @@ package edu.rit.asksg.domain;
 import edu.rit.asksg.domain.AsksgUser;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 privileged aspect AsksgUser_Roo_Json {
-
-	public String AsksgUser.toJson() {
-		return new JSONSerializer().exclude("*.class").serialize(this);
-	}
-
-	public static AsksgUser AsksgUser.fromJsonToAsksgUser(String json) {
-		return new JSONDeserializer<AsksgUser>().use(null, AsksgUser.class).deserialize(json);
-	}
-
-	public static String AsksgUser.toJsonArray(Collection<AsksgUser> collection) {
-		return new JSONSerializer().exclude("*.class").serialize(collection);
-	}
-
-	public static Collection<AsksgUser> AsksgUser.fromJsonArrayToAsksgUsers(String json) {
-		return new JSONDeserializer<List<AsksgUser>>().use(null, ArrayList.class).use("values", AsksgUser.class).deserialize(json);
-	}
-
+    
+    public String AsksgUser.toJson() {
+        return new JSONSerializer().exclude("*.class").serialize(this);
+    }
+    
+    public static AsksgUser AsksgUser.fromJsonToAsksgUser(String json) {
+        return new JSONDeserializer<AsksgUser>().use(null, AsksgUser.class).deserialize(json);
+    }
+    
+    public static String AsksgUser.toJsonArray(Collection<AsksgUser> collection) {
+        return new JSONSerializer().exclude("*.class").serialize(collection);
+    }
+    
+    public static Collection<AsksgUser> AsksgUser.fromJsonArrayToAsksgUsers(String json) {
+        return new JSONDeserializer<List<AsksgUser>>().use(null, ArrayList.class).use("values", AsksgUser.class).deserialize(json);
+    }
+    
 }

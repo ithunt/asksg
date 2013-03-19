@@ -412,68 +412,65 @@
 </div>-->
 </div>
 </div>
+
 <!--<div id="otherConfigTab" class="tab-pane fade">
 	<div class="span8" style="padding-left:20px;">
 		TODO: put other options here
 	</div>
 </div>-->
 </div>
-</div>
-</div>
-</div>
 
-<hr>
+
+</div>
+</div>
 
 <!--- usersTab -->
 <div id="userConfigTab" class="tab-pane fade">
-	<div class="tab-content">
-		<div class="tab-pane fade in active">
-			<div class="row-fluid">
-				<div class="span12">
-					<h2>ASKSG Users</h2>
+    <div class="row-fluid">
+                <div class="span12">
+                    <h2>ASKSG Users</h2>
 
-					<p>Create User</p>
-					<!-- todo fix awkward naming with user angular controller for scope -->
-					<form ng-submit="addUser()">
-						<input type="text" ng-model="userName" size="30" placeholder="Name">
-						<input type="text" ng-model="userUsername" size="10" placeholder="User Name">
-						<input type="text" ng-model="userPassword" size="15" placeholder="Password">
-						<input type="text" ng-model="userPhone" size="13" placeholder="Phone">
-						<input type="text" ng-model="userEmail" size="30" placeholder="Email">
-						<select ng-model="userRole" ng-options="role.name for role in roles"></select>
-						<input class="btn-primary" type="submit" value="add">
-					</form>
-					<!--user table-->
-					<div class="row-fluid">
-						<div class="span12">
-							<table class="table table-bordered table-striped">
-								<thead>
-								<tr>
-									<th>Name</th>
-									<th>Username</th>
-									<th>Phone Number</th>
-									<th>Email</th>
-									<th>Role</th>
-								</tr>
-								</thead>
-								<tbody>
-								<tr ng-repeat="user in users">
-									<td>{{user.name}}</td>
-									<td>{{user.userName}}</td>
-									<td>{{user.phoneNumber}}</td>
-									<td>{{user.email}}</td>
-									<td>{{user.role.name}}</td>
-								</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <p>Create User</p>
+                    <!-- todo fix awkward naming with user angular controller for scope -->
+                    <form ng-submit="addUser()">
+                        <input type="text" ng-model="userName" size="30" placeholder="Name">
+                        <input type="text" ng-model="userUsername" size="10" placeholder="User Name">
+                        <input type="text" ng-model="userPassword" size="15" placeholder="Password">
+                        <input type="text" ng-model="userPhone" size="13" placeholder="Phone">
+                        <input type="text" ng-model="userEmail" size="30" placeholder="Email">
+                        <select ng-model="userRole" ng-options="role.name for role in roles"></select>
+                        <input class="btn-primary" type="submit" value="add">
+                    </form>
+                    <!--user table-->
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Username</th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="user in users">
+                                    <td>{{user.name}}</td>
+                                    <td>{{user.userName}}</td>
+                                    <td>{{user.phoneNumber}}</td>
+                                    <td>{{user.email}}</td>
+                                    <td>{{user.role.name}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 </div>
 
+</div>
 
 <hr>
 
