@@ -3,14 +3,14 @@
 
 package edu.rit.asksg.domain;
 
-import edu.rit.asksg.domain.UserTag;
+import edu.rit.asksg.domain.IdentityTag;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-privileged aspect UserTag_Roo_ToString {
-    
-    public String UserTag.toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-    
+privileged aspect IdentityTag_Roo_ToString {
+
+	public String IdentityTag.toString() {
+		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+
 }

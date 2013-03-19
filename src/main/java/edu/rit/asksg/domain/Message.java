@@ -11,10 +11,13 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @RooJavaBean
 @RooToString
@@ -26,8 +29,8 @@ public class Message {
 	private String author;
 
 	@NotNull
-    @Column(length = 1000)
-    @Size(max = 1000)
+	@Column(length = 1000)
+	@Size(max = 1000)
 	private String content;
 
 	@NotNull
@@ -54,4 +57,11 @@ public class Message {
 	private String snippet;
 
 	private String recipient;
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Tag> tags;
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Identity identity;
+
 }
