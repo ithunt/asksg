@@ -35,10 +35,7 @@ public class UserController {
 
         UserRole role = new UserRole();
         role.setName("ROLE_ADMIN");
-        Set<UserRole> roles = new HashSet<UserRole>();
-        roles.add(role);
-
-        ian.setRoles(roles);
+        ian.setRole(role);
 
         userService.saveAsksgUser(ian);
 

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,13 +36,12 @@ public class AsksgUser implements UserDetails, Identity {
     @NotNull
     private String userName;
 
-    @NotNull
     private String password;
 
     private transient Optional<List<GrantedAuthority>> authorities = Optional.absent();
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<UserRole> roles = new HashSet<UserRole>();
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private UserRole role = new UserRole();
 
     private String phoneNumber;
 
@@ -51,10 +51,8 @@ public class AsksgUser implements UserDetails, Identity {
     public Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
 	    if(!authorities.isPresent()) {
             List<GrantedAuthority> authoritiesList = new ArrayList<GrantedAuthority>();
-            for (UserRole role : roles) {
-                logger.debug("Adding " + role + " to user " + userName);
-                authoritiesList.add(new SimpleGrantedAuthority(role.getName()));
-            }
+            authoritiesList.add(new SimpleGrantedAuthority(role.getName()));
+
             authorities = Optional.of(authoritiesList);
         }
         return authorities.get();
