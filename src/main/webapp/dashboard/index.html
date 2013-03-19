@@ -313,10 +313,9 @@
                             <div class="well">
                             <h4>Facebook Subscriptions</h4>
                             <p ng-repeat="service in subscriptions['Facebook']"> 
-                                Identifier (URL): {{service.config.url}} <br/> 
-                                Consumer Key: {{service.config.consumerkey}} <br/>
-                                Consumer Secret: {{service.config.consumersecret}} 
-                                <a ng-show="service.config.facebookAccessToken == null" data-toggle="modal" href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerkey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox" class="btn">Authenticate</a>
+                                Consumer Key: {{service.config.consumerKey}} <br/>
+                                Consumer Secret: {{service.config.consumerSecret}} <br/>
+                                <a ng-show="service.config.facebookAccessToken == null" data-toggle="modal" href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox" class="btn">Authenticate</a>
                             </p>
 
                             <a data-toggle="modal" href="#facebookModal" class="btn">Add Service</a>
@@ -327,10 +326,6 @@
                                 </div>
                                 <div class="modal-body">
                                     <form ng-submit="doAddServiceFacebook()">
-                                    <div style="float:left;margin-right:20px;">
-                                        <label for="name">Identifier (URL)</label>
-                                        <input class="input-xlarge focused" ng-model="facebookUrl"/>   
-                                    </div>
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Consumer Key</label>
                                         <input class="input-xlarge focused" ng-model="facebookConsumerKey"/>   

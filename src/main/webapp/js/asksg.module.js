@@ -63,8 +63,9 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 /**
  * Provider config provider object constructor.
  */
- //TODO: DONT USE
-function ProviderConfig(authenticated, config, name) {
+ //TODO: RENAME FUCKER
+function ProviderConfig(id, authenticated, config, name) {
+    this.id = id;
     this.authenticated = authenticated;
     this.name = name;
     this.config = config;
@@ -191,7 +192,7 @@ function ConversationController($scope, $asksg, $log) {
                     console.log($scope.subscriptions);
                     console.log($scope.subscriptions[subData.name]);
                     $scope.subscriptions[subData.name].push(
-                        new ProviderConfig(subData.authenticated, subData.config, 
+                        new ProviderConfig(subData.id, subData.authenticated, subData.config, 
                             subData.name, subData.version));
                 }
 
@@ -276,7 +277,8 @@ function ConversationController($scope, $asksg, $log) {
         console.log($scope.twitterUrl + " " + $scope.twitterConsumerKey + " " + $scope.twitterConsumerSecret + " " + $scope.twitterAccessToken + " " + $scope.twitterAccessSecret);
         // config, name, version)
         config = {url : $scope.twitterUrl, consumerkey : $scope.twitterConsumerKey, consumersecret: $scope.twitterConsumerSecret, 
-            accesstoken: $scope.twitterAccessToken, accesstokensecret: $scope.twitterAccessSecret};
+            accesstoken: $scope.twitterAccessToken, accesstokensecret: $scope.twitterAccessSecret, 
+            authenticationToken: "", createdBy: null, host: "", password: "", username: ""};
         newService = new Twitter(config, false);
         $asksg.postNewService(newService).
             success(function (data, status, headers, config) {
@@ -291,13 +293,15 @@ function ConversationController($scope, $asksg, $log) {
     };
 
     /**
-     * Invoke the ASKSG service post function
+     * Invoke the ASKSG service post function.
      */
     $scope.doAddServiceFacebook = function() {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-        console.log($scope.facebookUrl + " " + $scope.facebookConsumerKey + " " + $scope.facebookConsumerSecret + " " + $scope.facebookAccessToken + " " + $scope.facebookAccessSecret);
+        //console.log($scope.facebookUrl + " " + $scope.facebookConsumerKey + " " + $scope.facebookConsumerSecret + " " + $scope.facebookAccessToken + " " + $scope.facebookAccessSecret);
         // config, name, version)
-        config = {url : $scope.facebookUrl, consumerkey : $scope.facebookConsumerKey, consumersecret: $scope.facebookConsumerSecret};
+        config = {url : "", consumerKey : $scope.facebookConsumerKey, 
+            consumerSecret: $scope.facebookConsumerSecret, accessToken:"", accessTokenSecret:"",
+            authenticationToken: "", createdBy: null, host: "", password: "", username: ""};
         newService = new Facebook(config, false);
         $asksg.postNewService(newService).
             success(function (data, status, headers, config) {
