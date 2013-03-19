@@ -479,7 +479,7 @@ function ConversationController($scope, $asksg, $log) {
 		if ($scope.filterConvoArray['Reddit']) {
 			$scope.filterConvoArray['Reddit'] = false;
 		} else {
-			$scope.filterConvoArray['reddit'] = true;
+			$scope.filterConvoArray['Reddit'] = true;
 		}
 	};
 	$scope.filterRead = function () {
