@@ -16,10 +16,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		logger.debug("loadUserByUsername called with " + username);
 		AsksgUser user = this.userRepository.findByUserName(username);
-		logger.debug("Returned user " + user.getUsername() + ":" + user.getPassword());
+		if (user == null) {
+			throw new UsernameNotFoundException("User " + username + " not found in database.");
+		}
 		return user;
 	}
-
 }

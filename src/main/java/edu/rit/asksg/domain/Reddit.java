@@ -35,152 +35,152 @@ import java.util.TimeZone;
 @RooJson
 public class Reddit extends Service implements ContentProvider, SubscriptionProvider {
 
-    public static final String REDDIT_DOMAIN = "http://www.reddit.com";
+	public static final String REDDIT_DOMAIN = "http://www.reddit.com";
 
-    private static final transient Logger logger = LoggerFactory.getLogger(Reddit.class);
+	private static final transient Logger logger = LoggerFactory.getLogger(Reddit.class);
 
-    @JSON(include = false)
-    public List<Conversation> getNewContent() {
-        List<Conversation> convos = new ArrayList<Conversation>();
+	@JSON(include = false)
+	public List<Conversation> getNewContent() {
+		List<Conversation> convos = new ArrayList<Conversation>();
 
-        try {
-            convos = getRedditPosts(REDDIT_DOMAIN + "/r/" + this.getConfig().getIdentifier());
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
+		try {
+			convos = getRedditPosts(REDDIT_DOMAIN + "/r/" + this.getConfig().getIdentifier());
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
 
-        return convos;
+		return convos;
 
-    }
+	}
 
-    @JSON(include = false)
-    protected List<Conversation> getRedditPosts(String url) throws IOException, ParseException {
+	@JSON(include = false)
+	protected List<Conversation> getRedditPosts(String url) throws IOException, ParseException {
 
-        JSONArray posts = getPostsFromSubreddit(url);
+		JSONArray posts = getPostsFromSubreddit(url);
 
-        final List<Conversation> conversations = new ArrayList<Conversation>();
+		final List<Conversation> conversations = new ArrayList<Conversation>();
 
-        for(Object o : posts) {
-            JSONObject post = (JSONObject)((JSONObject)o).get("data");
+		for (Object o : posts) {
+			JSONObject post = (JSONObject) ((JSONObject) o).get("data");
 
-            try {
-                Conversation c = new Conversation(parsePost(post));
-                c.setService(this);
-                attachComments(c);
-                conversations.add(c);
-            } catch (Exception e) {
-                logger.error("Error parsing reddit post " + e.getLocalizedMessage());
-            }
-        }
+			try {
+				Conversation c = new Conversation(parsePost(post));
+				c.setService(this);
+				attachComments(c);
+				conversations.add(c);
+			} catch (Exception e) {
+				logger.error("Error parsing reddit post " + e.getLocalizedMessage());
+			}
+		}
 
-        return conversations;
-    }
+		return conversations;
+	}
 
-    protected Conversation attachComments(Conversation c) throws IOException, ParseException {
+	protected Conversation attachComments(Conversation c) throws IOException, ParseException {
 
-        if(c.getMessages() == null || c.getMessages().size() != 1) return c;
+		if (c.getMessages() == null || c.getMessages().size() != 1) return c;
 
-        Message m = Iterables.get( c.getMessages(), 0 );
-        Set<Message> messages = new HashSet<Message>();
-        messages.add(m);
+		Message m = Iterables.get(c.getMessages(), 0);
+		Set<Message> messages = new HashSet<Message>();
+		messages.add(m);
 
-        for(Object comment : getTopLevelComments(m.getUrl())) {
-            try {
-                JSONObject obj = (JSONObject)((JSONObject)comment).get("data");
-                messages.add(parseComment(obj));
-            } catch (Exception e) {
-                logger.error("Error parsing reddit comment - " + e.getLocalizedMessage());
-            }
-        }
-        c.setMessages(messages);
-        return c;
-    }
+		for (Object comment : getTopLevelComments(m.getUrl())) {
+			try {
+				JSONObject obj = (JSONObject) ((JSONObject) comment).get("data");
+				messages.add(parseComment(obj));
+			} catch (Exception e) {
+				logger.error("Error parsing reddit comment - " + e.getLocalizedMessage());
+			}
+		}
+		c.setMessages(messages);
+		return c;
+	}
 
-    protected static Message parsePost(JSONObject post) {
-        Message m = new Message();
+	protected static Message parsePost(JSONObject post) {
+		Message m = new Message();
 
-        String title = (String)post.get("title");
+		String title = (String) post.get("title");
 
-        if(post.containsKey("selftext")) {
-            m.setContent(title + " - " + post.get("selftext"));
-        } else {
-            m.setContent(title + " - " + post.get("url"));
-        }
+		if (post.containsKey("selftext")) {
+			m.setContent(title + " - " + post.get("selftext"));
+		} else {
+			m.setContent(title + " - " + post.get("url"));
+		}
 
-        m.setUrl("http://reddit.com" + post.get("permalink"));
-        m.setAuthor((String)post.get("author"));
-
-
-        //parse reddits created_utc time to EST localdatetime
-        m.setCreated(
-                new LocalDateTime(
-                        new Date( ((Double)post.get("created_utc")).longValue() +
-                        TimeZone.getTimeZone("EST").getRawOffset())));
+		m.setUrl("http://reddit.com" + post.get("permalink"));
+		m.setAuthor((String) post.get("author"));
 
 
-        return m;
-    }
-
-    protected static Message parseComment(JSONObject comment) {
-        Message m = new Message();
-
-        m.setAuthor((String)comment.get("author"));
-        m.setContent((String)comment.get("body"));
-
-        //parse reddits created_utc time to EST localdatetime
-        m.setCreated(
-                new LocalDateTime(
-                        new Date( ((Double)comment.get("created_utc")).longValue() +
-                                TimeZone.getTimeZone("EST").getRawOffset())));
-
-        return m;
-    }
-
-    @JSON(include = false)
-    protected static JSONArray getTopLevelComments(String permalink) throws IOException, ParseException {
-        JSONArray arr = (JSONArray)getJSONResponse(new URL(permalink + "/.json"));
-        JSONArray retVal = new JSONArray();
-
-        if(arr.size() > 1) {
-            try {
-
-                retVal = (JSONArray)((JSONObject)((JSONObject)arr.get(1)).get("data")).get("children");
-            } catch (Exception e) {
-                logger.error("Error in getting top level comments" + e.getLocalizedMessage());
-            }
-        }
-        return retVal;
-    }
-
-    @JSON(include = false)
-    protected static JSONArray getPostsFromSubreddit(String subreddit) throws IOException, ParseException {
-        JSONObject object = (JSONObject)getJSONResponse(new URL(subreddit + "/.json"));
-        return (JSONArray)((JSONObject)object.get("data")).get("children");
-    }
-
-    @JSON(include = false)
-    protected static Object getJSONResponse(URL url) throws IOException, ParseException {
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-        connection.setRequestMethod("GET");
-
-        JSONParser parser = new JSONParser();
-        Object object = parser.parse(new BufferedReader(new InputStreamReader(
-                connection.getInputStream())).readLine());
-
-        return object;
-    }
+		//parse reddits created_utc time to EST localdatetime
+		m.setCreated(
+				new LocalDateTime(
+						new Date(((Double) post.get("created_utc")).longValue() +
+								TimeZone.getTimeZone("EST").getRawOffset())));
 
 
-    @Override
-    public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
+		return m;
+	}
 
-        List<Conversation> conversations = new ArrayList<Conversation>();
-        try {
-            conversations = getRedditPosts(REDDIT_DOMAIN + "/r/" + socialSubscription.getHandle());
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
+	protected static Message parseComment(JSONObject comment) {
+		Message m = new Message();
 
-        return conversations;
-    }
+		m.setAuthor((String) comment.get("author"));
+		m.setContent((String) comment.get("body"));
+
+		//parse reddits created_utc time to EST localdatetime
+		m.setCreated(
+				new LocalDateTime(
+						new Date(((Double) comment.get("created_utc")).longValue() +
+								TimeZone.getTimeZone("EST").getRawOffset())));
+
+		return m;
+	}
+
+	@JSON(include = false)
+	protected static JSONArray getTopLevelComments(String permalink) throws IOException, ParseException {
+		JSONArray arr = (JSONArray) getJSONResponse(new URL(permalink + "/.json"));
+		JSONArray retVal = new JSONArray();
+
+		if (arr.size() > 1) {
+			try {
+
+				retVal = (JSONArray) ((JSONObject) ((JSONObject) arr.get(1)).get("data")).get("children");
+			} catch (Exception e) {
+				logger.error("Error in getting top level comments" + e.getLocalizedMessage());
+			}
+		}
+		return retVal;
+	}
+
+	@JSON(include = false)
+	protected static JSONArray getPostsFromSubreddit(String subreddit) throws IOException, ParseException {
+		JSONObject object = (JSONObject) getJSONResponse(new URL(subreddit + "/.json"));
+		return (JSONArray) ((JSONObject) object.get("data")).get("children");
+	}
+
+	@JSON(include = false)
+	protected static Object getJSONResponse(URL url) throws IOException, ParseException {
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("GET");
+
+		JSONParser parser = new JSONParser();
+		Object object = parser.parse(new BufferedReader(new InputStreamReader(
+				connection.getInputStream())).readLine());
+
+		return object;
+	}
+
+
+	@Override
+	public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
+
+		List<Conversation> conversations = new ArrayList<Conversation>();
+		try {
+			conversations = getRedditPosts(REDDIT_DOMAIN + "/r/" + socialSubscription.getHandle());
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+		}
+
+		return conversations;
+	}
 }

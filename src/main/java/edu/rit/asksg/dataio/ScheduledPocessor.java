@@ -20,10 +20,10 @@ public class ScheduledPocessor {
 	ProviderService providerService;
 
 	@Resource(name = "refreshWorker")
-    AsyncWorker refreshWorker;
+	AsyncWorker refreshWorker;
 
-    @Resource(name = "subscriptionWorker")
-    AsyncWorker subscriptionWorker;
+	@Resource(name = "subscriptionWorker")
+	AsyncWorker subscriptionWorker;
 
 
 	/**
@@ -40,14 +40,14 @@ public class ScheduledPocessor {
 	}
 
 
-    @Scheduled(fixedDelay = 1100000, initialDelay = 10000)
-    public void executeSubscriptions() {
-        log.debug("Start execution of subscription pull");
-        List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
-        for (edu.rit.asksg.domain.Service service : services) {
-            subscriptionWorker.work(service);
-        }
-        log.debug("Scheduler finished subscription pull");
-    }
+	@Scheduled(fixedDelay = 1100000, initialDelay = 10000)
+	public void executeSubscriptions() {
+		log.debug("Start execution of subscription pull");
+		List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
+		for (edu.rit.asksg.domain.Service service : services) {
+			subscriptionWorker.work(service);
+		}
+		log.debug("Scheduler finished subscription pull");
+	}
 
 }

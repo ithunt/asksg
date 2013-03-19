@@ -49,9 +49,9 @@
 	<int:service-activator input-channel="receiveChannel" ref="emailProvider" method="receive"/>
 
 	<!--<int-mail:imap-idle-channel-adapter id="gmailAdapter"-->
-	                                    <!--store-uri="imaps://ritasksg:allHailSpring@imap.gmail.com/INBOX"-->
-	                                    <!--channel="receiveChannel" auto-startup="true" should-delete-messages="false"-->
-	                                    <!--should-mark-messages-as-read="true" java-mail-properties="javaMailProperties"/>-->
+	<!--store-uri="imaps://ritasksg:allHailSpring@imap.gmail.com/INBOX"-->
+	<!--channel="receiveChannel" auto-startup="true" should-delete-messages="false"-->
+	<!--should-mark-messages-as-read="true" java-mail-properties="javaMailProperties"/>-->
 
 
 	<util:properties id="javaMailProperties">
@@ -67,14 +67,14 @@
 		<property name="authenticationToken" value="4heJuZtO5Ji43xk1uc0edKmDVgrSdheK"/>
 	</bean>
 
-    <bean id="emailConfig" class="edu.rit.asksg.domain.config.EmailConfig">
-        <property name="username" value="ritasksg@gmail.com" />
-        <property name="password" value="allHailSpring" />
+	<bean id="emailConfig" class="edu.rit.asksg.domain.config.EmailConfig">
+		<property name="username" value="ritasksg@gmail.com"/>
+		<property name="password" value="allHailSpring"/>
 
-    </bean>
+	</bean>
 
-    <bean id="refreshWorker" class="edu.rit.asksg.dataio.RefreshWorker"/>
-    <bean id="subscriptionWorker" class="edu.rit.asksg.dataio.SubscriptionWorker" />
+	<bean id="refreshWorker" class="edu.rit.asksg.dataio.RefreshWorker"/>
+	<bean id="subscriptionWorker" class="edu.rit.asksg.dataio.SubscriptionWorker"/>
 
 
 </beans>

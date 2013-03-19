@@ -4,50 +4,40 @@
 package edu.rit.asksg.domain;
 
 import edu.rit.asksg.domain.AsksgUser;
-import edu.rit.asksg.domain.Tag;
 import edu.rit.asksg.domain.UserRole;
-import java.util.Collection;
 
 privileged aspect AsksgUser_Roo_JavaBean {
-    
-    public void AsksgUser.setName(String name) {
-        this.name = name;
-    }
-    
-    public String AsksgUser.getUserName() {
-        return this.userName;
-    }
-    
-    public void AsksgUser.setUserName(String userName) {
-        this.userName = userName;
-    }
-    
-    public void AsksgUser.setPassword(String password) {
-        this.password = password;
-    }
-    
-    public UserRole AsksgUser.getRole() {
-        return this.role;
-    }
-    
-    public void AsksgUser.setRole(UserRole role) {
-        this.role = role;
-    }
-    
-    public void AsksgUser.setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-    
-    public void AsksgUser.setEmail(String email) {
-        this.email = email;
-    }
-    
-    public Collection<Tag> AsksgUser.getTags() {
-        return this.tags;
-    }
-    
-    public void AsksgUser.setTags(Collection<Tag> tags) {
-        this.tags = tags;
-    }
-    
+
+	public void AsksgUser.setName(String name) {
+		this.name = name;
+	}
+
+	public String AsksgUser.getUserName() {
+		return this.userName;
+	}
+
+	public void AsksgUser.setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void AsksgUser.setPassword(String password) {
+		this.password = password;
+	}
+
+	public UserRole AsksgUser.getRole() {
+		return this.role;
+	}
+
+	public void AsksgUser.setRole(UserRole role) {
+		this.role = role;
+	}
+
+	public void AsksgUser.setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void AsksgUser.setEmail(String email) {
+		this.email = email;
+	}
+
 }

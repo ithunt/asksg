@@ -1,6 +1,7 @@
 package edu.rit.asksg.domain;
 
 import com.google.common.base.Optional;
+import flexjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -14,17 +15,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-@RooJson(deepSerialize = true)
+@RooJson
 public class AsksgUser extends Identity implements UserDetails {
 
 	private static final Logger logger = LoggerFactory.getLogger(AsksgUser.class);
@@ -46,9 +45,7 @@ public class AsksgUser extends Identity implements UserDetails {
 
 	private String email;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Collection<Tag> tags = new HashSet<Tag>();
-
+	@JSON(include = false)
 	@Override
 	public Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
 		if (!authorities.isPresent()) {
@@ -60,6 +57,7 @@ public class AsksgUser extends Identity implements UserDetails {
 		return authorities.get();
 	}
 
+	@JSON(include = false)
 	public void setAuthorities(List<java.lang.String> roles) {
 		List<GrantedAuthority> listOfAuthorities = new ArrayList<GrantedAuthority>();
 		for (String role : roles) {
@@ -69,11 +67,13 @@ public class AsksgUser extends Identity implements UserDetails {
 	}
 
 	// Overrides for Roo fields because SpringUserDetails implements them
+	@JSON(include = false)
 	@Override
 	public String getPassword() {
 		return password;
 	}
 
+	@JSON(include = false)
 	@Override
 	public String getUsername() {
 		return userName;
@@ -104,10 +104,12 @@ public class AsksgUser extends Identity implements UserDetails {
 		return this.name;
 	}
 
+	@Override
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
+	@Override
 	public String getEmail() {
 		return email;
 	}

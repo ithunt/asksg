@@ -25,7 +25,7 @@ public class ServiceController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "facebookToken")
 	public ResponseEntity<String> facebookToken(@RequestParam("id") final String id,
-												@RequestParam("code") final String code) {
+	                                            @RequestParam("code") final String code) {
 		//TODO: type safety
 		final Facebook facebook = (Facebook) providerService.findService(Long.parseLong(id));
 		((SpringSocialConfig) facebook.getConfig()).setAccessToken(code);
@@ -35,13 +35,13 @@ public class ServiceController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromJson(@RequestBody String json) {
-        Service service = Service.fromJsonToService(json);
-        providerService.saveService(service);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        return new ResponseEntity<String>(service.toJson(), headers, HttpStatus.CREATED);
-    }
-    
+	public ResponseEntity<String> createFromJson(@RequestBody String json) {
+		Service service = Service.fromJsonToService(json);
+		providerService.saveService(service);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json");
+		return new ResponseEntity<String>(service.toJson(), headers, HttpStatus.CREATED);
+	}
+
 
 }

@@ -77,6 +77,6 @@ public class Service implements ContentProvider {
 		} else if (json.contains("\"name\":\"Reddit\"")) {
 			return new JSONDeserializer<Service>().use(null, Reddit.class).use("config", RedditConfig.class).deserialize(json);
 		}
-        return new JSONDeserializer<Service>().use(null, Service.class).deserialize(json);
-    }
+		return new JSONDeserializer<Service>().use(null, Service.class).deserialize(json);
+	}
 }

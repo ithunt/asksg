@@ -19,33 +19,33 @@ import java.util.List;
  */
 public class SubscriptionWorker implements AsyncWorker {
 
-    @Log
-    Logger log;
+	@Log
+	Logger log;
 
-    @Autowired
-    ConversationService conversationService;
+	@Autowired
+	ConversationService conversationService;
 
-    @Async
-    public void work(final Service service) {
-        final String threadName = Thread.currentThread().getName();
-        log.debug("Subscription worker executing on " + threadName + " for service " + service.toString());
+	@Async
+	public void work(final Service service) {
+		final String threadName = Thread.currentThread().getName();
+		log.debug("Subscription worker executing on " + threadName + " for service " + service.toString());
 
-        if (service instanceof SubscriptionProvider) {
-            for(SocialSubscription socialSubscription : service.getConfig().getSubscriptions()) {
-                final Collection<Conversation> conversationList =
-                        ((SubscriptionProvider) service).getContentFor(socialSubscription);
+		if (service instanceof SubscriptionProvider) {
+			for (SocialSubscription socialSubscription : service.getConfig().getSubscriptions()) {
+				final Collection<Conversation> conversationList =
+						((SubscriptionProvider) service).getContentFor(socialSubscription);
 
-                try {
-                    conversationService.saveConversations(conversationList);
-                } catch (Exception e) {
-                    log.error(e.getLocalizedMessage());
-                }
-            }
-        }
-        log.debug("Subscription worker on " + threadName + " for service " + service.toString() + " completed.");
+				try {
+					conversationService.saveConversations(conversationList);
+				} catch (Exception e) {
+					log.error(e.getLocalizedMessage());
+				}
+			}
+		}
+		log.debug("Subscription worker on " + threadName + " for service " + service.toString() + " completed.");
 
 
-    }
+	}
 
 
 }
