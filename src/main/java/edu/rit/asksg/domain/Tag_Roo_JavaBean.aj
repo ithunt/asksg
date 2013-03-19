@@ -6,33 +6,32 @@ package edu.rit.asksg.domain;
 import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Tag;
-
 import java.util.Set;
 
 privileged aspect Tag_Roo_JavaBean {
-
-	public String Tag.getName() {
-		return this.name;
-	}
-
-	public void Tag.setName(String name) {
-		this.name = name;
-	}
-
-	public AsksgUser Tag.getCreatedBy() {
-		return this.createdBy;
-	}
-
-	public void Tag.setCreatedBy(AsksgUser createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Set<Message> Tag.getMessage() {
-		return this.message;
-	}
-
-	public void Tag.setMessage(Set<Message> message) {
-		this.message = message;
-	}
-
+    
+    public String Tag.getName() {
+        return this.name;
+    }
+    
+    public void Tag.setName(String name) {
+        this.name = name;
+    }
+    
+    public AsksgUser Tag.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void Tag.setCreatedBy(AsksgUser createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public Set<Message> Tag.getMessage() {
+        return this.message;
+    }
+    
+    public void Tag.setMessage(Set<Message> message) {
+        this.message = message;
+    }
+    
 }

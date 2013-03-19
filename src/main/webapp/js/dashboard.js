@@ -82,13 +82,14 @@ $(document).ready(function () {
         debugger;
         //find tag context and remove from conversation
     };
+    /*
     $('.tag-list').tags({
         suggestions: ["suggestions"],
         tagData: ["tag a", "tag b", "tag c", "tag d"],
         excludeList: ["the", "is", "a"],
         whenAddingTag: whenAddingTag,
         tagRemoved: tagRemoved
-    });
+    });*/
 
 
 });

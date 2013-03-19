@@ -7,13 +7,13 @@ import edu.rit.asksg.analytics.Chatterbox;
 import edu.rit.asksg.domain.config.ProviderConfig;
 
 privileged aspect Chatterbox_Roo_JavaBean {
-
-	public ProviderConfig Chatterbox.getConfig() {
-		return this.config;
-	}
-
-	public void Chatterbox.setConfig(ProviderConfig config) {
-		this.config = config;
-	}
-
+    
+    public ProviderConfig Chatterbox.getConfig() {
+        return this.config;
+    }
+    
+    public void Chatterbox.setConfig(ProviderConfig config) {
+        this.config = config;
+    }
+    
 }

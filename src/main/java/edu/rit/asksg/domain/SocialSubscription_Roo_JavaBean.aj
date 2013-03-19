@@ -6,21 +6,21 @@ package edu.rit.asksg.domain;
 import edu.rit.asksg.domain.SocialSubscription;
 
 privileged aspect SocialSubscription_Roo_JavaBean {
-
-	public String SocialSubscription.getHandle() {
-		return this.handle;
-	}
-
-	public void SocialSubscription.setHandle(String handle) {
-		this.handle = handle;
-	}
-
-	public String SocialSubscription.getName() {
-		return this.name;
-	}
-
-	public void SocialSubscription.setName(String name) {
-		this.name = name;
-	}
-
+    
+    public String SocialSubscription.getHandle() {
+        return this.handle;
+    }
+    
+    public void SocialSubscription.setHandle(String handle) {
+        this.handle = handle;
+    }
+    
+    public String SocialSubscription.getName() {
+        return this.name;
+    }
+    
+    public void SocialSubscription.setName(String name) {
+        this.name = name;
+    }
+    
 }
