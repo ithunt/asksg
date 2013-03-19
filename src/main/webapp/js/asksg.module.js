@@ -1,3 +1,16 @@
+// Check to see if we're returning from Facebook
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    return null;
+}
+
 /**
  * Message object constructor.
  */
@@ -284,14 +297,14 @@ function ConversationController($scope, $asksg, $log) {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
         console.log($scope.facebookUrl + " " + $scope.facebookConsumerKey + " " + $scope.facebookConsumerSecret + " " + $scope.facebookAccessToken + " " + $scope.facebookAccessSecret);
         // config, name, version)
-        config = {url : $scope.facebookUrl, consumerkey : $scope.facebookConsumerKey, consumersecret: $scope.facebookConsumerSecret, 
-            accesstoken: $scope.facebookAccessToken, accesstokensecret: $scope.facebookAccessSecret};
+        config = {url : $scope.facebookUrl, consumerkey : $scope.facebookConsumerKey, consumersecret: $scope.facebookConsumerSecret};
         newService = new Facebook(config, false);
         $asksg.postNewService(newService).
             success(function (data, status, headers, config) {
                 console.log("Success adding the new service!");
                 console.log(data);
                 console.log(status);
+                var newService = angular.fromJson(data[0]);
                 $scope.refreshSubscriptions();
             }).
             error(function (data, status, headers, config) {
@@ -488,6 +501,17 @@ function ConversationController($scope, $asksg, $log) {
 	$scope.refreshSubscriptions();
 	$scope.refreshUsers();
 	$scope.refreshRoles();
+
+    // Handle facebook authentication
+    var facebookCode = getQueryVariable("code");
+    if (facebookCode != null) {
+        var serviceID = getQueryVariable("state");
+        if (serviceID != null) {
+            $asksg.authenticateFacebook(facebookCode, serviceID).success(
+                $scope.refreshSubscriptions();
+            );
+        }
+    }
 }
 
 /**
@@ -597,6 +621,10 @@ AsksgService = function () {
 
                 fetchRoles: function(){
                     return $http({method:'GET', url: rolesUrl});
+                },
+
+                authenticateFacebook: function(code, serviceID) {
+                    return $http({method:'POST', url: servicesUrl + "/facebookToken?id=" + serviceID + "&code=" + code});
                 }
             };
         });

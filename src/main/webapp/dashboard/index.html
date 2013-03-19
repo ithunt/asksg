@@ -315,9 +315,8 @@
                             <p ng-repeat="service in subscriptions['Facebook']"> 
                                 Identifier (URL): {{service.config.url}} <br/> 
                                 Consumer Key: {{service.config.consumerkey}} <br/>
-                                Consumer Secret: {{service.config.consumersecret}} <br/>
-                                Access Token: {{service.config.accesstoken}} <br/>
-                                Access Token Secret: {{service.config.accesstokensecret}} 
+                                Consumer Secret: {{service.config.consumersecret}} 
+                                <a ng-show="service.config.facebookAccessToken == null" data-toggle="modal" href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerkey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox" class="btn">Authenticate</a>
                             </p>
 
                             <a data-toggle="modal" href="#facebookModal" class="btn">Add Service</a>
@@ -339,14 +338,6 @@
                                     <div style="float:left;margin-right:20px;">
                                         <label for="name">Consumer Secret</label>
                                         <input class="input-xlarge focused" ng-model="facebookConsumerSecret"/>
-                                    </div>
-                                    <div style="float:left;margin-right:20px;">
-                                        <label for="name">Access Token</label>
-                                        <input class="input-xlarge focused" ng-model="facebookAccessToken"/>
-                                    </div>
-                                    <div style="float:left;margin-right:20px;">
-                                        <label for="name">Access Token Secret</label>
-                                        <input class="input-xlarge focused" ng-model="facebookAccessSecret"/>
                                     </div>
                                     <button class="btn" type="submit" data-dismiss="modal" ng-click="doAddServiceFacebook()">Go</button>
                                     </form>
