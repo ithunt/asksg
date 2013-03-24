@@ -63,7 +63,6 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 /**
  * Provider config provider object constructor.
  */
-	//TODO: RENAME FUCKER
 function ProviderConfig(id, authenticated, config, name) {
 	this.id = id;
 	this.authenticated = authenticated;
@@ -360,7 +359,7 @@ function ConversationController($scope, $asksg, $log) {
 					$scope.roles.push(new Role(roleData.name));
 				}
 			}).error(function (data, status, headers, config) {
-				console.log("Failed to retrieve users");
+				console.log("Failed to retrieve roles");
 				return null;
 			});
 	}
