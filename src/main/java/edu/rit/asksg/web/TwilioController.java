@@ -29,10 +29,7 @@ public class TwilioController {
 	                                         @RequestParam(value = "To") String to,
 	                                         @RequestParam(value = "Body") String body) {
 
-		logger.debug("Trying to find Twilio Service using id: " + to + " and substr: " + to.substring(1));
-		logger.debug("Provider Service null?: " + (providerService == null));
 		Twilio twilio = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, to.substring(1));
-		logger.debug("Twilio Service null?: " + (twilio==null));
 		twilio.handleMessage(smsSid, accountSid, from, to, body);
 
 		HttpHeaders headers = new HttpHeaders();

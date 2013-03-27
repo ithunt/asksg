@@ -80,8 +80,6 @@ public class Twilio extends Service implements ContentProvider {
 
 	public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
 
-		logger.debug("Handling message: from: " + from + ", body: " + body);
-
 		Message msg = new Message();
 		msg.setContent(body);
 		msg.setAuthor(from);
