@@ -68,20 +68,30 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 	}
 }
 
+// function SocialSubscription(handle, name) {
+// 	this.handle = handle;
+// 	this.name = name;
+// 	// this.id = id;
+// 	// this.version = version;
+// }
+
 /**
  * Provider config provider object constructor.
  */
-function ProviderConfig(id, authenticated, config, name, subscriptions) {
+function ProviderConfig(id, authenticated, config, name) {
 	this.id = id;
 	this.authenticated = authenticated;
 	this.name = name;
 	this.config = config;
+	// this.subscriptions = new Array();
+	// for (var i = 0; i < config.subscriptions.length; i++) {
+	// 	this.subscriptions[i] = new SocialSubscription(config.subscriptions[i].handle, config.subscriptions[i].name);
+	// }
 
 	// dummy data
-	this.config.subscriptions[0] = new SocialSubscription("handleA", "nameA");
-	this.config.subscriptions[1] = new SocialSubscription("handleB", "nameB");
-	console.log(this.config);
-	//console.log("WHY OH WHY");
+	// this.config.subscriptions[0] = {"handle":"handle", "name": "Bob"};
+	// this.config.subscriptions[0] = new SocialSubscription("handleA", "nameA");
+	// this.config.subscriptions[1] = new SocialSubscription("handleB", "nameB");
 }
 
 function Twilio(providerConfig, authenticated) {
@@ -188,30 +198,32 @@ function ConversationController($scope, $asksg, $log) {
 	/*
 	 * Populate the social subscription content
 	 */
-	$scope.refreshSubscriptions = function () {
+	$scope.refreshServices = function () {
 		$asksg.fetchSubscriptions().
 			success(function (data, status, headers, config) {
 				console.log("Got social data back from the server");
 				console.log(data);
 
 				// Always rebuild the social subscription data...
-				$scope.subscriptions = new Array();
+				$scope.services = new Array();
 				for (var i = 0; i < data.length; i++) {
 					var subData = angular.fromJson(data[i]);
 					console.log(subData.name);
-					if ((subData.name in $scope.subscriptions) == false) {
-						$scope.subscriptions[subData.name] = new Array();
-						console.log($scope.subscriptions[subData.name]);
+					if ((subData.name in $scope.services) == false) {
+						$scope.services[subData.name] = new Array();
+						console.log($scope.services[subData.name]);
 					}
-					console.log($scope.subscriptions);
-					console.log($scope.subscriptions[subData.name]);
-					$scope.subscriptions[subData.name].push(
+					console.log($scope.services);
+					console.log($scope.services[subData.name]);
+					$scope.services[subData.name].push(
 						new ProviderConfig(subData.id, subData.authenticated, subData.config,
-							subData.name, subData.version, subData.subscriptions));
+							subData.name, subData.version));
+					console.log("NEW SUBSCRIPTIONS");
+					console.log($scope.services);
 				}
 
 				// debug
-				console.log($scope.subscriptions);
+				console.log($scope.services);
 			}).
 			error(function (data, status, headers, config) {
 				console.log("Failed grabbing the social subscriptions");
@@ -253,7 +265,7 @@ function ConversationController($scope, $asksg, $log) {
 				console.log("Success adding the new service!");
 				console.log(data);
 				console.log(status);
-				$scope.refreshSubscriptions();
+				$scope.refreshServices();
 			}).
 			error(function (data, status, headers, config) {
 				console.log("Error... :(");
@@ -274,7 +286,7 @@ function ConversationController($scope, $asksg, $log) {
 				console.log("Success adding the new service!");
 				console.log(data);
 				console.log(status);
-				$scope.refreshSubscriptions();
+				$scope.refreshServices();
 			}).
 			error(function (data, status, headers, config) {
 				console.log("Error... :(");
@@ -290,16 +302,17 @@ function ConversationController($scope, $asksg, $log) {
 		// post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
 		console.log($scope.twitterUrl + " " + $scope.twitterConsumerKey + " " + $scope.twitterConsumerSecret + " " + $scope.twitterAccessToken + " " + $scope.twitterAccessSecret);
 		// config, name, version)
-		config = {url: $scope.twitterUrl, consumerkey: $scope.twitterConsumerKey, consumersecret: $scope.twitterConsumerSecret,
-			accesstoken: $scope.twitterAccessToken, accesstokensecret: $scope.twitterAccessSecret,
-			authenticationToken: "", createdBy: null, host: "", password: "", username: "", subscriptions: [{"handle":"handleA", "name":"name!"}]};
+		socialSub = new SocialSubscription("RIT_SG", "SG Twitter");
+		config = {url: $scope.twitterUrl, consumerKey: $scope.twitterConsumerKey, consumerSecret: $scope.twitterConsumerSecret,
+			accessToken: $scope.twitterAccessToken, accessTokenSecret: $scope.twitterAccessSecret,
+			authenticationToken: "", createdBy: null, host: "", password: "", username: "", subscriptions: [socialSub]};
 		newService = new Twitter(config, false);
 		$asksg.postNewService(newService).
 			success(function (data, status, headers, config) {
 				console.log("Success adding the new service!");
 				console.log(data);
 				console.log(status);
-				$scope.refreshSubscriptions();
+				$scope.refreshServices();
 			}).
 			error(function (data, status, headers, config) {
 				console.log("Error... :(");
@@ -323,7 +336,7 @@ function ConversationController($scope, $asksg, $log) {
 				console.log(data);
 				console.log(status);
 				var newService = angular.fromJson(data[0]);
-				$scope.refreshSubscriptions();
+				$scope.refreshServices();
 			}).
 			error(function (data, status, headers, config) {
 				console.log("Error... :(");
@@ -515,7 +528,7 @@ function ConversationController($scope, $asksg, $log) {
 
 	// Populate the model with the initial data.
 	$scope.refreshConvos();
-	$scope.refreshSubscriptions();
+	$scope.refreshServices();
 	$scope.refreshUsers();
 	$scope.refreshRoles();
 
@@ -525,7 +538,7 @@ function ConversationController($scope, $asksg, $log) {
 		var serviceID = getQueryVariable("state");
 		if (serviceID != null) {
 			$asksg.authenticateFacebook(facebookCode, serviceID);
-			$scope.refreshSubscriptions();
+			$scope.refreshServices();
 		}
 	}
 }

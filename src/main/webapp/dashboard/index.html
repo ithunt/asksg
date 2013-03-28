@@ -213,7 +213,7 @@
 <div class="well">
 	<h4>Twilio Subscription</h4>
 
-	<p ng-repeat="service in subscriptions['Twilio']">
+	<p ng-repeat="service in services['Twilio']">
 		Account SID: {{service.config.username}} <br/>
 		Authentication Token: {{service.config.authenticationToken}} <br/>
 		Phone Number: {{service.config.phoneNumber}}
@@ -250,7 +250,7 @@
 <div class="well">
 	<h4>Email Subscriptions</h4>
 
-	<p ng-repeat="service in subscriptions['Email']">
+	<p ng-repeat="service in services['Email']">
 		Username: {{service.config.username}} <br/>
 		Password: {{service.config.password}}
 	</p>
@@ -282,32 +282,26 @@
 <div class="well">
 	<h4>Twitter Subscriptions</h4>
 
-	<p ng-repeat="service in subscriptions['Twitter']">
+	<p ng-repeat="service in services['Twitter']">
 		Identifier (URL): {{service.config.url}} <br/>
 		Consumer Key: {{service.config.consumerKey}} <br/>
 		Consumer Secret: {{service.config.consumerSecret}} <br/>
 		Access Token: {{service.config.accessToken}} <br/>
-		Access Token Secret: {{service.config.accessTokenSecret}}
-		<hr/>
-		<h5>Subscriptions</h5>
-		0 {{service.config}} <br/>
-		1 {{service.config.subscriptions}} <br/>
-		2 {{service.config.subscriptions[0]}} <br/>
-		3 {{service.config.subscriptions[0].handle}} <br/>
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th style="text-align:center;">Handle</th>
-					<th style="text-align:center;">Name</th>
-				</tr>
-			</thead>
-			<tbody id="subscriptionRow">
-				<tr ng-repeat="sub in service.config.subscriptions">
-					<td>{{sub.handle}}</td>
-					<td>{{sub.name}}</td>
-				</tr>
-			</tbody>
-		</table>
+		Access Token Secret: {{service.config.accessTokenSecret}} <br/>
+		Subs: {{service.config.subscriptions}}<br/>
+		{{service.config.subscriptions[0].handle}} - {{service.config.subscriptions[0].name}} - {{service.config.subscriptions.length}}
+		<p ng-repeat="sub in service.config.subscriptions">
+			{{sub.handle}} - {{sub.name}}
+		</p>
+		<form ng-submit="TODO()">
+			<label for="handle">Handle:</label> <input class="input-xlarge focused" ng-model="socialSubHandle"/><br/>
+			<label for="handle">Name:</label> <input class="input-xlarge focused" ng-model="socialSubHandle"/><br/>
+		</form>
+<!-- 		<h5>Subscriptions</h5>
+		<ul>
+			<li>at least one... {{service.config.subscriptions.length}}</li>
+			<li ng-repeat="sub in service.config.subscriptions">{{sub.handle}}</li>
+		</ul> -->
 	</p>
 
 	<a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>
@@ -349,7 +343,7 @@
 <div class="well">
 	<h4>Facebook Subscriptions</h4>
 
-	<p ng-repeat="service in subscriptions['Facebook']">
+	<p ng-repeat="service in services['Facebook']">
 		Consumer Key: {{service.config.consumerKey}} <br/>
 		Consumer Secret: {{service.config.consumerSecret}} <br/>
 		Access Token: {{service.config.accessToken}} <br/>

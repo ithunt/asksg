@@ -61,25 +61,25 @@ public class Service implements ContentProvider {
 	public static Service fromJsonToService(String json) {
 		if (json.contains("\"name\":\"Twilio\"")) {
 			logger.error(json);
-			Service s = new JSONDeserializer<Service>().use(null, Twilio.class).use("config", TwilioConfig.class).deserialize(json);
+			Service s = new JSONDeserializer<Service>().use(null, Twilio.class).use("config", TwilioConfig.class).use("subscriptions", SocialSubscription.class).deserialize(json);
 			logger.error(s.toString());
 			return s;
 		} else if (json.contains("\"name\":\"Email\"")) {
-			return new JSONDeserializer<Service>().use(null, Email.class).use("config", EmailConfig.class).deserialize(json);
+			return new JSONDeserializer<Service>().use(null, Email.class).use("config", EmailConfig.class).use("subscriptions", SocialSubscription.class).deserialize(json);
 		} else if (json.contains("\"name\":\"Facebook\"")) {
 			logger.error("WENT TO FACEBOOK");
 			logger.error("input: " + json);
-			Service s = new JSONDeserializer<Service>().use(null, Facebook.class).use("config", SpringSocialConfig.class).deserialize(json);
+			Service s = new JSONDeserializer<Service>().use(null, Facebook.class).use("config", SpringSocialConfig.class).use("subscriptions", SocialSubscription.class).deserialize(json);
 			logger.error(s.toString() + " " + s.getConfig().toString());
 			return s;
 		} else if (json.contains("\"name\":\"Twitter\"")) {
 			logger.error("WENT TO TWITTER");
 			logger.error("input: " + json);
-			Service s = new JSONDeserializer<Service>().use(null, Twitter.class).use("config", SpringSocialConfig.class).deserialize(json);
+			Service s = new JSONDeserializer<Service>().use(null, Twitter.class).use("config", SpringSocialConfig.class).use("subscriptions", SocialSubscription.class).deserialize(json);
 			logger.error(s.toString() + " " + s.getConfig().toString());
 			return s;
 		} else if (json.contains("\"name\":\"Reddit\"")) {
-			return new JSONDeserializer<Service>().use(null, Reddit.class).use("config", RedditConfig.class).deserialize(json);
+			return new JSONDeserializer<Service>().use(null, Reddit.class).use("config", RedditConfig.class).use("subscriptions", SocialSubscription.class).deserialize(json);
 		}
 		return new JSONDeserializer<Service>().use(null, Service.class).deserialize(json);
 	}

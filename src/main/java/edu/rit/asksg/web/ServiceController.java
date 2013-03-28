@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RooWebJson(jsonObject = Service.class)
 @Controller
 @RequestMapping("/services")
 public class ServiceController {
+
+	private static final transient Logger logger = LoggerFactory.getLogger(Service.class);
 
 	@Autowired
 	FacebookService facebookService;
@@ -40,6 +44,7 @@ public class ServiceController {
 		providerService.saveService(service);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json");
+		logger.error(service.toString() + " - " + service.getConfig().toString());
 		return new ResponseEntity<String>(service.toJson(), headers, HttpStatus.CREATED);
 	}
 
