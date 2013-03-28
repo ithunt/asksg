@@ -6,7 +6,6 @@ package edu.rit.asksg.web;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.service.ConversationService;
 import edu.rit.asksg.web.ConversationController;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,33 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 privileged aspect ConversationController_Roo_Controller_Json {
     
     @Autowired
     ConversationService ConversationController.conversationService;
-    
-    @RequestMapping(value = "/{id}", headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<String> ConversationController.showJson(@PathVariable("id") Long id) {
-        Conversation conversation = conversationService.findConversation(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        if (conversation == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<String>(conversation.toJson(), headers, HttpStatus.OK);
-    }
-    
-    @RequestMapping(headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<String> ConversationController.listJson() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        List<Conversation> result = conversationService.findAllConversations();
-        return new ResponseEntity<String>(Conversation.toJsonArray(result), headers, HttpStatus.OK);
-    }
     
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> ConversationController.createFromJson(@RequestBody String json) {
