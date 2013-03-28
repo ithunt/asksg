@@ -96,8 +96,10 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 		final List<Conversation> conversations = new ArrayList<Conversation>();
 		logger.debug("Facebook: parsing feed. Posts has size " + posts.size() + ". Thread name: " + Thread.currentThread().getName());
 		for (Post post : posts) {
+			logger.debug("Facebook: parsing feed: post message is: " + post.getMessage() + ", author is: " + post.getFrom().getName());
 			Message message = new Message();
 			Conversation conversation = new Conversation(message);
+			conversation.setService(this);
 			message.setConversation(conversation);
 			message.setContent(post.getMessage());
 			message.setAuthor(facebookApi.userOperations().getUserProfile(post.getFrom().getId()).getName());

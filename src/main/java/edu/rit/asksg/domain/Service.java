@@ -61,7 +61,6 @@ public class Service implements ContentProvider {
 	}
 
 	public static Service fromJsonToService(String json) {
-		logger.trace(json);
 		Service s;
 		if (json.contains("\"name\":\"Twilio\"")) {
 			s = new JSONDeserializer<Service>().use(null, Twilio.class).use("config", TwilioConfig.class).deserialize(json);
@@ -76,7 +75,6 @@ public class Service implements ContentProvider {
 		} else {
 			s = new JSONDeserializer<Service>().use(null, Service.class).deserialize(json);
 		}
-		logger.trace(s.toString());
 		return s;
 	}
 }
