@@ -16,6 +16,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		//todo support enabled flag
+		//AsksgUser user = this.userRepository.findByUserNameAndEnabled(username);
 		AsksgUser user = this.userRepository.findByUserName(username);
 		if (user == null) {
 			throw new UsernameNotFoundException("User " + username + " not found in database.");

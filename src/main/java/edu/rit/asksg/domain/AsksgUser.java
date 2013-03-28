@@ -38,7 +38,7 @@ public class AsksgUser extends Identity implements UserDetails {
 
 	private transient Optional<List<GrantedAuthority>> authorities = Optional.absent();
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private UserRole role = new UserRole();
 
 	private String phoneNumber;
@@ -91,11 +91,6 @@ public class AsksgUser extends Identity implements UserDetails {
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
 		return true;
 	}
 

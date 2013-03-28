@@ -1,9 +1,11 @@
 package edu.rit.asksg.web;
 
+import edu.rit.asksg.common.Log;
 import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.UserRole;
 import edu.rit.asksg.service.RoleService;
 import edu.rit.asksg.service.UserService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,8 @@ public class UserController {
 
 	@Autowired
 	RoleService roleService;
+	@Log
+	Logger log;
 
 	@RequestMapping(value = "/seed")
 	public ResponseEntity<String> seed() {
@@ -57,4 +61,24 @@ public class UserController {
 		headers.add("Content-Type", "application/json");
 		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
+
+	@RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
+	public ResponseEntity<String> updateFromJson(@RequestBody String json) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json");
+		AsksgUser asksgUser = AsksgUser.fromJsonToAsksgUser(json);
+		AsksgUser dbUser = userService.findAsksgUser(asksgUser.getId());
+		dbUser.setEnabled(asksgUser.isEnabled());
+		dbUser.setEmail(asksgUser.getEmail());
+		dbUser.setName(asksgUser.getName());
+		dbUser.setPhoneNumber(asksgUser.getPhoneNumber());
+		dbUser.setUserName(asksgUser.getUserName());
+		//password not provided by asksguser, skip
+		//changing roles not supported
+		if (userService.updateAsksgUser(dbUser) == null) {
+			return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>(headers, HttpStatus.OK);
+	}
+
 }

@@ -48,17 +48,6 @@ privileged aspect UserController_Roo_Controller_Json {
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
     
-    @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> UserController.updateFromJson(@RequestBody String json) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        AsksgUser asksgUser = AsksgUser.fromJsonToAsksgUser(json);
-        if (userService.updateAsksgUser(asksgUser) == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
-    }
-    
     @RequestMapping(value = "/jsonArray", method = RequestMethod.PUT, headers = "Accept=application/json")
     public ResponseEntity<String> UserController.updateFromJsonArray(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
