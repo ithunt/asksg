@@ -64,11 +64,13 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
  * Provider config provider object constructor.
  */
 	//TODO: RENAME FUCKER
-function ProviderConfig(id, authenticated, config, name) {
+function ProviderConfig(id, authenticated, enabled, config, name, version) {
 	this.id = id;
 	this.authenticated = authenticated;
 	this.name = name;
+	this.enabled = enabled;
 	this.config = config;
+	this.version = version;
 }
 
 function Twilio(providerConfig, authenticated) {
@@ -193,7 +195,7 @@ function ConversationController($scope, $asksg, $log) {
 					console.log($scope.subscriptions);
 					console.log($scope.subscriptions[subData.name]);
 					$scope.subscriptions[subData.name].push(
-						new ProviderConfig(subData.id, subData.authenticated, subData.config,
+						new ProviderConfig(subData.id, subData.authenticated, subData.enabled, subData.config,
 							subData.name, subData.version));
 				}
 
@@ -209,9 +211,9 @@ function ConversationController($scope, $asksg, $log) {
 	/**
 	 * Invoke the ASKSG message post function
 	 */
-	$scope.doPostMessage = function (convo, messageId, message, author) {
+	$scope.doPostMessage = function (convo, message, author) {
 		// post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-		$asksg.postResponse(convo, messageId, message, author).
+		$asksg.postResponse(convo, message, author).
 			success(function (data, status, headers, config) {
 				console.log("Success");
 				console.log(data);
@@ -371,7 +373,7 @@ function ConversationController($scope, $asksg, $log) {
 	 */
 	$scope.deleteConvo = function (convoId) {
 		$asksg.deleteConvo(convoId);
-		refreshConvos();
+		$scope.refreshConvos();
 	};
 
 	/*
@@ -382,11 +384,7 @@ function ConversationController($scope, $asksg, $log) {
 	}
 
 	$scope.toggleReadConvo = function (convoId) {
-		if ($scope.convoMap[convoId].read == true) {
-			$scope.convoMap[convoId].read = false;
-		} else {
-			$scope.convoMap[convoId].read = true;
-		}
+		$scope.convoMap[convoId].read = !$scope.convoMap[convoId].read;
 		$asksg.updateConvo($scope.convoMap[convoId]);
 	}
 
@@ -394,12 +392,21 @@ function ConversationController($scope, $asksg, $log) {
 	 * Hide the specified conversation (mark as read).
 	 */
 	$scope.toggleHideConvo = function (convoId) {
-		if ($scope.convoMap[convoId].hidden == true) {
-			$scope.convoMap[convoId].hidden = false;
-		} else {
-			$scope.convoMap[convoId].hidden = true;
-		}
+		$scope.convoMap[convoId].hidden = !$scope.convoMap[convoId].hidden;
 		$asksg.updateConvo($scope.convoMap[convoId]);
+	}
+
+	$scope.toggleEnabledService = function (service) {
+		service.enabled = !service.enabled;
+		$asksg.updateService(service).success(function () {
+			$scope.refreshSubscriptions();
+		});
+	}
+
+	$scope.deleteService = function (serviceId) {
+		$asksg.deleteService(serviceId).success(function () {
+			$scope.refreshSubscriptions();
+		});
 	}
 
 	/*
@@ -448,53 +455,25 @@ function ConversationController($scope, $asksg, $log) {
 	 * Filter functions...
 	 */
 	$scope.filterEmail = function () {
-		if ($scope.filterConvoArray['Email']) {
-			$scope.filterConvoArray['Email'] = false;
-		} else {
-			$scope.filterConvoArray['Email'] = true;
-		}
+		$scope.filterConvoArray['Email'] = !$scope.filterConvoArray['Email'];
 	};
 	$scope.filterSms = function () {
-		if ($scope.filterConvoArray['Twilio']) {
-			$scope.filterConvoArray['Twilio'] = false;
-		} else {
-			$scope.filterConvoArray['Twilio'] = true;
-		}
+		$scope.filterConvoArray['Twilio'] = !$scope.filterConvoArray['Twilio'];
 	};
 	$scope.filterFacebook = function () {
-		if ($scope.filterConvoArray['Facebook']) {
-			$scope.filterConvoArray['Facebook'] = false;
-		} else {
-			$scope.filterConvoArray['Facebook'] = true;
-		}
+		$scope.filterConvoArray['Facebook'] = !$scope.filterConvoArray['Facebook'];
 	};
 	$scope.filterTwitter = function () {
-		if ($scope.filterConvoArray['Twitter']) {
-			$scope.filterConvoArray['Twitter'] = false;
-		} else {
-			$scope.filterConvoArray['Twitter'] = true;
-		}
+		$scope.filterConvoArray['Twitter'] = !$scope.filterConvoArray['Twitter'];
 	};
 	$scope.filterReddit = function () {
-		if ($scope.filterConvoArray['Reddit']) {
-			$scope.filterConvoArray['Reddit'] = false;
-		} else {
-			$scope.filterConvoArray['Reddit'] = true;
-		}
+		$scope.filterConvoArray['Reddit'] = !$scope.filterConvoArray['Reddit'];
 	};
 	$scope.filterRead = function () {
-		if ($scope.filterTagArray['read']) {
-			$scope.filterTagArray['read'] = false;
-		} else {
-			$scope.filterTagArray['read'] = true;
-		}
+		$scope.filterTagArray['read'] = !$scope.filterTagArray['read'];
 	};
 	$scope.filterUnread = function () {
-		if ($scope.filterTagArray['unread']) {
-			$scope.filterTagArray['unread'] = false;
-		} else {
-			$scope.filterTagArray['unread'] = true;
-		}
+		$scope.filterTagArray['unread'] = !$scope.filterTagArray['unread'];
 	};
 
 	// Set the user name
@@ -602,6 +581,18 @@ AsksgService = function () {
 				postNewService: function (service) {
 					console.log(JSON.stringify(service));
 					return $http({method: 'POST', url: servicesUrl, data: JSON.stringify(service)});
+				},
+
+				/**
+				 * Updates a service
+				 * @param service
+				 */
+				updateService: function (service) {
+					return $http({method: 'PUT', url: servicesUrl, data: JSON.stringify(service)});
+				},
+
+				deleteService: function (serviceId) {
+					return $http({method: 'DELETE', url: (servicesUrl + "/" + serviceId)});
 				},
 
 				/**

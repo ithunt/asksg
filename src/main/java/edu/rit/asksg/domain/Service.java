@@ -1,20 +1,20 @@
 package edu.rit.asksg.domain;
 
 import edu.rit.asksg.dataio.ContentProvider;
-import edu.rit.asksg.domain.config.ProviderConfig;
-import edu.rit.asksg.domain.config.TwilioConfig;
 import edu.rit.asksg.domain.config.EmailConfig;
+import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.RedditConfig;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
+import edu.rit.asksg.domain.config.TwilioConfig;
 import flexjson.JSON;
 import flexjson.JSONDeserializer;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
@@ -32,7 +32,7 @@ public class Service implements ContentProvider {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ProviderConfig config;
 
-	private boolean enabled;
+	private boolean enabled = true;
 
 	public String getName() {
 		return this.getClass().getSimpleName();
