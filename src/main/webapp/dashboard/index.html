@@ -535,15 +535,30 @@
 							<th>Phone Number</th>
 							<th>Email</th>
 							<th>Role</th>
+							<th>Enabled</th>
+							<th></th>
 						</tr>
 						</thead>
 						<tbody>
-						<tr ng-repeat="user in users">
+						<tr ng-repeat="user in users | orderBy:user.enabled">
 							<td>{{user.name}}</td>
 							<td>{{user.userName}}</td>
 							<td>{{user.phoneNumber}}</td>
 							<td>{{user.email}}</td>
 							<td>{{user.role.name}}</td>
+							<td>{{user.enabled}}</td>
+							<td>
+								<div class="dropdown delete">
+									<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+									<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+										<li role="presentation"><a ng-click="toggleEnabledUser(user)" role="menuitem"
+										                           tabindex="-1" href="#">Enable/Disable</a></li>
+
+										<li role="presentation"><a ng-click="deleteUser(user.id)" role="menuitem"
+										                           tabindex="-1" href="#">Delete</a></li>
+									</ul>
+								</div>
+							</td>
 						</tr>
 						</tbody>
 					</table>

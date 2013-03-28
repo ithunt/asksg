@@ -7,6 +7,8 @@ import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 @RooJpaEntity
 public abstract class Identity {
 
+	private boolean enabled = true;
+
 	public abstract String getName();
 
 	public abstract String getEmail();

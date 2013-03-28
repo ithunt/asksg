@@ -103,13 +103,15 @@ function Reddit(providerConfig, authenticated) {
 	this.name = "Reddit";
 }
 
-function User(name, username, password, phoneNumber, email, role) {
+function User(id, name, username, password, phoneNumber, email, role, enabled) {
+	this.id = id;
 	this.name = name;
 	this.userName = username;
 	this.password = password;
 	this.phoneNumber = phoneNumber;
 	this.email = email;
 	this.role = role;
+	this.enabled = enabled;
 }
 
 function Role(name) {
@@ -320,7 +322,7 @@ function ConversationController($scope, $asksg, $log) {
 	};
 
 	$scope.addUser = function () {
-		$asksg.postNewUser(new User($scope.userName, $scope.userUsername, $scope.userPassword, $scope.userPhone, $scope.userEmail, $scope.userRole)).
+		$asksg.postNewUser(new User(null, $scope.userName, $scope.userUsername, $scope.userPassword, $scope.userPhone, $scope.userEmail, $scope.userRole, true)).
 			success(function (data, status, headers, config) {
 				$scope.refreshUsers();
 			});
@@ -343,7 +345,7 @@ function ConversationController($scope, $asksg, $log) {
 				$scope.users = new Array();
 				for (var i = 0; i < data.length; i++) {
 					var userData = angular.fromJson(data[i]);
-					$scope.users.push(new User(userData.name, userData.userName, '', userData.phoneNumber, userData.email, new Role(data[i].role.name)));
+					$scope.users.push(new User(userData.id, userData.name, userData.userName, '', userData.phoneNumber, userData.email, new Role(data[i].role.name), userData.enabled));
 				}
 			}).error(function (data, status, headers, config) {
 				console.log("Failed to retrieve users");
@@ -406,6 +408,19 @@ function ConversationController($scope, $asksg, $log) {
 	$scope.deleteService = function (serviceId) {
 		$asksg.deleteService(serviceId).success(function () {
 			$scope.refreshSubscriptions();
+		});
+	}
+
+	$scope.toggleEnabledUser = function (user) {
+		user.enabled = !user.enabled;
+		$asksg.updateUser(user).success(function () {
+			$scope.refreshUsers();
+		});
+	}
+
+	$scope.deleteUser = function (userId) {
+		$asksg.deleteUser(userId).success(function () {
+			$scope.refreshUsers();
 		});
 	}
 
@@ -593,6 +608,18 @@ AsksgService = function () {
 
 				deleteService: function (serviceId) {
 					return $http({method: 'DELETE', url: (servicesUrl + "/" + serviceId)});
+				},
+
+				/**
+				 * Updates a user
+				 * @param user
+				 */
+				updateUser: function (user) {
+					return $http({method: 'PUT', url: usersUrl, data: JSON.stringify(user)});
+				},
+
+				deleteUser: function (userId) {
+					return $http({method: 'DELETE', url: (usersUrl + "/" + userId)});
 				},
 
 				/**
