@@ -38,7 +38,7 @@ public class SubscriptionWorker implements AsyncWorker {
 				try {
 					conversationService.saveConversations(conversationList);
 				} catch (Exception e) {
-					log.error(e.getLocalizedMessage());
+					log.error(e.getLocalizedMessage(), e);
 				}
 			}
 		}

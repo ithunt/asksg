@@ -32,7 +32,7 @@ public class RefreshWorker implements AsyncWorker {
 		try {
 			conversationService.saveConversations(service.getNewContent());
 		} catch (Exception e) {
-			log.error(e.getLocalizedMessage());
+			log.error(e.getLocalizedMessage(), e);
 		}
 
 		log.debug("Pull worker on " + threadName + " for service " + service.toString() + " completed.");

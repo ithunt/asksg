@@ -65,7 +65,8 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 				facebookApi.commentOperations().addComment(message.getConversation().getExternalId(), message.getContent());
 			}
 		} catch (Exception e) {
-			return false;
+			logger.error("Exception in Facebook trying to post content.", e);
+			return false; //TODO: for the love of god handle this exception
 		}
 		return true;
 	}
@@ -93,6 +94,7 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 
 	protected List<Conversation> parseFacebookFeed(List<Post> posts, org.springframework.social.facebook.api.Facebook facebookApi) {
 		final List<Conversation> conversations = new ArrayList<Conversation>();
+		logger.debug("Facebook: parsing feed. Posts has size " + posts.size() + ". Thread name: " + Thread.currentThread().getName());
 		for (Post post : posts) {
 			Message message = new Message();
 			Conversation conversation = new Conversation(message);
