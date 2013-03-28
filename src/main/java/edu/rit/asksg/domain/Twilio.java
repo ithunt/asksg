@@ -30,7 +30,7 @@ import java.util.Map;
 public class Twilio extends Service implements ContentProvider {
 
 	@Autowired
-	transient ConversationService conversationService;
+	private transient ConversationService conversationService;
 
 	private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
@@ -91,5 +91,9 @@ public class Twilio extends Service implements ContentProvider {
 		conv.setService(this);
 
 		conversationService.saveConversation(conv);
+	}
+
+	public void setConversationService(ConversationService conversationService) {
+		this.conversationService = conversationService;
 	}
 }
