@@ -19,6 +19,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
+import java.util.ArrayList;
 import java.util.List;
 
 @RooJavaBean
@@ -40,12 +41,12 @@ public class Service implements ContentProvider {
 
 	@JSON(include = false)
 	public List<edu.rit.asksg.domain.Conversation> getNewContent() {
-		return null;
+		return new ArrayList<Conversation>();
 	}
 
 	@JSON(include = false)
 	public List<edu.rit.asksg.domain.Conversation> getContentSince(LocalDateTime datetime) {
-		return null;
+		return new ArrayList<Conversation>();
 	}
 
 	public boolean postContent(Message message) {

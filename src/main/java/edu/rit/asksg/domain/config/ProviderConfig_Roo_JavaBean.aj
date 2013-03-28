@@ -7,6 +7,8 @@ import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.SocialSubscription;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import java.util.Set;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Minutes;
 
 privileged aspect ProviderConfig_Roo_JavaBean {
     
@@ -48,6 +50,38 @@ privileged aspect ProviderConfig_Roo_JavaBean {
     
     public void ProviderConfig.setHost(String host) {
         this.host = host;
+    }
+    
+    public LocalDateTime ProviderConfig.getLastUpdate() {
+        return this.lastUpdate;
+    }
+    
+    public void ProviderConfig.setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+    
+    public int ProviderConfig.getMaxCalls() {
+        return this.maxCalls;
+    }
+    
+    public void ProviderConfig.setMaxCalls(int maxCalls) {
+        this.maxCalls = maxCalls;
+    }
+    
+    public Minutes ProviderConfig.getUpdateFrequency() {
+        return this.updateFrequency;
+    }
+    
+    public void ProviderConfig.setUpdateFrequency(Minutes updateFrequency) {
+        this.updateFrequency = updateFrequency;
+    }
+    
+    public LocalDateTime ProviderConfig.getCounterRefresh() {
+        return this.counterRefresh;
+    }
+    
+    public void ProviderConfig.setCounterRefresh(LocalDateTime counterRefresh) {
+        this.counterRefresh = counterRefresh;
     }
     
     public int ProviderConfig.getPort() {

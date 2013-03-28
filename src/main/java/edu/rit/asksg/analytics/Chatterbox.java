@@ -4,28 +4,27 @@ import com.mashape.client.http.MashapeCallback;
 import com.mashape.client.http.MashapeResponse;
 import edu.rit.asksg.analytics.client.SentimentAnalysisForSocialMedia;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.service.MessageService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
 
 
 @RooJavaBean
 @RooToString
-public class Chatterbox {
-
-
-	@Autowired
-	private ProviderConfig config;
+@RooJpaEntity
+public class Chatterbox extends Service {
 
 	@Autowired
 	private transient MessageService messageService;
 
 	public void handleMessage(final Message message) {
-		SentimentAnalysisForSocialMedia client = new SentimentAnalysisForSocialMedia(config.getAuthenticationToken());
+		SentimentAnalysisForSocialMedia client = new SentimentAnalysisForSocialMedia(this.getConfig().getAuthenticationToken());
 		Thread thread = client.classifytext(message.getContent(), "en", null, null, new MashapeCallback<JSONObject>() {
 			@Override
 			public void requestCompleted(MashapeResponse<JSONObject> jsonObjectMashapeResponse) {

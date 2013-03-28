@@ -1,7 +1,7 @@
 package edu.rit.asksg.web;
 
 import edu.rit.asksg.common.Log;
-import edu.rit.asksg.dataio.ScheduledPocessor;
+import edu.rit.asksg.dataio.ScheduledProcessor;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Email;
 import edu.rit.asksg.domain.Facebook;
@@ -41,7 +41,7 @@ public class ConversationController {
 	ProviderService providerService;
 
 	@Autowired
-	ScheduledPocessor scheduledPocessor;
+	ScheduledProcessor scheduledProcessor;
 
 	@RequestMapping(value = "/seed")
 	public ResponseEntity<String> seed() {
@@ -172,8 +172,8 @@ public class ConversationController {
 	}
 
 	protected void pullContent() {
-		scheduledPocessor.executeRefresh();
-		scheduledPocessor.executeSubscriptions();
+		scheduledProcessor.executeRefresh();
+		scheduledProcessor.executeSubscriptions();
 	}
 
 }

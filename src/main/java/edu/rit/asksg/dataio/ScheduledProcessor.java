@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Component
-public class ScheduledPocessor {
+public class ScheduledProcessor {
 
 	@Log
 	Logger log;
@@ -34,7 +34,7 @@ public class ScheduledPocessor {
 		log.debug("Start execution of dataio refresh");
 		List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
 		for (edu.rit.asksg.domain.Service service : services) {
-			if(service.isEnabled()){
+			if (service.isEnabled()) {
 				refreshWorker.work(service);
 			}
 		}
@@ -47,7 +47,7 @@ public class ScheduledPocessor {
 		log.debug("Start execution of subscription pull");
 		List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
 		for (edu.rit.asksg.domain.Service service : services) {
-			if(service.isEnabled()){
+			if (service.isEnabled()) {
 				subscriptionWorker.work(service);
 			}
 		}
