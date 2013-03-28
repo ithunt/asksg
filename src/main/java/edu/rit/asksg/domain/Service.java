@@ -73,7 +73,11 @@ public class Service implements ContentProvider {
 			logger.error(s.toString() + " " + s.getConfig().toString());
 			return s;
 		} else if (json.contains("\"name\":\"Twitter\"")) {
-			return new JSONDeserializer<Service>().use(null, Twitter.class).use("config", SpringSocialConfig.class).deserialize(json);
+			logger.error("WENT TO TWITTER");
+			logger.error("input: " + json);
+			Service s = new JSONDeserializer<Service>().use(null, Twitter.class).use("config", SpringSocialConfig.class).deserialize(json);
+			logger.error(s.toString() + " " + s.getConfig().toString());
+			return s;
 		} else if (json.contains("\"name\":\"Reddit\"")) {
 			return new JSONDeserializer<Service>().use(null, Reddit.class).use("config", RedditConfig.class).deserialize(json);
 		}

@@ -12,6 +12,14 @@ function getQueryVariable(variable) {
 }
 
 /**
+ * SocialSubscription object constructor
+ */
+function SocialSubscription(handle, name) {
+	this.handle = handle; // not null
+	this.name = name;
+}
+
+/**
  * Message object constructor.
  */
 function Message(author, content, conversationId) {
@@ -63,12 +71,17 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 /**
  * Provider config provider object constructor.
  */
-	//TODO: RENAME FUCKER
-function ProviderConfig(id, authenticated, config, name) {
+function ProviderConfig(id, authenticated, config, name, subscriptions) {
 	this.id = id;
 	this.authenticated = authenticated;
 	this.name = name;
 	this.config = config;
+
+	// dummy data
+	this.config.subscriptions[0] = new SocialSubscription("handleA", "nameA");
+	this.config.subscriptions[1] = new SocialSubscription("handleB", "nameB");
+	console.log(this.config);
+	//console.log("WHY OH WHY");
 }
 
 function Twilio(providerConfig, authenticated) {
@@ -194,7 +207,7 @@ function ConversationController($scope, $asksg, $log) {
 					console.log($scope.subscriptions[subData.name]);
 					$scope.subscriptions[subData.name].push(
 						new ProviderConfig(subData.id, subData.authenticated, subData.config,
-							subData.name, subData.version));
+							subData.name, subData.version, subData.subscriptions));
 				}
 
 				// debug
@@ -279,7 +292,7 @@ function ConversationController($scope, $asksg, $log) {
 		// config, name, version)
 		config = {url: $scope.twitterUrl, consumerkey: $scope.twitterConsumerKey, consumersecret: $scope.twitterConsumerSecret,
 			accesstoken: $scope.twitterAccessToken, accesstokensecret: $scope.twitterAccessSecret,
-			authenticationToken: "", createdBy: null, host: "", password: "", username: ""};
+			authenticationToken: "", createdBy: null, host: "", password: "", username: "", subscriptions: [{"handle":"handleA", "name":"name!"}]};
 		newService = new Twitter(config, false);
 		$asksg.postNewService(newService).
 			success(function (data, status, headers, config) {

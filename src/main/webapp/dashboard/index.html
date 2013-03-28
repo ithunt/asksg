@@ -284,10 +284,30 @@
 
 	<p ng-repeat="service in subscriptions['Twitter']">
 		Identifier (URL): {{service.config.url}} <br/>
-		Consumer Key: {{service.config.consumerkey}} <br/>
-		Consumer Secret: {{service.config.consumersecret}} <br/>
-		Access Token: {{service.config.accesstoken}} <br/>
-		Access Token Secret: {{service.config.accesstokensecret}}
+		Consumer Key: {{service.config.consumerKey}} <br/>
+		Consumer Secret: {{service.config.consumerSecret}} <br/>
+		Access Token: {{service.config.accessToken}} <br/>
+		Access Token Secret: {{service.config.accessTokenSecret}}
+		<hr/>
+		<h5>Subscriptions</h5>
+		0 {{service.config}} <br/>
+		1 {{service.config.subscriptions}} <br/>
+		2 {{service.config.subscriptions[0]}} <br/>
+		3 {{service.config.subscriptions[0].handle}} <br/>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th style="text-align:center;">Handle</th>
+					<th style="text-align:center;">Name</th>
+				</tr>
+			</thead>
+			<tbody id="subscriptionRow">
+				<tr ng-repeat="sub in service.config.subscriptions">
+					<td>{{sub.handle}}</td>
+					<td>{{sub.name}}</td>
+				</tr>
+			</tbody>
+		</table>
 	</p>
 
 	<a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>
