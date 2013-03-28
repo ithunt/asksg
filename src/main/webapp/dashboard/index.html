@@ -91,9 +91,9 @@
 			<div class="well sidebar-nav">
 				<ul class="nav nav-list">
 					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
-					<li id="service-item-email" class="active service-menu-item" ng-click="filterRead()"><a
+					<li id="service-item-read" class="active service-menu-item" ng-click="filterRead()"><a
 							href="#">Read</a></li>
-					<li id="service-item-sms" class="active service-menu-item" ng-click="filterUnread()"><a
+					<li id="service-item-unread" class="active service-menu-item" ng-click="filterUnread()"><a
 							href="#">Unread</a></li>
 				</ul>
 			</div>
@@ -213,11 +213,28 @@
 <div class="well">
 	<h4>Twilio Subscription</h4>
 
-	<p ng-repeat="service in subscriptions['Twilio']">
-		Account SID: {{service.config.username}} <br/>
-		Authentication Token: {{service.config.authenticationToken}} <br/>
-		Phone Number: {{service.config.phoneNumber}}
-	</p>
+	<div ng-repeat="service in subscriptions['Twilio']">
+		<!-- todo turn into a directive and template, can't do now, no scopes used, would break things-->
+		<!-- Options menu for the service -->
+		<div class="dropdown delete pull-right" showonhoverparent>
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+				                           tabindex="-1" href="#">Enable/Disable</a></li>
+
+				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+				                           tabindex="-1" href="#">Delete</a></li>
+			</ul>
+		</div>
+		<div>
+			<p>
+				Account SID: {{service.config.username}} <br/>
+				Authentication Token: {{service.config.authenticationToken}} <br/>
+				Phone Number: {{service.config.phoneNumber}} <br/>
+				Enabled: {{service.enabled}}
+			</p>
+		</div>
+	</div>
 
 	<a data-toggle="modal" href="#twilioModal" class="btn">Add Service</a>
 
@@ -250,10 +267,26 @@
 <div class="well">
 	<h4>Email Subscriptions</h4>
 
-	<p ng-repeat="service in subscriptions['Email']">
-		Username: {{service.config.username}} <br/>
-		Password: {{service.config.password}}
-	</p>
+	<div ng-repeat="service in subscriptions['Email']">
+		<!-- Options menu for the service -->
+		<div class="dropdown delete pull-right" showonhoverparent>
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+				                           tabindex="-1" href="#">Enable/Disable</a></li>
+
+				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+				                           tabindex="-1" href="#">Delete</a></li>
+			</ul>
+		</div>
+		<div>
+			<p>
+				Username: {{service.config.username}} <br/>
+				Password: {{service.config.password}} <br/>
+				Enabled: {{service.enabled}}
+			</p>
+		</div>
+	</div>
 
 	<a data-toggle="modal" href="#emailModal" class="btn">Add Service</a>
 
@@ -282,13 +315,30 @@
 <div class="well">
 	<h4>Twitter Subscriptions</h4>
 
-	<p ng-repeat="service in subscriptions['Twitter']">
-		Identifier (URL): {{service.config.url}} <br/>
-		Consumer Key: {{service.config.consumerkey}} <br/>
-		Consumer Secret: {{service.config.consumersecret}} <br/>
-		Access Token: {{service.config.accesstoken}} <br/>
-		Access Token Secret: {{service.config.accesstokensecret}}
-	</p>
+	<div ng-repeat="service in subscriptions['Twitter']">
+		<!-- Options menu for the service -->
+		<div class="dropdown delete pull-right" showonhoverparent>
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+				                           tabindex="-1" href="#">Enable/Disable</a></li>
+
+				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+				                           tabindex="-1" href="#">Delete</a></li>
+			</ul>
+		</div>
+		<div>
+			<p>
+				Identifier (URL): {{service.config.url}} <br/>
+				Consumer Key: {{service.config.consumerkey}} <br/>
+				Consumer Secret: {{service.config.consumersecret}} <br/>
+				Access Token: {{service.config.accesstoken}} <br/>
+				Access Token Secret: {{service.config.accesstokensecret}} <br/>
+				Enabled: {{service.enabled}}
+			</p>
+		</div>
+
+	</div>
 
 	<a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>
 
@@ -329,15 +379,32 @@
 <div class="well">
 	<h4>Facebook Subscriptions</h4>
 
-	<p ng-repeat="service in subscriptions['Facebook']">
-		Consumer Key: {{service.config.consumerKey}} <br/>
-		Consumer Secret: {{service.config.consumerSecret}} <br/>
-		Access Token: {{service.config.accessToken}} <br/>
-		Access Token Secret: {{service.config.accessTokenSecret}} <br/>
-		<a ng-show="service.config.facebookAccessToken == null" data-toggle="modal"
-		   href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox"
-		   class="btn">Authenticate</a>
-	</p>
+	<div ng-repeat="service in subscriptions['Facebook']">
+		<!-- Options menu for the service -->
+		<div class="dropdown delete pull-right" showonhoverparent>
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+				                           tabindex="-1" href="#">Enable/Disable</a></li>
+
+				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+				                           tabindex="-1" href="#">Delete</a></li>
+			</ul>
+		</div>
+		<div>
+			<p>
+				Consumer Key: {{service.config.consumerKey}} <br/>
+				Consumer Secret: {{service.config.consumerSecret}} <br/>
+				Access Token: {{service.config.accessToken}} <br/>
+				Access Token Secret: {{service.config.accessTokenSecret}} <br/>
+				Enabled: {{service.enabled}} <br/>
+				<a ng-show="service.config.facebookAccessToken == null" data-toggle="modal"
+				   href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox"
+				   class="btn">Authenticate</a>
+			</p>
+		</div>
+
+	</div>
 
 	<a data-toggle="modal" href="#facebookModal" class="btn">Add Service</a>
 
@@ -367,11 +434,27 @@
 <!-- TODO: PUT BACK IN WHEN REDDIT API IS WORKING
 <div class="well">
 <h4>Reddit Subscriptions</h4>
-<p ng-repeat="service in subscriptions['Reddit']">
+<div ng-repeat="service in subscriptions['Reddit']">
+<div class="dropdown delete pull-right" showonhoverparent>
+	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+	<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+		<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+		                           tabindex="-1" href="#">Enable/Disable</a></li>
+
+		<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+		                           tabindex="-1" href="#">Delete</a></li>
+	</ul>
+</div>
+
+<div>
+<p>
 	Identifier: {{service.config.identifier}} <br/>
 	Username: {{service.config.username}} <br/>
-	Password: {{service.config.password}}
-</p>
+	Password: {{service.config.password}}<br/>
+	Enabled: {{service.enabled}}
+	</p>
+	</div>
+</div>
 
 <a data-toggle="modal" href="#redditModal" class="btn">Add Service</a>
 <div class="modal hide" id="redditModal">
@@ -426,48 +509,48 @@
 
 <!--- usersTab -->
 <div id="userConfigTab" class="tab-pane fade">
-    <div class="row-fluid">
-                <div class="span12">
-                    <h2>ASKSG Users</h2>
+	<div class="row-fluid">
+		<div class="span12">
+			<h2>ASKSG Users</h2>
 
-                    <p>Create User</p>
-                    <!-- todo fix awkward naming with user angular controller for scope -->
-                    <form ng-submit="addUser()">
-                        <input type="text" ng-model="userName" size="30" placeholder="Name">
-                        <input type="text" ng-model="userUsername" size="10" placeholder="User Name">
-                        <input type="text" ng-model="userPassword" size="15" placeholder="Password">
-                        <input type="text" ng-model="userPhone" size="13" placeholder="Phone">
-                        <input type="text" ng-model="userEmail" size="30" placeholder="Email">
-                        <select ng-model="userRole" ng-options="role.name for role in roles"></select>
-                        <input class="btn-primary" type="submit" value="add">
-                    </form>
-                    <!--user table-->
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Username</th>
-                                    <th>Phone Number</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="user in users">
-                                    <td>{{user.name}}</td>
-                                    <td>{{user.userName}}</td>
-                                    <td>{{user.phoneNumber}}</td>
-                                    <td>{{user.email}}</td>
-                                    <td>{{user.role.name}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+			<p>Create User</p>
+			<!-- todo fix awkward naming with user angular controller for scope -->
+			<form ng-submit="addUser()">
+				<input type="text" ng-model="userName" size="30" placeholder="Name">
+				<input type="text" ng-model="userUsername" size="10" placeholder="User Name">
+				<input type="text" ng-model="userPassword" size="15" placeholder="Password">
+				<input type="text" ng-model="userPhone" size="13" placeholder="Phone">
+				<input type="text" ng-model="userEmail" size="30" placeholder="Email">
+				<select ng-model="userRole" ng-options="role.name for role in roles"></select>
+				<input class="btn-primary" type="submit" value="add">
+			</form>
+			<!--user table-->
+			<div class="row-fluid">
+				<div class="span12">
+					<table class="table table-bordered table-striped">
+						<thead>
+						<tr>
+							<th>Name</th>
+							<th>Username</th>
+							<th>Phone Number</th>
+							<th>Email</th>
+							<th>Role</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="user in users">
+							<td>{{user.name}}</td>
+							<td>{{user.userName}}</td>
+							<td>{{user.phoneNumber}}</td>
+							<td>{{user.email}}</td>
+							<td>{{user.role.name}}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 </div>
