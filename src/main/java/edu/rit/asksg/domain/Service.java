@@ -32,6 +32,8 @@ public class Service implements ContentProvider {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ProviderConfig config;
 
+	private boolean enabled;
+
 	public String getName() {
 		return this.getClass().getSimpleName();
 	}
@@ -59,24 +61,22 @@ public class Service implements ContentProvider {
 	}
 
 	public static Service fromJsonToService(String json) {
+		logger.trace(json);
+		Service s;
 		if (json.contains("\"name\":\"Twilio\"")) {
-			logger.error(json);
-			Service s = new JSONDeserializer<Service>().use(null, Twilio.class).use("config", TwilioConfig.class).deserialize(json);
-			logger.error(s.toString());
-			return s;
+			s = new JSONDeserializer<Service>().use(null, Twilio.class).use("config", TwilioConfig.class).deserialize(json);
 		} else if (json.contains("\"name\":\"Email\"")) {
-			return new JSONDeserializer<Service>().use(null, Email.class).use("config", EmailConfig.class).deserialize(json);
+			s = new JSONDeserializer<Service>().use(null, Email.class).use("config", EmailConfig.class).deserialize(json);
 		} else if (json.contains("\"name\":\"Facebook\"")) {
-			logger.error("WENT TO FACEBOOK");
-			logger.error("input: " + json);
-			Service s = new JSONDeserializer<Service>().use(null, Facebook.class).use("config", SpringSocialConfig.class).deserialize(json);
-			logger.error(s.toString() + " " + s.getConfig().toString());
-			return s;
+			s = new JSONDeserializer<Service>().use(null, Facebook.class).use("config", SpringSocialConfig.class).deserialize(json);
 		} else if (json.contains("\"name\":\"Twitter\"")) {
-			return new JSONDeserializer<Service>().use(null, Twitter.class).use("config", SpringSocialConfig.class).deserialize(json);
+			s = new JSONDeserializer<Service>().use(null, Twitter.class).use("config", SpringSocialConfig.class).deserialize(json);
 		} else if (json.contains("\"name\":\"Reddit\"")) {
-			return new JSONDeserializer<Service>().use(null, Reddit.class).use("config", RedditConfig.class).deserialize(json);
+			s = new JSONDeserializer<Service>().use(null, Reddit.class).use("config", RedditConfig.class).deserialize(json);
+		} else {
+			s = new JSONDeserializer<Service>().use(null, Service.class).deserialize(json);
 		}
-		return new JSONDeserializer<Service>().use(null, Service.class).deserialize(json);
+		logger.trace(s.toString());
+		return s;
 	}
 }

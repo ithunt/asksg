@@ -34,7 +34,9 @@ public class ScheduledPocessor {
 		log.debug("Start execution of dataio refresh");
 		List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
 		for (edu.rit.asksg.domain.Service service : services) {
-			refreshWorker.work(service);
+			if(service.isEnabled()){
+				refreshWorker.work(service);
+			}
 		}
 		log.debug("Scheduler finished dataio refresh");
 	}
@@ -45,7 +47,9 @@ public class ScheduledPocessor {
 		log.debug("Start execution of subscription pull");
 		List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
 		for (edu.rit.asksg.domain.Service service : services) {
-			subscriptionWorker.work(service);
+			if(service.isEnabled()){
+				subscriptionWorker.work(service);
+			}
 		}
 		log.debug("Scheduler finished subscription pull");
 	}
