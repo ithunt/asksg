@@ -93,6 +93,11 @@ public class Twilio extends Service implements ContentProvider {
 		conversationService.saveConversation(conv);
 	}
 
+	@JSON(include = false)
+	public ConversationService getConversationService() {
+		return conversationService;
+	}
+
 	public void setConversationService(ConversationService conversationService) {
 		this.conversationService = conversationService;
 	}
