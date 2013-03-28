@@ -152,13 +152,22 @@ public class Email extends Service implements ContentProvider {
 			store = session.getStore("imaps");
 
 			/** USERNAME AND PASSWORD */
-			//store.connect("imap.gmail.com", config.getUsername(), config.getPassword());
-			store.connect("imap.gmail.com", "ritasksg@gmail.com", "allHailSpring");
+			store.connect("imap.gmail.com", config.getUsername(), config.getPassword());
+			//store.connect("imap.gmail.com", "ritasksg@gmail.com", "allHailSpring");
+
+
+            //inboxes to read
 
 			Folder inbox = store.getFolder("Inbox");
 			inbox.open(Folder.READ_ONLY);
-			FlagTerm ft = new FlagTerm(new Flags(Flags.Flag.SEEN), false);
+
+            Flags flags = new Flags(Flags.Flag.RECENT);
+            //flags.add(Flags.Flag.SEEN);
+
+			FlagTerm ft = new FlagTerm(flags, false);
+
 			javax.mail.Message messages[] = inbox.search(ft);
+
 			for (javax.mail.Message message : messages) {
 
 				try {
