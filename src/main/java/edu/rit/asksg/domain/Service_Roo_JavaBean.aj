@@ -16,4 +16,12 @@ privileged aspect Service_Roo_JavaBean {
         this.config = config;
     }
     
+    public boolean Service.isEnabled() {
+        return this.enabled;
+    }
+    
+    public void Service.setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    
 }

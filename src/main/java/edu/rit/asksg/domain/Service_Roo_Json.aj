@@ -16,10 +16,6 @@ privileged aspect Service_Roo_Json {
         return new JSONSerializer().exclude("*.class").deepSerialize(this);
     }
     
-    public static Service Service.fromJsonToService(String json) {
-        return new JSONDeserializer<Service>().use(null, Service.class).deserialize(json);
-    }
-    
     public static String Service.toJsonArray(Collection<Service> collection) {
         return new JSONSerializer().exclude("*.class").deepSerialize(collection);
     }
