@@ -13,31 +13,30 @@ import org.springframework.stereotype.Component;
  */
 public class RefreshWorker implements AsyncWorker {
 
-    @Log
-    Logger log;
+	@Log
+	Logger log;
 
-    @Autowired
-    ConversationService conversationService;
+	@Autowired
+	ConversationService conversationService;
 
-    /**
-     * Pull new content for each service in an async context
-     *
-     * @param service
-     */
-    @Async
-    public void work(final Service service) {
-        final String threadName = Thread.currentThread().getName();
-        log.debug("Pull worker executing on " + threadName + " for service " + service.toString());
+	/**
+	 * Pull new content for each service in an async context
+	 *
+	 * @param service
+	 */
+	@Async
+	public void work(final Service service) {
+		final String threadName = Thread.currentThread().getName();
+		log.debug("Pull worker executing on " + threadName + " for service " + service.toString());
 
-        try {
-            conversationService.saveConversations(service.getNewContent());
-        } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
-        }
+		try {
+			conversationService.saveConversations(service.getNewContent());
+		} catch (Exception e) {
+			log.error(e.getLocalizedMessage(), e);
+		}
 
-        log.debug("Pull worker on " + threadName + " for service " + service.toString() + " completed.");
-    }
-
+		log.debug("Pull worker on " + threadName + " for service " + service.toString() + " completed.");
+	}
 
 
 }

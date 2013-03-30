@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 privileged aspect UserController_Roo_Controller_Json {
@@ -39,15 +38,6 @@ privileged aspect UserController_Roo_Controller_Json {
         return new ResponseEntity<String>(AsksgUser.toJsonArray(result), headers, HttpStatus.OK);
     }
     
-    @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> UserController.createFromJson(@RequestBody String json) {
-        AsksgUser asksgUser = AsksgUser.fromJsonToAsksgUser(json);
-        userService.saveAsksgUser(asksgUser);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
-    }
-    
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> UserController.createFromJsonArray(@RequestBody String json) {
         for (AsksgUser asksgUser: AsksgUser.fromJsonArrayToAsksgUsers(json)) {
@@ -56,17 +46,6 @@ privileged aspect UserController_Roo_Controller_Json {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
-    }
-    
-    @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> UserController.updateFromJson(@RequestBody String json) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        AsksgUser asksgUser = AsksgUser.fromJsonToAsksgUser(json);
-        if (userService.updateAsksgUser(asksgUser) == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/jsonArray", method = RequestMethod.PUT, headers = "Accept=application/json")
@@ -91,14 +70,6 @@ privileged aspect UserController_Roo_Controller_Json {
         }
         userService.deleteAsksgUser(asksgUser);
         return new ResponseEntity<String>(headers, HttpStatus.OK);
-    }
-    
-    @RequestMapping(params = "find=ByUserNameEquals", headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<String> UserController.jsonFindAsksgUsersByUserNameEquals(@RequestParam("userName") String userName) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(AsksgUser.toJsonArray(AsksgUser.findAsksgUsersByUserNameEquals(userName).getResultList()), headers, HttpStatus.OK);
     }
     
 }

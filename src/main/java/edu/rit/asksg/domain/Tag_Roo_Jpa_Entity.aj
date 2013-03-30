@@ -5,15 +5,15 @@ package edu.rit.asksg.domain;
 
 import edu.rit.asksg.domain.Tag;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 privileged aspect Tag_Roo_Jpa_Entity {
     
-    declare @type: Tag: @MappedSuperclass;
+    declare @type: Tag: @Entity;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

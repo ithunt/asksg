@@ -1,204 +1,197 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" ng-app="ASKSG"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" ng-app="ASKSG"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
-        </style>
-        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-        <link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<style>
+		body {
+			padding-top: 60px;
+			padding-bottom: 40px;
+		}
+	</style>
+	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="css/main.css">
 
-        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
-        <!-- Load the angular controller code -->
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script> <!-- ../js/angular/angular.min.js -->
-        <script src="./js/asksg.module.js"></script>
+	<!-- Load the angular controller code -->
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+	<!-- ../js/angular/angular.min.js -->
+	<script src="./js/asksg.module.js"></script>
 
-        <!-- login -->
-        <script language="javascript">
-            function forceHttpsOnSubmit(objForm) {
-                console.log("TODO: switch over to HTTPS when the cert is installed...");
-                // TODO: drop in this code when SSL cert is up...
-                //objForm.action = objForm.action.replace("http:", "https:"); // .replace(":8080",":8443")
-            }
-        </script>
-    </head>
-    <body ng-controller="MainController">
+	<!-- login -->
+	<script language="javascript">
+		function forceHttpsOnSubmit(objForm) {
+			console.log("TODO: switch over to HTTPS when the cert is installed...");
+			// TODO: drop in this code when SSL cert is up...
+			//objForm.action = objForm.action.replace("http:", "https:"); // .replace(":8080",":8443")
+		}
+	</script>
+</head>
+<body ng-controller="MainController">
 
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
+<!--[if lt IE 7]>
+<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+	your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to
+	improve your experience.</p>
+<![endif]-->
 
-        <div id="fl_menu" class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="/">ASKSG</a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav">
-                            <!--<li><a href="/students/index.html">Students</a></li>-->
-                            <li><a class="scrollToLearnMore" href="#learn-more">Learn More</a></li>
-                        </ul>
-                        <ul class="nav pull-right">
-                            <!--<li><a href="/students/index.html">Students</a></li>-->
-                            <!--<li><a class="scrollToLearnMore" href="#learn-more">Learn More</a></li>-->
-                            <li><a data-toggle="modal" href="#loginModal" class="pull-right login-window">Login</a></li>
-                        </ul>
-                        <!--<a data-toggle="modal" href="#loginModal" class="btn pull-right login-window">Login</a>-->
-                    </div><!--/.nav-collapse -->
-                </div>
-            </div>
-        </div>
+<div id="fl_menu" class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="/">ASKSG</a>
 
-        <div class="container">
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<!--<li><a href="/students/index.html">Students</a></li>-->
+					<li><a class="scrollToLearnMore" href="#learn-more">Learn More</a></li>
+				</ul>
+				<ul class="nav pull-right">
+					<!--<li><a href="/students/index.html">Students</a></li>-->
+					<!--<li><a class="scrollToLearnMore" href="#learn-more">Learn More</a></li>-->
+					<li><a data-toggle="modal" href="#loginModal" class="pull-right login-window">Login</a></li>
+				</ul>
+				<!--<a data-toggle="modal" href="#loginModal" class="btn pull-right login-window">Login</a>-->
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+</div>
 
-            <!-- Main hero unit for a primary marketing message or call to action -->
-            <div class="hero-unit">
-                <h1 style="text-align:center">ASKSG</h1>
-                <br/>
-                <p style="text-align:center">The RIT community overlay that brings your thoughts and opinions to light.</p>
-                <br/>
-                <p style="text-align:center"><a class="btn btn-primary btn-large scrollToLearnMore" href="#learn-more">Learn more &darr;</a></p>
-            </div>
+<div class="container">
 
-            <div id="learn-more" class="row-fluid">
-                <div class="span12" style="text-align:center">
-                    <ul class="inside-list">
-                        <li class="inside-list-item-info">
-                            <h3 style="text-align:center">
-                                Ask questions that are sent directly to RIT Student Government representatives.
-                            </h3>
-                            <div style="text-align:center">
-                                <img src="http://dummyimage.com/480x268/000000/fff&text=replaceme"/>
-                            </div>
-                        </li>
-                        <li class="inside-list-item-info">
-                            <h3 style="text-align:center">
-                                Post your thoughts and opinions on social media networks like Facebook, Twitter, and Reddit and watch them appear above.
-                            </h3>
-                            <div style="text-align:center">
-                                <img src="http://dummyimage.com/480x268/000000/fff&text=replaceme"/>
-                            </div>
-                        </li>
-                        <li class="inside-list-item-info inside-list-item-lock">
-                            <h3 class="text-warning" style="text-align:center">
-                                Post your thoughts and opinions on social media networks like Facebook, Twitter, and Reddit and watch them appear above.
-                            </h3>
-                            <div style="text-align:center">
-                                <img src="http://dummyimage.com/480x268/000000/fff&text=replaceme"/>
-                            </div>
-                        </li>
-                        <!--<h2 class="inside-header">Don't worry, your messages are 100% Private &amp; Confidential. We won't share any of your personal information.</h2>-->
-                    </ul>
-                </div>
+	<!-- Main hero unit for a primary marketing message or call to action -->
+	<div class="hero-unit">
+		<h1 style="text-align:center">ASKSG</h1>
+		<br/>
 
-                <div class="row-fluid">
-                    <div class="span12" style="text-align:center">
-                        <a data-toggle="modal" href="#loginModal" class="btn btn-primary btn-large loginButton">Login</a>
-                    </div>
-                </div>
-            </div>
+		<p style="text-align:center">The RIT community overlay that brings your thoughts and opinions to light.</p>
+		<br/>
 
-            <!--
-            <div id="steps">
-                <p>TODO</p>
-            </div>  
-            -->
+		<p style="text-align:center"><a class="btn btn-primary btn-large scrollToLearnMore" href="#learn-more">Learn
+			more &darr;</a></p>
+	</div>
 
-            <!--<div id="get-started">
-                <a href="#login-box" class="step-button login-window">Login</a>
-            </div>-->
+	<div id="learn-more" class="row-fluid">
+		<div class="span12" style="text-align:center">
+			<ul class="inside-list">
+				<li class="inside-list-item-info">
+					<h3 style="text-align:center">
+						Ask questions that are sent directly to RIT Student Government representatives.
+					</h3>
 
-            <!--<div class="row">   
-                <div class="span9" style="text-align:center">
-                    
-                </div>  
-            </div>-->
+					<div style="text-align:center">
+						<img src="http://dummyimage.com/480x268/000000/fff&text=replaceme"/>
+					</div>
+				</li>
+				<li class="inside-list-item-info">
+					<h3 style="text-align:center">
+						Post your thoughts and opinions on social media networks like Facebook, Twitter, and Reddit and
+						watch them appear above.
+					</h3>
 
-            <div class="modal hide" id="loginModal">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">x</button>
-                    <h3>Login to ASKSG</h3>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="/asksg/resources/j_spring_security_check" onsubmit="forceHttpsOnSubmit(this)" name="login_form"> <!-- ng-submit="login()" -->
-                        <p>
-                            <input ng-model="username" type="text" class="span3" name="j_username" id="email" placeholder="Email">
-                        </p>
-                        <p>
-                            <input ng-model="password" type="password" class="span3" name="j_password" placeholder="Password">
-                        </p>
-                        <p>
-                            <label class="forCheckbox" for='_spring_security_remember_me'>
-                            Remember me:
-                            <input type='checkbox' name='_spring_security_remember_me'/>
-                            </label>
-                        </p>
-                        <p><button type="submit" class="btn btn-primary">Sign in</button></p>
-                    </form>
-                </div>
-            </div>
+					<div style="text-align:center">
+						<img src="http://dummyimage.com/480x268/000000/fff&text=replaceme"/>
+					</div>
+				</li>
+				<li class="inside-list-item-info inside-list-item-lock">
+					<h3 class="text-warning" style="text-align:center">
+						Don't worry, your messages are 100% Private &amp; Confidential. We won't share or persist any of
+						your personal information.
+					</h3>
 
-            <!-- login overlay modal -->
-            <!--
-            <div id="login-box" class="login-popup">
-                <a href="#" class="close"><img src="close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>
-                <form method="post" class="signin" action="#"> 
-                    <fieldset class="textbox">
-                    <label class="username">
-                    <span>Email</span>
-                    <input id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username">
-                    </label>
-                    <label class="password">
-                    <span>Password</span>
-                    <input id="password" name="password" value="" type="password" placeholder="Password">
-                    </label>
-                    <button class="submit button" type="button">Sign in</button>
-                    </fieldset>
-                </form>
-            </div>
-            -->
+					<div style="text-align:center">
+						<img src="http://dummyimage.com/480x268/000000/fff&text=replaceme"/>
+					</div>
+				</li>
+			</ul>
+		</div>
 
-            <hr>
+		<div class="row-fluid">
+			<div class="span12" style="text-align:center">
+				<a data-toggle="modal" href="#loginModal" class="btn btn-primary btn-large loginButton">Login</a>
+			</div>
+		</div>
+	</div>
 
-            <footer>
-                <p>&copy; ASKSG</p>
-            </footer>
+	<div class="modal hide" id="loginModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3>Login to ASKSG</h3>
+		</div>
+		<div class="modal-body">
+			<form method="POST" action="/asksg/resources/j_spring_security_check" onsubmit="forceHttpsOnSubmit(this)"
+			      name="login_form"> <!-- ng-submit="login()" -->
+				<p>
+					<input ng-model="localUserName" type="text" class="span3" name="j_username" id="email"
+					       placeholder="Username">
+				</p>
 
-        </div> <!-- /container -->
+				<p>
+					<input ng-model="password" type="password" class="span3" name="j_password" placeholder="Password">
+				</p>
 
-        <!-- le jQuery -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
+				<p>
+					<label class="forCheckbox" for='_spring_security_remember_me'>
+						Remember me:
+						<input type='checkbox' name='_spring_security_remember_me'/>
+					</label>
+				</p>
 
-        <!-- le Bootstrap -->
-        <script src="js/vendor/bootstrap.min.js"></script>
+				<p>
+					<button type="submit" class="btn btn-primary">Sign in</button>
+				</p>
+			</form>
+		</div>
+	</div>
 
-        <!-- le prettify script - should this code just be put in main.js? -->
-        <script src="js/prettify.js"></script>
+	<hr>
 
-        <!-- le Analytics -->
-        <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
-        </script>
-    </body>
+	<footer>
+		<p>&copy; ASKSG</p>
+	</footer>
+
+</div>
+<!-- /container -->
+
+<!-- le jQuery -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
+
+<!-- le Bootstrap -->
+<script src="js/vendor/bootstrap.min.js"></script>
+
+<!-- le prettify script - should this code just be put in main.js? -->
+<script src="js/prettify.js"></script>
+
+<!-- le Analytics -->
+<script>
+	var _gaq = [
+		['_setAccount', 'UA-XXXXX-X'],
+		['_trackPageview']
+	];
+	(function (d, t) {
+		var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+		g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+		s.parentNode.insertBefore(g, s)
+	}(document, 'script'));
+</script>
+</body>
 </html>

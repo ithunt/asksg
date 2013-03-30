@@ -11,6 +11,10 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.social.twitter.api.DirectMessage;
+import org.springframework.social.twitter.api.DirectMessageOperations;
+import org.springframework.social.twitter.api.SearchOperations;
+import org.springframework.social.twitter.api.SearchResults;
 import org.springframework.social.twitter.api.TimelineOperations;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
@@ -30,12 +34,19 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 	@JSON(include = false)
 	@Override
 	public List<Conversation> getNewContent() {
+
+		//Get Timeline of Authenticated User
 		final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
 		final TimelineOperations timelineOperations = twitterApi.timelineOperations();
 		final List<Tweet> tweets = timelineOperations.getHomeTimeline();
+		List<Conversation> conversations = parseTweets(tweets);
 
+		//Get Direct Messages of Authenticated user
+		final DirectMessageOperations directMessageOperations = twitterApi.directMessageOperations();
+		final List<DirectMessage> directMessages = directMessageOperations.getDirectMessagesReceived();
+		conversations.addAll(parseDirectMessages(directMessages));
 
-        return parseTweets(tweets);
+		return conversations;
 	}
 
 	@Override
@@ -48,6 +59,26 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 						message.getContent();
 
 		return !(timelineOperations.updateStatus(tweet) == null);
+	}
+
+	protected List<Conversation> parseDirectMessages(List<DirectMessage> messages) {
+
+		final List<Conversation> conversations = new ArrayList<Conversation>();
+		for (DirectMessage dm : messages) {
+			Message m = new Message();
+			m.setAuthor(dm.getSender().getName());
+			m.setCreated(new LocalDateTime(dm.getCreatedAt()));
+			m.setContent(dm.getText());
+
+
+			Conversation c = new Conversation(m);
+			c.setService(this);
+			c.setExternalId(String.valueOf(dm.getId()));
+			m.setConversation(c);
+			conversations.add(c);
+		}
+
+		return conversations;
 	}
 
 	protected List<Conversation> parseTweets(List<Tweet> tweets) {
@@ -85,15 +116,27 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 	@JSON(include = false)
 	private org.springframework.social.twitter.api.Twitter getTwitterApi() {
 
-        final SpringSocialConfig config = (SpringSocialConfig)this.getConfig();
-        return new TwitterTemplate(config.getConsumerkey(), config.getConsumersecret(), config.getAccesstoken(), config.getAccesstokensecret());
+		final SpringSocialConfig config = (SpringSocialConfig) this.getConfig();
+		return new TwitterTemplate(config.getConsumerKey(), config.getConsumerSecret(), config.getAccessToken(), config.getAccessTokenSecret());
 
 	}
 
-    @JSON(include = false)
-    public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
-        final TimelineOperations timelineOperations = getTwitterApi().timelineOperations();
-        final List<Tweet> tweets = timelineOperations.getUserTimeline(socialSubscription.getHandle());
-        return parseTweets(tweets);
-    }
+	@JSON(include = false)
+	public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
+
+		List<Conversation> conversations;
+
+		//hashtag
+		if (socialSubscription.getHandle().startsWith("#")) {
+			final SearchOperations searchOperations = getTwitterApi().searchOperations();
+			conversations = parseTweets(searchOperations.search(socialSubscription.getHandle()).getTweets());
+		} else {
+			final TimelineOperations timelineOperations = getTwitterApi().timelineOperations();
+			final List<Tweet> tweets = timelineOperations.getUserTimeline(socialSubscription.getHandle());
+			conversations = parseTweets(tweets);
+		}
+
+
+		return conversations;
+	}
 }

@@ -1,7 +1,10 @@
 package edu.rit.asksg.web;
 
 import edu.rit.asksg.domain.Twilio;
+import edu.rit.asksg.service.ConversationService;
 import edu.rit.asksg.service.ProviderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,11 @@ public class TwilioController {
 	@Autowired
 	ProviderService providerService;
 
+	@Autowired
+	ConversationService conversationService;
+
+	private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
+
 	@RequestMapping(method = RequestMethod.POST, value = "/sms")
 	public ResponseEntity<String> receiveSMS(@RequestParam(value = "SmsSid") String smsSid,
 	                                         @RequestParam(value = "AccountSid") String accountSid,
@@ -25,7 +33,9 @@ public class TwilioController {
 	                                         @RequestParam(value = "To") String to,
 	                                         @RequestParam(value = "Body") String body) {
 
-		providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, to).handleMessage(smsSid, accountSid, from, to, body);
+		Twilio twilio = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, to.substring(1));
+		twilio.setConversationService(conversationService);
+		twilio.handleMessage(smsSid, accountSid, from, to, body);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "text/plain");
@@ -37,7 +47,7 @@ public class TwilioController {
 		// Phone calls are out of scope, but this method would be where to handle them.
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "text/plain");
-		return new ResponseEntity<String>("Thank you for contacting RIT Student Government. This phone number only" +
+		return new ResponseEntity<String>("Thank you for contacting RIT Student Government. This phone number only " +
 				"supports text messages at this time. Thank you.", headers, HttpStatus.OK);
 	}
 

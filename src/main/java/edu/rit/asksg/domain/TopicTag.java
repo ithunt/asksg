@@ -8,6 +8,5 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-@RooJson
 public class TopicTag extends Tag {
 }

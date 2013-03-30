@@ -20,14 +20,18 @@ public class ConversationServiceImpl implements ConversationService {
 	@Autowired
 	ProviderService providerService;
 
-    public void saveConversations(Collection<Conversation> conversations) {
-        for(Conversation conversation : conversations ) {
-            saveConversation(conversation);
-        }
-    }
+	public void saveConversations(Collection<Conversation> conversations) {
+		for (Conversation conversation : conversations) {
+			saveConversation(conversation);
+		}
+	}
 
 	public void saveConversation(Conversation conversation) {
 		for (Message m : conversation.getMessages()) {
+
+			//TODO make 2000 more visible?
+			if (m.getContent().length() > 2000) m.setContent(m.getContent().substring(0, 2000));
+
 			messageService.saveMessage(m);
 		}
 

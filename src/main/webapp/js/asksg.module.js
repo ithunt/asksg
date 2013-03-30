@@ -1,3 +1,16 @@
+// Check to see if we're returning from Facebook
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    return null;
+}
+
 /**
  * Message object constructor.
  */
@@ -21,13 +34,16 @@ function MessageResp(author, content, conversation) {
 /**
  * Conversation object constructor.
  */
-function Conversation(id, author, subject, snippet, messages, created, modified) {
+function Conversation(id, author, subject, snippet, messages, created, modified, service, read, hidden) {
     this.id = id;
     this.author = author;
     this.subject = subject;
     this.created_at = created;
     this.modified_at = modified;
     this.active = false;
+    this.service = service;
+    this.read = read;
+    this.hidden = hidden; // hidden
 
     // Run through the messages list and create the appropriate Message objects
     this.messages = new Array();
@@ -40,37 +56,82 @@ function Conversation(id, author, subject, snippet, messages, created, modified)
 
     // Function to set this conversation as "active" in the UI
     this.setActive = function (flag) {
-        console.log("toggling a convo...");
         this.active = flag;
     }
 }
 
 /**
- * Social subscription provider object constructor.
+ * Provider config provider object constructor.
  */
-function SocialSubscription(authenticated, config, id, name, version) {
+    //TODO: RENAME FUCKER
+function ProviderConfig(id, authenticated, enabled, config, name, version) {
+    this.id = id;
     this.authenticated = authenticated;
+    this.name = name;
+    this.enabled = enabled;
     this.config = config;
+    this.version = version;
+}
+
+function Twilio(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Twilio";
+}
+
+function Email(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Email";
+}
+
+function Facebook(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Facebook";
+}
+
+function Twitter(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Twitter";
+}
+
+function Reddit(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Reddit";
+}
+
+function User(id, name, username, password, phoneNumber, email, role, enabled) {
     this.id = id;
     this.name = name;
-    this.version = version;
+    this.userName = username;
+    this.password = password;
+    this.phoneNumber = phoneNumber;
+    this.email = email;
+    this.role = role;
+    this.enabled = enabled;
+}
+
+function Role(name) {
+    this.name = name;
 }
 
 /**
  * Construct the main page controller. >.<
  */
 function MainController($scope, $asksg, $log) {
-
     // Defaults until entered otherwise on the main page...
-    $scope.username = "";
+    $scope.localUserName = "";
     $scope.password = "";
 
     /**
      * Handle the login events.
      */
     $scope.login = function () {
-        console.log("username and password: " + $scope.username + ", " + $scope.password);
-        //$scope.$emit('event:loginRequest', $scope.username, $scope.password);
+        console.log("username and password: " + $scope.localUserName + ", " + $scope.password);
+        //$scope.$emit('event:loginRequest', $scope.localUserName, $scope.password);
     }
 }
 
@@ -98,12 +159,14 @@ function ConversationController($scope, $asksg, $log) {
 
                     var createdDate = new Date(conversation.created.localMillis);
                     var modifiedDate = new Date(conversation.modified.localMillis);
+                    console.log(createdDate);
 
                     // Create the object and store it
                     $scope.convos[i] = new Conversation(conversation.id,
                         conversation.author, conversation.subject,
                         conversation.snippet, conversation.messages,
-                        conversation.createdDate, conversation.modifiedDate);
+                        conversation.createdDate, conversation.modifiedDate,
+                        conversation.service, conversation.read, conversation.hidden);
                     $scope.convoMap[conversation.id] = $scope.convos[i];
                 }
             }).
@@ -111,7 +174,7 @@ function ConversationController($scope, $asksg, $log) {
                 console.log("Failed refreshing convos...");
                 return null;
             });
-    }
+    };
 
     /*
      * Populate the social subscription content
@@ -123,7 +186,6 @@ function ConversationController($scope, $asksg, $log) {
                 console.log(data);
 
                 // Always rebuild the social subscription data...
-                $scope.test = "it works...";
                 $scope.subscriptions = new Array();
                 for (var i = 0; i < data.length; i++) {
                     var subData = angular.fromJson(data[i]);
@@ -131,12 +193,12 @@ function ConversationController($scope, $asksg, $log) {
                     if ((subData.name in $scope.subscriptions) == false) {
                         $scope.subscriptions[subData.name] = new Array();
                         console.log($scope.subscriptions[subData.name]);
-                    } 
+                    }
                     console.log($scope.subscriptions);
                     console.log($scope.subscriptions[subData.name]);
                     $scope.subscriptions[subData.name].push(
-                        new SocialSubscription(subData.authenticated, subData.config, 
-                            subData.id, subData.name, subData.version));
+                        new ProviderConfig(subData.id, subData.authenticated, subData.enabled, subData.config,
+                            subData.name, subData.version));
                 }
 
                 // debug
@@ -146,14 +208,14 @@ function ConversationController($scope, $asksg, $log) {
                 console.log("Failed grabbing the social subscriptions");
                 return null;
             });
-    }
+    };
 
     /**
      * Invoke the ASKSG message post function
      */
-    $scope.doPostMessage = function (convo, messageId, message, author) {
+    $scope.doPostMessage = function (convo, message, author) {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-        $asksg.postResponse(convo, messageId, message, author).
+        $asksg.postResponse(convo, message, author).
             success(function (data, status, headers, config) {
                 console.log("Success");
                 console.log(data);
@@ -170,11 +232,16 @@ function ConversationController($scope, $asksg, $log) {
     /**
      * Invoke the ASKSG service post function
      */
-    $scope.doAddService = function(service) {
+    $scope.doAddServiceTwilio = function () {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-        $asksg.postNewService(service).
+        console.log($scope.twilioUsername + " " + $scope.twilioAuthToken + " " + $scope.twilioNumber);
+        config = {authenticationToken: $scope.twilioAuthToken, createdBy: null, host: "",
+            password: "", username: $scope.twilioUsername, phoneNumber: $scope.twilioNumber};
+        //newConfig = new ProviderConfig(false, config, "Twilio", 0);
+        newService = new Twilio(config, false);
+        $asksg.postNewService(newService).
             success(function (data, status, headers, config) {
-                console.log("Success");
+                console.log("Success adding the new service!");
                 console.log(data);
                 console.log(status);
                 $scope.refreshSubscriptions();
@@ -182,13 +249,133 @@ function ConversationController($scope, $asksg, $log) {
             error(function (data, status, headers, config) {
                 console.log("Error... :(");
             });
+    };
+
+    /**
+     * Invoke the ASKSG service post function
+     */
+    $scope.doAddServiceEmail = function () {
+        // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
+        console.log($scope.emailUsername + " " + $scope.emailPassword);
+        // config, name, version)
+        config = {createdBy: null, host: "", password: $scope.emailPassword, username: $scope.emailUsername};
+        newService = new Email(config, false);
+        $asksg.postNewService(newService).
+            success(function (data, status, headers, config) {
+                console.log("Success adding the new service!");
+                console.log(data);
+                console.log(status);
+                $scope.refreshSubscriptions();
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error... :(");
+            });
+    };
+
+
+    /**
+     * Invoke the ASKSG service post function
+     */
+    $scope.doAddServiceTwitter = function () {
+        //twitterUrl, twitterConsumerKey, twitterConsumerSecret, twitterAccessToken, twitterAccessSecret
+        // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
+        console.log($scope.twitterUrl + " " + $scope.twitterConsumerKey + " " + $scope.twitterConsumerSecret + " " + $scope.twitterAccessToken + " " + $scope.twitterAccessSecret);
+        // config, name, version)
+        config = {url: $scope.twitterUrl, consumerkey: $scope.twitterConsumerKey, consumersecret: $scope.twitterConsumerSecret,
+            accesstoken: $scope.twitterAccessToken, accesstokensecret: $scope.twitterAccessSecret,
+            authenticationToken: "", createdBy: null, host: "", password: "", username: ""};
+        newService = new Twitter(config, false);
+        $asksg.postNewService(newService).
+            success(function (data, status, headers, config) {
+                console.log("Success adding the new service!");
+                console.log(data);
+                console.log(status);
+                $scope.refreshSubscriptions();
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error... :(");
+            });
+    };
+
+    /**
+     * Invoke the ASKSG service post function.
+     */
+    $scope.doAddServiceFacebook = function () {
+        // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
+        //console.log($scope.facebookUrl + " " + $scope.facebookConsumerKey + " " + $scope.facebookConsumerSecret + " " + $scope.facebookAccessToken + " " + $scope.facebookAccessSecret);
+        // config, name, version)
+        config = {url: "", consumerKey: $scope.facebookConsumerKey,
+            consumerSecret: $scope.facebookConsumerSecret, accessToken: "", accessTokenSecret: "",
+            authenticationToken: "", createdBy: null, host: "", password: "", username: ""};
+        newService = new Facebook(config, false);
+        $asksg.postNewService(newService).
+            success(function (data, status, headers, config) {
+                console.log("Success adding the new service!");
+                console.log(data);
+                console.log(status);
+                var newService = angular.fromJson(data[0]);
+                $scope.refreshSubscriptions();
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error... :(");
+            });
+    };
+
+    $scope.addUser = function () {
+        $asksg.postNewUser(new User(null, $scope.userName, $scope.userUsername, $scope.userPassword, $scope.userPhone, $scope.userEmail, $scope.userRole, true)).
+            success(function (data, status, headers, config) {
+                $scope.refreshUsers();
+            });
+        $scope.userName = '';
+        $scope.userUsername = '';
+        $scope.userPassword = '';
+        $scope.userPhone = '';
+        $scope.userEmail = '';
+        $scope.userRole = '';
     }
+
+    /**
+     * Populate the users content
+     */
+    $scope.refreshUsers = function () {
+        $asksg.fetchUsers().
+            success(function (data, status, headers, config) {
+                console.log("Retrieved user data from server");
+                console.log(data);
+                $scope.users = new Array();
+                for (var i = 0; i < data.length; i++) {
+                    var userData = angular.fromJson(data[i]);
+                    $scope.users.push(new User(userData.id, userData.name, userData.userName, '', userData.phoneNumber, userData.email, new Role(data[i].role.name), userData.enabled));
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Failed to retrieve users");
+                return null;
+            });
+    }
+
+    $scope.refreshRoles = function () {
+        $asksg.fetchRoles().
+            success(function (data, status, headers, config) {
+                console.log("Retrieved role data from server");
+                console.log(data);
+                $scope.roles = new Array();
+                for (var i = 0; i < data.length; i++) {
+                    var roleData = angular.fromJson(data[i]);
+                    $scope.roles.push(new Role(roleData.name));
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Failed to retrieve users");
+                return null;
+            });
+    }
+
 
     /*
      * Delete a conversation.
      */
     $scope.deleteConvo = function (convoId) {
-        console.log("TODO: send HTML delete to server for convo id = " + convoId);
+        $asksg.deleteConvo(convoId);
+        $scope.refreshConvos();
     };
 
     /*
@@ -196,6 +383,45 @@ function ConversationController($scope, $asksg, $log) {
      */
     $scope.isConvoActive = function (convoId) {
         return $scope.convoMap[convoId].active;
+    }
+
+    $scope.toggleReadConvo = function (convoId) {
+        $scope.convoMap[convoId].read = !$scope.convoMap[convoId].read;
+        $asksg.updateConvo($scope.convoMap[convoId]);
+    }
+
+    /*
+     * Hide the specified conversation (mark as read).
+     */
+    $scope.toggleHideConvo = function (convoId) {
+        $scope.convoMap[convoId].hidden = !$scope.convoMap[convoId].hidden;
+        $asksg.updateConvo($scope.convoMap[convoId]);
+    }
+
+    $scope.toggleEnabledService = function (service) {
+        service.enabled = !service.enabled;
+        $asksg.updateService(service).success(function () {
+            $scope.refreshSubscriptions();
+        });
+    }
+
+    $scope.deleteService = function (serviceId) {
+        $asksg.deleteService(serviceId).success(function () {
+            $scope.refreshSubscriptions();
+        });
+    }
+
+    $scope.toggleEnabledUser = function (user) {
+        user.enabled = !user.enabled;
+        $asksg.updateUser(user).success(function () {
+            $scope.refreshUsers();
+        });
+    }
+
+    $scope.deleteUser = function (userId) {
+        $asksg.deleteUser(userId).success(function () {
+            $scope.refreshUsers();
+        });
     }
 
     /*
@@ -206,11 +432,11 @@ function ConversationController($scope, $asksg, $log) {
 
     // Array to store the state of active conversation filters
     $scope.filterConvoArray = Array();
-    $scope.filterConvoArray['email'] = false;
-    $scope.filterConvoArray['sms'] = false;
-    $scope.filterConvoArray['facebook'] = false;
-    $scope.filterConvoArray['twitter'] = false;
-    $scope.filterConvoArray['reddit'] = false;
+    $scope.filterConvoArray['Email'] = false;
+    $scope.filterConvoArray['Twilio'] = false;
+    $scope.filterConvoArray['Facebook'] = false;
+    $scope.filterConvoArray['Twitter'] = false;
+    $scope.filterConvoArray['Reddit'] = false;
 
     // Array to store the state of the active tag filters
     $scope.filterTagArray = Array();
@@ -218,92 +444,77 @@ function ConversationController($scope, $asksg, $log) {
     $scope.filterTagArray['unread'] = false;
 
     /*
-     * Filter function for the conversations.
+     * Filter function for the conversations based on their service.
      */
     $scope.filterConvo = function (convo) {
-        //console.log(convo.service);
-        //console.log($scope.filterArray[convo.service]);
-        return !($scope.filterConvoArray[convo.service]);
+        if (convo.service != null) {
+            return !($scope.filterConvoArray[convo.service.name]);
+        }
+        return false;
     };
 
     /*
-     * Filter function for the conversations.
+     * Filter function for the conversations based on read/unread tags.
      */
-    $scope.filterTag = function (tag) {
-        //console.log(convo.service);
-        //console.log($scope.filterArray[convo.service]);
-        return !($scope.filterTagArray[tag]);
+    $scope.filterTag = function (convo) {
+        if ($scope.filterTagArray['read'] && convo.read) {
+            return false;
+        }
+        if ($scope.filterTagArray['unread'] && !(convo.read)) {
+            return false;
+        }
+        return true;
     };
 
     /*
      * Filter functions...
      */
-    $scope.filterAll = function () {
-        $scope.convoCategory = "";
-    };
     $scope.filterEmail = function () {
-        if ($scope.filterConvoArray['email']) {
-            $scope.filterConvoArray['email'] = false;
-        } else {
-            $scope.filterConvoArray['email'] = true;
-        }
+        $scope.filterConvoArray['Email'] = !$scope.filterConvoArray['Email'];
     };
     $scope.filterSms = function () {
-        if ($scope.filterConvoArray['sms']) {
-            $scope.filterConvoArray['sms'] = false;
-        } else {
-            $scope.filterConvoArray['sms'] = true;
-        }
+        $scope.filterConvoArray['Twilio'] = !$scope.filterConvoArray['Twilio'];
     };
     $scope.filterFacebook = function () {
-        if ($scope.filterConvoArray['facebook']) {
-            $scope.filterConvoArray['facebook'] = false;
-        } else {
-            $scope.filterConvoArray['facebook'] = true;
-        }
+        $scope.filterConvoArray['Facebook'] = !$scope.filterConvoArray['Facebook'];
     };
     $scope.filterTwitter = function () {
-        if ($scope.filterConvoArray['twitter']) {
-            $scope.filterConvoArray['twitter'] = false;
-        } else {
-            $scope.filterConvoArray['twitter'] = true;
-        }
+        $scope.filterConvoArray['Twitter'] = !$scope.filterConvoArray['Twitter'];
     };
     $scope.filterReddit = function () {
-        if ($scope.filterConvoArray['reddit']) {
-            $scope.filterConvoArray['reddit'] = false;
-        } else {
-            $scope.filterConvoArray['reddit'] = true;
-        }
+        $scope.filterConvoArray['Reddit'] = !$scope.filterConvoArray['Reddit'];
     };
     $scope.filterRead = function () {
-        if ($scope.filterTagArray['read']) {
-            $scope.filterTagArray['read'] = false;
-        } else {
-            $scope.filterTagArray['read'] = true;
-        }
+        $scope.filterTagArray['read'] = !$scope.filterTagArray['read'];
     };
     $scope.filterUnread = function () {
-        if ($scope.filterTagArray['unread']) {
-            $scope.filterTagArray['unread'] = false;
-        } else {
-            $scope.filterTagArray['unread'] = true;
-        }
+        $scope.filterTagArray['unread'] = !$scope.filterTagArray['unread'];
     };
 
     // Set the user name
-    $scope.userName = "Admin"; // this should be replaced by response from server
+    $scope.localUserName = "Admin"; // this should be replaced by response from server
 
     // Populate the model with the initial data.
     $scope.refreshConvos();
     $scope.refreshSubscriptions();
+    $scope.refreshUsers();
+    $scope.refreshRoles();
+
+    // Handle facebook authentication
+    var facebookCode = getQueryVariable("code");
+    if (facebookCode != null) {
+        var serviceID = getQueryVariable("state");
+        if (serviceID != null) {
+            $asksg.authenticateFacebook(facebookCode, serviceID);
+            $scope.refreshSubscriptions();
+        }
+    }
 }
 
 /**
  * Create the ASKSG module for the dashboard app.
  */
 AsksgService = function () {
-
     // Indicate that we're starting up...
     console.log("Starting the AsksgService...");
 
@@ -318,7 +529,9 @@ AsksgService = function () {
             var convoSeedUrl = '/asksg/conversations/seed';
             var messageUrl = '/asksg/messages';
             var messageSeedUrl = '/asksg/messages/seed';
-            var servicesUrl = '/asksg/services'
+            var servicesUrl = '/asksg/services';
+            var usersUrl = '/asksg/users';
+            var rolesUrl = '/asksg/roles';
 
             // Publish the $asksg API here
             return {
@@ -358,14 +571,55 @@ AsksgService = function () {
                 },
 
                 /**
+                 * Update a conversation.
+                 *
+                 * @param convo - the conversation to update.
+                 */
+                updateConvo: function (convo) {
+                    return $http({method: 'UPDATE', url: convoUrl, data: JSON.stringify(convo)});
+                },
+
+                /**
+                 * Delete a conversation.
+                 *
+                 * @param convo - the conversation to update.
+                 */
+                deleteConvo: function (convoId) {
+                    return $http({method: 'DELETE', url: (convoUrl + "/" + convoId)});
+                },
+
+                /**
                  * Submit a new service to the system.
                  *
                  * @param service - new service to add
                  */
                 postNewService: function (service) {
-                    console.log("TODO");
-                    // Return the HTTP response
-                    //return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
+                    console.log(JSON.stringify(service));
+                    return $http({method: 'POST', url: servicesUrl, data: JSON.stringify(service)});
+                },
+
+                /**
+                 * Updates a service
+                 * @param service
+                 */
+                updateService: function (service) {
+                    return $http({method: 'PUT', url: servicesUrl, data: JSON.stringify(service)});
+                },
+
+                deleteService: function (serviceId) {
+                    return $http({method: 'DELETE', url: (servicesUrl + "/" + serviceId)});
+                },
+
+                /**
+                 * Updates a user
+                 * @param user
+                 */
+                updateUser: function (user) {
+                    return $http({method: 'PUT', url: usersUrl, data: JSON.stringify(user)});
+                },
+
+                deleteUser: function (userId) {
+                    return $http({method: 'DELETE', url: (usersUrl + "/" + userId)});
                 },
 
                 /**
@@ -373,13 +627,31 @@ AsksgService = function () {
                  */
                 fetchSubscriptions: function () {
                     return $http({method: 'GET', url: servicesUrl});
+                },
+
+                postNewUser: function (user) {
+                    return $http({method: 'POST', url: usersUrl, data: JSON.stringify(user)});
+                },
+
+                /**
+                 * Fetch users and roles on asksg side
+                 */
+                fetchUsers: function () {
+                    return $http({method: 'GET', url: usersUrl});
+                },
+
+                fetchRoles: function () {
+                    return $http({method: 'GET', url: rolesUrl});
+                },
+
+                authenticateFacebook: function (code, serviceID) {
+                    return $http({method: 'POST', url: servicesUrl + "/facebookToken?id=" + serviceID + "&code=" + code});
                 }
             };
         });
     });
-}
+};
 
 // Invoke the ASKSG service constructor...
 console.log("Jumping into the constructor...");
 AsksgService();
-

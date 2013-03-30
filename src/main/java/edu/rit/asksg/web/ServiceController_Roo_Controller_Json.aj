@@ -43,15 +43,6 @@ privileged aspect ServiceController_Roo_Controller_Json {
         return new ResponseEntity<String>(Service.toJsonArray(result), headers, HttpStatus.OK);
     }
     
-    @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> ServiceController.createFromJson(@RequestBody String json) {
-        Service service = Service.fromJsonToService(json);
-        providerService.saveService(service);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
-    }
-    
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> ServiceController.createFromJsonArray(@RequestBody String json) {
         for (Service service: Service.fromJsonArrayToServices(json)) {

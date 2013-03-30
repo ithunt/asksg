@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 
 public interface AsyncWorker {
 
-    public void work(final Service service);
+	public void work(final Service service);
 
 }

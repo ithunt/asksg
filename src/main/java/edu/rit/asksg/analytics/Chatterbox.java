@@ -9,26 +9,20 @@ import edu.rit.asksg.service.MessageService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
 
 
 @RooJavaBean
 @RooToString
-@RooJpaEntity
 public class Chatterbox {
 
 
-	public final transient ProviderConfig config;
-	public final transient MessageService messageService;
+	@Autowired
+	private ProviderConfig config;
 
 	@Autowired
-	public Chatterbox(@Qualifier("chatterboxConfig") final ProviderConfig config, final MessageService messageService) {
-		this.config = config;
-		this.messageService = messageService;
-	}
+	private transient MessageService messageService;
 
 	public void handleMessage(final Message message) {
 		SentimentAnalysisForSocialMedia client = new SentimentAnalysisForSocialMedia(config.getAuthenticationToken());
@@ -57,5 +51,8 @@ public class Chatterbox {
 		});
 	}
 
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
+	}
 
 }

@@ -4,6 +4,7 @@ package edu.rit.asksg.dataio;
  * Original Author:  Faisal Basra
  * http://www.javaplex.com/blog/using-javamail-api-read-emails-from-gmail/
  */
+
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.config.ProviderConfig;
 
@@ -27,7 +28,6 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 
 public class InboxReader {
-
 
 
 }

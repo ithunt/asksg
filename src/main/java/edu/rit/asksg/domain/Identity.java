@@ -1,16 +1,18 @@
 package edu.rit.asksg.domain;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ian
- * Date: 2/3/13
- * Time: 3:18 PM
- * To change this template use File | Settings | File Templates.
- */
-public interface Identity {
+import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 
-    public String getName();
-    public String getEmail();
-    public String getPhoneNumber();
+@RooJavaBean
+@RooJpaEntity
+public abstract class Identity {
+
+	private boolean enabled = true;
+
+	public abstract String getName();
+
+	public abstract String getEmail();
+
+	public abstract String getPhoneNumber();
 
 }
