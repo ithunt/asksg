@@ -36,13 +36,13 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 	@JSON(include = false)
 	public List<Conversation> getNewContent() {
 		final org.springframework.social.facebook.api.Facebook facebookApi = getFacebookApi();
-		return parseFacebookFeed(facebookApi.feedOperations().getFeed(), facebookApi);
+		return parseFacebookFeed(facebookApi.feedOperations().getFeed("ritstudentgov"), facebookApi);
 	}
 
 	@JSON(include = false)
 	public List<Conversation> getContentSince(LocalDateTime datetime) {
 		final org.springframework.social.facebook.api.Facebook facebookApi = getFacebookApi();
-		final List<Post> posts = facebookApi.feedOperations().getFeed();
+		final List<Post> posts = facebookApi.feedOperations().getFeed("ritstudentgov"); //TODO: who knows if this works
 
 		//filter out posts by date
 		List<Post> filtered = new ArrayList<Post>();
@@ -97,6 +97,9 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 		logger.debug("Facebook: parsing feed. Posts has size " + posts.size() + ". Thread name: " + Thread.currentThread().getName());
 		for (Post post : posts) {
 			logger.debug("Facebook: parsing feed: post message is: " + post.getMessage() + ", author is: " + post.getFrom().getName());
+			if (post.getMessage() == null) {
+				continue; // skip posts with no text content to save
+			}
 			Message message = new Message();
 			Conversation conversation = new Conversation(message);
 			conversation.setService(this);
