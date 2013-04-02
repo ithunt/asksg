@@ -1,4 +1,4 @@
-package edu.rit.asksg.analytics;
+package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Twilio;

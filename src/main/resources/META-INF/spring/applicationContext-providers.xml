@@ -14,39 +14,39 @@
 
 	<bean id="emailProvider" class="edu.rit.asksg.domain.Email"></bean>
 
-	<!--EMAIL-->
-	<int:annotation-config/>
-	<int:channel id="outboundMailChannel"/>
-	<int:channel id="xformMailChannel"/>
-	<int:channel id="confirmationChannel"/>
-	<int:channel id="receiveChannel">
-		<!--<int:interceptors>-->
-		<!--<int:wire-tap channel="logger" />-->
-		<!--</int:interceptors>-->
-	</int:channel>
+	<!--&lt;!&ndash;EMAIL&ndash;&gt;-->
+	<!--<int:annotation-config/>-->
+	<!--<int:channel id="outboundMailChannel"/>-->
+	<!--<int:channel id="xformMailChannel"/>-->
+	<!--<int:channel id="confirmationChannel"/>-->
+	<!--<int:channel id="receiveChannel">-->
+		<!--&lt;!&ndash;<int:interceptors>&ndash;&gt;-->
+		<!--&lt;!&ndash;<int:wire-tap channel="logger" />&ndash;&gt;-->
+		<!--&lt;!&ndash;</int:interceptors>&ndash;&gt;-->
+	<!--</int:channel>-->
 
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="username" value="ritasksg"/>
-		<property name="password" value="allHailSpring"/>
-		<property name="host" value="smtp.gmail.com"/>
-		<property name="port" value="587"/>
-		<property name="javaMailProperties" ref="javaMailProperties"/>
-	</bean>
+	<!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">-->
+		<!--<property name="username" value="ritasksg"/>-->
+		<!--<property name="password" value="allHailSpring"/>-->
+		<!--<property name="host" value="smtp.gmail.com"/>-->
+		<!--<property name="port" value="587"/>-->
+		<!--<property name="javaMailProperties" ref="javaMailProperties"/>-->
+	<!--</bean>-->
 
-	<int:gateway id="mailGateway" service-interface="edu.rit.asksg.dataio.MailGateway"
-	             default-request-channel="xformMailChannel" default-reply-channel="confirmationChannel"/>
+	<!--<int:gateway id="mailGateway" service-interface="edu.rit.asksg.dataio.MailGateway"-->
+	             <!--default-request-channel="xformMailChannel" default-reply-channel="confirmationChannel"/>-->
 
-	<int:transformer input-channel="xformMailChannel" output-channel="outboundMailChannel" ref="emailProvider"
-	                 method="transform"/>
+	<!--<int:transformer input-channel="xformMailChannel" output-channel="outboundMailChannel" ref="emailProvider"-->
+	                 <!--method="transform"/>-->
 
-	<int-mail:outbound-channel-adapter channel="outboundMailChannel" mail-sender="mailSender"/>
+	<!--<int-mail:outbound-channel-adapter channel="outboundMailChannel" mail-sender="mailSender"/>-->
 
-	<bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
-		<property name="from" value="ritasksg@gmail.com"/>
-		<property name="replyTo" value="ritasksg@gmail.com"/>
-	</bean>
+	<!--<bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">-->
+		<!--<property name="from" value="ritasksg@gmail.com"/>-->
+		<!--<property name="replyTo" value="ritasksg@gmail.com"/>-->
+	<!--</bean>-->
 
-	<int:service-activator input-channel="receiveChannel" ref="emailProvider" method="receive"/>
+	<!--<int:service-activator input-channel="receiveChannel" ref="emailProvider" method="receive"/>-->
 
 	<!--<int-mail:imap-idle-channel-adapter id="gmailAdapter"-->
 	<!--store-uri="imaps://ritasksg:allHailSpring@imap.gmail.com/INBOX"-->
@@ -67,11 +67,11 @@
 		<property name="authenticationToken" value="4heJuZtO5Ji43xk1uc0edKmDVgrSdheK"/>
 	</bean>
 
-	<bean id="emailConfig" class="edu.rit.asksg.domain.config.EmailConfig">
-		<property name="username" value="ritasksg@gmail.com"/>
-		<property name="password" value="allHailSpring"/>
+	<!--<bean id="emailConfig" class="edu.rit.asksg.domain.config.EmailConfig">-->
+		<!--<property name="username" value="ritasksg@gmail.com"/>-->
+		<!--<property name="password" value="allHailSpring"/>-->
 
-	</bean>
+	<!--</bean>-->
 
 	<bean id="refreshWorker" class="edu.rit.asksg.dataio.RefreshWorker"/>
 	<bean id="subscriptionWorker" class="edu.rit.asksg.dataio.SubscriptionWorker"/>
