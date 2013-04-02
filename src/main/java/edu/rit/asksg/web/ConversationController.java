@@ -95,6 +95,7 @@ public class ConversationController {
 			emailConfig.setIdentifier("ritasksg");
 			emailConfig.setUsername("ritasksg@gmail.com");
 			emailConfig.setPassword("allHailSpring");
+            emailConfig.setHost("gmail.com");
 			email.setConfig(emailConfig);
 			providerService.saveService(email);
 		}

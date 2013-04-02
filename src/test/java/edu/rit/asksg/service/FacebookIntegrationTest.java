@@ -1,4 +1,4 @@
-package edu.rit.asksg.analytics;
+package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Facebook;

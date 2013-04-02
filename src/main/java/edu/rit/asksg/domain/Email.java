@@ -1,8 +1,6 @@
 package edu.rit.asksg.domain;
 
 import edu.rit.asksg.dataio.ContentProvider;
-import edu.rit.asksg.dataio.MailGateway;
-import edu.rit.asksg.domain.config.EmailConfig;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.service.ConversationService;
 import flexjson.JSON;
@@ -10,25 +8,25 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailMessage;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import javax.annotation.Resource;
 import javax.mail.BodyPart;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -40,22 +38,10 @@ public class Email extends Service implements ContentProvider {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(Email.class);
 
-	@Autowired
-	transient ConversationService conversationService;
-
-	@Resource(name = "mailMessage")
-	transient MailMessage mailMessage;
-
-	@Autowired
-	transient MailGateway mailGateway;
-
-	@Resource(name = "emailConfig")
-	transient EmailConfig emailConfig;
-
 	@JSON(include = false)
 	@Override
 	public List<Conversation> getNewContent() {
-		return getInbox(emailConfig);
+		return getInbox(getConfig());
 	}
 
 	@JSON(include = false)
@@ -66,9 +52,44 @@ public class Email extends Service implements ContentProvider {
 
 	@Override
 	public boolean postContent(Message message) {
-		mailGateway.sendMail(message);
-		return true;
+		return sendMail(message);
 	}
+
+
+    protected boolean sendMail(Message message) {
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp." + getConfig().getHost());
+        properties.put("mail.smtp.port", "587");
+
+
+        Session session = Session.getInstance(properties,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(getConfig().getUsername(),getConfig().getPassword());
+                    }
+                });
+        session.setDebug(true);
+
+        try {
+            MimeMessage m = new MimeMessage(session);
+            m.setFrom(new InternetAddress(getConfig().getUsername()));
+            m.setRecipients(javax.mail.Message.RecipientType.TO,
+                    InternetAddress.parse(message.getRecipient()));
+            m.setSubject("Your Response from SG");
+            m.setText(message.getContent());
+            Transport.send(m);
+
+        } catch (MessagingException e) {
+            logger.error(e.getLocalizedMessage(), e);
+            return false;
+        }
+
+
+        return true;
+    }
 
 	@Override
 	public boolean authenticate() {
@@ -80,16 +101,6 @@ public class Email extends Service implements ContentProvider {
 		return false;
 	}
 
-	public MailMessage transform(Message m) {
-		if (m == null) return null;
-
-		mailMessage.setTo(m.getRecipient());
-		mailMessage.setSubject("Your Response from SG");
-		mailMessage.setSentDate(new Date(0));
-		mailMessage.setText(m.getContent());
-
-		return mailMessage;
-	}
 
 	public static Conversation makeConversation(javax.mail.Message mimeMessage) {
 		Message m = new Message();
@@ -124,15 +135,6 @@ public class Email extends Service implements ContentProvider {
 		return c;
 	}
 
-	public void receive(MimeMessage mimeMessage) {
-
-		logger.debug("Received new MimeMessage... Parsing");
-		Conversation c = makeConversation(mimeMessage);
-		c.setService(this);
-		conversationService.saveConversation(c);
-
-	}
-
 	@JSON(include = false)
 	public List<Conversation> getInbox(ProviderConfig config) {
 
@@ -152,8 +154,8 @@ public class Email extends Service implements ContentProvider {
 			store = session.getStore("imaps");
 
 			/** USERNAME AND PASSWORD */
-			//store.connect("imap.gmail.com", config.getUsername(), config.getPassword());
-			store.connect("imap.gmail.com", "ritasksg@gmail.com", "allHailSpring");
+			store.connect("imap." + config.getHost() , config.getUsername(), config.getPassword());
+			//store.connect("imap.", "ritasksg@gmail.com", "allHailSpring");
 
 			Folder inbox = store.getFolder("Inbox");
 			inbox.open(Folder.READ_ONLY);
