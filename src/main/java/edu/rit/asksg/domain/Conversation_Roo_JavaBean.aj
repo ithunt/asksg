@@ -6,16 +6,16 @@ package edu.rit.asksg.domain;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
-import java.util.Set;
+import java.util.List;
 import org.joda.time.LocalDateTime;
 
 privileged aspect Conversation_Roo_JavaBean {
     
-    public Set<Message> Conversation.getMessages() {
+    public List<Message> Conversation.getMessages() {
         return this.messages;
     }
     
-    public void Conversation.setMessages(Set<Message> messages) {
+    public void Conversation.setMessages(List<Message> messages) {
         this.messages = messages;
     }
     

@@ -25,6 +25,7 @@ import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class ConversationController {
 		m2.setAuthor("Tyrion Lannister");
 		m2.setContent("Sorcery is the sauce fools spoon over failure to hide the flavor of the their own incompetence");
 
-		Set<Message> messages = new HashSet<Message>();
+		List<Message> messages = new ArrayList<Message>();
 		messages.add(m1);
 		messages.add(m2);
 

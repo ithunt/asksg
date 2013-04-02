@@ -1,13 +1,19 @@
 package edu.rit.asksg.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.validation.constraints.NotNull;
 
+import flexjson.JSON;
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,8 +28,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson(deepSerialize = true)
 public class Conversation {
 
+    @OrderBy("created")
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Message> messages = new HashSet<Message>();
+	private List<Message> messages = new ArrayList<Message>();
 
 	@NotNull
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
@@ -44,7 +51,22 @@ public class Conversation {
 	}
 
 	public Conversation(Message m) {
-		this.messages = new HashSet<Message>();
+		this.messages = new ArrayList<Message>();
 		this.messages.add(m);
 	}
+
+    //todo: can this be done with sql? even with jodadatetime?
+
+    @JSON(include = true)
+    public List<Message> getMessagesSorted() {
+        List<Message> sorted = new ArrayList(this.messages);
+        Collections.sort(sorted, new Comparator<Message>() {
+            @Override
+            public int compare(Message message, Message message2) {
+                return message.getCreated().compareTo(message2.getCreated());
+            }
+        });
+
+        return sorted;
+    }
 }

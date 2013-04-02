@@ -81,7 +81,7 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 		if (c.getMessages() == null || c.getMessages().size() != 1) return c;
 
 		Message m = Iterables.get(c.getMessages(), 0);
-		Set<Message> messages = new HashSet<Message>();
+		List<Message> messages = new ArrayList<Message>();
 		messages.add(m);
 
 		for (Object comment : getTopLevelComments(m.getUrl())) {

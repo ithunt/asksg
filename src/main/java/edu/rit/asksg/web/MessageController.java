@@ -14,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RooWebJson(jsonObject = Message.class)
@@ -54,7 +56,7 @@ public class MessageController {
 	public ResponseEntity<String> seed() {
 
 		Conversation convo = new Conversation();
-		Set<Message> messages = new HashSet<Message>();
+		List<Message> messages = new ArrayList<Message>();
 		convo.setService(providerService.findServiceByTypeAndIdentifierEquals(Email.class, "ritasksg@gmail.com"));
 
 		Message m = new Message();
@@ -76,22 +78,5 @@ public class MessageController {
 	}
 
 
-	@RequestMapping(value = "/email")
-	public ResponseEntity<String> email() {
-
-		Message m = new Message();
-		m.setAuthor("ithunt0@gmail.com");
-		m.setContent("Greetings from AskSG");
-
-		emailProvider.postContent(m);
-
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("content_type", "text/plain");
-
-		return new ResponseEntity<String>("Check your email", headers, HttpStatus.OK);
-
-
-	}
 
 }
