@@ -37,6 +37,8 @@ public class ProviderConfig {
 
 	private int maxCalls;
 
+	private int currentCalls;
+
 	private Minutes updateFrequency;
 
 	private LocalDateTime counterRefresh;
