@@ -443,6 +443,37 @@ ul.convo-list
 	text-align: left;
 }
 
+
+
+.Reddit-img
+{
+    background-image: url('../img/Reddit.png');
+    background-repeat: no-repeat;
+    width: 36px;
+    height: 36px;
+    float: left;
+    margin-right: 10px;
+}
+.Facebook-img
+{
+    background-image: url('../img/Facebook.png');
+    background-repeat: no-repeat;
+    width: 36px;
+    height: 36px;
+    float: left;
+    margin-right: 10px;
+}
+.Twitter-img
+{
+    background-image: url('../img/Twitter1.png');
+    background-repeat: no-repeat;
+    width: 36px;
+    height: 36px;
+    float: left;
+    margin-right: 10px;
+}
+
+
 .convo-list-item-space
 {
 	background-color: transparent;

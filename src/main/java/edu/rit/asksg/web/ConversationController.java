@@ -44,7 +44,7 @@ public class ConversationController {
 	@Autowired
 	ScheduledPocessor scheduledPocessor;
 
-	@RequestMapping(value = "/seed")
+	@RequestMapping(value = "seed")
 	public ResponseEntity<String> seed() {
 
 		bootstrapProviders();

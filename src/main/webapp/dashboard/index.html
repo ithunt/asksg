@@ -75,15 +75,15 @@
                     <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services
                     </li>
                     <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()">
-                        <!--<i class="icon-envelope">--><a href="#">Email</a></li>
+                       <a href="#">&nbsp;Email</a></li>
                     <li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()">
-                        <!--<i class="icon-comment">--><a href="#">SMS</a></li>
+                        <a href="#">&nbsp;SMS</a></li>
                     <li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()">
-                        <!--<img src="../img/Facebook.png"/>--><a href="#">Facebook</a></li>
+                        <a href="#"><img src="../img/Facebook.png"/>&nbsp;Facebook</a></li>
                     <li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()">
-                        <!--<img src="../img/Twitter1.png"/>--><a href="#">Twitter</a></li>
+                        <a href="#"><img src="../img/Twitter1.png"/>&nbsp;Twitter</a></li>
                     <li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()">
-                        <!--<img src="../img/Reddit.png"/>--><a href="#">Reddit</a></li>
+                        <a href="#"><img src="../img/Reddit.png"/>&nbsp;Reddit</a></li>
                 </ul>
             </div>
             <!-- well sidebar-nav -->
@@ -147,12 +147,14 @@
                                 </ul>
                             </div>
 
+                            <div class="{{convo.service.name}}-img"> </div>
+
                             <!-- Display the most recent web contents -->
-                            <!--<img ng-show"convo.service.name == 'Facebook'" src="../img/Facebook.png">
-                            <img ng-show"convo.service.name == 'Twitter'" src="../img/Twitter1.png">
-                            <img ng-show"convo.service.name == 'Reddit'" src="../img/Reddit.png">
-                            <i class="icon-envelope" ng-show="convo.service.name == 'Email'">
-                            <i class="icon-comment" ng-show="convo.service.name == 'Twilio'">-->
+                            <!--<img ng-show"convo.service.name == 'Facebook'" src="../img/Facebook.png">-->
+                            <!--<img ng-show"convo.service.name == 'Twitter'" src="../img/Twitter1.png">-->
+                            <!--<img ng-show"convo.service.name == 'Reddit' " src="../img/Reddit.png">-->
+                            <!--<i class="icon-envelope" ng-show="convo.service.name == 'Email'">-->
+                            <!--<i class="icon-comment" ng-show="convo.service.name == 'Twilio'">-->
                             <h5>
                                 <b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length
                                     - 1].content}}</i></b>
