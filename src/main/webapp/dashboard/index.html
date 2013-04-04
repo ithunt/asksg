@@ -23,14 +23,26 @@
     </style>
     <link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
     <link rel="stylesheet" href="../css/main.css">
-    <!--<link rel="stylesheet" href="../bootstrap-toggle-buttons.css">-->
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+
+    <!-- le jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+    <!-- jquery UI -->
+    <!-- TODO: download minimized version -->
+    <!--<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>-->
 
     <!-- Link in angular and our controller files -->
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script>
-    <!-- ../js/angular/angular.min.js -->
-    <!--<script src="../js/underscore-min.js"></script>-->
     <script src="../js/asksg.module.js"></script>
+
+    <!-- link in mondernizer -->
     <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+
+    <!-- link in D3 -->
+    <script src="../js/d3.v3.min.js"></script>
 </head>
 <body ng-controller="ConversationController">
 
@@ -64,6 +76,7 @@
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#dashTab">Dashboard</a></li>
     <li><a data-toggle="tab" href="#configTab">Configuration</a></li>
+    <li><a data-toggle="tab" href="#analyticsTab">Analytics</a></li>
     <li><a data-toggle="tab" href="#userConfigTab">Users</a></li>
 </ul>
 <div class="tab-content">
@@ -568,6 +581,53 @@
     </div>
 </div>
 
+<!--- analytics tab -->
+<div id="analyticsTab" class="tab-pane fade">
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Options</li>
+                    <li class="active"><a data-toggle="tab" href="#analyticsMain">Main</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Configuration settings -->
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="analyticsMain">
+                <div class="span8 mainAnalytics" style="padding-left:20px;">
+                    <h2>Data Display</h2>
+
+                    <p>Display Parameters</p>
+<div ng-controller="PickerCtrl">
+    <button ng-click="buttonClicked()">Show Date</button>
+    <jqui-datepicker model="selectedDate" show="showDatePicker"></jqui-datepicker>
+</div>
+
+
+                    <input id="dp" type="text" ng-model="dataDisplayDateStart" name="mDate" my-datepicker/>
+                    <!-- todo fix awkward naming with user angular controller for scope -->
+                    <form ng-submit="addUser()"> <!-- hook up to send data to the analytics controller -->
+                        
+                        <!--<input type="text" datepicker ng-model="dataDisplayDateStart" />-->
+<!--
+                        <input type="text" ng-model="dataDisplayDateStart" id="datepicker" datepicker>
+                        <input type="text" ng-model="dataDisplayDateEnd" id="datepicker" datepicker>
+                        <select ng-model="userRole" ng-options="role.name for role in roles"></select>
+-->
+                        <input class="btn-primary" type="submit" value="Display">
+                    </form>
+
+                    <!-- Drop in the D3 rendering script -->
+                    <script src="../js/analyticsui.js"></script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
 
 <hr>
@@ -579,26 +639,6 @@
 </div>
 <!-- configTab -->
 </div> <!-- container -->
-
-<!-- le jQuery -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
-
-<!-- le infinite scroll -->
-<script src="../js/jquery.jscroll.min.js"></script>
-<script>
-    //$('.infinite-scroll').jscroll();
-
-    // customize the infinite scroll options as follows
-    /*
-     $('.infinite-scroll').jscroll({
-     loadingHtml: '<img src="loading.gif" alt="Loading" /> Loading...',
-     padding: 20,
-     nextSelector: 'a.jscroll-next:last',
-     contentSelector: 'li'
-     });
-     */
-</script>
 
 <!-- le Bootstrap -->
 <script src="../js/vendor/bootstrap.min.js"></script>

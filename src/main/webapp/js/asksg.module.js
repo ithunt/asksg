@@ -650,6 +650,86 @@ AsksgService = function () {
             };
         });
     });
+
+directives.directive('jquiDatepicker', function($log) {
+    return {
+        restrict: 'E',
+        link: function(scope, elm, attrs) {
+            var show = attrs.show || null;
+            var dpCtrl = null;
+ 
+            // close picker control and remove any related DOM elements 
+            function closePicker() {
+                if (dpCtrl) {
+                    dpCtrl.datepicker('destroy');
+                    dpCtrl.remove();
+                    dpCtrl = null;
+                }
+            }
+ 
+            // create and show datepicker control
+            function openPicker() {
+                elm.append('<p style="display:inline;" class="datepicker"></p>');
+                dpCtrl = elm.find('.datepicker');
+                dpCtrl.datepicker({
+                    onSelect: function(dateText, inst) { 
+                        if (attrs.model) {
+                            scope.$apply(attrs.model+"='"+ dateText+"'");
+                        }
+                    }
+                });
+            }
+ 
+            // defines a watch on the show attribute, if one was provided.
+            // otherwise, always display the control
+            if (show) {
+                scope.$watch(show, function(show) {
+                    if (show) {
+                        openPicker();
+                    }
+                    else {
+                        closePicker();
+                    }
+                })
+            }
+            else {
+                openPicker();
+            }
+        }
+    };
+});
+
+/*
+    directives.directive('datepicker', function() {
+        return function (scope, element, attrs, controller) {
+            var ngModel = $parse(attrs.ngModel);
+            $(function(){
+                element.datepicker({
+                    showOn:"both",
+                    changeYear:true,
+                    changeMonth:true,
+                    dateFormat:'yy-mm-dd',
+                    maxDate: new Date(),
+                    yearRange: '1920:2012',
+                    onSelect:function (dateText, inst) {
+                        console.log("AsdasdasdASDASD!!!");
+                        scope.$apply(function(scope){
+                            // Change binded variable
+                            ngModel.assign(scope, dateText);
+                        });
+                    }
+                });
+            });
+        }
+    });*/
+};
+
+function PickerCtrl($scope) {
+    $scope.showDatePicker = false;
+ 
+    $scope.buttonClicked = function() {
+        $scope.showDatePicker = !$scope.showDatePicker;
+    };
 };
 
 // Invoke the ASKSG service constructor...
