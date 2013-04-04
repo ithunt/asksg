@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.dataio.SubscriptionProvider;
 import flexjson.JSON;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -111,12 +112,7 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 		m.setAuthor((String) post.get("author"));
 
 
-		//parse reddits created_utc time to EST localdatetime
-		m.setCreated(
-				new LocalDateTime(
-						new Date(((Double) post.get("created_utc")).longValue() +
-								TimeZone.getTimeZone("EST").getRawOffset())));
-
+        m.setCreated( new LocalDateTime( ((Double)post.get("created_utc")).longValue() * 1000L , DateTimeZone.UTC ));
 
 		return m;
 	}
@@ -126,12 +122,7 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
 		m.setAuthor((String) comment.get("author"));
 		m.setContent((String) comment.get("body"));
-
-		//parse reddits created_utc time to EST localdatetime
-		m.setCreated(
-				new LocalDateTime(
-						new Date(((Double) comment.get("created_utc")).longValue() +
-								TimeZone.getTimeZone("EST").getRawOffset())));
+        m.setCreated( new LocalDateTime( ( (Double)comment.get("created_utc")).longValue() * 1000L , DateTimeZone.UTC));
 
 		return m;
 	}
