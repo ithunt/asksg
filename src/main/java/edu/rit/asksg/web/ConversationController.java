@@ -178,4 +178,15 @@ public class ConversationController {
 		scheduledPocessor.executeSubscriptions();
 	}
 
+
+    @RequestMapping(value = "/refresh")
+    public ResponseEntity<String> refresh() {
+        pullContent();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content_type", "text/plain");
+
+        return new ResponseEntity<String>("Refresh Requested", headers, HttpStatus.OK);
+    }
+
 }
