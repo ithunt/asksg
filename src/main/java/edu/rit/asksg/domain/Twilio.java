@@ -64,7 +64,7 @@ public class Twilio extends Service implements ContentProvider {
 			//TODO: Twilio can use a callback to POST information to if sending fails
 		} catch (TwilioRestException e) {
 			//logger.error("Failed to send outgoing message to " + message.getAuthor(), e);
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage(), e);
 			return false;
 		}
 		return true;
@@ -85,6 +85,7 @@ public class Twilio extends Service implements ContentProvider {
 		Message msg = new Message();
 		msg.setContent(body);
 		msg.setAuthor(from);
+		msg.setRecipient(from);
 		msg.setCreated(LocalDateTime.now());
 		msg.setModified(LocalDateTime.now());
 
