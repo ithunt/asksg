@@ -54,7 +54,9 @@ public class Twilio extends Service implements ContentProvider {
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("Body", message.getContent());
 		vars.put("From", config.getPhoneNumber());
-		vars.put("To", message.getAuthor());
+		// This is the fix recommended by Ryan because the UI can't be relied on to send a 'to' >_>
+		String number = ((Message[])message.getConversation().getMessages().toArray())[0].getAuthor();
+		vars.put("To", number);
 
 		SmsFactory smsFactory = twc.getAccount().getSmsFactory();
 		try {
@@ -83,12 +85,14 @@ public class Twilio extends Service implements ContentProvider {
 		Message msg = new Message();
 		msg.setContent(body);
 		msg.setAuthor(from);
-
+		msg.setCreated(LocalDateTime.now());
+		msg.setModified(LocalDateTime.now());
 
 		Conversation conv = new Conversation(msg);
 		msg.setConversation(conv);
 
 		conv.setService(this);
+		conv.setExternalId(smsSid);
 
 		conversationService.saveConversation(conv);
 	}
