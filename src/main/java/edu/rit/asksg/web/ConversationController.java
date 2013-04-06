@@ -136,6 +136,28 @@ public class ConversationController {
 			fbConfig.setIdentifier("asksgfbapp");
 
 			facebook.setConfig(fbConfig);
+
+			SocialSubscription ritsg = new SocialSubscription();
+			ritsg.setHandle("ritstudentgov");
+
+			SocialSubscription clubs = new SocialSubscription();
+			clubs.setHandle("RITClubs");
+
+			SocialSubscription rit = new SocialSubscription();
+			rit.setHandle("RITfb");
+
+			SocialSubscription news = new SocialSubscription();
+			news.setHandle("RITNews");
+
+			Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
+			subscriptions.add(ritsg);
+			subscriptions.add(clubs);
+			subscriptions.add(rit);
+			subscriptions.add(news);
+
+			fbConfig.setSubscriptions(subscriptions);
+
+			providerService.saveService(facebook);
 		}
 
 		final Service redditProvider = providerService.findServiceByTypeAndIdentifierEquals(Reddit.class, "rit");

@@ -42,7 +42,7 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 	@JSON(include = false)
 	public List<Conversation> getContentSince(LocalDateTime datetime) {
 		final org.springframework.social.facebook.api.Facebook facebookApi = getFacebookApi();
-		final List<Post> posts = facebookApi.feedOperations().getFeed("ritstudentgov"); //TODO: who knows if this works
+		final List<Post> posts = facebookApi.feedOperations().getFeed("ritstudentgov");
 
 		//filter out posts by date
 		List<Post> filtered = new ArrayList<Post>();
