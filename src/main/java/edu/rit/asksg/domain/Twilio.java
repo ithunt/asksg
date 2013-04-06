@@ -56,6 +56,7 @@ public class Twilio extends Service implements ContentProvider {
 		vars.put("From", config.getPhoneNumber());
 		// This is the fix recommended by Ryan because the UI can't be relied on to send a 'to' >_>
 		String number = ((Message[])message.getConversation().getMessages().toArray())[0].getAuthor();
+		logger.debug("Twilio: sending message to number: " + number);
 		vars.put("To", number);
 
 		SmsFactory smsFactory = twc.getAccount().getSmsFactory();
@@ -64,7 +65,7 @@ public class Twilio extends Service implements ContentProvider {
 			//TODO: Twilio can use a callback to POST information to if sending fails
 		} catch (TwilioRestException e) {
 			//logger.error("Failed to send outgoing message to " + message.getAuthor(), e);
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage(), e);
 			return false;
 		}
 		return true;
