@@ -23,12 +23,9 @@ function Message(author, content, conversationId) {
 /**
  * MessageResp object constructor.
  */
-function MessageResp(author, content, conversation) {
-    this.author = author;
+function MessageResp(content, conversation) {
     this.content = content;
     this.conversation = conversation;
-    this.analytics = null;
-    this.posted = false;
 }
 
 /**
@@ -162,11 +159,11 @@ function ConversationController($scope, $asksg, $log) {
                     console.log(createdDate);
 
                     // Create the object and store it
-                    $scope.convos[i] = new Conversation(conversation.id,
-                        conversation.author, conversation.subject,
+                    $scope.convos[i] = new Convedrsation(conversation.id,
+                        conversation.author, condversation.subject,
                         conversation.snippet, conversation.messages,
                         conversation.createdDate, conversation.modifiedDate,
-                        conversation.service, conversation.read, conversation.hidden);
+                        conversation.service, conversationd.read, conversation.hidden);
                     $scope.convoMap[conversation.id] = $scope.convos[i];
                 }
             }).
@@ -213,9 +210,10 @@ function ConversationController($scope, $asksg, $log) {
     /**
      * Invoke the ASKSG message post function
      */
-    $scope.doPostMessage = function (convo, message, author) {
+    $scope.doPostMessage = function (message, convoId) {
         // post the message - on success re-fetch the conversations so the most up-to-date convos are viewed
-        $asksg.postResponse(convo, message, author).
+        var messageResp = new MessageResp(message, convoId);
+        $asksg.postResponse(messageResp).
             success(function (data, status, headers, config) {
                 console.log("Success");
                 console.log(data);
@@ -557,15 +555,12 @@ AsksgService = function () {
                 /**
                  * Submit a message response to a conversation.
                  *
-                 * @param convo - the host conversation ID
-                 * @param messageId - optional message, which indicates that this is a nested response (a la Reddit)
                  * @param message - the message to insert
+                 * @param convoId - the host conversation ID
+                 * @param messageId - TODO:  optional message, which indicates that this is a nested response (a la Reddit)
                  */
-                postResponse: function (convo, message, author) {
-                    console.log("Building message...");
-                    messageResp = new MessageResp(author, message, convo);
+                postResponse: function (messageResp) {
                     console.log(messageResp);
-
                     // Return the HTTP response
                     return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
                 },

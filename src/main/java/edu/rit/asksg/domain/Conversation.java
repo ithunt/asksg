@@ -47,6 +47,8 @@ public class Conversation {
 
 	private String externalId;
 
+	private String recipient;
+
 	public Conversation() {
 	}
 
@@ -55,18 +57,7 @@ public class Conversation {
 		this.messages.add(m);
 	}
 
-    //todo: can this be done with sql? even with jodadatetime?
-
-    @JSON(include = true)
-    public List<Message> getMessagesSorted() {
-        List<Message> sorted = new ArrayList(this.messages);
-        Collections.sort(sorted, new Comparator<Message>() {
-            @Override
-            public int compare(Message message, Message message2) {
-                return message.getCreated().compareTo(message2.getCreated());
-            }
-        });
-
-        return sorted;
+    private String getRecipient(){
+    	return messages.get(0).getAuthor();
     }
 }

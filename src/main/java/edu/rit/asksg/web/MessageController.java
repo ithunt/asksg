@@ -30,6 +30,22 @@ public class MessageController {
 	@Autowired
 	ProviderService providerService;
 
+    @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> createFromJson(@RequestBody String json) {
+//todo: pull author from spring security and set on message
+    	/*
+			Conversation c = conversationService.findConversation(message.getConversation().getId());
+			message.setConversation(c);
+			c.getMessages().add(message);
+
+    	*/
+        Message message = Message.fromJsonToMessage(json);
+        messageService.saveMessage(message);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+    }
+
 	@RequestMapping(value = "/test")
 	public ResponseEntity<String> test() {
 
@@ -73,8 +89,6 @@ public class MessageController {
 		headers.set("content_type", "text/plain");
 
 		return new ResponseEntity<String>("Your seed has been spread", headers, HttpStatus.OK);
-
-
 	}
 
 

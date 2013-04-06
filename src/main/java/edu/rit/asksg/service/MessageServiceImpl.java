@@ -21,28 +21,11 @@ public class MessageServiceImpl implements MessageService {
 	public void saveMessage(Message message) {
 		//Bind the appropriate conversation to an incoming message
 		if (message.getConversation() != null && message.getConversation().getId() != null) {
-
-			Conversation c = conversationService.findConversation(message.getConversation().getId());
-			List<Message> messages = c.getMessages();
-			message.setConversation(c);
-
-			c.setMessages(messages);
-
-
-			//TODO: make recipient hack less ugly and more formalized - pass in recipent from UI?
 			try {
-                //todo: sort by date
-				final Message first = c.getMessagesSorted().get(0);
-
-				if (first.getAuthor() != null)
-					message.setRecipient(first.getAuthor());
-
 				message.setPosted(postMessage(message));
-
-				messages.add(message);
 				conversationService.updateConversation(c);
 			} catch (Exception e) {
-				logger.error(e.getLocalizedMessage());
+				logger.error(e.getLocalizedMessage(),e);
 				//TODO: indicate to user that the service they're using is unavailable and message might not have been sent
 			}
 
