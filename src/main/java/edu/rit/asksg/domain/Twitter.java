@@ -51,14 +51,22 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 
 	@Override
 	public boolean postContent(Message message) {
+        final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
+        if(message.getPrivateMessage()) {
+            final DirectMessageOperations directMessageOperations = twitterApi.directMessageOperations();
+            directMessageOperations.sendDirectMessage(message.getRecipient(), message.getContent());
+            return true;
+            //todo: update the current one with the id?
+        } else {
 
-		final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
-		final TimelineOperations timelineOperations = twitterApi.timelineOperations();
-		final String tweet =
-				((message.getRecipient() != null) ? "@" + message.getRecipient() + " " : "") +
-						message.getContent();
+            final TimelineOperations timelineOperations = twitterApi.timelineOperations();
+            final String tweet =
+                    ((message.getRecipient() != null) ? "@" + message.getRecipient() + " " : "") +
+                            message.getContent();
 
-		return !(timelineOperations.updateStatus(tweet) == null);
+            return !(timelineOperations.updateStatus(tweet) == null);
+
+        }
 	}
 
 	protected List<Conversation> parseDirectMessages(List<DirectMessage> messages) {
@@ -69,6 +77,7 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 			m.setAuthor(dm.getSender().getName());
 			m.setCreated(new LocalDateTime(dm.getCreatedAt()));
 			m.setContent(dm.getText());
+            m.setPrivateMessage(true);
 
 
 			Conversation c = new Conversation(m);

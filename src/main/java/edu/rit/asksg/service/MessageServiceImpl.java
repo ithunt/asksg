@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Set;
 
 public class MessageServiceImpl implements MessageService {
@@ -22,7 +23,7 @@ public class MessageServiceImpl implements MessageService {
 		if (message.getConversation() != null && message.getConversation().getId() != null) {
 
 			Conversation c = conversationService.findConversation(message.getConversation().getId());
-			Set<Message> messages = c.getMessages();
+			List<Message> messages = c.getMessages();
 			message.setConversation(c);
 
 			c.setMessages(messages);
@@ -30,7 +31,8 @@ public class MessageServiceImpl implements MessageService {
 
 			//TODO: make recipient hack less ugly and more formalized - pass in recipent from UI?
 			try {
-				final Message first = ((Message) messages.toArray()[0]);
+                //todo: sort by date
+				final Message first = c.getMessagesSorted().get(0);
 
 				if (first.getAuthor() != null)
 					message.setRecipient(first.getAuthor());

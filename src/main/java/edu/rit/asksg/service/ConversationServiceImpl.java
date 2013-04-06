@@ -29,6 +29,7 @@ public class ConversationServiceImpl implements ConversationService {
 	public void saveConversation(Conversation conversation) {
 		for (Message m : conversation.getMessages()) {
 
+            if(m.getContent() == null) m.setContent("");
 			//TODO make 2000 more visible?
 			if (m.getContent().length() > 2000) m.setContent(m.getContent().substring(0, 2000));
 
