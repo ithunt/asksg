@@ -1,0 +1,84 @@
+[
+   {
+   		"word": "ALICE",
+   		"values": 
+   		[
+	   		{
+	   			"time": 1,
+	            "sentiment": 0.5,
+	            "count": 10
+	        },
+	        {
+	        	"time": 2,
+	        	"sentiment": 0.4,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 3,
+	        	"sentiment": 0.3,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 4,
+	        	"sentiment": 0.2,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 5,
+	        	"sentiment": 0.1,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 6,
+	        	"sentiment": 0.0,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 7,
+	        	"sentiment": -0.1,
+	            "count": 10	
+	        }
+        ]
+     },
+     {
+     	"word" : "BOB",
+     	"values":
+     	[
+	   		{
+	   			"time": 1,
+	            "sentiment": 0.5,
+	            "count": 10
+	        },
+	        {
+	        	"time": 2,
+	        	"sentiment": 0.4,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 3,
+	        	"sentiment": 0.3,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 4,
+	        	"sentiment": 0.2,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 5,
+	        	"sentiment": 0.1,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 6,
+	        	"sentiment": 0.0,
+	            "count": 10	
+	        },
+	        {
+	        	"time": 7,
+	        	"sentiment": -0.1,
+	            "count": 10	
+	        }
+        ]
+     }
+]
