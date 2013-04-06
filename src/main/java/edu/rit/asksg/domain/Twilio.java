@@ -54,7 +54,7 @@ public class Twilio extends Service implements ContentProvider {
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("Body", message.getContent());
 		vars.put("From", config.getPhoneNumber());
-		vars.put("To", message.getAuthor());
+		vars.put("To", message.getRecipient());
 
 		SmsFactory smsFactory = twc.getAccount().getSmsFactory();
 		try {
@@ -62,7 +62,7 @@ public class Twilio extends Service implements ContentProvider {
 			//TODO: Twilio can use a callback to POST information to if sending fails
 		} catch (TwilioRestException e) {
 			//logger.error("Failed to send outgoing message to " + message.getAuthor(), e);
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage(), e);
 			return false;
 		}
 		return true;
@@ -83,12 +83,15 @@ public class Twilio extends Service implements ContentProvider {
 		Message msg = new Message();
 		msg.setContent(body);
 		msg.setAuthor(from);
-
+		msg.setRecipient(from);
+		msg.setCreated(LocalDateTime.now());
+		msg.setModified(LocalDateTime.now());
 
 		Conversation conv = new Conversation(msg);
 		msg.setConversation(conv);
 
 		conv.setService(this);
+		conv.setExternalId(smsSid);
 
 		conversationService.saveConversation(conv);
 	}
