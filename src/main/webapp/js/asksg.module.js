@@ -159,11 +159,11 @@ function ConversationController($scope, $asksg, $log) {
                     console.log(createdDate);
 
                     // Create the object and store it
-                    $scope.convos[i] = new Convedrsation(conversation.id,
-                        conversation.author, condversation.subject,
+                    $scope.convos[i] = new Conversation(conversation.id,
+                        conversation.author, conversation.subject,
                         conversation.snippet, conversation.messages,
                         conversation.createdDate, conversation.modifiedDate,
-                        conversation.service, conversationd.read, conversation.hidden);
+                        conversation.service, conversation.read, conversation.hidden);
                     $scope.convoMap[conversation.id] = $scope.convos[i];
                 }
             }).

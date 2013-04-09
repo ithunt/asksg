@@ -8,113 +8,107 @@ import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Identity;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Tag;
+
 import java.util.Set;
+
 import org.joda.time.LocalDateTime;
 
 privileged aspect Message_Roo_JavaBean {
-    
+
     public String Message.getAuthor() {
         return this.author;
     }
-    
+
     public void Message.setAuthor(String author) {
         this.author = author;
     }
-    
+
     public String Message.getContent() {
         return this.content;
     }
-    
+
     public void Message.setContent(String content) {
         this.content = content;
     }
-    
+
     public LocalDateTime Message.getCreated() {
         return this.created;
     }
-    
+
     public void Message.setCreated(LocalDateTime created) {
         this.created = created;
     }
-    
+
     public LocalDateTime Message.getModified() {
         return this.modified;
     }
-    
+
     public void Message.setModified(LocalDateTime modified) {
         this.modified = modified;
     }
-    
+
     public Analytics Message.getAnalytics() {
         return this.analytics;
     }
-    
+
     public void Message.setAnalytics(Analytics analytics) {
         this.analytics = analytics;
     }
-    
+
     public Conversation Message.getConversation() {
         return this.conversation;
     }
-    
+
     public void Message.setConversation(Conversation conversation) {
         this.conversation = conversation;
     }
-    
+
     public String Message.getUrl() {
         return this.url;
     }
-    
+
     public void Message.setUrl(String url) {
         this.url = url;
     }
-    
+
     public Boolean Message.getPosted() {
         return this.posted;
     }
-    
+
     public void Message.setPosted(Boolean posted) {
         this.posted = posted;
     }
-    
+
     public String Message.getSnippet() {
         return this.snippet;
     }
-    
+
     public void Message.setSnippet(String snippet) {
         this.snippet = snippet;
     }
-    
-    public String Message.getRecipient() {
-        return this.recipient;
-    }
-    
-    public void Message.setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
-    
+
     public Set<Tag> Message.getTags() {
         return this.tags;
     }
-    
+
     public void Message.setTags(Set<Tag> tags) {
         this.tags = tags;
     }
-    
+
     public Identity Message.getIdentity() {
         return this.identity;
     }
-    
+
     public void Message.setIdentity(Identity identity) {
         this.identity = identity;
     }
-    
+
     public Boolean Message.getPrivateMessage() {
         return this.privateMessage;
     }
-    
+
     public void Message.setPrivateMessage(Boolean privateMessage) {
         this.privateMessage = privateMessage;
     }
-    
+
 }

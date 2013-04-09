@@ -29,79 +29,78 @@ import java.util.Map;
 @RooJson
 public class Twilio extends Service implements ContentProvider {
 
-	@Autowired
-	private transient ConversationService conversationService;
+    @Autowired
+    private transient ConversationService conversationService;
 
-	private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
+    private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
-	@JSON(include = false)
-	@Override
-	public List<Conversation> getNewContent() {
-		logger.debug("Twilio does not support fetching new content.");
-		return new ArrayList<Conversation>();
-	}
+    @JSON(include = false)
+    @Override
+    public List<Conversation> getNewContent() {
+        logger.debug("Twilio does not support fetching new content.");
+        return new ArrayList<Conversation>();
+    }
 
-	@JSON(include = false)
-	@Override
-	public List<Conversation> getContentSince(LocalDateTime datetime) {
-		return new ArrayList<Conversation>();
-	}
+    @JSON(include = false)
+    @Override
+    public List<Conversation> getContentSince(LocalDateTime datetime) {
+        return new ArrayList<Conversation>();
+    }
 
-	@Override
-	public boolean postContent(Message message) {
-		final TwilioConfig config = (TwilioConfig) this.getConfig();
-		TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
-		Map<String, String> vars = new HashMap<String, String>();
-		vars.put("Body", message.getContent());
-		vars.put("From", config.getPhoneNumber());
-		vars.put("To", message.getRecipient());
+    @Override
+    public boolean postContent(Message message) {
+        final TwilioConfig config = (TwilioConfig) this.getConfig();
+        TwilioRestClient twc = new TwilioRestClient(config.getUsername(), config.getAuthenticationToken());
+        Map<String, String> vars = new HashMap<String, String>();
+        vars.put("Body", message.getContent());
+        vars.put("From", config.getPhoneNumber());
+        vars.put("To", message.getConversation().getRecipient());
 
-		SmsFactory smsFactory = twc.getAccount().getSmsFactory();
-		try {
-			Sms sms = smsFactory.create(vars);
-			//TODO: Twilio can use a callback to POST information to if sending fails
-		} catch (TwilioRestException e) {
-			//logger.error("Failed to send outgoing message to " + message.getAuthor(), e);
-			logger.error(e.getLocalizedMessage(), e);
-			return false;
-		}
-		return true;
-	}
+        SmsFactory smsFactory = twc.getAccount().getSmsFactory();
+        try {
+            Sms sms = smsFactory.create(vars);
+            //TODO: Twilio can use a callback to POST information to if sending fails
+        } catch (TwilioRestException e) {
+            //logger.error("Failed to send outgoing message to " + message.getAuthor(), e);
+            logger.error(e.getLocalizedMessage(), e);
+            return false;
+        }
+        return true;
+    }
 
-	@Override
-	public boolean authenticate() {
-		return false;
-	}
+    @Override
+    public boolean authenticate() {
+        return false;
+    }
 
-	@Override
-	public boolean isAuthenticated() {
-		return false;
-	}
+    @Override
+    public boolean isAuthenticated() {
+        return false;
+    }
 
-	public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
+    public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
 
-		Message msg = new Message();
-		msg.setContent(body);
-		msg.setAuthor(from);
-		msg.setRecipient(from);
-		msg.setCreated(LocalDateTime.now());
-		msg.setModified(LocalDateTime.now());
+        Message msg = new Message();
+        msg.setContent(body);
+        msg.setAuthor(from);
+        msg.setCreated(LocalDateTime.now());
+        msg.setModified(LocalDateTime.now());
 
-		Conversation conv = new Conversation(msg);
-		msg.setConversation(conv);
+        Conversation conv = new Conversation(msg);
+        msg.setConversation(conv);
 
-		conv.setService(this);
-		conv.setExternalId(smsSid);
+        conv.setService(this);
+        conv.setExternalId(smsSid);
 
-		conversationService.saveConversation(conv);
-	}
+        conversationService.saveConversation(conv);
+    }
 
-	@JSON(include = false)
-	public ConversationService getConversationService() {
-		return conversationService;
-	}
+    @JSON(include = false)
+    public ConversationService getConversationService() {
+        return conversationService;
+    }
 
-	public void setConversationService(ConversationService conversationService) {
-		this.conversationService = conversationService;
-	}
+    public void setConversationService(ConversationService conversationService) {
+        this.conversationService = conversationService;
+    }
 }
