@@ -1,5 +1,6 @@
 package edu.rit.asksg.web;
 
+import com.google.common.base.Optional;
 import edu.rit.asksg.common.Log;
 import edu.rit.asksg.dataio.ScheduledPocessor;
 import edu.rit.asksg.domain.Conversation;
@@ -24,6 +25,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,6 +39,8 @@ import java.util.Set;
 @Controller
 @RequestMapping("/conversations")
 public class ConversationController {
+
+    public static final Integer DEFAULT_COUNT = 10;
 
 	@Log
 	private Logger logger;
@@ -74,6 +81,65 @@ public class ConversationController {
 
 		return new ResponseEntity<String>("your seed has been spread", headers, HttpStatus.OK);
 	}
+
+    //just to shut roo up
+    private  ResponseEntity<String> listJson() {
+        return listJson(new ServletWebRequest(null));
+    }
+
+    @RequestMapping(headers = "Accept=application/json" )
+    @ResponseBody
+    public ResponseEntity<String> listJson( WebRequest params ) {
+        String s = params.getParameter("since");
+        String u = params.getParameter("until");
+        String c = params.getParameter("count");
+        String b = params.getParameter("showRead");
+
+        Optional<Integer> since = Optional.absent();
+        Optional<Integer> until = Optional.absent();
+        Optional<Boolean> read = Optional.absent();
+
+
+        //todo:not here
+        Integer count = DEFAULT_COUNT;
+
+        if(s != null)
+            since = Optional.of(Integer.parseInt(s));
+
+        if(u != null)
+            until = Optional.of(Integer.parseInt(u));
+
+        if(c != null)
+            count = Integer.parseInt(c);
+
+        if(b != null)
+            read = Optional.of(Boolean.parseBoolean(b));
+
+        List<Long> excludes = new ArrayList<Long>();
+        String[] e = params.getParameterValues("excludeServices");    //services
+        if(e != null) {
+            for(String id : e) {
+                try {
+                    excludes.add(Long.parseLong(id));
+                } catch (Exception ex) {
+                    logger.error(ex.getLocalizedMessage(), ex);
+                }
+            }
+        }
+
+        String[] includes = params.getParameterValues("includeTags");    //tags
+        if(includes == null) includes = new String[0];
+
+
+        List<Conversation> conversations = conversationService.findAllConversations(
+                since, until, excludes.toArray(new Long[excludes.size()]), includes, read, count);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+
+
+        return new ResponseEntity<String>(Conversation.toJsonArray(conversations), headers, HttpStatus.OK);
+    }
 
 	private void bootstrapProviders() {
 

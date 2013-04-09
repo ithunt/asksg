@@ -51,4 +51,20 @@ privileged aspect Conversation_Roo_JavaBean {
         this.externalId = externalId;
     }
     
+    public Boolean Conversation.getHidden() {
+        return this.hidden;
+    }
+    
+    public void Conversation.setHidden(Boolean hidden) {
+        this.hidden = hidden;
+    }
+    
+    public Boolean Conversation.getIsRead() {
+        return this.isRead;
+    }
+    
+    public void Conversation.setIsRead(Boolean isRead) {
+        this.isRead = isRead;
+    }
+    
 }
