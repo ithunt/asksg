@@ -5,7 +5,10 @@ import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Email;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.service.ConversationService;
 import edu.rit.asksg.service.ProviderService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -35,25 +38,35 @@ public class MessageController {
     @Autowired
     ProviderService providerService;
 
+    @Autowired
+    ConversationService conversationService;
+
     @Log
     Logger logger;
 
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> createFromJson(@RequestBody String json, Principal principal) {
-        logger.error("Principal user: " + principal.getName());
-     /*
-            Conversation c = conversationService.findConversation(message.getConversation().getId());
-			message.setConversation(c);
-			c.getMessages().add(message);
-
-    	*/
-        logger.error("JSON input: " + json);
-        Message message = Message.fromJsonToMessage(json);
-        logger.error("Message object : " + message.toString());
-        message.setAuthor(principal.getName());
-        messageService.saveMessage(message);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
+        String content;
+        Long conversationId;
+        try {
+            final JSONObject parsedJson = new JSONObject(json);
+            content = (String) parsedJson.get("content");
+            final Double id = Double.parseDouble(parsedJson.get("conversation").toString());
+            conversationId = id.longValue();
+        } catch (JSONException e) {
+            logger.error("JSON Parsing failed on send message with Json string: " + json);
+            return new ResponseEntity<String>(headers, HttpStatus.BAD_REQUEST);
+        }
+        Conversation conversation = conversationService.findConversation(conversationId);
+        Message message = new Message();
+        message.setContent(content);
+        message.setAuthor(principal.getName());
+        message.setConversation(conversation);
+
+        conversation.getMessages().add(message);
+        messageService.saveMessage(message);
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 

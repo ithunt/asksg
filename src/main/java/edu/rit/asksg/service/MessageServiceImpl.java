@@ -24,18 +24,12 @@ public class MessageServiceImpl implements MessageService {
      * @param message Populated message with a conversation object attached
      */
     public void saveMessage(Message message) {
-        //Bind the appropriate conversation to an incoming message
-        if (message.getConversation() != null && message.getConversation().getId() != null) {
-            try {
-                message.setPosted(postMessage(message));
-                conversationService.updateConversation(message.getConversation());
-            } catch (Exception e) {
-                logger.error(e.getLocalizedMessage(), e);
-                //TODO: indicate to user that the service they're using is unavailable and message might not have been sent
-            }
-        } else {
-            messageRepository.save(message);
-            //todo: probably should throw an error here instead - message should always be attached to a conversation by the caller
+        try {
+            message.setPosted(postMessage(message));
+            conversationService.updateConversation(message.getConversation());
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage(), e);
+            //TODO: indicate to user that the service they're using is unavailable and message might not have been sent
         }
     }
 

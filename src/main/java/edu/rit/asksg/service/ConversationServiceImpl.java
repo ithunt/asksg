@@ -11,41 +11,37 @@ import java.util.Collection;
 
 public class ConversationServiceImpl implements ConversationService {
 
-	@Autowired
-	MessageService messageService;
+    @Autowired
+    MessageService messageService;
 
-	@Autowired
-	MessageRepository messageRepository;
+    @Autowired
+    MessageRepository messageRepository;
 
-	@Autowired
-	ProviderService providerService;
+    @Autowired
+    ProviderService providerService;
 
-	public void saveConversations(Collection<Conversation> conversations) {
-		for (Conversation conversation : conversations) {
-			saveConversation(conversation);
-		}
-	}
+    public void saveConversations(Collection<Conversation> conversations) {
+        for (Conversation conversation : conversations) {
+            saveConversation(conversation);
+        }
+    }
 
-	public void saveConversation(Conversation conversation) {
-		for (Message m : conversation.getMessages()) {
+    public void saveConversation(Conversation conversation) {
+        for (Message m : conversation.getMessages()) {
+            if (m.getContent() == null) m.setContent("");
+            //TODO make 2000 more visible?
+            if (m.getContent().length() > 2000) m.setContent(m.getContent().substring(0, 2000));
+        }
+        conversationRepository.save(conversation);
+    }
 
-            if(m.getContent() == null) m.setContent("");
-			//TODO make 2000 more visible?
-			if (m.getContent().length() > 2000) m.setContent(m.getContent().substring(0, 2000));
-
-			messageService.saveMessage(m);
-		}
-
-		conversationRepository.save(conversation);
-	}
-
-	public Conversation updateConversation(Conversation conversation) {
-		conversation.setModified(LocalDateTime.now());
+    public Conversation updateConversation(Conversation conversation) {
+        conversation.setModified(LocalDateTime.now());
 
 //        for(Message m : conversation.getMessages()) {
 //            if(m.getId() == null) messageRepository.save(m);
 //        }
 
-		return conversationRepository.save(conversation);
-	}
+        return conversationRepository.save(conversation);
+    }
 }
