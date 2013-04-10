@@ -11,11 +11,11 @@ import java.util.List;
 public interface ConversationService {
 	public void saveConversations(Collection<Conversation> conversations);
 
-    List<Conversation> findAllConversations (
-            Optional<Integer> since,
-            Optional<Integer> until,
-            Long[] excludeServices,
-            String[] includeTags,
-            Optional<Boolean> showRead,
-            int count);
+	List<Conversation> findAllConversations(
+			Optional<Integer> since,
+			Optional<Integer> until,
+			Long[] excludeServices,
+			String[] includeTags,
+			Optional<Boolean> showRead,
+			int count);
 }

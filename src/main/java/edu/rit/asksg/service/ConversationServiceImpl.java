@@ -1,24 +1,19 @@
 package edu.rit.asksg.service;
 
-
 import com.google.common.base.Optional;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.Tag;
-import edu.rit.asksg.repository.MessageRepository;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -32,9 +27,6 @@ public class ConversationServiceImpl implements ConversationService {
 	MessageService messageService;
 
 	@Autowired
-	MessageRepository messageRepository;
-
-	@Autowired
 	ProviderService providerService;
 
 	public void saveConversations(Collection<Conversation> conversations) {
@@ -45,74 +37,58 @@ public class ConversationServiceImpl implements ConversationService {
 
 	public void saveConversation(Conversation conversation) {
 		for (Message m : conversation.getMessages()) {
-
-            if(m.getContent() == null) m.setContent("");
+			if (m.getContent() == null) m.setContent("");
 			//TODO make 2000 more visible?
 			if (m.getContent().length() > 2000) m.setContent(m.getContent().substring(0, 2000));
-
-			messageService.saveMessage(m);
 		}
-
 		conversationRepository.save(conversation);
 	}
 
 	public Conversation updateConversation(Conversation conversation) {
 		conversation.setModified(LocalDateTime.now());
-
-//        for(Message m : conversation.getMessages()) {
-//            if(m.getId() == null) messageRepository.save(m);
-//        }
-
 		return conversationRepository.save(conversation);
 	}
 
-
-    @Override
-    public List<Conversation> findAllConversations(
-            final Optional<Integer> since,
-            final Optional<Integer> until,
-            final Long[] excludeServices,
-            final String[] includeTags,
-            final Optional<Boolean> showRead,
-            final int count) {
-
-
-        Specification<Conversation> specification = new Specification<Conversation>() {
-            @Override
-            public Predicate toPredicate(Root<Conversation> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-                List<Predicate> predicates = new ArrayList<Predicate>();
+	@Override
+	public List<Conversation> findAllConversations(
+			final Optional<Integer> since,
+			final Optional<Integer> until,
+			final Long[] excludeServices,
+			final String[] includeTags,
+			final Optional<Boolean> showRead,
+			final int count) {
 
 
-                Path<Integer> id = root.get("id");
-                if(since.isPresent()) {
-                   predicates.add( cb.gt(id, since.get()));
-                } else if( until.isPresent()) {
-                    predicates.add(cb.lt(id, until.get()));
-                }
+		Specification<Conversation> specification = new Specification<Conversation>() {
+			@Override
+			public Predicate toPredicate(Root<Conversation> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-                Join<Conversation, Service> join = root.join("service");
+				List<Predicate> predicates = new ArrayList<Predicate>();
+				Path<Integer> id = root.get("id");
+				if (since.isPresent()) {
+					predicates.add(cb.gt(id, since.get()));
+				} else if (until.isPresent()) {
+					predicates.add(cb.lt(id, until.get()));
+				}
 
-                for(Long service : excludeServices) {
-                    predicates.add(cb.notEqual(join.get("id"), service));
-                }
+				Join<Conversation, Service> join = root.join("service");
 
+				for (Long service : excludeServices) {
+					predicates.add(cb.notEqual(join.get("id"), service));
+				}
 
-                //todo: this doesnt work, tags are on messages
-                for(String tag : includeTags) {
-                    predicates.add(cb.equal(root.get("tag.name"), tag));
-                }
+				//todo: this doesnt work, tags are on messages
+				for (String tag : includeTags) {
+					predicates.add(cb.equal(root.get("tag.name"), tag));
+				}
 
-                if(showRead.isPresent())
-                   predicates.add(cb.equal(root.get("isRead"), showRead.get()));
+				if (showRead.isPresent())
+					predicates.add(cb.equal(root.get("isRead"), showRead.get()));
 
+				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+			}
+		};
 
-
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-
-        return ((Page<Conversation>)conversationRepository.findAll(specification, new PageRequest(0, count))).getContent();
-    }
-
+		return ((Page<Conversation>) conversationRepository.findAll(specification, new PageRequest(0, count))).getContent();
+	}
 }

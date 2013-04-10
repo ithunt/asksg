@@ -85,14 +85,6 @@ privileged aspect Message_Roo_JavaBean {
         this.snippet = snippet;
     }
     
-    public String Message.getRecipient() {
-        return this.recipient;
-    }
-    
-    public void Message.setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
-    
     public Set<Tag> Message.getTags() {
         return this.tags;
     }

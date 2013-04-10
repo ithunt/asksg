@@ -175,7 +175,7 @@
 
                                 <!-- The message/conversation response form -->
                                 <div id="response-form-{{convo.id}}" class="responseForm">
-                                    <form ng-submit="doPostMessage(convo, messageResp, userName)">
+                                    <form ng-submit="doPostMessage(messageResp, convo.id)">
                                         <input class="input-xlarge focused" ng-model="messageResp"/>
                                         <button class="btn" type="submit">Submit Message</button>
                                     </form>

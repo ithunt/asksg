@@ -40,7 +40,7 @@ import java.util.Set;
 @RequestMapping("/conversations")
 public class ConversationController {
 
-    public static final Integer DEFAULT_COUNT = 10;
+	public static final Integer DEFAULT_COUNT = 10;
 
 	@Log
 	private Logger logger;
@@ -82,64 +82,64 @@ public class ConversationController {
 		return new ResponseEntity<String>("your seed has been spread", headers, HttpStatus.OK);
 	}
 
-    //just to shut roo up
-    private  ResponseEntity<String> listJson() {
-        return listJson(new ServletWebRequest(null));
-    }
+	//Prevent roo from autogenerating method (hiding listJson with WebRequest)
+	private ResponseEntity<String> listJson() {
+		return listJson(new ServletWebRequest(null));
+	}
 
-    @RequestMapping(headers = "Accept=application/json" )
-    @ResponseBody
-    public ResponseEntity<String> listJson( WebRequest params ) {
-        String s = params.getParameter("since");
-        String u = params.getParameter("until");
-        String c = params.getParameter("count");
-        String b = params.getParameter("showRead");
+	@RequestMapping(headers = "Accept=application/json")
+	@ResponseBody
+	public ResponseEntity<String> listJson(WebRequest params) {
+		String s = params.getParameter("since");
+		String u = params.getParameter("until");
+		String c = params.getParameter("count");
+		String b = params.getParameter("showRead");
 
-        Optional<Integer> since = Optional.absent();
-        Optional<Integer> until = Optional.absent();
-        Optional<Boolean> read = Optional.absent();
-
-
-        //todo:not here
-        Integer count = DEFAULT_COUNT;
-
-        if(s != null)
-            since = Optional.of(Integer.parseInt(s));
-
-        if(u != null)
-            until = Optional.of(Integer.parseInt(u));
-
-        if(c != null)
-            count = Integer.parseInt(c);
-
-        if(b != null)
-            read = Optional.of(Boolean.parseBoolean(b));
-
-        List<Long> excludes = new ArrayList<Long>();
-        String[] e = params.getParameterValues("excludeServices");    //services
-        if(e != null) {
-            for(String id : e) {
-                try {
-                    excludes.add(Long.parseLong(id));
-                } catch (Exception ex) {
-                    logger.error(ex.getLocalizedMessage(), ex);
-                }
-            }
-        }
-
-        String[] includes = params.getParameterValues("includeTags");    //tags
-        if(includes == null) includes = new String[0];
+		Optional<Integer> since = Optional.absent();
+		Optional<Integer> until = Optional.absent();
+		Optional<Boolean> read = Optional.absent();
 
 
-        List<Conversation> conversations = conversationService.findAllConversations(
-                since, until, excludes.toArray(new Long[excludes.size()]), includes, read, count);
+		//todo:not here
+		Integer count = DEFAULT_COUNT;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
+		if (s != null)
+			since = Optional.of(Integer.parseInt(s));
+
+		if (u != null)
+			until = Optional.of(Integer.parseInt(u));
+
+		if (c != null)
+			count = Integer.parseInt(c);
+
+		if (b != null)
+			read = Optional.of(Boolean.parseBoolean(b));
+
+		List<Long> excludes = new ArrayList<Long>();
+		String[] e = params.getParameterValues("excludeServices");    //services
+		if (e != null) {
+			for (String id : e) {
+				try {
+					excludes.add(Long.parseLong(id));
+				} catch (Exception ex) {
+					logger.error(ex.getLocalizedMessage(), ex);
+				}
+			}
+		}
+
+		String[] includes = params.getParameterValues("includeTags");    //tags
+		if (includes == null) includes = new String[0];
 
 
-        return new ResponseEntity<String>(Conversation.toJsonArray(conversations), headers, HttpStatus.OK);
-    }
+		List<Conversation> conversations = conversationService.findAllConversations(
+				since, until, excludes.toArray(new Long[excludes.size()]), includes, read, count);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json; charset=utf-8");
+
+
+		return new ResponseEntity<String>(Conversation.toJsonArray(conversations), headers, HttpStatus.OK);
+	}
 
 	private void bootstrapProviders() {
 
@@ -162,7 +162,7 @@ public class ConversationController {
 			emailConfig.setIdentifier("ritasksg");
 			emailConfig.setUsername("ritasksg@gmail.com");
 			emailConfig.setPassword("allHailSpring");
-            emailConfig.setHost("gmail.com");
+			emailConfig.setHost("gmail.com");
 			email.setConfig(emailConfig);
 			providerService.saveService(email);
 		}
@@ -245,14 +245,14 @@ public class ConversationController {
 	}
 
 
-    @RequestMapping(value = "/refresh")
-    public ResponseEntity<String> refresh() {
-        pullContent();
+	@RequestMapping(value = "/refresh")
+	public ResponseEntity<String> refresh() {
+		pullContent();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content_type", "text/plain");
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("content_type", "text/plain");
 
-        return new ResponseEntity<String>("Refresh Requested", headers, HttpStatus.OK);
-    }
+		return new ResponseEntity<String>("Refresh Requested", headers, HttpStatus.OK);
+	}
 
 }
