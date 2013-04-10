@@ -154,7 +154,7 @@ function ConversationController($scope, $asksg, $log) {
                 for (var i = 0; i < data.length; i++) {
                     var conversation = angular.fromJson(data[i]);
 
-                    var createdDate = new Date(conversation.created.localMillis);
+                    var createdDate = new Date(conversation.created.localMillis)
                     var modifiedDate = new Date(conversation.modified.localMillis);
                     console.log(createdDate);
 
@@ -162,7 +162,7 @@ function ConversationController($scope, $asksg, $log) {
                     $scope.convos[i] = new Conversation(conversation.id,
                         conversation.author, conversation.subject,
                         conversation.snippet, conversation.messages,
-                        conversation.createdDate, conversation.modifiedDate,
+                        createdDate, modifiedDate,
                         conversation.service, conversation.read, conversation.hidden);
                     $scope.convoMap[conversation.id] = $scope.convos[i];
                 }

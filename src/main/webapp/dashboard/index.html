@@ -171,7 +171,7 @@
                                 <!-- Some useful(?) buttons -->
                                 <!--<button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>-->
                                 <button class="btn" onclick="showResponseForm(convo.id)">Reply</button>
-                                Created: {{convo.created_at}}
+                                Created: {{convo.created_at.toLocaleString();}}
 
                                 <!-- The message/conversation response form -->
                                 <div id="response-form-{{convo.id}}" class="responseForm">
