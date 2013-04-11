@@ -94,6 +94,8 @@ public class Twilio extends Service implements ContentProvider {
 
 		conv.setService(this);
 		conv.setExternalId(smsSid);
+		conv.setCreated(LocalDateTime.now());
+		conv.setModified(LocalDateTime.now());
 
 		conversationService.saveConversation(conv);
 	}
