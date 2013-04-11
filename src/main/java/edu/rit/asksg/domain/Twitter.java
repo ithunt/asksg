@@ -29,123 +29,123 @@ import java.util.List;
 @RooJson
 public class Twitter extends Service implements ContentProvider, SubscriptionProvider {
 
-	private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
+    private static final transient Logger logger = LoggerFactory.getLogger(Twitter.class);
 
-	@JSON(include = false)
-	@Override
-	public List<Conversation> getNewContent() {
+    @JSON(include = false)
+    @Override
+    public List<Conversation> getNewContent() {
 
-		//Get Timeline of Authenticated User
-		final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
-		final TimelineOperations timelineOperations = twitterApi.timelineOperations();
-		final List<Tweet> tweets = timelineOperations.getHomeTimeline();
-		List<Conversation> conversations = parseTweets(tweets);
-
-		//Get Direct Messages of Authenticated user
-		final DirectMessageOperations directMessageOperations = twitterApi.directMessageOperations();
-		final List<DirectMessage> directMessages = directMessageOperations.getDirectMessagesReceived();
-		conversations.addAll(parseDirectMessages(directMessages));
-
-		return conversations;
-	}
-
-	@Override
-	public boolean postContent(Message message) {
+        //Get Timeline of Authenticated User
         final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
-        if(message.getPrivateMessage()) {
+        final TimelineOperations timelineOperations = twitterApi.timelineOperations();
+        final List<Tweet> tweets = timelineOperations.getHomeTimeline();
+        List<Conversation> conversations = parseTweets(tweets);
+
+        //Get Direct Messages of Authenticated user
+        final DirectMessageOperations directMessageOperations = twitterApi.directMessageOperations();
+        final List<DirectMessage> directMessages = directMessageOperations.getDirectMessagesReceived();
+        conversations.addAll(parseDirectMessages(directMessages));
+
+        return conversations;
+    }
+
+    @Override
+    public boolean postContent(Message message) {
+        final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
+        if (message.getPrivateMessage()) {
             final DirectMessageOperations directMessageOperations = twitterApi.directMessageOperations();
-            directMessageOperations.sendDirectMessage(message.getRecipient(), message.getContent());
+            directMessageOperations.sendDirectMessage(message.getConversation().getRecipient(), message.getContent());
             return true;
             //todo: update the current one with the id?
         } else {
 
             final TimelineOperations timelineOperations = twitterApi.timelineOperations();
             final String tweet =
-                    ((message.getRecipient() != null) ? "@" + message.getRecipient() + " " : "") +
+                    ((message.getConversation().getRecipient() != null) ? "@" + message.getConversation().getRecipient() + " " : "") +
                             message.getContent();
 
             return !(timelineOperations.updateStatus(tweet) == null);
 
         }
-	}
+    }
 
-	protected List<Conversation> parseDirectMessages(List<DirectMessage> messages) {
+    protected List<Conversation> parseDirectMessages(List<DirectMessage> messages) {
 
-		final List<Conversation> conversations = new ArrayList<Conversation>();
-		for (DirectMessage dm : messages) {
-			Message m = new Message();
-			m.setAuthor(dm.getSender().getName());
-			m.setCreated(new LocalDateTime(dm.getCreatedAt()));
-			m.setContent(dm.getText());
+        final List<Conversation> conversations = new ArrayList<Conversation>();
+        for (DirectMessage dm : messages) {
+            Message m = new Message();
+            m.setAuthor(dm.getSender().getName());
+            m.setCreated(new LocalDateTime(dm.getCreatedAt()));
+            m.setContent(dm.getText());
             m.setPrivateMessage(true);
 
 
-			Conversation c = new Conversation(m);
-			c.setService(this);
-			c.setExternalId(String.valueOf(dm.getId()));
-			m.setConversation(c);
-			conversations.add(c);
-		}
+            Conversation c = new Conversation(m);
+            c.setService(this);
+            c.setExternalId(String.valueOf(dm.getId()));
+            m.setConversation(c);
+            conversations.add(c);
+        }
 
-		return conversations;
-	}
+        return conversations;
+    }
 
-	protected List<Conversation> parseTweets(List<Tweet> tweets) {
-		final List<Conversation> convos = new ArrayList<Conversation>();
+    protected List<Conversation> parseTweets(List<Tweet> tweets) {
+        final List<Conversation> convos = new ArrayList<Conversation>();
 
-		for (Tweet tweet : tweets) {
-			Message m = new Message();
-			m.setAuthor(tweet.getFromUser());
-			m.setPosted(true);
-			m.setContent(tweet.getText());
-			m.setUrl(tweet.getSource());
-			m.setCreated(new LocalDateTime(tweet.getCreatedAt()));
+        for (Tweet tweet : tweets) {
+            Message m = new Message();
+            m.setAuthor(tweet.getFromUser());
+            m.setPosted(true);
+            m.setContent(tweet.getText());
+            m.setUrl(tweet.getSource());
+            m.setCreated(new LocalDateTime(tweet.getCreatedAt()));
 
-			Conversation c = new Conversation(m);
-			m.setConversation(c);
-			c.setService(this);
-			convos.add(c);
+            Conversation c = new Conversation(m);
+            m.setConversation(c);
+            c.setService(this);
+            convos.add(c);
 
-			logger.debug("New Tweet:" + m.toString());
+            logger.debug("New Tweet:" + m.toString());
 
-		}
-		return convos;
-	}
+        }
+        return convos;
+    }
 
-	@Override
-	public boolean authenticate() {
-		return super.authenticate();
-	}
+    @Override
+    public boolean authenticate() {
+        return super.authenticate();
+    }
 
-	@Override
-	public boolean isAuthenticated() {
-		return super.isAuthenticated();
-	}
+    @Override
+    public boolean isAuthenticated() {
+        return super.isAuthenticated();
+    }
 
-	@JSON(include = false)
-	private org.springframework.social.twitter.api.Twitter getTwitterApi() {
+    @JSON(include = false)
+    private org.springframework.social.twitter.api.Twitter getTwitterApi() {
 
-		final SpringSocialConfig config = (SpringSocialConfig) this.getConfig();
-		return new TwitterTemplate(config.getConsumerKey(), config.getConsumerSecret(), config.getAccessToken(), config.getAccessTokenSecret());
+        final SpringSocialConfig config = (SpringSocialConfig) this.getConfig();
+        return new TwitterTemplate(config.getConsumerKey(), config.getConsumerSecret(), config.getAccessToken(), config.getAccessTokenSecret());
 
-	}
+    }
 
-	@JSON(include = false)
-	public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
+    @JSON(include = false)
+    public Collection<Conversation> getContentFor(SocialSubscription socialSubscription) {
 
-		List<Conversation> conversations;
+        List<Conversation> conversations;
 
-		//hashtag
-		if (socialSubscription.getHandle().startsWith("#")) {
-			final SearchOperations searchOperations = getTwitterApi().searchOperations();
-			conversations = parseTweets(searchOperations.search(socialSubscription.getHandle()).getTweets());
-		} else {
-			final TimelineOperations timelineOperations = getTwitterApi().timelineOperations();
-			final List<Tweet> tweets = timelineOperations.getUserTimeline(socialSubscription.getHandle());
-			conversations = parseTweets(tweets);
-		}
+        //hashtag
+        if (socialSubscription.getHandle().startsWith("#")) {
+            final SearchOperations searchOperations = getTwitterApi().searchOperations();
+            conversations = parseTweets(searchOperations.search(socialSubscription.getHandle()).getTweets());
+        } else {
+            final TimelineOperations timelineOperations = getTwitterApi().timelineOperations();
+            final List<Tweet> tweets = timelineOperations.getUserTimeline(socialSubscription.getHandle());
+            conversations = parseTweets(tweets);
+        }
 
 
-		return conversations;
-	}
+        return conversations;
+    }
 }

@@ -55,8 +55,6 @@ public class Message {
 
     private String snippet;
 
-    private String recipient;
-
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Tag> tags;
 

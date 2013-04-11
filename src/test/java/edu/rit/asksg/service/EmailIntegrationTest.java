@@ -1,6 +1,7 @@
 package edu.rit.asksg.service;
 
 
+import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Email;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.config.EmailConfig;
@@ -42,9 +43,18 @@ public class EmailIntegrationTest {
     @Test
     public void testSendMail() {
         Message m = new Message();
-        m.setRecipient("vulshok@gmail.com");
-        m.setContent("Test successful - " + new LocalDateTime());
-        assertTrue(email.postContent(m));
+	    m.setAuthor("vulshok@gmail.com");
+        Conversation c = new Conversation(m);
+        m.setConversation(c);
+	    m.setContent("Originating input messaage");
+
+	    Message m2 = new Message();
+	    m2.setConversation(c);
+	    c.getMessages().add(m2);
+        m2.setContent("Test successful - " + new LocalDateTime());
+        m2.setAuthor("testuser");
+
+	    assertTrue(email.postContent(m2));
     }
 
 }
