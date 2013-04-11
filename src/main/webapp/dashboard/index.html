@@ -163,7 +163,7 @@
                             <!-- The message/conversation response form -->
                             <div ng-hide="convo.hidden == true">
                                 <!-- List the messages -->
-                                <p class="msg-header" ng-repeat="message in convo.messages | orderBy:'id':false">
+                                <p class="msg-header" ng-repeat="message in convo.messages">
                                     <!-- put the messages in reverse order -->
                                     <i class="icon-chevron-right"></i>{{message.author}} : {{message.content}}
                                 </p>
