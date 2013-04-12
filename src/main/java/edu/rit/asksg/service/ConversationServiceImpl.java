@@ -5,6 +5,7 @@ import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.Tag;
+import org.hibernate.criterion.Expression;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -48,6 +49,30 @@ public class ConversationServiceImpl implements ConversationService {
 		conversation.setModified(LocalDateTime.now());
 		return conversationRepository.save(conversation);
 	}
+
+
+    public List<Conversation> findByService(final Service service, final LocalDateTime since) {
+
+
+        Specification<Conversation> specification = new Specification<Conversation>() {
+            @Override
+            public Predicate toPredicate(Root<Conversation> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> predicates = new ArrayList<Predicate>();
+
+                Path<LocalDateTime> date = root.get("created");
+                predicates.add(cb.greaterThan(date, since));
+
+                Join<Conversation, Service> join = root.join("service");
+                predicates.add(cb.equal(join.get("id"), service.getId()));
+
+
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+
+
+        return conversationRepository.findAll(specification);
+    }
 
 	@Override
 	public List<Conversation> findAllConversations(
