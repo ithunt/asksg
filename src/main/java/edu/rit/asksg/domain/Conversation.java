@@ -52,6 +52,7 @@ public class Conversation {
 	public Conversation(Message m) {
 		this.messages = new ArrayList<Message>();
 		this.messages.add(m);
+		m.setConversation(this);
 	}
 
 	public String getRecipient() {

@@ -60,11 +60,11 @@ public class ConversationController {
 		Message m1 = new Message();
 		m1.setAuthor("Socrates");
 		m1.setContent("For the unexamined life is not worth living");
-
+		m1.setConversation(c);
 		Message m2 = new Message();
 		m2.setAuthor("Tyrion Lannister");
 		m2.setContent("Sorcery is the sauce fools spoon over failure to hide the flavor of the their own incompetence");
-
+		m2.setConversation(c);
 		List<Message> messages = new ArrayList<Message>();
 		messages.add(m1);
 		messages.add(m2);
