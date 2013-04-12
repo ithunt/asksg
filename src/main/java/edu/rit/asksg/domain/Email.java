@@ -71,7 +71,7 @@ public class Email extends Service implements ContentProvider {
                         return new PasswordAuthentication(getConfig().getUsername(), getConfig().getPassword());
                     }
                 });
-        session.setDebug(true);
+        session.setDebug(false);
 
         try {
             MimeMessage m = new MimeMessage(session);
@@ -150,7 +150,7 @@ public class Email extends Service implements ContentProvider {
 
         try {
             Session session = Session.getDefaultInstance(props, null);
-            session.setDebug(true);
+            session.setDebug(false);
             store = session.getStore("imaps");
 
             /** USERNAME AND PASSWORD */

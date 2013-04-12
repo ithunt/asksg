@@ -43,9 +43,12 @@ public class WordCounter {
 
             for(Message m : c.getMessages()) {
 
-                for(String s : m.getContent().split(" ")) {
+                for(String s : m.getContent().split("\\n| |\\r|;|\\(|\\)")) {
 
                     try {
+
+                        if(s.endsWith(".") || s.endsWith(",")) s=s.substring(0,s.length()-1);
+                        s = s.toLowerCase();
 
                         if(countMap.containsKey(s)) {
 
@@ -53,6 +56,7 @@ public class WordCounter {
                             wc.setWordCount(wc.getWordCount() + 1);
 
                         } else {
+
                             WordCount wc = new WordCount();
                             wc.setWord(s);
                             wc.setWordCount(1);
