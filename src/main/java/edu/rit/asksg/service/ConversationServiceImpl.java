@@ -92,4 +92,14 @@ public class ConversationServiceImpl implements ConversationService {
 
 		return ((Page<Conversation>) conversationRepository.findAll(specification, new PageRequest(0, count))).getContent();
 	}
+
+	@Override
+	public Conversation findConversationByRecipient(String recipient) {
+		List<Message> messages = messageService.findMessagesByAuthor(recipient);
+		if (! messages.isEmpty()) {
+			return messages.get(0).getConversation();
+		} else {
+			return null;
+		}
+	}
 }
