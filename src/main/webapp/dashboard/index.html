@@ -8,201 +8,200 @@
 <!--[if gt IE 8]><!-->
 <html class="no-js" ng-app="ASKSG"> <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
 
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <style>
-        body {
-            padding-top: 60px;
-            padding-bottom: 40px;
-        }
-    </style>
-    <link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" href="../css/main.css">
-    <!--<link rel="stylesheet" href="../bootstrap-toggle-buttons.css">-->
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<style>
+		body {
+			padding-top: 60px;
+			padding-bottom: 40px;
+		}
+	</style>
+	<link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="../css/main.css">
+	<!--<link rel="stylesheet" href="../bootstrap-toggle-buttons.css">-->
 
-    <!-- Link in angular and our controller files -->
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script>
-    <!-- ../js/angular/angular.min.js -->
-    <!--<script src="../js/underscore-min.js"></script>-->
-    <script src="../js/asksg.module.js"></script>
-    <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	<!-- Link in angular and our controller files -->
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script>
+	<!-- ../js/angular/angular.min.js -->
+	<!--<script src="../js/underscore-min.js"></script>-->
+	<script src="../js/asksg.module.js"></script>
+	<script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 </head>
 <body ng-controller="ConversationController">
 
 <!--[if lt IE 7]>
 <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-    your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to
-    improve your experience.</p>
+	your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to
+	improve your experience.</p>
 <![endif]-->
 
 <!-- Service selector controller -->
 <div id="fl_menu" class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="/">ASKSG</a>
-            <ul class="nav pull-right">
-                <li><a data-toggle="modal" href="#loginModal" class="pull-right login-window">Logout
-                    {{localUserName}}</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="/">ASKSG</a>
+			<ul class="nav pull-right">
+				<li><a data-toggle="modal" href="#loginModal" class="pull-right login-window">Logout
+					{{localUserName}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>
 
 <!-- The conversation controller -->
 <div class="container">
 <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#dashTab">Dashboard</a></li>
-    <li><a data-toggle="tab" href="#configTab">Configuration</a></li>
-    <li><a data-toggle="tab" href="#userConfigTab">Users</a></li>
+	<li class="active"><a data-toggle="tab" href="#dashTab">Dashboard</a></li>
+	<li><a data-toggle="tab" href="#configTab">Configuration</a></li>
+	<li><a data-toggle="tab" href="#userConfigTab">Users</a></li>
 </ul>
 <div class="tab-content">
 <div class="tab-pane fade in active" id="dashTab">
-    <div class="row-fluid">
-        <div class="span3">
-            <div class="well sidebar-nav">
-                <ul class="nav nav-list">
-                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services
-                    </li>
-                    <li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()">
-                       <a href="#">&nbsp;Email</a></li>
-                    <li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()">
-                        <a href="#">&nbsp;SMS</a></li>
-                    <li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()">
-                        <a href="#"><img src="../img/Facebook.png"/>&nbsp;Facebook</a></li>
-                    <li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()">
-                        <a href="#"><img src="../img/Twitter1.png"/>&nbsp;Twitter</a></li>
-                    <li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()">
-                        <a href="#"><img src="../img/Reddit.png"/>&nbsp;Reddit</a></li>
-                </ul>
-            </div>
-            <!-- well sidebar-nav -->
+	<div class="row-fluid">
+		<div class="span3">
+			<div class="well sidebar-nav">
+				<ul class="nav nav-list">
+					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services
+					</li>
+					<li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()">
+						<a href="#">&nbsp;Email</a></li>
+					<li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()">
+						<a href="#">&nbsp;SMS</a></li>
+					<li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()">
+						<a href="#"><img src="../img/Facebook.png"/>&nbsp;Facebook</a></li>
+					<li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()">
+						<a href="#"><img src="../img/Twitter1.png"/>&nbsp;Twitter</a></li>
+					<li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()">
+						<a href="#"><img src="../img/Reddit.png"/>&nbsp;Reddit</a></li>
+				</ul>
+			</div>
+			<!-- well sidebar-nav -->
 
-            <div class="well sidebar-nav">
-                <ul class="nav nav-list">
-                    <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
-                    <li id="service-item-read" class="active service-menu-item" ng-click="filterRead()"><a
-                            href="#">Read</a></li>
-                    <li id="service-item-unread" class="active service-menu-item" ng-click="filterUnread()"><a
-                            href="#">Unread</a></li>
-                </ul>
-            </div>
-            <!-- well sidebar-nav -->
-        </div>
-        <!-- span3 -->
+			<div class="well sidebar-nav">
+				<ul class="nav nav-list">
+					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
+					<li id="service-item-read" class="active service-menu-item" ng-click="filterRead()"><a
+							href="#">Read</a></li>
+					<li id="service-item-unread" class="active service-menu-item" ng-click="filterUnread()"><a
+							href="#">Unread</a></li>
+				</ul>
+			</div>
+			<!-- well sidebar-nav -->
+		</div>
+		<!-- span3 -->
 
-        <!-- The conversation controller -->
-        <div class="span8">
-            <div class="convo-box">
+		<!-- The conversation controller -->
+		<div class="span8">
+			<div class="convo-box">
 
-                <!--<div id="text-toggle-button">
-                    <input type="checkbox" checked="checked">
-                </div>-->
+				<!--<div id="text-toggle-button">
+					<input type="checkbox" checked="checked">
+				</div>-->
 
-                <div id="convo-navbar" class="navbar">
-                    <div class="well convo-well">
-                        <!--div class="pagination pagination-centered">-->
-                        <ul class="nav">
-                            <li class="disabled"><a>Conversations</a></li>
-                        </ul>
-                        <!--</div>-->
-                        <form class="navbar-search pull-right">
-                            <div class="input-append">
-                                <!-- Hook up the search bar to the converation filter for the Angular controller -->
-                                <div class="input-append"><input ng-model="refineFilterString" type="text"
-                                                                 placeholder="Filter" id="" name=""><span
-                                        class="add-on"><i class="icon-filter"></i></span></div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+				<div id="convo-navbar" class="navbar">
+					<div class="well convo-well">
+						<!--div class="pagination pagination-centered">-->
+						<ul class="nav">
+							<li class="disabled"><a>Conversations</a></li>
+						</ul>
+						<!--</div>-->
+						<form class="navbar-search pull-right">
+							<div class="input-append">
+								<!-- Hook up the search bar to the converation filter for the Angular controller -->
+								<div class="input-append"><input ng-model="refineFilterString" type="text"
+								                                 placeholder="Filter" id="" name=""><span
+										class="add-on"><i class="icon-filter"></i></span></div>
+							</div>
+						</form>
+					</div>
+				</div>
 
-                <ul class="convo-list infinite-scroll">
-                    <li class="convo-list-item-msg"
-                        ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString">
-                        <div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
+				<ul class="convo-list infinite-scroll">
+					<li class="convo-list-item-msg"
+					    ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString">
+						<div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
 
-                            <!-- Options menu for the conversation -->
-                            <div class="dropdown delete pull-right" showonhoverparent>
-                                <!-- ng-show="isConvoActive(convo.id)" -->
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                    <li role="presentation"><a ng-click="toggleReadConvo(convo.id)" role="menuitem"
-                                                               tabindex="-1" href="#">Mark as Read/Unread</a></li>
-                                    <li role="presentation"><a ng-click="toggleHideConvo(convo.id)" role="menuitem"
-                                                               tabindex="-1" href="#">Hide/Unhide</a></li>
-                                    <li role="presentation" class="divider"></li>
-                                    <li role="presentation"><a ng-click="deleteConvo(convo.id)" role="menuitem"
-                                                               tabindex="-1" href="#">Delete</a></li>
-                                </ul>
-                            </div>
+							<!-- Options menu for the conversation -->
+							<div class="dropdown delete pull-right" showonhoverparent>
+								<!-- ng-show="isConvoActive(convo.id)" -->
+								<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+									<li role="presentation"><a ng-click="toggleReadConvo(convo.id)" role="menuitem"
+									                           tabindex="-1" href="#">Mark as Read/Unread</a></li>
+									<li role="presentation"><a ng-click="toggleHideConvo(convo.id)" role="menuitem"
+									                           tabindex="-1" href="#">Hide/Unhide</a></li>
+									<li role="presentation" class="divider"></li>
+									<li role="presentation"><a ng-click="deleteConvo(convo.id)" role="menuitem"
+									                           tabindex="-1" href="#">Delete</a></li>
+								</ul>
+							</div>
 
-                            <div class="{{convo.service.name}}-img"> </div>
+							<div class="{{convo.service.name}}-img"></div>
 
-                            <!-- Display the most recent web contents -->
-                            <!--<img ng-show"convo.service.name == 'Facebook'" src="../img/Facebook.png">-->
-                            <!--<img ng-show"convo.service.name == 'Twitter'" src="../img/Twitter1.png">-->
-                            <!--<img ng-show"convo.service.name == 'Reddit' " src="../img/Reddit.png">-->
-                            <!--<i class="icon-envelope" ng-show="convo.service.name == 'Email'">-->
-                            <!--<i class="icon-comment" ng-show="convo.service.name == 'Twilio'">-->
-                            <h5>
-                                <b>{{convo.messages[convo.messages.length - 1].author}}: <i>{{convo.messages[convo.messages.length
-                                    - 1].content}}</i></b>
-                            </h5>
+							<!-- Display the most recent web contents -->
+							<!--<img ng-show"convo.service.name == 'Facebook'" src="../img/Facebook.png">-->
+							<!--<img ng-show"convo.service.name == 'Twitter'" src="../img/Twitter1.png">-->
+							<!--<img ng-show"convo.service.name == 'Reddit' " src="../img/Reddit.png">-->
+							<!--<i class="icon-envelope" ng-show="convo.service.name == 'Email'">-->
+							<!--<i class="icon-comment" ng-show="convo.service.name == 'Twilio'">-->
+							<h5>
+								<b>{{convo.messages[0].author}}: <i>{{convo.messages[0].content}}</i></b>
+							</h5>
 
-                            <!-- The message/conversation response form -->
-                            <div ng-hide="convo.hidden == true">
-                                <!-- List the messages -->
-                                <p class="msg-header" ng-repeat="message in convo.messages">
-                                    <!-- put the messages in reverse order -->
-                                    <i class="icon-chevron-right"></i>{{message.author}} : {{message.content}}
-                                </p>
+							<!-- The message/conversation response form -->
+							<div ng-hide="convo.hidden == true">
+								<!-- List the messages -->
+								<p class="msg-header" ng-repeat="message in convo.messages">
+									<!-- put the messages in reverse order -->
+									<i class="icon-chevron-right"></i>{{message.author}} : {{message.content}}
+								</p>
 
-                                <!-- Some useful(?) buttons -->
-                                <!--<button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>-->
-                                <button class="btn" onclick="showResponseForm(convo.id)">Reply</button>
-                                Created: {{convo.created_at.toLocaleString();}}
+								<!-- Some useful(?) buttons -->
+								<!--<button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>-->
+								<button class="btn" onclick="showResponseForm(convo.id)">Reply</button>
+								Created: {{convo.created_at.toLocaleString();}}
 
-                                <!-- The message/conversation response form -->
-                                <div id="response-form-{{convo.id}}" class="responseForm">
-                                    <form ng-submit="doPostMessage(messageResp, convo.id)">
-                                        <input class="input-xlarge focused" ng-model="messageResp"/>
-                                        <button class="btn" type="submit">Submit Message</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <!-- span8 -->
-    </div>
+								<!-- The message/conversation response form -->
+								<div id="response-form-{{convo.id}}" class="responseForm">
+									<form ng-submit="doPostMessage(messageResp, convo.id)">
+										<input class="input-xlarge focused" ng-model="messageResp"/>
+										<button class="btn" type="submit">Submit Message</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- span8 -->
+	</div>
 </div>
 <!-- dashTab -->
 <div id="configTab" class="tab-pane fade">
 <div class="row-fluid">
 <div class="span3">
-    <div class="well sidebar-nav">
-        <ul class="nav nav-list">
-            <li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Settings
-            </li>
-            <li class="active"><a data-toggle="tab" href="#serviceConfigTab">Service Configurations</a>
-            </li>
-            <!--<li><a data-toggle="tab" href="#otherConfigTab">Other</a></li>-->
-        </ul>
-    </div>
-    <!-- well sidebar-nav -->
+	<div class="well sidebar-nav">
+		<ul class="nav nav-list">
+			<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Settings
+			</li>
+			<li class="active"><a data-toggle="tab" href="#serviceConfigTab">Service Configurations</a>
+			</li>
+			<!--<li><a data-toggle="tab" href="#otherConfigTab">Other</a></li>-->
+		</ul>
+	</div>
+	<!-- well sidebar-nav -->
 </div>
 <!-- span3 -->
 
@@ -213,224 +212,224 @@
 <h2>Service Configurations</h2>
 
 <div class="well">
-    <h4>Twilio Subscription</h4>
+	<h4>Twilio Subscription</h4>
 
-    <div ng-repeat="service in subscriptions['Twilio']">
-        <!-- todo turn into a directive and template, can't do now, no scopes used, would break things-->
-        <!-- Options menu for the service -->
-        <div class="dropdown delete pull-right" showonhoverparent>
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
-                                           tabindex="-1" href="#">Enable/Disable</a></li>
+	<div ng-repeat="service in subscriptions['Twilio']">
+		<!-- todo turn into a directive and template, can't do now, no scopes used, would break things-->
+		<!-- Options menu for the service -->
+		<div class="dropdown delete pull-right" showonhoverparent>
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+				                           tabindex="-1" href="#">Enable/Disable</a></li>
 
-                <li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
-                                           tabindex="-1" href="#">Delete</a></li>
-            </ul>
-        </div>
-        <div>
-            <p>
-                Account SID: {{service.config.username}} <br/>
-                Authentication Token: {{service.config.authenticationToken}} <br/>
-                Phone Number: {{service.config.phoneNumber}} <br/>
-                Enabled: {{service.enabled}}
-            </p>
-        </div>
-    </div>
+				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+				                           tabindex="-1" href="#">Delete</a></li>
+			</ul>
+		</div>
+		<div>
+			<p>
+				Account SID: {{service.config.username}} <br/>
+				Authentication Token: {{service.config.authenticationToken}} <br/>
+				Phone Number: {{service.config.phoneNumber}} <br/>
+				Enabled: {{service.enabled}}
+			</p>
+		</div>
+	</div>
 
-    <a data-toggle="modal" href="#twilioModal" class="btn">Add Service</a>
+	<a data-toggle="modal" href="#twilioModal" class="btn">Add Service</a>
 
-    <div class="modal hide" id="twilioModal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">x</button>
-            <h3>Configure new Twilio service</h3>
-        </div>
-        <div class="modal-body">
-            <form ng-submit="doAddServiceTwilio()">
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Account SID</label>
-                    <input class="input-xlarge focused" ng-model="twilioUsername"/>
-                </div>
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Authentication Token</label>
-                    <input class="input-xlarge focused" ng-model="twilioAuthToken"/>
-                </div>
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Phone Number</label>
-                    <input class="input-xlarge focused" ng-model="twilioNumber"/>
-                </div>
-                <button class="btn" type="submit" ng-click="doAddServiceTwilio()" data-dismiss="modal">Go
-                </button>
-            </form>
-        </div>
-    </div>
+	<div class="modal hide" id="twilioModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3>Configure new Twilio service</h3>
+		</div>
+		<div class="modal-body">
+			<form ng-submit="doAddServiceTwilio()">
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Account SID</label>
+					<input class="input-xlarge focused" ng-model="twilioUsername"/>
+				</div>
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Authentication Token</label>
+					<input class="input-xlarge focused" ng-model="twilioAuthToken"/>
+				</div>
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Phone Number</label>
+					<input class="input-xlarge focused" ng-model="twilioNumber"/>
+				</div>
+				<button class="btn" type="submit" ng-click="doAddServiceTwilio()" data-dismiss="modal">Go
+				</button>
+			</form>
+		</div>
+	</div>
 </div>
 
 <div class="well">
-    <h4>Email Subscriptions</h4>
+	<h4>Email Subscriptions</h4>
 
-    <div ng-repeat="service in subscriptions['Email']">
-        <!-- Options menu for the service -->
-        <div class="dropdown delete pull-right" showonhoverparent>
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
-                                           tabindex="-1" href="#">Enable/Disable</a></li>
+	<div ng-repeat="service in subscriptions['Email']">
+		<!-- Options menu for the service -->
+		<div class="dropdown delete pull-right" showonhoverparent>
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+				                           tabindex="-1" href="#">Enable/Disable</a></li>
 
-                <li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
-                                           tabindex="-1" href="#">Delete</a></li>
-            </ul>
-        </div>
-        <div>
-            <p>
-                Username: {{service.config.username}} <br/>
-                Password: {{service.config.password}} <br/>
-                Enabled: {{service.enabled}}
-            </p>
-        </div>
-    </div>
+				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+				                           tabindex="-1" href="#">Delete</a></li>
+			</ul>
+		</div>
+		<div>
+			<p>
+				Username: {{service.config.username}} <br/>
+				Password: {{service.config.password}} <br/>
+				Enabled: {{service.enabled}}
+			</p>
+		</div>
+	</div>
 
-    <a data-toggle="modal" href="#emailModal" class="btn">Add Service</a>
+	<a data-toggle="modal" href="#emailModal" class="btn">Add Service</a>
 
-    <div class="modal hide" id="emailModal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">x</button>
-            <h3>Configure new Email service</h3>
-        </div>
-        <div class="modal-body">
-            <form ng-submit="doAddServiceEmail()">
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Username</label>
-                    <input class="input-xlarge focused" ng-model="emailUsername"/>
-                </div>
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Password</label>
-                    <input class="input-xlarge focused" ng-model="emailPassword"/>
-                </div>
-                <button class="btn" type="submit" data-dismiss="modal" ng-click="doAddServiceEmail()">Go
-                </button>
-            </form>
-        </div>
-    </div>
+	<div class="modal hide" id="emailModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3>Configure new Email service</h3>
+		</div>
+		<div class="modal-body">
+			<form ng-submit="doAddServiceEmail()">
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Username</label>
+					<input class="input-xlarge focused" ng-model="emailUsername"/>
+				</div>
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Password</label>
+					<input class="input-xlarge focused" ng-model="emailPassword"/>
+				</div>
+				<button class="btn" type="submit" data-dismiss="modal" ng-click="doAddServiceEmail()">Go
+				</button>
+			</form>
+		</div>
+	</div>
 </div>
 
 <div class="well">
-    <h4>Twitter Subscriptions</h4>
+	<h4>Twitter Subscriptions</h4>
 
-    <div ng-repeat="service in subscriptions['Twitter']">
-        <!-- Options menu for the service -->
-        <div class="dropdown delete pull-right" showonhoverparent>
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
-                                           tabindex="-1" href="#">Enable/Disable</a></li>
+	<div ng-repeat="service in subscriptions['Twitter']">
+		<!-- Options menu for the service -->
+		<div class="dropdown delete pull-right" showonhoverparent>
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+				                           tabindex="-1" href="#">Enable/Disable</a></li>
 
-                <li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
-                                           tabindex="-1" href="#">Delete</a></li>
-            </ul>
-        </div>
-        <div>
-            <p>
-                Identifier (URL): {{service.config.url}} <br/>
-                Consumer Key: {{service.config.consumerkey}} <br/>
-                Consumer Secret: {{service.config.consumersecret}} <br/>
-                Access Token: {{service.config.accesstoken}} <br/>
-                Access Token Secret: {{service.config.accesstokensecret}} <br/>
-                Enabled: {{service.enabled}}
-            </p>
-        </div>
+				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+				                           tabindex="-1" href="#">Delete</a></li>
+			</ul>
+		</div>
+		<div>
+			<p>
+				Identifier (URL): {{service.config.url}} <br/>
+				Consumer Key: {{service.config.consumerkey}} <br/>
+				Consumer Secret: {{service.config.consumersecret}} <br/>
+				Access Token: {{service.config.accesstoken}} <br/>
+				Access Token Secret: {{service.config.accesstokensecret}} <br/>
+				Enabled: {{service.enabled}}
+			</p>
+		</div>
 
-    </div>
+	</div>
 
-    <a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>
+	<a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>
 
-    <div class="modal hide" id="twitterModal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">x</button>
-            <h3>Configure new Twitter service</h3>
-        </div>
-        <div class="modal-body">
-            <form ng-submit="doAddServiceTwitter()">
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Identifier (URL)</label>
-                    <input class="input-xlarge focused" ng-model="twitterUrl"/>
-                </div>
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Consumer Key</label>
-                    <input class="input-xlarge focused" ng-model="twitterConsumerKey"/>
-                </div>
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Consumer Secret</label>
-                    <input class="input-xlarge focused" ng-model="twitterConsumerSecret"/>
-                </div>
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Access Token</label>
-                    <input class="input-xlarge focused" ng-model="twitterAccessToken"/>
-                </div>
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Access Token Secret</label>
-                    <input class="input-xlarge focused" ng-model="twitterAccessSecret"/>
-                </div>
-                <button class="btn" type="submit" data-dismiss="modal" ng-click="doAddServiceTwitter()">Go
-                </button>
-            </form>
-        </div>
-    </div>
+	<div class="modal hide" id="twitterModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3>Configure new Twitter service</h3>
+		</div>
+		<div class="modal-body">
+			<form ng-submit="doAddServiceTwitter()">
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Identifier (URL)</label>
+					<input class="input-xlarge focused" ng-model="twitterUrl"/>
+				</div>
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Consumer Key</label>
+					<input class="input-xlarge focused" ng-model="twitterConsumerKey"/>
+				</div>
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Consumer Secret</label>
+					<input class="input-xlarge focused" ng-model="twitterConsumerSecret"/>
+				</div>
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Access Token</label>
+					<input class="input-xlarge focused" ng-model="twitterAccessToken"/>
+				</div>
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Access Token Secret</label>
+					<input class="input-xlarge focused" ng-model="twitterAccessSecret"/>
+				</div>
+				<button class="btn" type="submit" data-dismiss="modal" ng-click="doAddServiceTwitter()">Go
+				</button>
+			</form>
+		</div>
+	</div>
 </div>
 
 <div class="well">
-    <h4>Facebook Subscriptions</h4>
+	<h4>Facebook Subscriptions</h4>
 
-    <div ng-repeat="service in subscriptions['Facebook']">
-        <!-- Options menu for the service -->
-        <div class="dropdown delete pull-right" showonhoverparent>
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
-                                           tabindex="-1" href="#">Enable/Disable</a></li>
+	<div ng-repeat="service in subscriptions['Facebook']">
+		<!-- Options menu for the service -->
+		<div class="dropdown delete pull-right" showonhoverparent>
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+				                           tabindex="-1" href="#">Enable/Disable</a></li>
 
-                <li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
-                                           tabindex="-1" href="#">Delete</a></li>
-            </ul>
-        </div>
-        <div>
-            <p>
-                Consumer Key: {{service.config.consumerKey}} <br/>
-                Consumer Secret: {{service.config.consumerSecret}} <br/>
-                Access Token: {{service.config.accessToken}} <br/>
-                Access Token Secret: {{service.config.accessTokenSecret}} <br/>
-                Enabled: {{service.enabled}} <br/>
-                <a ng-show="service.config.facebookAccessToken == null" data-toggle="modal"
-                   href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox"
-                   class="btn">Authenticate</a>
-            </p>
-        </div>
+				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+				                           tabindex="-1" href="#">Delete</a></li>
+			</ul>
+		</div>
+		<div>
+			<p>
+				Consumer Key: {{service.config.consumerKey}} <br/>
+				Consumer Secret: {{service.config.consumerSecret}} <br/>
+				Access Token: {{service.config.accessToken}} <br/>
+				Access Token Secret: {{service.config.accessTokenSecret}} <br/>
+				Enabled: {{service.enabled}} <br/>
+				<a ng-show="service.config.facebookAccessToken == null" data-toggle="modal"
+				   href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox"
+				   class="btn">Authenticate</a>
+			</p>
+		</div>
 
-    </div>
+	</div>
 
-    <a data-toggle="modal" href="#facebookModal" class="btn">Add Service</a>
+	<a data-toggle="modal" href="#facebookModal" class="btn">Add Service</a>
 
-    <div class="modal hide" id="facebookModal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">x</button>
-            <h3>Configure new Facebook service</h3>
-        </div>
-        <div class="modal-body">
-            <form ng-submit="doAddServiceFacebook()">
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Consumer Key</label>
-                    <input class="input-xlarge focused" ng-model="facebookConsumerKey"/>
-                </div>
-                <div style="float:left;margin-right:20px;">
-                    <label for="name">Consumer Secret</label>
-                    <input class="input-xlarge focused" ng-model="facebookConsumerSecret"/>
-                </div>
-                <button class="btn" type="submit" data-dismiss="modal" ng-click="doAddServiceFacebook()">
-                    Go
-                </button>
-            </form>
-        </div>
-    </div>
+	<div class="modal hide" id="facebookModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3>Configure new Facebook service</h3>
+		</div>
+		<div class="modal-body">
+			<form ng-submit="doAddServiceFacebook()">
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Consumer Key</label>
+					<input class="input-xlarge focused" ng-model="facebookConsumerKey"/>
+				</div>
+				<div style="float:left;margin-right:20px;">
+					<label for="name">Consumer Secret</label>
+					<input class="input-xlarge focused" ng-model="facebookConsumerSecret"/>
+				</div>
+				<button class="btn" type="submit" data-dismiss="modal" ng-click="doAddServiceFacebook()">
+					Go
+				</button>
+			</form>
+		</div>
+	</div>
 </div>
 
 <!-- TODO: PUT BACK IN WHEN REDDIT API IS WORKING
@@ -511,63 +510,63 @@
 
 <!--- usersTab -->
 <div id="userConfigTab" class="tab-pane fade">
-    <div class="row-fluid">
-        <div class="span12">
-            <h2>ASKSG Users</h2>
+	<div class="row-fluid">
+		<div class="span12">
+			<h2>ASKSG Users</h2>
 
-            <p>Create User</p>
-            <!-- todo fix awkward naming with user angular controller for scope -->
-            <form ng-submit="addUser()">
-                <input type="text" ng-model="userName" size="30" placeholder="Name">
-                <input type="text" ng-model="userUsername" size="10" placeholder="User Name">
-                <input type="text" ng-model="userPassword" size="15" placeholder="Password">
-                <input type="text" ng-model="userPhone" size="13" placeholder="Phone">
-                <input type="text" ng-model="userEmail" size="30" placeholder="Email">
-                <select ng-model="userRole" ng-options="role.name for role in roles"></select>
-                <input class="btn-primary" type="submit" value="add">
-            </form>
-            <!--user table-->
-            <div class="row-fluid">
-                <div class="span12">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Username</th>
-                            <th>Phone Number</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Enabled</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="user in users | orderBy:user.enabled">
-                            <td>{{user.name}}</td>
-                            <td>{{user.userName}}</td>
-                            <td>{{user.phoneNumber}}</td>
-                            <td>{{user.email}}</td>
-                            <td>{{user.role.name}}</td>
-                            <td>{{user.enabled}}</td>
-                            <td>
-                                <div class="dropdown delete">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
-                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                        <li role="presentation"><a ng-click="toggleEnabledUser(user)" role="menuitem"
-                                                                   tabindex="-1" href="#">Enable/Disable</a></li>
+			<p>Create User</p>
+			<!-- todo fix awkward naming with user angular controller for scope -->
+			<form ng-submit="addUser()">
+				<input type="text" ng-model="userName" size="30" placeholder="Name">
+				<input type="text" ng-model="userUsername" size="10" placeholder="User Name">
+				<input type="text" ng-model="userPassword" size="15" placeholder="Password">
+				<input type="text" ng-model="userPhone" size="13" placeholder="Phone">
+				<input type="text" ng-model="userEmail" size="30" placeholder="Email">
+				<select ng-model="userRole" ng-options="role.name for role in roles"></select>
+				<input class="btn-primary" type="submit" value="add">
+			</form>
+			<!--user table-->
+			<div class="row-fluid">
+				<div class="span12">
+					<table class="table table-bordered table-striped">
+						<thead>
+						<tr>
+							<th>Name</th>
+							<th>Username</th>
+							<th>Phone Number</th>
+							<th>Email</th>
+							<th>Role</th>
+							<th>Enabled</th>
+							<th></th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="user in users | orderBy:user.enabled">
+							<td>{{user.name}}</td>
+							<td>{{user.userName}}</td>
+							<td>{{user.phoneNumber}}</td>
+							<td>{{user.email}}</td>
+							<td>{{user.role.name}}</td>
+							<td>{{user.enabled}}</td>
+							<td>
+								<div class="dropdown delete">
+									<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+									<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+										<li role="presentation"><a ng-click="toggleEnabledUser(user)" role="menuitem"
+										                           tabindex="-1" href="#">Enable/Disable</a></li>
 
-                                        <li role="presentation"><a ng-click="deleteUser(user.id)" role="menuitem"
-                                                                   tabindex="-1" href="#">Delete</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+										<li role="presentation"><a ng-click="deleteUser(user.id)" role="menuitem"
+										                           tabindex="-1" href="#">Delete</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 </div>
@@ -575,7 +574,7 @@
 <hr>
 
 <footer>
-    <p>&copy; ASKSG</p>
+	<p>&copy; ASKSG</p>
 </footer>
 
 </div>
@@ -589,17 +588,17 @@
 <!-- le infinite scroll -->
 <script src="../js/jquery.jscroll.min.js"></script>
 <script>
-    //$('.infinite-scroll').jscroll();
+	//$('.infinite-scroll').jscroll();
 
-    // customize the infinite scroll options as follows
-    /*
-     $('.infinite-scroll').jscroll({
-     loadingHtml: '<img src="loading.gif" alt="Loading" /> Loading...',
-     padding: 20,
-     nextSelector: 'a.jscroll-next:last',
-     contentSelector: 'li'
-     });
-     */
+	// customize the infinite scroll options as follows
+	/*
+	 $('.infinite-scroll').jscroll({
+	 loadingHtml: '<img src="loading.gif" alt="Loading" /> Loading...',
+	 padding: 20,
+	 nextSelector: 'a.jscroll-next:last',
+	 contentSelector: 'li'
+	 });
+	 */
 </script>
 
 <!-- le Bootstrap -->
@@ -613,15 +612,15 @@
 
 <!-- le Analytics -->
 <script>
-    var _gaq = [
-        ['_setAccount', 'UA-XXXXX-X'],
-        ['_trackPageview']
-    ];
-    (function (d, t) {
-        var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
-        g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
-        s.parentNode.insertBefore(g, s)
-    }(document, 'script'));
+	var _gaq = [
+		['_setAccount', 'UA-XXXXX-X'],
+		['_trackPageview']
+	];
+	(function (d, t) {
+		var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+		g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+		s.parentNode.insertBefore(g, s)
+	}(document, 'script'));
 </script>
 </body>
 </html>
