@@ -469,13 +469,18 @@ li.active {
 
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #000;
+  /*fill: none;*/
+/*  stroke: #000;
   shape-rendering: crispEdges;
+  stroke-width: 1.0px;*/
+
+  fill: none; 
+  stroke: black; 
+  stroke-width; 1; 
 }
 
 .x.axis path {
-  display: none;
+  /*display: none;*/
 }
 
 .line {
