@@ -91,10 +91,12 @@ public class Twilio extends Service implements ContentProvider {
 		Conversation conv = conversationService.findConversationByRecipient(from);
 
 		if (conv == null) {
+			logger.debug("Twilio: Creating new conversation for message received from " + from);
 			conv = new Conversation(msg);
 			conv.setExternalId(smsSid);
 			conv.setCreated(LocalDateTime.now());
 		} else {
+			logger.debug("Twilio: Adding received message from " + from + " to conversation with ID " + conv.getId());
 			conv.getMessages().add(msg);
 		}
 
