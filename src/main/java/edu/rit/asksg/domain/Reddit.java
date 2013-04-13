@@ -47,7 +47,7 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 		try {
 			convos = getRedditPosts(REDDIT_DOMAIN + "/r/" + this.getConfig().getIdentifier());
 		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error(e.getLocalizedMessage(), e);
 		}
 
 		return convos;
@@ -70,7 +70,7 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 				attachComments(c);
 				conversations.add(c);
 			} catch (Exception e) {
-				logger.error("Error parsing reddit post " + e.getLocalizedMessage());
+				logger.error("Error parsing reddit post " + e.getLocalizedMessage(),e);
 			}
 		}
 
@@ -88,9 +88,11 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 		for (Object comment : getTopLevelComments(m.getUrl())) {
 			try {
 				JSONObject obj = (JSONObject) ((JSONObject) comment).get("data");
-				messages.add(parseComment(obj));
+				Message parsedComment = parseComment(obj);
+				parsedComment.setConversation(c);
+				messages.add(parsedComment);
 			} catch (Exception e) {
-				logger.error("Error parsing reddit comment - " + e.getLocalizedMessage());
+				logger.error("Error parsing reddit comment - " + e.getLocalizedMessage(),e);
 			}
 		}
 		c.setMessages(messages);
@@ -137,7 +139,7 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
 				retVal = (JSONArray) ((JSONObject) ((JSONObject) arr.get(1)).get("data")).get("children");
 			} catch (Exception e) {
-				logger.error("Error in getting top level comments" + e.getLocalizedMessage());
+				logger.error("Error in getting top level comments" + e.getLocalizedMessage(), e);
 			}
 		}
 		return retVal;
@@ -169,7 +171,7 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 		try {
 			conversations = getRedditPosts(REDDIT_DOMAIN + "/r/" + socialSubscription.getHandle());
 		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error(e.getLocalizedMessage(), e);
 		}
 
 		return conversations;
