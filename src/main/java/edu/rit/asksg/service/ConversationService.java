@@ -22,4 +22,6 @@ public interface ConversationService {
 			int count);
 
     List<Conversation> findByService(Service service, LocalDateTime since);
+
+    List<Conversation> findByService(Service service, LocalDateTime since, LocalDateTime until);
 }

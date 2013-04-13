@@ -51,7 +51,7 @@ public class ConversationServiceImpl implements ConversationService {
 	}
 
 
-    public List<Conversation> findByService(final Service service, final LocalDateTime since) {
+    public List<Conversation> findByService(final Service service, final LocalDateTime since, final LocalDateTime until) {
 
 
         Specification<Conversation> specification = new Specification<Conversation>() {
@@ -61,6 +61,7 @@ public class ConversationServiceImpl implements ConversationService {
 
                 Path<LocalDateTime> date = root.get("created");
                 predicates.add(cb.greaterThan(date, since));
+                predicates.add(cb.lessThan(date, until));
 
                 Join<Conversation, Service> join = root.join("service");
                 predicates.add(cb.equal(join.get("id"), service.getId()));
@@ -72,6 +73,10 @@ public class ConversationServiceImpl implements ConversationService {
 
 
         return conversationRepository.findAll(specification);
+    }
+
+    public List<Conversation> findByService(final Service service, final LocalDateTime since) {
+        return findByService(service, since, LocalDateTime.now());
     }
 
 	@Override

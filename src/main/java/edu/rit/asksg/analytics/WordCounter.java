@@ -31,20 +31,28 @@ public class WordCounter {
     WordCountRepository wordCountRepository;
 
     @Async
-    public void work(final Service service) {
-        LocalDateTime since = new LocalDateTime();
-        since = since.minusWeeks(1);
-        List<Conversation> conversations = conversationService.findByService(service, since);
+    public void work(final Service service, final LocalDateTime since, final LocalDateTime until) {
+        List<Conversation> conversations = conversationService.findByService(service, since, until);
 
+        Map<String, WordCount> countMap = buildCountMapWithService(conversations, service, until);
+
+        try {
+            wordCountRepository.save(countMap.values());
+        } catch (Error e) {
+            logger.error(e.getLocalizedMessage(), e);
+        }
+
+    }
+
+
+    protected Map<String, WordCount> buildCountMapWithService(
+            final List<Conversation> conversations,
+            final Service service,
+            final LocalDateTime until) {
         Map<String, WordCount> countMap = new HashMap<String, WordCount>();
-
         for(Conversation c : conversations) {
-
-
             for(Message m : c.getMessages()) {
-
                 for(String s : m.getContent().split("\\n| |\\r|;|\\(|\\)")) {
-
                     try {
 
                         if(s.endsWith(".") || s.endsWith(",")) s=s.substring(0,s.length()-1);
@@ -60,7 +68,7 @@ public class WordCounter {
                             WordCount wc = new WordCount();
                             wc.setWord(s);
                             wc.setWordCount(1);
-                            wc.setCreated(new LocalDateTime());
+                            wc.setCreated(until);
                             wc.setService(service.getName());
                             countMap.put(s, wc);
                         }
@@ -69,17 +77,12 @@ public class WordCounter {
                     }
                 }
             }
-
         }
-
-
-        try {
-            wordCountRepository.save(countMap.values());
-        } catch (Error e) {
-            logger.error(e.getLocalizedMessage(), e);
-        }
-
+        return  countMap;
     }
+
+
+
 
 
 

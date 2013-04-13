@@ -1,11 +1,15 @@
 package edu.rit.asksg.service;
 
+import edu.rit.asksg.analytics.domain.GraphData;
 import edu.rit.asksg.analytics.domain.Topic;
+import edu.rit.asksg.analytics.domain.WordCount;
+import org.joda.time.LocalDateTime;
 
-import java.util.Map;
+import java.util.List;
 
 public interface AnalyticsService {
 
-    Map<Topic, Integer> getAggregatedWordCount();
+    List<GraphData> getAggregatedWordCount();
 
+    List<WordCount> findWordCountInRange(Topic topic, LocalDateTime since, LocalDateTime until);
 }

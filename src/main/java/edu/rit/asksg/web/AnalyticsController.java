@@ -1,6 +1,7 @@
 package edu.rit.asksg.web;
 
 import edu.rit.asksg.analytics.WordCounter;
+import edu.rit.asksg.analytics.domain.GraphData;
 import edu.rit.asksg.analytics.domain.Topic;
 import edu.rit.asksg.common.Log;
 import edu.rit.asksg.domain.Service;
@@ -8,6 +9,7 @@ import edu.rit.asksg.repository.TopicRepository;
 import edu.rit.asksg.repository.WordCountRepository;
 import edu.rit.asksg.service.AnalyticsService;
 import edu.rit.asksg.service.ProviderService;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -50,7 +52,19 @@ public class AnalyticsController {
 
         for(Service s : providerService.findAllServices()) {
             logger.info("Counting " + s.getName() + " words");
-            wordCounter.work(s);
+
+
+            LocalDateTime since1 = new LocalDateTime();
+            LocalDateTime since2 = new LocalDateTime();
+            LocalDateTime since3 = new LocalDateTime();
+
+            since1 = since1.minusDays(3);
+            since2 = since2.minusDays(6);
+            since3 = since3.minusDays(9);
+
+            wordCounter.work(s, since3, since2);
+            wordCounter.work(s, since2, since1);
+            wordCounter.work(s, since1, LocalDateTime.now());
         }
 
 
@@ -89,30 +103,12 @@ public class AnalyticsController {
     @RequestMapping(value = "/words")
     public ResponseEntity<String> wordCounts() {
 
-        Map<Topic, Integer> m = analyticsService.getAggregatedWordCount();
-
-        List<String> words = new ArrayList<String>();
-        List<Integer> counts = new ArrayList<Integer>();
-
-        for(Map.Entry<Topic, Integer> e : m.entrySet()) {
-            words.add(e.getKey().getName());
-            counts.add(e.getValue());
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for(String w : words) {
-            sb.append(w + "\t");
-        }
-        sb.append("\n");
-
-        for(Integer i : counts) {
-            sb.append(i + "\t\t");
-        }
+        List<GraphData> data = analyticsService.getAggregatedWordCount();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "text/plain; charset=utf-8");
+        headers.add("Content-Type", "application/json; charset=utf-8");
 
-        return new ResponseEntity<String>(sb.toString(), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(GraphData.toJsonArray(data), headers, HttpStatus.OK);
     }
 
 
