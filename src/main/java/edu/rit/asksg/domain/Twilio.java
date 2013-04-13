@@ -1,5 +1,7 @@
 package edu.rit.asksg.domain;
 
+import com.google.common.base.Optional;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.TwilioRestException;
 import com.twilio.sdk.resource.factory.SmsFactory;
@@ -86,11 +88,26 @@ public class Twilio extends Service implements ContentProvider {
         msg.setCreated(LocalDateTime.now());
         msg.setModified(LocalDateTime.now());
 
-        Conversation conv = new Conversation(msg);
+		Conversation conv = null;
+
+		// TODO: is there a better way to do this? this has got to be slow...
+		for (Conversation c : conversationService.findAllConversations()) {
+			if (c.getRecipient().equals(from)) {
+				conv = c;
+				break;
+			}
+		}
+
+        if (conv == null) {
+			conv = new Conversation(msg);
+			conv.setCreated(LocalDateTime.now());
+			conv.setExternalId(smsSid);
+		}
+
         msg.setConversation(conv);
 
-        conv.setService(this);
-        conv.setExternalId(smsSid);
+		conv.setService(this);
+		conv.setModified(LocalDateTime.now());
 
         conversationService.saveConversation(conv);
     }
