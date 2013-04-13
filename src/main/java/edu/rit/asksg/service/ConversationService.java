@@ -18,4 +18,8 @@ public interface ConversationService {
 			String[] includeTags,
 			Optional<Boolean> showRead,
 			int count);
+
+	Conversation findConversationByRecipient(
+			String recipient
+	);
 }
