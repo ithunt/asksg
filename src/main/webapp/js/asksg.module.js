@@ -225,6 +225,7 @@ function ConversationController($scope, $asksg, $log) {
 			error(function (data, status, headers, config) {
 				console.log("Error... :(");
 			});
+		$(":input", "#response-form-" + convoId).not(":button")[0].value = '';
 	};
 
 	/**
@@ -247,6 +248,9 @@ function ConversationController($scope, $asksg, $log) {
 			error(function (data, status, headers, config) {
 				console.log("Error... :(");
 			});
+		$scope.twilioAuthToken = '';
+		$scope.twilioUsername = '';
+		$scope.twilioNumber = '';
 	};
 
 	/**
@@ -268,6 +272,8 @@ function ConversationController($scope, $asksg, $log) {
 			error(function (data, status, headers, config) {
 				console.log("Error... :(");
 			});
+		$scope.emailUsername = '';
+		$scope.emailPassword = '';
 	};
 
 
@@ -293,6 +299,11 @@ function ConversationController($scope, $asksg, $log) {
 			error(function (data, status, headers, config) {
 				console.log("Error... :(");
 			});
+		$scope.twitterUrl = '';
+		$scope.twitterConsumerKey = '';
+		$scope.twitterConsumerSecret = '';
+		$scope.twitterAccessToken = '';
+		$scope.twitterAccessSecret = '';
 	};
 
 	/**
@@ -317,6 +328,9 @@ function ConversationController($scope, $asksg, $log) {
 			error(function (data, status, headers, config) {
 				console.log("Error... :(");
 			});
+		$scope.facebookConsumerKey = '';
+		$scope.facebookConsumerSecret = '';
+
 	};
 
 	$scope.addUser = function () {
