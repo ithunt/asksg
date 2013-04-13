@@ -80,37 +80,22 @@ public class Twilio extends Service implements ContentProvider {
         return false;
     }
 
-    public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
+	public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
 
-        Message msg = new Message();
-        msg.setContent(body);
-        msg.setAuthor(from);
-        msg.setCreated(LocalDateTime.now());
-        msg.setModified(LocalDateTime.now());
+		Message msg = new Message();
+		msg.setContent(body);
+		msg.setAuthor(from);
+		msg.setCreated(LocalDateTime.now());
+		msg.setModified(LocalDateTime.now());
 
-		Conversation conv = null;
-
-		// TODO: is there a better way to do this? this has got to be slow...
-		for (Conversation c : conversationService.findAllConversations()) {
-			if (c.getRecipient().equals(from)) {
-				conv = c;
-				break;
-			}
-		}
-
-        if (conv == null) {
-			conv = new Conversation(msg);
-			conv.setCreated(LocalDateTime.now());
-			conv.setExternalId(smsSid);
-		}
-
-        msg.setConversation(conv);
+		Conversation conv = new Conversation(msg);
+		msg.setConversation(conv);
 
 		conv.setService(this);
-		conv.setModified(LocalDateTime.now());
+		conv.setExternalId(smsSid);
 
-        conversationService.saveConversation(conv);
-    }
+		conversationService.saveConversation(conv);
+	}
 
     @JSON(include = false)
     public ConversationService getConversationService() {
