@@ -511,6 +511,23 @@ function ConversationController($scope, $asksg, $log) {
     }
 }
 
+function putObject(path, object, value) {
+    var modelPath = path.split(".");
+ 
+    function fill(object, elements, depth, value) {
+        var hasNext = ((depth + 1) < elements.length);
+        if(depth < elements.length && hasNext) {
+            if(!object.hasOwnProperty(modelPath[depth])) {
+                object[modelPath[depth]] = {};
+            }
+            fill(object[modelPath[depth]], elements, ++depth, value);
+        } else {
+            object[modelPath[depth]] = value;
+        }
+    }
+    fill(object, modelPath, 0, value);
+}
+
 /**
  * Create the ASKSG module for the dashboard app.
  */
@@ -651,53 +668,53 @@ AsksgService = function () {
         });
     });
 
-directives.directive('jquiDatepicker', function($log) {
-    return {
-        restrict: 'E',
-        link: function(scope, elm, attrs) {
-            var show = attrs.show || null;
-            var dpCtrl = null;
+// directives.directive('jquiDatepicker', function($log) {
+//     return {
+//         restrict: 'E',
+//         link: function(scope, elm, attrs) {
+//             var show = attrs.show || null;
+//             var dpCtrl = null;
  
-            // close picker control and remove any related DOM elements 
-            function closePicker() {
-                if (dpCtrl) {
-                    dpCtrl.datepicker('destroy');
-                    dpCtrl.remove();
-                    dpCtrl = null;
-                }
-            }
+//             // close picker control and remove any related DOM elements 
+//             function closePicker() {
+//                 if (dpCtrl) {
+//                     dpCtrl.datepicker('destroy');
+//                     dpCtrl.remove();
+//                     dpCtrl = null;
+//                 }
+//             }
  
-            // create and show datepicker control
-            function openPicker() {
-                elm.append('<p style="display:inline;" class="datepicker"></p>');
-                dpCtrl = elm.find('.datepicker');
-                dpCtrl.datepicker({
-                    onSelect: function(dateText, inst) { 
-                        if (attrs.model) {
-                            scope.$apply(attrs.model+"='"+ dateText+"'");
-                        }
-                    }
-                });
-            }
+//             // create and show datepicker control
+//             function openPicker() {
+//                 elm.append('<p style="display:inline;" class="datepicker"></p>');
+//                 dpCtrl = elm.find('.datepicker');
+//                 dpCtrl.datepicker({
+//                     onSelect: function(dateText, inst) { 
+//                         if (attrs.model) {
+//                             scope.$apply(attrs.model+"='"+ dateText+"'");
+//                         }
+//                     }
+//                 });
+//             }
  
-            // defines a watch on the show attribute, if one was provided.
-            // otherwise, always display the control
-            if (show) {
-                scope.$watch(show, function(show) {
-                    if (show) {
-                        openPicker();
-                    }
-                    else {
-                        closePicker();
-                    }
-                })
-            }
-            else {
-                openPicker();
-            }
-        }
-    };
-});
+//             // defines a watch on the show attribute, if one was provided.
+//             // otherwise, always display the control
+//             if (show) {
+//                 scope.$watch(show, function(show) {
+//                     if (show) {
+//                         openPicker();
+//                     }
+//                     else {
+//                         closePicker();
+//                     }
+//                 })
+//             }
+//             else {
+//                 openPicker();
+//             }
+//         }
+//     };
+// });
 
 /*
     directives.directive('datepicker', function() {
@@ -722,6 +739,25 @@ directives.directive('jquiDatepicker', function($log) {
             });
         }
     });*/
+
+    // var directives = angular.module('directives', []);
+    directives.directive('myDatepicker', function ($parse) {
+    return function (scope, element, attrs, controller) {
+        var ngModel = $parse(attrs.ngModel);
+        $(function(){
+            element.datepicker({
+               inline: true,
+               dateFormat: 'dd.mm.yy',
+               onSelect:function (dateText, inst) {
+                    scope.$apply(function(scope){
+                        // Change binded variable
+                        ngModel.assign(scope, dateText);
+                    });
+               }
+            });
+        });
+    }
+});
 };
 
 function PickerCtrl($scope) {

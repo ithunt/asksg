@@ -591,42 +591,42 @@
                     <li class="active"><a data-toggle="tab" href="#analyticsMain">Main</a></li>
                 </ul>
             </div>
+
+            <div class="well">
+                <h4 style="text-align:center">Display Parameters</h4>
+                <label for="StartDate"> Start Date: </label>
+                <input type="text" name="StartDate" my-datepicker ng-model="analyticsStartDate"/>
+                <label for="EndDate"> End Date: </label>
+                <input type="text" name="EndDate" my-datepicker ng-model="analyticsEndDate"/>
+                <p>
+                    Time span:
+                </p>
+                <p>
+                    {{analyticsStartDate}} - {{analyticsEndDate}}
+                </p>
+                <!-- Staples button -->
+                <form style="text-align:center" ng-submit="renderAnalyticsData()">
+                    <input class="btn-primary" type="submit" value="Render Analytics Data">
+                </form>
+            </div>
         </div>
 
         <!-- Configuration settings -->
         <div class="tab-content">
             <div class="tab-pane fade in active" id="analyticsMain">
                 <div class="span8" style="padding-left:20px;">
-                    <h2>Data Display</h2>
+                    <h2>Main Analytics</h2>
 
-                    <p>Display Parameters</p>
-<div ng-controller="PickerCtrl">
-    <button ng-click="buttonClicked()">Show Date</button>
-    <jqui-datepicker model="selectedDate" show="showDatePicker"></jqui-datepicker>
-</div>
-
-
-                    <input id="dp" type="text" ng-model="dataDisplayDateStart" name="mDate" my-datepicker/>
-                    <!-- todo fix awkward naming with user angular controller for scope -->
-                    <form ng-submit="addUser()"> <!-- hook up to send data to the analytics controller -->
-                        
-                        <!--<input type="text" datepicker ng-model="dataDisplayDateStart" />-->
-<!--
-                        <input type="text" ng-model="dataDisplayDateStart" id="datepicker" datepicker>
-                        <input type="text" ng-model="dataDisplayDateEnd" id="datepicker" datepicker>
-                        <select ng-model="userRole" ng-options="role.name for role in roles"></select>
--->
-                        <input class="btn-primary" type="submit" value="Display">
-                    </form>
-
+                    <!-- The main analytics graph will go here -->
                     <div id="mainAnalytics">
                     </div>
-                    <div id="secondAnalytics">
-                    </div>
+
+                    <!-- Maybe a secondary one for interaction goes here? Probably not... -->
+                    <!--<div id="secondAnalytics">
+                    </div>-->
 
                     <!-- Drop in the D3 rendering script -->
                     <script src="../js/analyticsui.js"></script>
-
                 </div>
             </div>
         </div>
