@@ -84,6 +84,10 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             c.setService(this);
             c.setExternalId(String.valueOf(dm.getId()));
             m.setConversation(c);
+
+            if(c.getMessages() != null && !c.getMessages().isEmpty())
+                c.setCreated(c.getMessages().get(0).getCreated());
+
             conversations.add(c);
         }
 
@@ -104,6 +108,9 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             Conversation c = new Conversation(m);
             m.setConversation(c);
             c.setService(this);
+            if(c.getMessages() != null && !c.getMessages().isEmpty())
+                c.setCreated(c.getMessages().get(0).getCreated());
+
             convos.add(c);
 
             logger.debug("New Tweet:" + m.toString());

@@ -132,6 +132,9 @@ public class Email extends Service implements ContentProvider {
 
         Conversation c = new Conversation(m);
         m.setConversation(c);
+        if(c.getMessages() != null && !c.getMessages().isEmpty())
+            c.setCreated(c.getMessages().get(0).getCreated());
+
         return c;
     }
 

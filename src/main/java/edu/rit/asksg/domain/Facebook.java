@@ -118,6 +118,10 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 				}
 			}
 			conversation.setExternalId(post.getId());
+
+            if(conversation.getMessages() != null && !conversation.getMessages().isEmpty())
+                conversation.setCreated(conversation.getMessages().get(0).getCreated());
+
 			conversations.add(conversation);
 		}
 		return conversations;

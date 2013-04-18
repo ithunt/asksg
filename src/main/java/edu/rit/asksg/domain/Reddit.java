@@ -66,6 +66,8 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 
 			try {
 				Conversation c = new Conversation(parsePost(post));
+                if(c.getMessages() != null && !c.getMessages().isEmpty())
+                    c.setCreated(c.getMessages().get(0).getCreated());
 				c.setService(this);
 				attachComments(c);
 				conversations.add(c);

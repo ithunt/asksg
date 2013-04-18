@@ -89,6 +89,9 @@ public class Twilio extends Service implements ContentProvider {
         Conversation conv = new Conversation(msg);
         msg.setConversation(conv);
 
+        if(conv.getMessages() != null && !conv.getMessages().isEmpty())
+            conv.setCreated(conv.getMessages().get(0).getCreated());
+
         conv.setService(this);
         conv.setExternalId(smsSid);
 
