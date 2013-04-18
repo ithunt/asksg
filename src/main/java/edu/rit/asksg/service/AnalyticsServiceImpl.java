@@ -95,12 +95,21 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
             gd.setDates(dates);
             gd.setWordCounts(counts);
-            gd.setSentiments(new ArrayList<Double>());
+            gd.setSentiments(randomSentiments(gd.getWordCounts().size()));
 
             graphData.add(gd);
 
         }
 
         return graphData;
+    }
+
+    protected List<Double> randomSentiments(int count) {
+        List<Double> l = new ArrayList<Double>();
+
+        for(int i=0;i<count;i++) {
+            l.add((Math.random() * 2) - 1);
+        }
+        return l;
     }
 }
