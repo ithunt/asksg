@@ -35,24 +35,12 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 
 	@JSON(include = false)
 	public List<Conversation> getNewContent() {
-		final org.springframework.social.facebook.api.Facebook facebookApi = getFacebookApi();
-		return parseFacebookFeed(facebookApi.feedOperations().getFeed("ritstudentgov"), facebookApi);
+		return new ArrayList<Conversation>();
 	}
 
 	@JSON(include = false)
 	public List<Conversation> getContentSince(LocalDateTime datetime) {
-		final org.springframework.social.facebook.api.Facebook facebookApi = getFacebookApi();
-		final List<Post> posts = facebookApi.feedOperations().getFeed("ritstudentgov");
-
-		//filter out posts by date
-		List<Post> filtered = new ArrayList<Post>();
-		for (Post post : posts) {
-			if (datetime.isAfter(new LocalDateTime(post.getCreatedTime()))) {
-				filtered.add(post);
-			}
-		}
-
-		return parseFacebookFeed(filtered, facebookApi);
+		return new ArrayList<Conversation>();
 	}
 
 	public boolean postContent(Message message) {
