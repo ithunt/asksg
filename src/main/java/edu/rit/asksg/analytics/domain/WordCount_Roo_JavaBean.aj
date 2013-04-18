@@ -3,32 +3,34 @@
 
 package edu.rit.asksg.analytics.domain;
 
+import edu.rit.asksg.analytics.domain.Topic;
 import edu.rit.asksg.analytics.domain.WordCount;
+import edu.rit.asksg.domain.Service;
 import org.joda.time.LocalDateTime;
 
 privileged aspect WordCount_Roo_JavaBean {
     
-    public String WordCount.getWord() {
-        return this.word;
+    public Topic WordCount.getTopic() {
+        return this.topic;
     }
     
-    public void WordCount.setWord(String word) {
-        this.word = word;
+    public void WordCount.setTopic(Topic topic) {
+        this.topic = topic;
     }
     
-    public String WordCount.getService() {
+    public Service WordCount.getService() {
         return this.service;
     }
     
-    public void WordCount.setService(String service) {
+    public void WordCount.setService(Service service) {
         this.service = service;
     }
     
-    public Integer WordCount.getWordCount() {
+    public Long WordCount.getWordCount() {
         return this.wordCount;
     }
     
-    public void WordCount.setWordCount(Integer wordCount) {
+    public void WordCount.setWordCount(Long wordCount) {
         this.wordCount = wordCount;
     }
     

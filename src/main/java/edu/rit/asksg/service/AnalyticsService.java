@@ -11,5 +11,6 @@ public interface AnalyticsService {
 
     List<GraphData> getAggregatedWordCount();
 
-    List<WordCount> findWordCountInRange(Topic topic, LocalDateTime since, LocalDateTime until);
+    List<WordCount> findWordCountsWith(Topic topic, LocalDateTime since, LocalDateTime until);
+
 }

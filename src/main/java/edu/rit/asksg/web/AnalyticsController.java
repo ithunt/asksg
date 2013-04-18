@@ -18,11 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 @Controller
 @RequestMapping("/analytics")
@@ -58,9 +54,9 @@ public class AnalyticsController {
             LocalDateTime since2 = new LocalDateTime();
             LocalDateTime since3 = new LocalDateTime();
 
-            since1 = since1.minusDays(3);
-            since2 = since2.minusDays(6);
-            since3 = since3.minusDays(9);
+            since1 = since1.minusDays(1);
+            since2 = since2.minusDays(2);
+            since3 = since3.minusDays(3);
 
             wordCounter.work(s, since3, since2);
             wordCounter.work(s, since2, since1);
@@ -80,16 +76,29 @@ public class AnalyticsController {
     @RequestMapping(value = "/topics")
     public ResponseEntity<String> topicTest() {
 
-        Topic t = new Topic();
-        t.setName("RIT");
+        Topic t = new Topic("rit");
+        t.getWords().add("#rit");
 
-        Set<String> words = new TreeSet<String>();
-        words.add("#rit");
-        words.add("rit");
+        Topic t2 = new Topic("destler");
 
-        t.setWords(words);
+        Topic t3 = new Topic("elections");
+        t3.getWords().add("vote");
+        t3.getWords().add("election");
+
+        Topic t4 = new Topic("debates");
+        t4.getWords().add("#sgdebates");
+        t4.getWords().add("debate");
+
+        Topic t5 = new Topic("sustainability");
+        t5.getWords().add("#sustainability");
+        t5.getWords().add("@ritgreen");
 
         topicRepository.save(t);
+        topicRepository.save(t2);
+        topicRepository.save(t3);
+        topicRepository.save(t4);
+        topicRepository.save(t5);
+
 
 
         HttpHeaders headers = new HttpHeaders();
@@ -110,6 +119,9 @@ public class AnalyticsController {
 
         return new ResponseEntity<String>(GraphData.toJsonArray(data), headers, HttpStatus.OK);
     }
+
+
+
 
 
 
