@@ -123,6 +123,8 @@ public class Email extends Service implements ContentProvider {
                 }
             }
 
+            m.setCreated(new LocalDateTime(mimeMessage.getReceivedDate()));
+
             logger.debug("MimeMessage from:" + m.getAuthor() + " - " + m.getContent());
         } catch (MessagingException e) {
             logger.error(e.getLocalizedMessage());
