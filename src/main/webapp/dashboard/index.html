@@ -75,9 +75,9 @@
 					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services
 					</li>
 					<li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()">
-						<a href="#">&nbsp;Email</a></li>
+						<a href="#"><img src="../img/Email.png"/>&nbsp;Email</a></li>
 					<li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()">
-						<a href="#">&nbsp;SMS</a></li>
+						<a href="#"><img src="../img/Twilio.png"/>&nbsp;SMS</a></li>
 					<li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()">
 						<a href="#"><img src="../img/Facebook.png"/>&nbsp;Facebook</a></li>
 					<li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()">
@@ -91,7 +91,7 @@
 			<div class="well sidebar-nav">
 				<ul class="nav nav-list">
 					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
-					<li id="service-item-read" class="active service-menu-item" ng-click="filterRead()"><a
+					<li id="service-item-read" class="service-menu-item" ng-click="filterRead()"><a
 							href="#">Read</a></li>
 					<li id="service-item-unread" class="active service-menu-item" ng-click="filterUnread()"><a
 							href="#">Unread</a></li>
@@ -143,7 +143,7 @@
 									                           tabindex="-1" href="#">Hide/Unhide</a></li>
 									<li role="presentation" class="divider"></li>
 									<li role="presentation"><a ng-click="deleteConvo(convo.id)" role="menuitem"
-									                           tabindex="-1" href="#">Delete</a></li>
+									                            tabindex="-1" href="#">Delete</a></li>
 								</ul>
 							</div>
 

@@ -452,7 +452,7 @@ function ConversationController($scope, $asksg, $log) {
 
 	// Array to store the state of the active tag filters
 	$scope.filterTagArray = Array();
-	$scope.filterTagArray['read'] = false;
+	$scope.filterTagArray['read'] = true;
 	$scope.filterTagArray['unread'] = false;
 
 	/*
