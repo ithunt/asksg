@@ -2,6 +2,7 @@ package edu.rit.asksg.web;
 
 import edu.rit.asksg.domain.Facebook;
 import edu.rit.asksg.domain.Service;
+import edu.rit.asksg.domain.SocialSubscription;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import edu.rit.asksg.service.FacebookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,11 @@ public class ServiceController {
 	                                            @RequestParam("code") final String code) {
 		//TODO: type safety
 		final Facebook facebook = (Facebook) providerService.findService(Long.parseLong(id));
-		((SpringSocialConfig) facebook.getConfig()).setAccessToken(code);
+		final SpringSocialConfig fbConfig = ((SpringSocialConfig) facebook.getConfig());
+		fbConfig.setAccessToken(code);
+		SocialSubscription ritsg = new SocialSubscription();
+		ritsg.setHandle("ritstudentgov"); // TODO: still hard-coded
+		fbConfig.getSubscriptions().add(ritsg);
 		facebookService.makeAccessTokenRequest(facebook);
 		providerService.updateService(facebook);
 		return new ResponseEntity<String>(HttpStatus.OK);

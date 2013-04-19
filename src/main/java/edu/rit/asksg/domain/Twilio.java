@@ -1,5 +1,7 @@
 package edu.rit.asksg.domain;
 
+import com.google.common.base.Optional;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.TwilioRestException;
 import com.twilio.sdk.resource.factory.SmsFactory;
@@ -78,25 +80,35 @@ public class Twilio extends Service implements ContentProvider {
         return false;
     }
 
-    public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
+	public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
 
-        Message msg = new Message();
-        msg.setContent(body);
-        msg.setAuthor(from);
-        msg.setCreated(LocalDateTime.now());
-        msg.setModified(LocalDateTime.now());
+		Message msg = new Message();
+		msg.setContent(body);
+		msg.setAuthor(from);
+		msg.setCreated(LocalDateTime.now());
+		msg.setModified(LocalDateTime.now());
 
-        Conversation conv = new Conversation(msg);
-        msg.setConversation(conv);
+		Conversation conv = conversationService.findConversationByRecipient(from);
 
-        if(conv.getMessages() != null && !conv.getMessages().isEmpty())
-            conv.setCreated(conv.getMessages().get(0).getCreated());
+		if (conv == null) {
+			logger.debug("Twilio: Creating new conversation for message received from " + from);
+			conv = new Conversation(msg);
+			conv.setExternalId(smsSid);
 
-        conv.setService(this);
-        conv.setExternalId(smsSid);
+            //Todo: is it possible to get the true creation date?
+			conv.setCreated(LocalDateTime.now());
+		} else {
+			logger.debug("Twilio: Adding received message from " + from + " to conversation with ID " + conv.getId());
+			conv.getMessages().add(msg);
+		}
 
-        conversationService.saveConversation(conv);
-    }
+		conv.setModified(LocalDateTime.now());
+		conv.setService(this);
+
+		msg.setConversation(conv);
+
+		conversationService.saveConversation(conv);
+	}
 
     @JSON(include = false)
     public ConversationService getConversationService() {

@@ -24,4 +24,9 @@ public interface ConversationService {
     List<Conversation> findByService(Service service, LocalDateTime since);
 
     List<Conversation> findByService(Service service, LocalDateTime since, LocalDateTime until);
+
+	Conversation findConversationByRecipient(
+			String recipient
+	);
+
 }
