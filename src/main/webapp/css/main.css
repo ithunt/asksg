@@ -491,6 +491,16 @@ ul.convo-list
     margin-right: 10px;
 }
 
+.privateMessage
+{
+    background-image: url('../img/PrivateMessage.png');
+    background-repeat: no-repeat;
+    width: 18px;
+    height: 36px;
+    float: left;
+    margin-right: 10px;
+}
+
 
 .convo-list-item-space
 {
