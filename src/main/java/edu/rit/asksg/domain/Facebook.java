@@ -92,7 +92,10 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 			Conversation conversation = new Conversation(message);
 			conversation.setService(this);
 			message.setConversation(conversation);
-			message.setContent(post.getMessage());
+			String postMessage = post.getMessage();
+			message.setContent(postMessage);
+			// Subject snippet will be the first 40 characters plus a "...", unless it's shorter than that
+			conversation.setSubject(postMessage.length() > 40 ? postMessage.substring(0, 40) + "..." : postMessage);
 			message.setAuthor(facebookApi.userOperations().getUserProfile(post.getFrom().getId()).getName());
 			message.setCreated(new LocalDateTime(post.getCreatedTime()));
 			if (post.getComments() != null) {
