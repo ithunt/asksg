@@ -1,0 +1,150 @@
+// TODO: comment later...
+function updateAnalytics(data) {
+  console.log("someone called us!");
+  console.log(data);
+  // var data = [
+  //   {tag: 'alice', values: [0,1,3,9, 8, 7]},
+  //   {tag: 'bob', values: [0, 10, 7, 1, 1, 11]}
+  // ];
+
+// http://stackoverflow.com/questions/8689498/drawing-multiple-lines-in-d3-js
+
+// test to avoid the DB error...
+// enforce y scale...
+  data[0].wordCounts[0] = 100;
+  data[0].wordCounts[1] = 50;
+  data[0].wordCounts[2] = 75;
+
+// dummy data...
+  data[0].dates[0] = 1366239279085;
+  data[0].dates[1] = 1400000000000;
+  data[0].dates[2] = 1500000000000;
+
+  var margin = {top: 30, right: 80, bottom: 50, left: 50},
+      width = 640 - margin.left - margin.right,
+      height = 380 - margin.top - margin.bottom;
+
+  // Pull out the time range
+  // Relies on sorting in the dates array, and assumes all data objects have the same time span...
+  var minDate = data[0].dates[0];
+  var maxDate = data[0].dates[data[0].dates.length - 1];
+  console.log(minDate);
+  console.log(maxDate);
+
+  // var x = d3.scale.linear()
+  //     .domain([0, d3.max(data, function(d) { return d.dates.length - 1; })])
+  //     .range([0, width]);
+
+  // var x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
+  var x = d3.scale.linear().domain([minDate, maxDate]).range([0, width]);
+  var y = d3.scale.linear()
+      .domain([d3.min(data, function(d) { return d3.min(d.wordCounts); }),
+               d3.max(data, function(d) { return d3.max(d.wordCounts); })])
+      .range([height, 0]);
+
+  // var color = d3.scale.category10()
+  //     .domain(d3.keys(data[0]).filter(function(key) { return key == "topic"; }));
+
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .tickFormat(d3.format('d'))
+      .orient("bottom");
+
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left");
+
+  var line = d3.svg.line()
+      .interpolate("basis")
+      .x(function(d, i) { return x(d.xVal); }) 
+      .y(function(d, i) { return y(d.yVal); });
+
+  var svg = d3.select("#mainAnalytics").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Append the x-axis and a label
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+    svg.append("text")
+        .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
+        .style("text-anchor", "middle")
+        .text("Date");
+
+    // Append the y-axis and a label
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left) // 0 - margin.left
+        .attr("x",0 - ((height / 2) - margin.bottom))
+        .attr("dy", "1em")
+        .style("text-anchor", "end")
+        .text("Word Count");
+
+    // Append paths for each tab of interest we get back from the analyics controller 
+    // var lineData = [];
+    // // data.forEach(function(topic, i) { 
+    //   var tmp = [];
+    //   for (var i = 0; i < data[0].dates.length; i++) {
+    //     tmp.push({xVal:data[0].dates[i], yVal:data[0].wordCounts[i]});
+    //   }
+    //   lineData.push(tmp);
+    // // });
+    // console.log(lineData);
+
+    var lineData = [];
+    data.forEach(function(topic, i) { 
+      var tmp = [];
+      for (var i = 0; i < topic.dates.length; i++) {
+        tmp.push({xVal:topic.dates[i], yVal:topic.wordCounts[i]});
+      }
+      lineData.push(tmp);
+    });
+    console.log(lineData);
+
+    // TODO
+    svg.selectAll(".line").data(lineData)
+    .enter().append("path")
+      .attr("class", "line")
+      .attr("d", line);
+
+    //   var lineFunction = d3.svg.line()
+    //                      .x(function(d) { return d.x; })
+    //                      .y(function(d) { return d.y; })
+    //                      .interpolate("linear");
+
+    //   console.log(topic);
+    //   console.log(lineData);
+
+    //   svg.append("path").attr("d", lineFunction(lineData)).attr("stroke-width", 2);
+
+    //   // var lineGraph = svg.append("path")
+    //   //                       .attr("d", lineFunction(lineData))
+    //   //                       .attr("stroke", "blue")
+    //   //                       .attr("stroke-width", 2)
+    //   //                       .attr("fill", "none");
+    // });
+
+  //   var topics = svg.data(data)//.selectAll(".line")
+  //     // .data(data)
+  // .enter().append("path")
+  //   .attr("class", "line")
+  //   // function(d), not just line function 
+  //   .attr("d", function(d){ console.log("data d:", d); console.log("wordcounts: ", d.wordCounts); return line(d.wordCounts); })
+  //   .attr("stroke-width", 2)
+    // .attr("stroke", "black");
+    //     .data(data)
+    //   .enter().append("g")
+    //     .attr("class", "topics");
+    // topics.append("path")
+    //     .attr("class", "line")
+    //     .attr("d", function(d) { return line(d.wordCounts); })
+    //     .style("stroke", "black" );
+}
+

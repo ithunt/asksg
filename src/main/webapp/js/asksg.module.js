@@ -367,6 +367,22 @@ function ConversationController($scope, $asksg, $log) {
             });
     }
 
+    /*
+     * Attempt to render some analytics data
+     */
+    $scope.renderAnalyticsData = function() {
+        console.log("invoking the update analytics method...");
+        $asksg.fetchAnalyticsData().
+            success(function (data, status, headers, config) {
+                console.log("Got analytics data back from the server");
+                console.log(data);
+                updateAnalytics(data);
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Failed grabbing the social subscriptions");
+                return null;
+            });
+    }
 
     /*
      * Delete a conversation.
@@ -530,6 +546,7 @@ AsksgService = function () {
             var servicesUrl = '/asksg/services';
             var usersUrl = '/asksg/users';
             var rolesUrl = '/asksg/roles';
+            var analyticsUrl = '/asksg/analytics/words';
 
             // Publish the $asksg API here
             return {
@@ -641,10 +658,41 @@ AsksgService = function () {
 
                 authenticateFacebook: function (code, serviceID) {
                     return $http({method: 'POST', url: servicesUrl + "/facebookToken?id=" + serviceID + "&code=" + code});
+                },
+
+                fetchAnalyticsData : function() {
+                    return $http({method: 'GET', url: analyticsUrl});
                 }
             };
         });
     });
+
+    // var directives = angular.module('directives', []);
+    directives.directive('myDatepicker', function ($parse) {
+        return function (scope, element, attrs, controller) {
+            var ngModel = $parse(attrs.ngModel);
+            $(function(){
+                element.datepicker({
+                   inline: true,
+                   dateFormat: 'dd.mm.yy',
+                   onSelect:function (dateText, inst) {
+                        scope.$apply(function(scope){
+                            // Change binded variable
+                            ngModel.assign(scope, dateText);
+                        });
+                   }
+                });
+            });
+        }
+    });
+};
+
+function PickerCtrl($scope) {
+    $scope.showDatePicker = false;
+ 
+    $scope.buttonClicked = function() {
+        $scope.showDatePicker = !$scope.showDatePicker;
+    };
 };
 
 // Invoke the ASKSG service constructor...
