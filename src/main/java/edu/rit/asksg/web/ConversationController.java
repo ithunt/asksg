@@ -60,11 +60,11 @@ public class ConversationController {
 		Message m1 = new Message();
 		m1.setAuthor("Socrates");
 		m1.setContent("For the unexamined life is not worth living");
-
+		m1.setConversation(c);
 		Message m2 = new Message();
 		m2.setAuthor("Tyrion Lannister");
 		m2.setContent("Sorcery is the sauce fools spoon over failure to hide the flavor of the their own incompetence");
-
+		m2.setConversation(c);
 		List<Message> messages = new ArrayList<Message>();
 		messages.add(m1);
 		messages.add(m2);
@@ -202,6 +202,28 @@ public class ConversationController {
 			fbConfig.setIdentifier("asksgfbapp");
 
 			facebook.setConfig(fbConfig);
+
+			SocialSubscription ritsg = new SocialSubscription();
+			ritsg.setHandle("ritstudentgov");
+
+			SocialSubscription clubs = new SocialSubscription();
+			clubs.setHandle("RITClubs");
+
+			SocialSubscription rit = new SocialSubscription();
+			rit.setHandle("RITfb");
+
+			SocialSubscription news = new SocialSubscription();
+			news.setHandle("RITNews");
+
+			Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
+			subscriptions.add(ritsg);
+			subscriptions.add(clubs);
+			subscriptions.add(rit);
+			subscriptions.add(news);
+
+			fbConfig.setSubscriptions(subscriptions);
+
+			providerService.saveService(facebook);
 		}
 
 		final Service redditProvider = providerService.findServiceByTypeAndIdentifierEquals(Reddit.class, "rit");

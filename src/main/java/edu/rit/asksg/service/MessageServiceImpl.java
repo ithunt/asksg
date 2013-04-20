@@ -5,6 +5,13 @@ import edu.rit.asksg.domain.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 public class MessageServiceImpl implements MessageService {
 
@@ -32,4 +39,14 @@ public class MessageServiceImpl implements MessageService {
         final Service service = message.getConversation().getService();
         return service.postContent(message);
     }
+
+	public List<Message> findMessagesByAuthor(final String author) {
+		Specification<Message> specification = new Specification<Message>() {
+			@Override
+			public Predicate toPredicate(Root<Message> messageRoot, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				return criteriaBuilder.equal(messageRoot.get("author"), author);
+			}
+		};
+		return messageRepository.findAll(specification);
+	}
 }

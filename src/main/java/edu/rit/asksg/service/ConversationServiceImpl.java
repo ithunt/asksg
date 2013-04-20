@@ -115,10 +115,21 @@ public class ConversationServiceImpl implements ConversationService {
 				if (showRead.isPresent())
 					predicates.add(cb.equal(root.get("isRead"), showRead.get()));
 
+				query.orderBy(cb.desc(root.get("created")));
 				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			}
 		};
 
 		return ((Page<Conversation>) conversationRepository.findAll(specification, new PageRequest(0, count))).getContent();
+	}
+
+	@Override
+	public Conversation findConversationByRecipient(String recipient) {
+		List<Message> messages = messageService.findMessagesByAuthor(recipient);
+		if (! messages.isEmpty()) {
+			return messages.get(0).getConversation();
+		} else {
+			return null;
+		}
 	}
 }

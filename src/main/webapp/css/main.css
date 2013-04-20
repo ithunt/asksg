@@ -443,7 +443,25 @@ ul.convo-list
 	text-align: left;
 }
 
+.Email-img
+{
+    background-image: url('../img/Email.png');
+    background-repeat: no-repeat;
+    width: 36px;
+    height: 36px;
+    float: left;
+    margin-right: 10px;
+}
 
+.Twilio-img
+{
+    background-image: url('../img/Twilio.png');
+    background-repeat: no-repeat;
+    width: 36px;
+    height: 36px;
+    float: left;
+    margin-right: 10px;
+}
 
 .Reddit-img
 {
