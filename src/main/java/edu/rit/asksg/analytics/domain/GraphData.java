@@ -17,7 +17,7 @@ public class GraphData {
     //Invariant, length of these arrays are the same
 
     public List<Long> dates;
-    public List<Integer> wordCounts;
+    public List<Long> wordCounts;
     public List<Double> sentiments;
 
 }

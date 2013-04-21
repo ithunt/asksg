@@ -13,7 +13,7 @@ public interface AnalyticsService {
 
     List<WordCount> findWordCountsWith(Topic topic, LocalDateTime since, LocalDateTime until);
 
-    int getTotalWordCount(Topic t, LocalDateTime since, LocalDateTime until);
+    long getTotalWordCount(Topic t, LocalDateTime since, LocalDateTime until);
 
     List<GraphData> getGraphDataInRange(LocalDateTime start, LocalDateTime end);
 }

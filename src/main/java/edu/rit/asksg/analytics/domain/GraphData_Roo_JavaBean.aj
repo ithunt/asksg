@@ -24,11 +24,11 @@ privileged aspect GraphData_Roo_JavaBean {
         this.dates = dates;
     }
     
-    public List<Integer> GraphData.getWordCounts() {
+    public List<Long> GraphData.getWordCounts() {
         return this.wordCounts;
     }
     
-    public void GraphData.setWordCounts(List<Integer> wordCounts) {
+    public void GraphData.setWordCounts(List<Long> wordCounts) {
         this.wordCounts = wordCounts;
     }
     
