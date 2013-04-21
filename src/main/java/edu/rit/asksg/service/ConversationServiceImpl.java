@@ -4,13 +4,15 @@ import com.google.common.base.Optional;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
-import edu.rit.asksg.domain.Tag;
-import org.hibernate.criterion.Expression;
+import edu.rit.asksg.specification.AbstractSpecification;
+import edu.rit.asksg.specification.ConversationServiceSpecification;
+import edu.rit.asksg.specification.ConversationSinceSpecification;
+import edu.rit.asksg.specification.ConversationUntilSpecification;
+import edu.rit.asksg.specification.Specification;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -52,27 +54,13 @@ public class ConversationServiceImpl implements ConversationService {
 
 
     public List<Conversation> findByService(final Service service, final LocalDateTime since, final LocalDateTime until) {
+        Specification<Conversation> sinceSpec = new ConversationSinceSpecification(since);
+        Specification<Conversation> untilSpec = new ConversationUntilSpecification(until);
+        Specification<Conversation> serviceSpec = new ConversationServiceSpecification(service);
 
+        Specification<Conversation> spec = sinceSpec.and(untilSpec.and(serviceSpec));
 
-        Specification<Conversation> specification = new Specification<Conversation>() {
-            @Override
-            public Predicate toPredicate(Root<Conversation> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                List<Predicate> predicates = new ArrayList<Predicate>();
-
-                Path<LocalDateTime> date = root.get("created");
-                predicates.add(cb.greaterThan(date, since));
-                predicates.add(cb.lessThan(date, until));
-
-                Join<Conversation, Service> join = root.join("service");
-                predicates.add(cb.equal(join.get("id"), service.getId()));
-
-
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-            }
-        };
-
-
-        return conversationRepository.findAll(specification);
+        return conversationRepository.findAll(spec);
     }
 
     public List<Conversation> findByService(final Service service, final LocalDateTime since) {
@@ -88,8 +76,7 @@ public class ConversationServiceImpl implements ConversationService {
 			final Optional<Boolean> showRead,
 			final int count) {
 
-
-		Specification<Conversation> specification = new Specification<Conversation>() {
+		Specification<Conversation> specification = new AbstractSpecification<Conversation>() {
 			@Override
 			public Predicate toPredicate(Root<Conversation> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
