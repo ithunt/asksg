@@ -338,7 +338,21 @@
 				Enabled: {{service.enabled}}
 			</p>
 		</div>
-
+		<div>
+			<ul ng-repeat="sub in service.config.subscriptions">
+				<li>
+					<div class="dropdown delete pull-right" showonhoverparent>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+						<div>{{sub.handle}}</div>
+						<div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
+					</div>
+				</li>
+			</ul>
+			<form ng-submit="addSocialSubscription()">
+				<label for="handle">Handle:</label> <input class="input-xlarge focused" ng-model="socialSubHandle"/><br/>
+				<label for="handle">Name:</label> <input class="input-xlarge focused" ng-model="socialSubHandle"/><br/>
+			</form>
+		</div>
 	</div>
 
 	<a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>

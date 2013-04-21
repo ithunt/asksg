@@ -12,6 +12,14 @@ function getQueryVariable(variable) {
 }
 
 /**
+ * SocialSubscription object constructor
+ */
+function SocialSubscription(handle, name) {
+	this.handle = handle; // not null
+	this.name = name;
+}
+
+/**
  * Message object constructor.
  */
 function Message(author, content, conversationId) {
@@ -381,6 +389,16 @@ function ConversationController($scope, $asksg, $log) {
 			});
 	}
 
+	/*
+	 * Add a new social subscription...
+	 */
+	$scope.addSocialSubscription = function() {
+		ss = SocialSubscription(socialSubHandle, socialSubHandle);
+		$asksg.postNewSocialSubscription(ss).
+			success(function (data, status, headers, config) {
+				$scope.refreshSubscriptions();
+			});
+	}
 
 	/*
 	 * Delete a conversation.
@@ -544,6 +562,7 @@ AsksgService = function () {
 			var servicesUrl = '/asksg/services';
 			var usersUrl = '/asksg/users';
 			var rolesUrl = '/asksg/roles';
+			var subscriptionsUrl = '/asksg/socialsubscriptions';
 
 			// Publish the $asksg API here
 			return {
@@ -605,6 +624,11 @@ AsksgService = function () {
 				postNewService: function (service) {
 					console.log(JSON.stringify(service));
 					return $http({method: 'POST', url: servicesUrl, data: JSON.stringify(service)});
+				},
+
+				postNewSocialSubscription: function (sub) {
+					console.log(JSON.stringify(sub));
+					return $http({method: 'POST', url: subscriptionsUrl, data: JSON.stringify(service)});	
 				},
 
 				/**
