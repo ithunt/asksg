@@ -1,6 +1,5 @@
 package edu.rit.asksg.specification;
 
-import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Service;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -10,17 +9,17 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class ConversationServiceSpecification extends AbstractSpecification<Conversation> implements Specification<Conversation> {
+public class ServiceSpecification<T> extends AbstractSpecification<T> implements Specification<T> {
 
     private final Service service;
 
-    public ConversationServiceSpecification(Service service) {
+    public ServiceSpecification(Service service) {
         this.service = service;
     }
 
     @Override
-    public Predicate toPredicate(Root<Conversation> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-        Join<Conversation, Service> join = root.join("service");
+    public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        Join<T, Service> join = root.join("service");
         return cb.equal(join.get("id"), service.getId());
     }
 }

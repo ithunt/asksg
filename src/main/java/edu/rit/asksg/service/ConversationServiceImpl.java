@@ -5,9 +5,9 @@ import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.specification.AbstractSpecification;
-import edu.rit.asksg.specification.ConversationServiceSpecification;
-import edu.rit.asksg.specification.ConversationSinceSpecification;
-import edu.rit.asksg.specification.ConversationUntilSpecification;
+import edu.rit.asksg.specification.ServiceSpecification;
+import edu.rit.asksg.specification.CreatedSinceSpecification;
+import edu.rit.asksg.specification.CreatedUntilSpecification;
 import edu.rit.asksg.specification.Specification;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +54,9 @@ public class ConversationServiceImpl implements ConversationService {
 
 
     public List<Conversation> findByService(final Service service, final LocalDateTime since, final LocalDateTime until) {
-        Specification<Conversation> sinceSpec = new ConversationSinceSpecification(since);
-        Specification<Conversation> untilSpec = new ConversationUntilSpecification(until);
-        Specification<Conversation> serviceSpec = new ConversationServiceSpecification(service);
+        Specification<Conversation> sinceSpec = new CreatedSinceSpecification<Conversation>(since);
+        Specification<Conversation> untilSpec = new CreatedUntilSpecification<Conversation>(until);
+        Specification<Conversation> serviceSpec = new ServiceSpecification<Conversation>(service);
 
         Specification<Conversation> spec = sinceSpec.and(untilSpec.and(serviceSpec));
 
