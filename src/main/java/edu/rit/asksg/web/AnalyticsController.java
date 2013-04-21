@@ -1,5 +1,6 @@
 package edu.rit.asksg.web;
 
+import com.google.common.base.Optional;
 import edu.rit.asksg.analytics.WordCounter;
 import edu.rit.asksg.analytics.domain.GraphData;
 import edu.rit.asksg.analytics.domain.Topic;
@@ -17,7 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.WebRequest;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 
 @Controller
@@ -41,6 +44,29 @@ public class AnalyticsController {
 
     @Autowired
     AnalyticsService analyticsService;
+
+
+    @RequestMapping(value = "/wordcount")
+    public ResponseEntity<String> getWordCountsForDates(WebRequest params) {
+        String s = params.getParameter("since");
+        String u = params.getParameter("until");
+        LocalDateTime since = null;
+        LocalDateTime until = null;
+
+        //todo: is failed parse just null?
+        if(s != null) since = LocalDateTime.parse(s);
+        if(s != null) until = LocalDateTime.parse(u);
+
+        if(since == null) since = LocalDateTime.now().minusWeeks(1);
+        if(until == null) until = LocalDateTime.now();
+
+        List<GraphData> data = analyticsService.getGraphDataInRange(since, until);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+
+        return new ResponseEntity<String>(GraphData.toJsonArray(data), headers, HttpStatus.OK);
+    }
 
 
     @RequestMapping(value = "/count")

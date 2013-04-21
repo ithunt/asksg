@@ -5,6 +5,8 @@ import edu.rit.asksg.analytics.domain.Topic;
 import edu.rit.asksg.analytics.domain.WordCount;
 import edu.rit.asksg.repository.TopicRepository;
 import edu.rit.asksg.repository.WordCountRepository;
+import org.joda.time.DateMidnight;
+import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -60,6 +62,39 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         return total;
     }
 
+
+    public List<GraphData> getGraphDataInRange(LocalDateTime start, LocalDateTime end) {
+        final int days = Days.daysBetween( new DateMidnight(start.toDateTime()), new DateMidnight(end.toDateTime())).getDays();
+        final DateMidnight s = new DateMidnight(start.toDateTime());
+
+        List<GraphData> data = new ArrayList<GraphData>();
+
+        for(Topic t : topicRepository.findAll()) {
+            GraphData gd = new GraphData();
+            gd.setTopic(t.getName());
+
+            List<Long> dates = new ArrayList<Long>();
+            List<Integer> counts = new ArrayList<Integer>();
+
+            for(int i=0;i<=days;i++) {
+                DateMidnight since = s.plusDays(i);
+                DateMidnight until = s.plusDays(i+1);
+
+                dates.add(since.toDate().getTime());
+                counts.add(getTotalWordCount(t, new LocalDateTime(since), new LocalDateTime(until)));
+            }
+
+            gd.setDates(dates);
+            gd.setWordCounts(counts);
+            gd.setSentiments(randomSentiments(gd.getWordCounts().size()));
+
+            data.add(gd);
+        }
+
+        return data;
+    }
+
+
     public List<GraphData> getAggregatedWordCount() {
         final List<Topic> topics = topicRepository.findAll();
 
@@ -100,7 +135,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         return graphData;
     }
 
-    protected List<Double> randomSentiments(int count) {
+    protected static List<Double> randomSentiments(int count) {
         List<Double> l = new ArrayList<Double>();
 
         for(int i=0;i<count;i++) {
