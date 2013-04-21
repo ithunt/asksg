@@ -1,11 +1,6 @@
 // TODO: comment later...
 function updateAnalytics(data) {
-  console.log("someone called us!");
   console.log(data);
-  // var data = [
-  //   {tag: 'alice', values: [0,1,3,9, 8, 7]},
-  //   {tag: 'bob', values: [0, 10, 7, 1, 1, 11]}
-  // ];
 
 // http://stackoverflow.com/questions/8689498/drawing-multiple-lines-in-d3-js
 
