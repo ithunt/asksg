@@ -14,10 +14,9 @@ function getQueryVariable(variable) {
 /**
  * Message object constructor.
  */
-function Message(author, content, conversationId, privateMessage) {
+function Message(author, content, conversationId) {
 	this.author = author;
 	this.content = content;
-    this.privateMessage = privateMessage;
 	this.conversationId = conversationId;
 }
 
@@ -32,7 +31,7 @@ function MessageResp(content, conversation) {
 /**
  * Conversation object constructor.
  */
-function Conversation(id, author, subject, snippet, messages, created, modified, service, read, hidden) {
+function Conversation(id, author, subject, snippet, messages, created, modified, service, read, hidden, privateConversation) {
 	this.id = id;
 	this.author = author;
 	this.subject = subject;
@@ -42,11 +41,12 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 	this.service = service;
 	this.read = read;
 	this.hidden = hidden; // hidden
+    this.privateConversation = privateConversation;
 
 	// Run through the messages list and create the appropriate Message objects
 	this.messages = new Array();
 	for (var i = messages.length - 1; i >= 0; i--) {
-		this.messages[i] = new Message(messages[i].author, messages[i].content, id, messages[i].privateMessage);
+		this.messages[i] = new Message(messages[i].author, messages[i].content, id);
 	}
 
 	// The message snippet
@@ -164,7 +164,8 @@ function ConversationController($scope, $asksg, $log) {
 						conversation.author, conversation.subject,
 						conversation.snippet, conversation.messages,
 						createdDate, modifiedDate,
-						conversation.service, conversation.read, conversation.hidden);
+						conversation.service, conversation.read, conversation.hidden,
+                        conversation.privateConversation);
 					$scope.convoMap[conversation.id] = $scope.convos[i];
 				}
 			}).

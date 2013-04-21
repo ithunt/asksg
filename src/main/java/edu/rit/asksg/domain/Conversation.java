@@ -48,6 +48,8 @@ public class Conversation {
 
 	private String subject;
 
+	private Boolean privateConversation = Boolean.FALSE;
+
 	public Conversation() {
 	}
 

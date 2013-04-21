@@ -60,6 +60,4 @@ public class Message {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Identity identity;
-
-    private Boolean privateMessage = Boolean.FALSE;
 }

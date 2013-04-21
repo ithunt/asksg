@@ -52,7 +52,7 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
     @Override
     public boolean postContent(Message message) {
         final org.springframework.social.twitter.api.Twitter twitterApi = getTwitterApi();
-        if (message.getPrivateMessage()) {
+        if (message.getConversation().getPrivateConversation()) {
             final DirectMessageOperations directMessageOperations = twitterApi.directMessageOperations();
             directMessageOperations.sendDirectMessage(message.getConversation().getRecipient(), message.getContent());
             return true;
@@ -77,10 +77,9 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             m.setAuthor(dm.getSender().getName());
             m.setCreated(new LocalDateTime(dm.getCreatedAt()));
             m.setContent(dm.getText());
-            m.setPrivateMessage(true);
-
 
             Conversation c = new Conversation(m);
+			c.setPrivateConversation(true);
             c.setService(this);
             c.setExternalId(String.valueOf(dm.getId()));
             m.setConversation(c);
