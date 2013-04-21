@@ -49,6 +49,16 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
 
+    public int getTotalWordCount(Topic t, LocalDateTime since, LocalDateTime until) {
+        if(t == null || since == null || until == null) return 0;
+
+        int total = 0;
+        for(WordCount wc : findWordCountsWith(t, since, until)) {
+            total += wc.getWordCount();
+        }
+
+        return total;
+    }
 
     public List<GraphData> getAggregatedWordCount() {
         final List<Topic> topics = topicRepository.findAll();
@@ -70,28 +80,14 @@ public class AnalyticsServiceImpl implements AnalyticsService {
             List<Long> dates = new ArrayList<Long>();
             List<Integer> counts = new ArrayList<Integer>();
 
-            int total = 0;
-            for(WordCount wc : findWordCountsWith(t, since3, since2)) {
-                total += wc.getWordCount();
-            }
             dates.add(since3.toDate().getTime());
-            counts.add(total);
+            counts.add(getTotalWordCount(t, since3, since2));
 
-
-            total = 0;
-            for(WordCount wc : findWordCountsWith(t, since2, since1)) {
-                total += wc.getWordCount();
-            }
             dates.add(since2.toDate().getTime());
-            counts.add(total);
+            counts.add(getTotalWordCount(t, since2, since1));
 
-
-            total = 0;
-            for(WordCount wc : findWordCountsWith(t, since1, LocalDateTime.now())) {
-                total += wc.getWordCount();
-            }
             dates.add(since1.toDate().getTime());
-            counts.add(total);
+            counts.add(getTotalWordCount(t, since1, LocalDateTime.now()));
 
             gd.setDates(dates);
             gd.setWordCounts(counts);

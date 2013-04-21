@@ -13,4 +13,5 @@ public interface AnalyticsService {
 
     List<WordCount> findWordCountsWith(Topic topic, LocalDateTime since, LocalDateTime until);
 
+    int getTotalWordCount(Topic t, LocalDateTime since, LocalDateTime until);
 }
