@@ -256,38 +256,5 @@ function updateAnalytics(data) {
     .enter().append("path")
       .attr("class", "line")
       .attr("d", line);
-
-    //   var lineFunction = d3.svg.line()
-    //                      .x(function(d) { return d.x; })
-    //                      .y(function(d) { return d.y; })
-    //                      .interpolate("linear");
-
-    //   console.log(topic);
-    //   console.log(lineData);
-
-    //   svg.append("path").attr("d", lineFunction(lineData)).attr("stroke-width", 2);
-
-    //   // var lineGraph = svg.append("path")
-    //   //                       .attr("d", lineFunction(lineData))
-    //   //                       .attr("stroke", "blue")
-    //   //                       .attr("stroke-width", 2)
-    //   //                       .attr("fill", "none");
-    // });
-
-  //   var topics = svg.data(data)//.selectAll(".line")
-  //     // .data(data)
-  // .enter().append("path")
-  //   .attr("class", "line")
-  //   // function(d), not just line function 
-  //   .attr("d", function(d){ console.log("data d:", d); console.log("wordcounts: ", d.wordCounts); return line(d.wordCounts); })
-  //   .attr("stroke-width", 2)
-    // .attr("stroke", "black");
-    //     .data(data)
-    //   .enter().append("g")
-    //     .attr("class", "topics");
-    // topics.append("path")
-    //     .attr("class", "line")
-    //     .attr("d", function(d) { return line(d.wordCounts); })
-    //     .style("stroke", "black" );
 }
 
