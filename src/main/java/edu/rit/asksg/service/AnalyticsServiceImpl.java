@@ -155,16 +155,6 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         return graphData;
     }
 
-    protected class Tuple<M,N> {
-        public M first;
-        public N second;
-
-        public Tuple(M m, N n) {
-            this.first = m;
-            this.second = n;
-        }
-    }
-
     protected static List<Double> randomSentiments(int count) {
         List<Double> l = new ArrayList<Double>();
 

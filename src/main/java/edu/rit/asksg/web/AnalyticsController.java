@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -112,28 +113,76 @@ public class AnalyticsController {
     @RequestMapping(value = "/topics")
     public ResponseEntity<String> topicTest() {
 
-        Topic t = new Topic("rit");
-        t.getWords().add("#rit");
+        List<Topic> topics = new ArrayList<Topic>();
 
-        Topic t2 = new Topic("destler");
+        Topic t = new Topic("rit", "#rit,#ritnews");
+        topics.add(t);
 
-        Topic t3 = new Topic("elections");
-        t3.getWords().add("vote");
-        t3.getWords().add("election");
+        Topic t2 = new Topic("parking", "tickets, fees");
+        topics.add(t2);
 
-        Topic t4 = new Topic("debates");
-        t4.getWords().add("#sgdebates");
-        t4.getWords().add("debate");
+        Topic t3 = new Topic("debit", "dining");
+        topics.add(t3);
 
-        Topic t5 = new Topic("sustainability");
-        t5.getWords().add("#sustainability");
-        t5.getWords().add("@ritgreen");
+        Topic t4 = new Topic("food", "healthy");
+        topics.add(t4);
 
-        topicRepository.save(t);
-        topicRepository.save(t2);
-        topicRepository.save(t3);
-        topicRepository.save(t4);
-        topicRepository.save(t5);
+        Topic t5 = new Topic("sustainability", "#sustainability,@ritgreen");
+        topics.add(t5);
+
+        Topic t6 = new Topic("activities", "cab,@ritcab");
+        topics.add(t6);
+
+        Topic t7 = new Topic("events", "conference,parties");
+        topics.add(t7);
+
+        Topic t8 = new Topic("advisors", "advisor,department");
+        topics.add(t8);
+
+        Topic t9 = new Topic("academics");
+        topics.add(t9);
+
+        Topic t10 = new Topic("mycourses", "grades");
+        topics.add(t10);
+
+        Topic t11 = new Topic("registration", "iap,waitlist,wait-list");
+        topics.add(t11);
+
+        Topic t12 = new Topic("weather", "rochester,snow");
+        topics.add(t12);
+
+        Topic t13 = new Topic("sis", "#sis,oracle");
+        topics.add(t13);
+
+        Topic t14 = new Topic("classes", "withdraw");
+        topics.add(t14);
+
+        Topic t15 = new Topic("sg", "#sg,elections,#elections");
+        topics.add(t15);
+
+        Topic t16 = new Topic("housing", "dorms,laundry");
+        topics.add(t16);
+
+        Topic t17 = new Topic("admission", "admissions,accepted");
+        topics.add(t17);
+
+        Topic t18 = new Topic("executives", "administration");
+        topics.add(t18);
+
+        Topic t19 = new Topic("co-op", "coop,jobzone,#jobzone");
+        topics.add(t19);
+
+        Topic t20 = new Topic("grounds", "fountain,trees,flowers,architecture");
+        topics.add(t20);
+
+        Topic t21 = new Topic("greek", "mansions,#ritgreek");
+        topics.add(t21);
+
+        Topic t22 = new Topic("athletics", "hockey,tigers");
+        topics.add(t22);
+
+        topicRepository.save(topics);
+
 
 
 

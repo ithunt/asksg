@@ -9,6 +9,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,6 +28,13 @@ public class Topic {
         this.name = s;
         words = new HashSet<String>();
         words.add(s);
+    }
+
+    public Topic(String s, String ss) {
+        this.name = s;
+        words = new HashSet<String>();
+        words.add(s);
+        words.addAll(Arrays.asList(ss.split(",")));
     }
 
     public Topic() {

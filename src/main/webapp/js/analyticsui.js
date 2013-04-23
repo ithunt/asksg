@@ -6,23 +6,23 @@ function updateAnalytics(data) {
 
 // test to avoid the DB error...
 // enforce y scale...
-  data[0].wordCounts[0] = 100;
-  data[0].wordCounts[1] = 50;
-  data[0].wordCounts[2] = 75;
-
-// dummy data...
-  data[0].dates[0] = 1366239279085;
-  data[0].dates[1] = 1367239279085; //1400000000000;
-  data[0].dates[2] = 1368239279085; //1500000000000;
-
-  data[1].wordCounts[0] = 50;
-  data[1].wordCounts[1] = 75;
-  data[1].wordCounts[2] = 25;
-
-// dummy data...
-  data[1].dates[0] = 1366239279085;
-  data[1].dates[1] = 1367239279085;
-  data[1].dates[2] = 1368239279085;
+//  data[0].wordCounts[0] = 100;
+//  data[0].wordCounts[1] = 50;
+//  data[0].wordCounts[2] = 75;
+//
+//// dummy data...
+//  data[0].dates[0] = 1366239279085;
+//  data[0].dates[1] = 1367239279085; //1400000000000;
+//  data[0].dates[2] = 1368239279085; //1500000000000;
+//
+//  data[1].wordCounts[0] = 50;
+//  data[1].wordCounts[1] = 75;
+//  data[1].wordCounts[2] = 25;
+//
+//// dummy data...
+//  data[1].dates[0] = 1366239279085;
+//  data[1].dates[1] = 1367239279085;
+//  data[1].dates[2] = 1368239279085;
 
   var margin = {top: 30, right: 80, bottom: 50, left: 50},
       width = 640 - margin.left - margin.right,
