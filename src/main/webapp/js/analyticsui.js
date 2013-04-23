@@ -2,27 +2,8 @@
 function updateAnalytics(data) {
   console.log(data);
 
-// http://stackoverflow.com/questions/8689498/drawing-multiple-lines-in-d3-js
-
-// test to avoid the DB error...
-// enforce y scale...
-//  data[0].wordCounts[0] = 100;
-//  data[0].wordCounts[1] = 50;
-//  data[0].wordCounts[2] = 75;
-//
-//// dummy data...
-//  data[0].dates[0] = 1366239279085;
-//  data[0].dates[1] = 1367239279085; //1400000000000;
-//  data[0].dates[2] = 1368239279085; //1500000000000;
-//
-//  data[1].wordCounts[0] = 50;
-//  data[1].wordCounts[1] = 75;
-//  data[1].wordCounts[2] = 25;
-//
-//// dummy data...
-//  data[1].dates[0] = 1366239279085;
-//  data[1].dates[1] = 1367239279085;
-//  data[1].dates[2] = 1368239279085;
+    // Clear the current graphs
+    d3.select("svg").remove();
 
   var margin = {top: 30, right: 80, bottom: 50, left: 50},
       width = 640 - margin.left - margin.right,
@@ -35,19 +16,12 @@ function updateAnalytics(data) {
   console.log(minDate);
   console.log(maxDate);
 
-  // var x = d3.scale.linear()
-  //     .domain([0, d3.max(data, function(d) { return d.dates.length - 1; })])
-  //     .range([0, width]);
-
   // var x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
   var x = d3.scale.linear().domain([minDate, maxDate]).range([0, width]);
   var y = d3.scale.linear()
       .domain([d3.min(data, function(d) { return d3.min(d.wordCounts); }),
                d3.max(data, function(d) { return d3.max(d.wordCounts); })])
       .range([height, 0]);
-
-  // var color = d3.scale.category10()
-  //     .domain(d3.keys(data[0]).filter(function(key) { return key == "topic"; }));
 
   var xAxis = d3.svg.axis()
       .scale(x)
@@ -93,17 +67,6 @@ function updateAnalytics(data) {
         .style("text-anchor", "end")
         .text("Word Count");
 
-    // Append paths for each tab of interest we get back from the analyics controller 
-    // var lineData = [];
-    // // data.forEach(function(topic, i) { 
-    //   var tmp = [];
-    //   for (var i = 0; i < data[0].dates.length; i++) {
-    //     tmp.push({xVal:data[0].dates[i], yVal:data[0].wordCounts[i]});
-    //   }
-    //   lineData.push(tmp);
-    // // });
-    // console.log(lineData);
-
     var lineData = [];
     data.forEach(function(topic, i) { 
       var tmp = [];
@@ -132,17 +95,10 @@ function updateAnalytics(data) {
         .attr("dy", "1em")
         .style("text-anchor", "end")
         .text(topicName);
-
-      //   svg.selectAll(".line").data(lineData).enter().append("text")
-      //   .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-      // .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
-      // .attr("x", 3)
-      // .attr("dy", ".35em")
-      // .text(function(d) { return d.name; });
     });
     console.log(lineData);
 
-    // TODO
+    // Add the line data.
     svg.selectAll(".line").data(lineData)
     .enter().append("path")
       .attr("class", "line")
@@ -156,9 +112,6 @@ function updateAnalytics(data) {
       .domain([d3.min(data, function(d) { return d3.min(d.sentiments); }),
                d3.max(data, function(d) { return d3.max(d.sentiments); })])
       .range([height, 0]);
-
-  // var color = d3.scale.category10()
-  //     .domain(d3.keys(data[0]).filter(function(key) { return key == "topic"; }));
 
   var xAxis = d3.svg.axis()
       .scale(x)
@@ -202,17 +155,6 @@ function updateAnalytics(data) {
         .style("text-anchor", "end")
         .text("Semantic Score");
 
-    // Append paths for each tab of interest we get back from the analyics controller 
-    // var lineData = [];
-    // // data.forEach(function(topic, i) { 
-    //   var tmp = [];
-    //   for (var i = 0; i < data[0].dates.length; i++) {
-    //     tmp.push({xVal:data[0].dates[i], yVal:data[0].wordCounts[i]});
-    //   }
-    //   lineData.push(tmp);
-    // // });
-    // console.log(lineData);
-
     var lineData = [];
     data.forEach(function(topic, i) { 
       var tmp = [];
@@ -241,17 +183,10 @@ function updateAnalytics(data) {
         .attr("dy", "1em")
         .style("text-anchor", "end")
         .text(topicName);
-
-      //   svg.selectAll(".line").data(lineData).enter().append("text")
-      //   .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-      // .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
-      // .attr("x", 3)
-      // .attr("dy", ".35em")
-      // .text(function(d) { return d.name; });
     });
     console.log(lineData);
 
-    // TODO
+    // Add the semantic lines...
     svg.selectAll(".line").data(lineData)
     .enter().append("path")
       .attr("class", "line")

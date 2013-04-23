@@ -401,8 +401,7 @@ function ConversationController($scope, $asksg, $log) {
 	/*
 	 * Add a new social subscription...
 	 */
-	$scope.addSocialSubscription = function(id) {
-		ss = SocialSubscription(socialSubHandle, socialSubName);
+	$scope.addSocialSubscription = function(id, socialSubHandle, socialSubName) {
 		$asksg.addSubscription(id, socialSubHandle, socialSubName).
 			success(function (data, status, headers, config) {
 				$scope.refreshSubscriptions();
@@ -548,6 +547,12 @@ function ConversationController($scope, $asksg, $log) {
 			$scope.refreshSubscriptions();
 		}
 	}
+
+    // Scope vars for start/end dates
+    analyticsStartDate = "";
+    analyticsEndDate = "";
+    socialSubHandle = "";
+    socialSubName = "";
 }
 
 /**
@@ -639,8 +644,11 @@ AsksgService = function () {
                 /**
 				 * Hit the service controller to add a new subscription.
 				 */
-				addSubscription: function(id, name, handle) {
-					target = servicesUrl + "/subscribe?id=" + id + "&name=" + name + "&handle=" + handle;
+				addSubscription: function(ssid, ssname, sshandle) {
+					target = servicesUrl + "/subscribe?id=" + ssid + "&name=" + ssname + "&handle=" + sshandle;
+//                    console.log("shipping subscription data off to the server.");
+//                    tmp = JSON.stringify({id: ssid, name: ssname, handle: sshandle});
+//                    console.log(tmp);
 					return $http({method: 'POST', url: target});
 				},
 
