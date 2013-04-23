@@ -9,7 +9,9 @@ import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.repository.TopicRepository;
 import edu.rit.asksg.repository.WordCountRepository;
 import edu.rit.asksg.service.AnalyticsService;
+import edu.rit.asksg.service.AnalyticsServiceImpl;
 import edu.rit.asksg.service.ProviderService;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,8 @@ public class AnalyticsController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "text/plain; charset=utf-8");
 
-        return new ResponseEntity<String>(analyticsService.buildCSV(LocalDateTime.now().minusWeeks(1), LocalDateTime.now()), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(analyticsService.buildCSV(LocalDateTime.now().minusWeeks(1),
+                                                LocalDateTime.now()), headers, HttpStatus.OK);
 
     }
 
@@ -81,31 +84,29 @@ public class AnalyticsController {
 
 
     @RequestMapping(value = "/count")
-    public ResponseEntity<String> getTest() {
+    public ResponseEntity<String> count() {
 
-        for(Service s : providerService.findAllServices()) {
-            logger.info("Counting " + s.getName() + " words");
-
-
-            LocalDateTime since1 = new LocalDateTime();
-            LocalDateTime since2 = new LocalDateTime();
-            LocalDateTime since3 = new LocalDateTime();
-
-            since1 = since1.minusDays(1);
-            since2 = since2.minusDays(2);
-            since3 = since3.minusDays(3);
-
-            wordCounter.work(s, since3, since2);
-            wordCounter.work(s, since2, since1);
-            wordCounter.work(s, since1, LocalDateTime.now());
+        if(topicRepository.count() < 1) {
+            topicTest();
         }
 
+        analyticsService.count();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "text/plain; charset=utf-8");
 
         return new ResponseEntity<String>("Counting...", headers, HttpStatus.OK);
 
+    }
+
+    @RequestMapping(value = "/words")
+    public ResponseEntity<String> wordCounts() {
+        List<GraphData> data = analyticsService.getGraphDataInRange(LocalDateTime.now().minusDays(3), LocalDateTime.now());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+
+        return new ResponseEntity<String>(GraphData.toJsonArray(data), headers, HttpStatus.OK);
     }
 
 
@@ -183,27 +184,14 @@ public class AnalyticsController {
 
         topicRepository.save(topics);
 
-
-
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "text/plain; charset=utf-8");
-
         return new ResponseEntity<String>("#RIT", headers, HttpStatus.OK);
 
     }
 
 
-    @RequestMapping(value = "/words")
-    public ResponseEntity<String> wordCounts() {
 
-        List<GraphData> data = analyticsService.getAggregatedWordCount();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-
-        return new ResponseEntity<String>(GraphData.toJsonArray(data), headers, HttpStatus.OK);
-    }
 
 
 

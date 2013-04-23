@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import edu.rit.asksg.analytics.domain.GraphData;
 import edu.rit.asksg.analytics.domain.Topic;
 import edu.rit.asksg.analytics.domain.WordCount;
+import edu.rit.asksg.dataio.ScheduledPocessor;
 import edu.rit.asksg.repository.TopicRepository;
 import edu.rit.asksg.repository.WordCountRepository;
 import edu.rit.asksg.specification.CreatedSinceSpecification;
@@ -15,6 +16,9 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +34,10 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @Autowired
     WordCountRepository wordCountRepository;
 
+    @Autowired
+    ScheduledPocessor scheduledPocessor;
+
+
     @Override
     public List<WordCount> findWordCountsWith(final Topic topic, final LocalDateTime since, final LocalDateTime until) {
         Specification<WordCount> spec = new EqualSpecification<WordCount>("topic", topic);
@@ -37,6 +45,21 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         spec = spec.and(new CreatedUntilSpecification<WordCount>(until));
 
         return wordCountRepository.findAll(spec);
+    }
+
+    @Override
+    public WordCount findLastWordCount() {
+        List<WordCount> wcs = wordCountRepository.findAll(new PageRequest(0,1,new Sort(Sort.Direction.DESC,"created"))).getContent();
+        if(!wcs.isEmpty()) {
+            return wcs.get(0);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void count() {
+        scheduledPocessor.executeWordCount();
     }
 
     @Override

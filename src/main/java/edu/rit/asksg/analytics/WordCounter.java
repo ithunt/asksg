@@ -50,6 +50,7 @@ public class WordCounter {
 
 
     //todo: Not load ALL conversations, chunk it out - page requests ala paginated conversations
+    //note: to separate policy and mechanism, the caller of work only sends in 1 day at a time
     protected Map<String, WordCount> buildCountMapWithService(
             final List<Conversation> conversations,
             final Service service,

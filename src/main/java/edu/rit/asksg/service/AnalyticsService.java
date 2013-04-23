@@ -18,4 +18,8 @@ public interface AnalyticsService {
     List<GraphData> getGraphDataInRange(LocalDateTime start, LocalDateTime end);
 
     String buildCSV(LocalDateTime since, LocalDateTime until);
+
+    WordCount findLastWordCount();
+
+    void count();
 }

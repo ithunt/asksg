@@ -75,6 +75,7 @@
 
 	<bean id="refreshWorker" class="edu.rit.asksg.dataio.RefreshWorker"/>
 	<bean id="subscriptionWorker" class="edu.rit.asksg.dataio.SubscriptionWorker"/>
+    <bean id="wordCounter" class="edu.rit.asksg.analytics.WordCounter" />
 
 
 </beans>
