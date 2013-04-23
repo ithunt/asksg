@@ -16,4 +16,6 @@ public interface AnalyticsService {
     long getTotalWordCount(Topic t, LocalDateTime since, LocalDateTime until);
 
     List<GraphData> getGraphDataInRange(LocalDateTime start, LocalDateTime end);
+
+    String buildCSV(LocalDateTime since, LocalDateTime until);
 }

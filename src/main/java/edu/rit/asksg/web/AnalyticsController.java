@@ -46,6 +46,16 @@ public class AnalyticsController {
     AnalyticsService analyticsService;
 
 
+    @RequestMapping(value = "/csv")
+    public ResponseEntity<String> buildCsv() {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "text/plain; charset=utf-8");
+
+        return new ResponseEntity<String>(analyticsService.buildCSV(LocalDateTime.now().minusWeeks(1), LocalDateTime.now()), headers, HttpStatus.OK);
+
+    }
+
     @RequestMapping(value = "/wordcount")
     public ResponseEntity<String> getWordCountsForDates(WebRequest params) {
         String s = params.getParameter("since");

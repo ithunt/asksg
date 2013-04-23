@@ -1,5 +1,6 @@
 package edu.rit.asksg.service;
 
+import com.google.common.base.Joiner;
 import edu.rit.asksg.analytics.domain.GraphData;
 import edu.rit.asksg.analytics.domain.Topic;
 import edu.rit.asksg.analytics.domain.WordCount;
@@ -10,6 +11,7 @@ import edu.rit.asksg.specification.CreatedUntilSpecification;
 import edu.rit.asksg.specification.EqualSpecification;
 import edu.rit.asksg.specification.Specification;
 import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,6 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public List<WordCount> findWordCountsWith(final Topic topic, final LocalDateTime since, final LocalDateTime until) {
-
         Specification<WordCount> spec = new EqualSpecification<WordCount>("topic", topic);
         spec = spec.and(new CreatedSinceSpecification<WordCount>(since));
         spec = spec.and(new CreatedUntilSpecification<WordCount>(until));
@@ -38,6 +39,25 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         return wordCountRepository.findAll(spec);
     }
 
+    @Override
+    public String buildCSV(final LocalDateTime since, final LocalDateTime until) {
+        List<String> csv = new ArrayList<String>();
+        csv.add("word,service,count,date,sentiment,synonyms");
+        for(Topic t : topicRepository.findAll()) {
+            for(WordCount wc : findWordCountsWith(t,since,until)) {
+                csv.add(t.getName() + "," +
+                        wc.getService().getName() + "," +
+                        wc.getWordCount() + "," +
+                        wc.getCreated() + "," +
+                        ((Math.random() * 2) - 1) + "," +
+                        "[" + Joiner.on(",").join(t.getWords()) + "]"
+
+                        );
+            }
+
+        }
+        return Joiner.on("\n").join(csv);
+    }
 
     public long getTotalWordCount(Topic t, LocalDateTime since, LocalDateTime until) {
         if(t == null || since == null || until == null) return 0;
@@ -51,10 +71,21 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
 
-    public List<GraphData> getGraphDataInRange(LocalDateTime start, LocalDateTime end) {
+    public static List<DateTime> getDaySpan(LocalDateTime start, LocalDateTime end) {
         final int days = Days.daysBetween( new DateMidnight(start.toDateTime()), new DateMidnight(end.toDateTime())).getDays();
         final DateMidnight s = new DateMidnight(start.toDateTime());
 
+        List<DateTime> span = new ArrayList<DateTime>();
+
+        for(int i=0;i<=days;i++) {
+            span.add(s.plusDays(i).toDateTime());
+        }
+
+        return span;
+    }
+
+
+    public List<GraphData> getGraphDataInRange(LocalDateTime start, LocalDateTime end) {
         List<GraphData> data = new ArrayList<GraphData>();
 
         for(Topic t : topicRepository.findAll()) {
@@ -64,12 +95,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
             List<Long> dates = new ArrayList<Long>();
             List<Long> counts = new ArrayList<Long>();
 
-            for(int i=0;i<=days;i++) {
-                DateMidnight since = s.plusDays(i);
-                DateMidnight until = s.plusDays(i+1);
-
-                dates.add(since.toDate().getTime());
-                counts.add(getTotalWordCount(t, new LocalDateTime(since), new LocalDateTime(until)));
+            for(DateTime d : getDaySpan(start, end)) {
+                dates.add(d.toDate().getTime());
+                counts.add(getTotalWordCount(t, new LocalDateTime(d), new LocalDateTime(d.plusDays(1))));
             }
 
             gd.setDates(dates);
@@ -125,6 +153,16 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         }
 
         return graphData;
+    }
+
+    protected class Tuple<M,N> {
+        public M first;
+        public N second;
+
+        public Tuple(M m, N n) {
+            this.first = m;
+            this.second = n;
+        }
     }
 
     protected static List<Double> randomSentiments(int count) {
