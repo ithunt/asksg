@@ -14,7 +14,15 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson
 public class SocialSubscription {
 
-	@NotNull
+    public SocialSubscription() {
+    }
+
+    public SocialSubscription(String name, String handle) {
+        this.name = name;
+        this.handle = handle;
+    }
+
+    @NotNull
 	private String handle;
 
 	private String name;

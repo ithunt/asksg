@@ -54,11 +54,15 @@ public class ServiceController {
 
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
-    public void subscribe(@RequestParam("id") final Long id,
+    public ResponseEntity<String> subscribe(@RequestParam("id") final Long id,
                                             @RequestParam("name") final String name,
                                             @RequestParam("handle") final String handle) {
 
+        providerService.addSubscriptionToService(id, name, handle);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return new ResponseEntity<String>("cool story bro", headers, HttpStatus.CREATED);
     }
 
 
