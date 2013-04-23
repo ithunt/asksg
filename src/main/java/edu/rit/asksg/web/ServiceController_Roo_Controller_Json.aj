@@ -4,10 +4,8 @@
 package edu.rit.asksg.web;
 
 import edu.rit.asksg.domain.Service;
-import edu.rit.asksg.service.ProviderService;
 import edu.rit.asksg.web.ServiceController;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 privileged aspect ServiceController_Roo_Controller_Json {
-    
-    @Autowired
-    ProviderService ServiceController.providerService;
     
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody

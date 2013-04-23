@@ -49,7 +49,7 @@ public class WordCounter {
     }
 
 
-    //todo: Not load ALL conversations, chunk it out
+    //todo: Not load ALL conversations, chunk it out - page requests ala paginated conversations
     protected Map<String, WordCount> buildCountMapWithService(
             final List<Conversation> conversations,
             final Service service,

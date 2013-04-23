@@ -5,18 +5,16 @@ import edu.rit.asksg.analytics.domain.Topic;
 import edu.rit.asksg.analytics.domain.WordCount;
 import edu.rit.asksg.repository.TopicRepository;
 import edu.rit.asksg.repository.WordCountRepository;
+import edu.rit.asksg.specification.CreatedSinceSpecification;
+import edu.rit.asksg.specification.CreatedUntilSpecification;
+import edu.rit.asksg.specification.EqualSpecification;
+import edu.rit.asksg.specification.Specification;
 import org.joda.time.DateMidnight;
 import org.joda.time.Days;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,21 +31,11 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @Override
     public List<WordCount> findWordCountsWith(final Topic topic, final LocalDateTime since, final LocalDateTime until) {
 
-        Specification<WordCount> specification = new Specification<WordCount>() {
-            @Override
-            public Predicate toPredicate(Root<WordCount> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        Specification<WordCount> spec = new EqualSpecification<WordCount>("topic", topic);
+        spec = spec.and(new CreatedSinceSpecification<WordCount>(since));
+        spec = spec.and(new CreatedUntilSpecification<WordCount>(until));
 
-                Path<LocalDateTime> created = root.get("created");
-                Predicate[] predicates = new Predicate[3];
-                predicates[0] = cb.equal(root.get("topic"), topic);
-                predicates[1] = cb.greaterThan(created, since);
-                predicates[2] = cb.lessThan(created, until);
-
-                return cb.and(predicates);
-            }
-        };
-
-        return wordCountRepository.findAll(specification);
+        return wordCountRepository.findAll(spec);
     }
 
 

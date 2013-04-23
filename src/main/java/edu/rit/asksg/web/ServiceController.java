@@ -5,6 +5,7 @@ import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.domain.SocialSubscription;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import edu.rit.asksg.service.FacebookService;
+import edu.rit.asksg.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,9 @@ public class ServiceController {
 
 	@Autowired
 	FacebookService facebookService;
+
+    @Autowired
+    ProviderService providerService;
 
 	@RequestMapping(method = RequestMethod.POST, value = "facebookToken")
 	public ResponseEntity<String> facebookToken(@RequestParam("id") final String id,
@@ -47,6 +51,15 @@ public class ServiceController {
 		headers.add("Content-Type", "application/json");
 		return new ResponseEntity<String>(service.toJson(), headers, HttpStatus.CREATED);
 	}
+
+
+    @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
+    public void subscribe(@RequestParam("id") final Long id,
+                                            @RequestParam("name") final String name,
+                                            @RequestParam("handle") final String handle) {
+
+
+    }
 
 
 }
