@@ -75,4 +75,12 @@ privileged aspect Conversation_Roo_JavaBean {
         this.subject = subject;
     }
     
+    public Boolean Conversation.getPrivateConversation() {
+        return this.privateConversation;
+    }
+    
+    public void Conversation.setPrivateConversation(Boolean privateConversation) {
+        this.privateConversation = privateConversation;
+    }
+    
 }

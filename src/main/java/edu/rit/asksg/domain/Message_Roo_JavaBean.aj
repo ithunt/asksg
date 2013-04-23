@@ -101,12 +101,4 @@ privileged aspect Message_Roo_JavaBean {
         this.identity = identity;
     }
     
-    public Boolean Message.getPrivateMessage() {
-        return this.privateMessage;
-    }
-    
-    public void Message.setPrivateMessage(Boolean privateMessage) {
-        this.privateMessage = privateMessage;
-    }
-    
 }

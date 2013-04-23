@@ -32,7 +32,7 @@ function MessageResp(content, conversation) {
 /**
  * Conversation object constructor.
  */
-function Conversation(id, author, subject, snippet, messages, created, modified, service, read, hidden) {
+function Conversation(id, author, subject, snippet, messages, created, modified, service, read, hidden, privateConversation) {
 	this.id = id;
 	this.author = author;
 	this.subject = subject;
@@ -42,6 +42,7 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 	this.service = service;
 	this.read = read;
 	this.hidden = hidden; // hidden
+    this.privateConversation = privateConversation;
 
 	// Run through the messages list and create the appropriate Message objects
 	this.messages = new Array();
@@ -164,7 +165,8 @@ function ConversationController($scope, $asksg, $log) {
 						conversation.author, conversation.subject,
 						conversation.snippet, conversation.messages,
 						createdDate, modifiedDate,
-						conversation.service, conversation.read, conversation.hidden);
+						conversation.service, conversation.read, conversation.hidden,
+                        conversation.privateConversation);
 					$scope.convoMap[conversation.id] = $scope.convos[i];
 				}
 			}).
