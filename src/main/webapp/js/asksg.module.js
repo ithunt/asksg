@@ -14,9 +14,10 @@ function getQueryVariable(variable) {
 /**
  * Message object constructor.
  */
-function Message(author, content, conversationId) {
+function Message(author, content, conversationId, privateMessage) {
 	this.author = author;
 	this.content = content;
+    this.privateMessage = privateMessage;
 	this.conversationId = conversationId;
 }
 
@@ -45,7 +46,7 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 	// Run through the messages list and create the appropriate Message objects
 	this.messages = new Array();
 	for (var i = messages.length - 1; i >= 0; i--) {
-		this.messages[i] = new Message(messages[i].author, messages[i].content, id);
+		this.messages[i] = new Message(messages[i].author, messages[i].content, id, messages[i].privateMessage);
 	}
 
 	// The message snippet
