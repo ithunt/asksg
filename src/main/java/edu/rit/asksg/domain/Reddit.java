@@ -67,6 +67,7 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 			try {
 				Conversation c = new Conversation(parsePost(post));
 				c.setService(this);
+				c.setSubject((String) post.get("title"));
 				attachComments(c);
 				conversations.add(c);
 			} catch (Exception e) {
@@ -102,12 +103,10 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
 	protected static Message parsePost(JSONObject post) {
 		Message m = new Message();
 
-		String title = (String) post.get("title");
-
 		if (post.containsKey("selftext")) {
-			m.setContent(title + " - " + post.get("selftext"));
+			m.setContent((String)post.get("selftext"));
 		} else {
-			m.setContent(title + " - " + post.get("url"));
+			m.setContent((String)post.get("url"));
 		}
 
 		m.setUrl("http://reddit.com" + post.get("permalink"));

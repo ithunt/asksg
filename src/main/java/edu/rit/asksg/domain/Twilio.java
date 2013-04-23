@@ -100,6 +100,7 @@ public class Twilio extends Service implements ContentProvider {
 			conv = new Conversation(msg);
 			conv.setExternalId(smsSid);
 			conv.setCreated(now);
+			conv.setSubject(body);
 		} else {
 			logger.debug("Twilio: Adding received message from " + from + " to conversation with ID " + conv.getId());
 			conv.getMessages().add(msg);

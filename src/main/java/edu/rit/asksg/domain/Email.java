@@ -132,7 +132,12 @@ public class Email extends Service implements ContentProvider {
 
         Conversation c = new Conversation(m);
         m.setConversation(c);
-        return c;
+		try {
+			c.setSubject(mimeMessage.getSubject());
+		} catch (MessagingException e) {
+			c.setSubject("(no subject)");
+		}
+		return c;
     }
 
     @JSON(include = false)

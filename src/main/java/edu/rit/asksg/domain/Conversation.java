@@ -46,6 +46,8 @@ public class Conversation {
 
 	private Boolean isRead = Boolean.FALSE;
 
+	private String subject;
+
 	public Conversation() {
 	}
 

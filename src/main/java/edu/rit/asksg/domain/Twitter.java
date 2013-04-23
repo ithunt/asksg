@@ -104,6 +104,7 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             Conversation c = new Conversation(m);
             m.setConversation(c);
             c.setService(this);
+			c.setSubject(m.getSnippet());
             convos.add(c);
 
             logger.debug("New Tweet:" + m.toString());

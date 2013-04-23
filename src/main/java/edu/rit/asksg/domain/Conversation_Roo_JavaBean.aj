@@ -67,4 +67,12 @@ privileged aspect Conversation_Roo_JavaBean {
         this.isRead = isRead;
     }
     
+    public String Conversation.getSubject() {
+        return this.subject;
+    }
+    
+    public void Conversation.setSubject(String subject) {
+        this.subject = subject;
+    }
+    
 }
