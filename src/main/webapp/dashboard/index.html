@@ -298,6 +298,21 @@
 				Enabled: {{service.enabled}}
 			</p>
 		</div>
+		<div>
+			<ul ng-repeat="sub in service.config.subscriptions">
+				<li>
+					<div class="dropdown delete pull-right" showonhoverparent>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+						<div>{{sub.handle}}</div>
+						<div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
+					</div>
+				</li>
+			</ul>
+			<form ng-submit="addSocialSubscription(service.id)">
+				<label for="handle">Handle:</label> <input class="input-xlarge focused" ng-model="socialSubHandle"/><br/>
+				<label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
+			</form>
+		</div>
 	</div>
 
 	<a data-toggle="modal" href="#emailModal" class="btn">Add Service</a>
@@ -349,7 +364,21 @@
 				Enabled: {{service.enabled}}
 			</p>
 		</div>
-
+		<div>
+			<ul ng-repeat="sub in service.config.subscriptions">
+				<li>
+					<div class="dropdown delete pull-right" showonhoverparent>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+						<div>{{sub.handle}}</div>
+						<div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
+					</div>
+				</li>
+			</ul>
+			<form ng-submit="addSocialSubscription(service.id)">
+				<label for="handle">Handle:</label> <input class="input-xlarge focused" ng-model="socialSubHandle"/><br/>
+				<label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
+			</form>
+		</div>
 	</div>
 
 	<a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>
@@ -415,7 +444,21 @@
 				   class="btn">Authenticate</a>
 			</p>
 		</div>
-
+		<div>
+			<ul ng-repeat="sub in service.config.subscriptions">
+				<li>
+					<div class="dropdown delete pull-right" showonhoverparent>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+						<div>{{sub.handle}}</div>
+						<div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
+					</div>
+				</li>
+			</ul>
+			<form ng-submit="addSocialSubscription(service.id)">
+				<label for="handle">Handle:</label> <input class="input-xlarge focused" ng-model="socialSubHandle"/><br/>
+				<label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
+			</form>
+		</div>
 	</div>
 
 	<a data-toggle="modal" href="#facebookModal" class="btn">Add Service</a>
@@ -617,7 +660,10 @@
                     <h2>Main Analytics</h2>
 
                     <!-- The main analytics graph will go here -->
-                    <div id="mainAnalytics">
+                    <div id="countAnalytics">
+                    </div>
+
+                    <div id="semanticAnalytics">
                     </div>
 
                     <!-- Maybe a secondary one for interaction goes here? Probably not... -->

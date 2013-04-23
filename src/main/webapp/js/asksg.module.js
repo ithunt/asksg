@@ -145,7 +145,7 @@ function ConversationController($scope, $asksg, $log) {
      */
     $scope.renderAnalyticsData = function() {
         console.log("invoking the update analytics method...");
-        $asksg.fetchAnalyticsData().
+        $asksg.fetchAnalyticsData(analyticsStartDate, analyticsEndDate).
             success(function (data, status, headers, config) {
                 console.log("Got analytics data back from the server");
                 console.log(data);
@@ -398,6 +398,16 @@ function ConversationController($scope, $asksg, $log) {
 			});
 	}
 
+	/*
+	 * Add a new social subscription...
+	 */
+	$scope.addSocialSubscription = function(id) {
+		ss = SocialSubscription(socialSubHandle, socialSubName);
+		$asksg.addSubscription(id, socialSubHandle, socialSubName).
+			success(function (data, status, headers, config) {
+				$scope.refreshSubscriptions();
+			});
+	}
 
 	/*
 	 * Delete a conversation.
@@ -562,6 +572,7 @@ AsksgService = function () {
             var usersUrl = '/asksg/users';
             var rolesUrl = '/asksg/roles';
             var analyticsUrl = '/asksg/analytics/words';
+            var subscriptionsUrl = '/asksg/socialsubscriptions';
 
             // Publish the $asksg API here
             return {
@@ -626,6 +637,14 @@ AsksgService = function () {
                 },
 
                 /**
+				 * Hit the service controller to add a new subscription.
+				 */
+				addSubscription: function(id, name, handle) {
+					target = servicesUrl + "/subscribe?id=" + id + "&name=" + name + "&handle=" + handle;
+					return $http({method: 'POST', url: target});
+				},
+
+                /**
                  * Updates a service
                  * @param service
                  */
@@ -675,8 +694,15 @@ AsksgService = function () {
                     return $http({method: 'POST', url: servicesUrl + "/facebookToken?id=" + serviceID + "&code=" + code});
                 },
 
-                fetchAnalyticsData : function() {
-                    return $http({method: 'GET', url: analyticsUrl});
+                fetchAnalyticsData : function(start, end) {
+                	target = analyticsUrl;
+                	if (start != null && start.length > 0) {
+                		target = target + "?since=" + start;
+                		if (end != null && end.lenght > 0) {
+                			target = target + "&until=" + end;
+                		}
+                	} 
+                    return $http({method: 'GET', url: target});
                 }
             };
         });
