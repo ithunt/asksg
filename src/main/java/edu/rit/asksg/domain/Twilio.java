@@ -85,8 +85,13 @@ public class Twilio extends Service implements ContentProvider {
 		Message msg = new Message();
 		msg.setContent(body);
 		msg.setAuthor(from);
-		msg.setCreated(LocalDateTime.now());
-		msg.setModified(LocalDateTime.now());
+		LocalDateTime now = LocalDateTime.now();
+		msg.setCreated(now);
+		msg.setModified(now);
+		Person person = new Person();
+		person.setName(from);
+		person.setPhoneNumber(from);
+		msg.setIdentity(person);
 
 		Conversation conv = conversationService.findConversationByRecipient(from);
 
@@ -94,13 +99,13 @@ public class Twilio extends Service implements ContentProvider {
 			logger.debug("Twilio: Creating new conversation for message received from " + from);
 			conv = new Conversation(msg);
 			conv.setExternalId(smsSid);
-			conv.setCreated(LocalDateTime.now());
+			conv.setCreated(now);
 		} else {
 			logger.debug("Twilio: Adding received message from " + from + " to conversation with ID " + conv.getId());
 			conv.getMessages().add(msg);
 		}
 
-		conv.setModified(LocalDateTime.now());
+		conv.setModified(now);
 		conv.setService(this);
 
 		msg.setConversation(conv);
