@@ -245,7 +245,9 @@
                 Account SID: {{service.config.username}} <br/>
                 Authentication Token: {{service.config.authenticationToken}} <br/>
                 Phone Number: {{service.config.phoneNumber}} <br/>
-                Enabled: {{service.enabled}}
+                Enabled: {{service.enabled}} <br/>
+                API limit last update: {{service.config.lastupdate}} <br/>
+                Calls made so far: {{service.config.currentcalls}}
             </p>
         </div>
     </div>
@@ -362,7 +364,9 @@
                 Consumer Secret: {{service.config.consumersecret}} <br/>
                 Access Token: {{service.config.accesstoken}} <br/>
                 Access Token Secret: {{service.config.accesstokensecret}} <br/>
-                Enabled: {{service.enabled}}
+                Enabled: {{service.enabled}} <br/>
+                API limit last update: {{service.config.lastupdate}} <br/>
+                Calls made so far: {{service.config.currentcalls}}
             </p>
         </div>
         <div>
@@ -439,6 +443,10 @@
                 Access Token: {{service.config.accessToken}} <br/>
                 Access Token Secret: {{service.config.accessTokenSecret}} <br/>
                 Enabled: {{service.enabled}} <br/>
+                API limit last update: {{service.config.lastupdate}} <br/>
+                Calls made so far: {{service.config.currentcalls}}
+            </p>
+            <p>
                 <a ng-show="service.config.facebookAccessToken == null" data-toggle="modal"
                    href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox"
                    class="btn">Authenticate</a>

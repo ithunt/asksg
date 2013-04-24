@@ -63,13 +63,17 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
  * Provider config provider object constructor.
  */
     //TODO: RENAME FUCKER
-function ProviderConfig(id, authenticated, enabled, config, name, version) {
+function ProviderConfig(id, authenticated, enabled, config, name, version, maxcalls, updatefreq, lastupdate, currentcalls) {
     this.id = id;
     this.authenticated = authenticated;
     this.name = name;
     this.enabled = enabled;
     this.config = config;
     this.version = version;
+    this.maxcalls = maxcalls;
+    this.updatefreq = updatefreq;
+    this.lastupdate = lastupdate;
+    this.currentcalls = currentcalls;
 }
 
 function Twilio(providerConfig, authenticated) {
@@ -215,7 +219,8 @@ function ConversationController($scope, $asksg, $log) {
                     console.log($scope.subscriptions[subData.name]);
                     $scope.subscriptions[subData.name].push(
                         new ProviderConfig(subData.id, subData.authenticated, subData.enabled, subData.config,
-                            subData.name, subData.version));
+                            subData.name, subData.version, subData.maxcalls, subData.updatefreq,
+                            subData.lastupdate, subData.currentcalls));
                 }
 
                 // debug
