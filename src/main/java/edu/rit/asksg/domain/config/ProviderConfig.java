@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import flexjson.JSON;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Minutes;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -50,4 +51,9 @@ public class ProviderConfig {
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
+
+	@JSON(include = false)
+	public void incrementCalls() {
+		currentCalls++;
+	}
 }
