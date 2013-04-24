@@ -6,27 +6,26 @@ package edu.rit.asksg.analytics.domain;
 import edu.rit.asksg.analytics.domain.WordCount;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 privileged aspect WordCount_Roo_Json {
-
+    
     public String WordCount.toJson() {
         return new JSONSerializer().exclude("*.class").serialize(this);
     }
-
+    
     public static WordCount WordCount.fromJsonToWordCount(String json) {
         return new JSONDeserializer<WordCount>().use(null, WordCount.class).deserialize(json);
     }
-
+    
     public static String WordCount.toJsonArray(Collection<WordCount> collection) {
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
-
+    
     public static Collection<WordCount> WordCount.fromJsonArrayToWordCounts(String json) {
         return new JSONDeserializer<List<WordCount>>().use(null, ArrayList.class).use("values", WordCount.class).deserialize(json);
     }
-
+    
 }

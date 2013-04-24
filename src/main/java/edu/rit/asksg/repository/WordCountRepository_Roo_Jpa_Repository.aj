@@ -10,11 +10,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 privileged aspect WordCountRepository_Roo_Jpa_Repository {
-
-    declare parents:WordCountRepository extends JpaRepository<WordCount,Long>;
-
-    declare parents:WordCountRepository extends JpaSpecificationExecutor<WordCount>;
-
-    declare @type: WordCountRepository:@Repository;
-
+    
+    declare parents: WordCountRepository extends JpaRepository<WordCount, Long>;
+    
+    declare parents: WordCountRepository extends JpaSpecificationExecutor<WordCount>;
+    
+    declare @type: WordCountRepository: @Repository;
+    
 }

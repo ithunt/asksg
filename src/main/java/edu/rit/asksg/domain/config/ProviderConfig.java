@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import org.joda.time.LocalDateTime;
+import org.joda.time.Minutes;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
@@ -32,6 +34,16 @@ public class ProviderConfig {
 	private String host;
 
 	private int port;
+
+	private LocalDateTime lastUpdate;
+
+	private int maxCalls;
+
+	private int currentCalls;
+
+	private Minutes updateFrequency;
+
+	private LocalDateTime counterRefresh;
 
 	@ManyToOne
 	private AsksgUser createdBy;
