@@ -253,6 +253,15 @@
     </div>
 
     <a data-toggle="modal" href="#twilioModal" class="btn">Add Service</a>
+    <div>
+        <form ng-submit="updateApiLimits(service.config, maxcalls, updateFreq)">
+            <label for="updateFreq">Length of API limit count period:</label> <input class="input-xlarge focused"
+                                                                                     ng-model="updateFreq"/>
+            <label for="maxcalls">Maximum calls per period:</label> <input class="input-xlarge"
+                                                                           ng-model="maxcalls" /><br />
+            <input class="btn-primary" type="submit" value="Change API Limits"/>
+        </form>
+    </div>
 
     <div class="modal hide" id="twilioModal">
         <div class="modal-header">
@@ -370,6 +379,15 @@
             </p>
         </div>
         <div>
+            <form ng-submit="updateApiLimits(service.config, maxcalls, updateFreq)">
+                <label for="updateFreq">Length of API limit count period:</label> <input class="input-xlarge focused"
+                                                                                         ng-model="updateFreq"/>
+                <label for="maxcalls">Maximum calls per period:</label> <input class="input-xlarge"
+                                                                               ng-model="maxcalls" /><br />
+                <input class="btn-primary" type="submit" value="Change API Limits"/>
+            </form>
+        </div>
+        <div>
             <ul ng-repeat="sub in service.config.subscriptions">
                 <li>
                     <div>{{sub.handle}}</div>
@@ -451,6 +469,15 @@
                    href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox"
                    class="btn">Authenticate</a>
             </p>
+        </div>
+        <div>
+            <form ng-submit="updateApiLimits(service.config, maxcalls, updateFreq)">
+                <label for="updateFreq">Length of API limit count period:</label> <input class="input-xlarge focused"
+                                                                                         ng-model="updateFreq"/>
+                <label for="maxcalls">Maximum calls per period:</label> <input class="input-xlarge"
+                                                                               ng-model="maxcalls" /><br />
+                <input class="btn-primary" type="submit" value="Change API Limits"/>
+            </form>
         </div>
         <div>
             <ul ng-repeat="sub in service.config.subscriptions">

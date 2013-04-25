@@ -417,6 +417,15 @@ function ConversationController($scope, $asksg, $log) {
     }
 
     /*
+     * Update the update limits of the config
+     */
+    $scope.updateApiLimits = function (config, maxcalls, updateFreq) {
+        config.maxcalls = maxcalls;
+        config.updatefreq = updateFreq;
+        $asksg.updateConfig(config)
+    }
+
+    /*
      * Delete a conversation.
      */
     $scope.deleteConvo = function (convoId) {
@@ -586,6 +595,7 @@ AsksgService = function () {
             var rolesUrl = '/asksg/roles';
             var analyticsUrl = '/asksg/analytics/words';
             var subscriptionsUrl = '/asksg/socialsubscriptions';
+            var configsUrl = '/asksg/providerconfigs';
 
             // Publish the $asksg API here
             return {
@@ -670,6 +680,10 @@ AsksgService = function () {
 
                 deleteService: function (serviceId) {
                     return $http({method: 'DELETE', url: (servicesUrl + "/" + serviceId)});
+                },
+
+                updateConfig: function(updatedConfig) {
+                    return $http({method: 'PUT', url: configsUrl, data: JSON.stringify(updatedConfig)});
                 },
 
                 /**
