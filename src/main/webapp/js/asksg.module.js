@@ -11,6 +11,26 @@ function getQueryVariable(variable) {
     return null;
 }
 
+// Busy spinner for the analytics page...
+var opts = {
+    lines: 13, // The number of lines to draw
+    length: 10, // The length of each line
+    width: 5, // The line thickness
+    radius: 10, // The radius of the inner circle
+    corners: 1, // Corner roundness (0..1)
+    rotate: 0, // The rotation offset
+    direction: 1, // 1: clockwise, -1: counterclockwise
+    color: '#000', // #rgb or #rrggbb
+    speed: 1, // Rounds per second
+    trail: 60, // Afterglow percentage
+    shadow: false, // Whether to render a shadow
+    hwaccel: false, // Whether to use hardware acceleration
+    className: 'spinner', // The CSS class to assign to the spinner
+    zIndex: 2e9, // The z-index (defaults to 2000000000)
+    top: 'auto', // Top position relative to parent in px
+    left: 'auto' // Left position relative to parent in px
+};
+
 /**
  * Message object constructor.
  */
@@ -147,13 +167,28 @@ function ConversationController($scope, $asksg, $log) {
      */
     $scope.renderAnalyticsData = function () {
         console.log("invoking the update analytics method...");
+        $('#messagePane').remove('.messagePaneError');
+        $('.messagePaneError').remove();
+        var target = document.getElementById('messagePane');
+        var spinner = new Spinner(opts).spin(target);
         $asksg.fetchAnalyticsData(analyticsStartDate, analyticsEndDate).
             success(function (data, status, headers, config) {
                 console.log("Got analytics data back from the server");
                 console.log(data);
-                updateAnalytics(data);
+                try {
+                    updateAnalytics(data);    
+                }
+                catch (err) {
+                    $('#messagePane').append('<p class="messagePaneError">Error occurred while generating the analytics data. Try again...</p>');
+                    spinner.stop();
+                    console.log("Error occured while trying to render graphs...");
+                }
+                spinner.stop();
+                $('#messagePane').remove('.spinner');   
             }).
             error(function (data, status, headers, config) {
+                spinner.stop();
+                $('#messagePane').remove('.spinner');
                 console.log("Failed grabbing the social subscriptions");
                 return null;
             });
