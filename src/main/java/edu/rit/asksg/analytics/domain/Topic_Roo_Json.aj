@@ -13,20 +13,20 @@ import java.util.List;
 
 privileged aspect Topic_Roo_Json {
 
-    public String Topic.toJson() {
-        return new JSONSerializer().exclude("*.class").serialize(this);
-    }
+	public String Topic.toJson() {
+		return new JSONSerializer().exclude("*.class").serialize(this);
+	}
 
-    public static Topic Topic.fromJsonToTopic(String json) {
-        return new JSONDeserializer<Topic>().use(null, Topic.class).deserialize(json);
-    }
+	public static Topic Topic.fromJsonToTopic(String json) {
+		return new JSONDeserializer<Topic>().use(null, Topic.class).deserialize(json);
+	}
 
-    public static String Topic.toJsonArray(Collection<Topic> collection) {
-        return new JSONSerializer().exclude("*.class").serialize(collection);
-    }
+	public static String Topic.toJsonArray(Collection<Topic> collection) {
+		return new JSONSerializer().exclude("*.class").serialize(collection);
+	}
 
-    public static Collection<Topic> Topic.fromJsonArrayToTopics(String json) {
-        return new JSONDeserializer<List<Topic>>().use(null, ArrayList.class).use("values", Topic.class).deserialize(json);
-    }
+	public static Collection<Topic> Topic.fromJsonArrayToTopics(String json) {
+		return new JSONDeserializer<List<Topic>>().use(null, ArrayList.class).use("values", Topic.class).deserialize(json);
+	}
 
 }

@@ -9,8 +9,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 privileged aspect GraphData_Roo_ToString {
 
-    public String GraphData.toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
+	public String GraphData.toString() {
+		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
 
 }

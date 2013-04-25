@@ -9,36 +9,36 @@ import java.util.List;
 
 privileged aspect GraphData_Roo_JavaBean {
 
-    public String GraphData.getTopic() {
-        return this.topic;
-    }
+	public String GraphData.getTopic() {
+		return this.topic;
+	}
 
-    public void GraphData.setTopic(String topic) {
-        this.topic = topic;
-    }
+	public void GraphData.setTopic(String topic) {
+		this.topic = topic;
+	}
 
-    public List<Long> GraphData.getDates() {
-        return this.dates;
-    }
+	public List<Long> GraphData.getDates() {
+		return this.dates;
+	}
 
-    public void GraphData.setDates(List<Long> dates) {
-        this.dates = dates;
-    }
+	public void GraphData.setDates(List<Long> dates) {
+		this.dates = dates;
+	}
 
-    public List<Long> GraphData.getWordCounts() {
-        return this.wordCounts;
-    }
+	public List<Long> GraphData.getWordCounts() {
+		return this.wordCounts;
+	}
 
-    public void GraphData.setWordCounts(List<Long> wordCounts) {
-        this.wordCounts = wordCounts;
-    }
+	public void GraphData.setWordCounts(List<Long> wordCounts) {
+		this.wordCounts = wordCounts;
+	}
 
-    public List<Double> GraphData.getSentiments() {
-        return this.sentiments;
-    }
+	public List<Double> GraphData.getSentiments() {
+		return this.sentiments;
+	}
 
-    public void GraphData.setSentiments(List<Double> sentiments) {
-        this.sentiments = sentiments;
-    }
+	public void GraphData.setSentiments(List<Double> sentiments) {
+		this.sentiments = sentiments;
+	}
 
 }

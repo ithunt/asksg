@@ -14,31 +14,31 @@ import javax.persistence.Version;
 
 privileged aspect Topic_Roo_Jpa_Entity {
 
-    declare @type: Topic:@Entity;
+	declare @type: Topic:@Entity;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long Topic.id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private Long Topic.id;
 
-    @Version
-    @Column(name = "version")
-    private Integer Topic.version;
+	@Version
+	@Column(name = "version")
+	private Integer Topic.version;
 
-    public Long Topic.getId() {
-        return this.id;
-    }
+	public Long Topic.getId() {
+		return this.id;
+	}
 
-    public void Topic.setId(Long id) {
-        this.id = id;
-    }
+	public void Topic.setId(Long id) {
+		this.id = id;
+	}
 
-    public Integer Topic.getVersion() {
-        return this.version;
-    }
+	public Integer Topic.getVersion() {
+		return this.version;
+	}
 
-    public void Topic.setVersion(Integer version) {
-        this.version = version;
-    }
+	public void Topic.setVersion(Integer version) {
+		this.version = version;
+	}
 
 }

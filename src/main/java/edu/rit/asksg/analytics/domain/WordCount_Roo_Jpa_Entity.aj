@@ -14,31 +14,31 @@ import javax.persistence.Version;
 
 privileged aspect WordCount_Roo_Jpa_Entity {
 
-    declare @type: WordCount:@Entity;
+	declare @type: WordCount:@Entity;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long WordCount.id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private Long WordCount.id;
 
-    @Version
-    @Column(name = "version")
-    private Integer WordCount.version;
+	@Version
+	@Column(name = "version")
+	private Integer WordCount.version;
 
-    public Long WordCount.getId() {
-        return this.id;
-    }
+	public Long WordCount.getId() {
+		return this.id;
+	}
 
-    public void WordCount.setId(Long id) {
-        this.id = id;
-    }
+	public void WordCount.setId(Long id) {
+		this.id = id;
+	}
 
-    public Integer WordCount.getVersion() {
-        return this.version;
-    }
+	public Integer WordCount.getVersion() {
+		return this.version;
+	}
 
-    public void WordCount.setVersion(Integer version) {
-        this.version = version;
-    }
+	public void WordCount.setVersion(Integer version) {
+		this.version = version;
+	}
 
 }

@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 
 privileged aspect TopicRepository_Roo_Jpa_Repository {
 
-    declare parents:TopicRepository extends JpaRepository<Topic,Long>;
+	declare parents:TopicRepository extends JpaRepository<Topic,Long>;
 
-    declare parents:TopicRepository extends JpaSpecificationExecutor<Topic>;
+	declare parents:TopicRepository extends JpaSpecificationExecutor<Topic>;
 
-    declare @type: TopicRepository:@Repository;
+	declare @type: TopicRepository:@Repository;
 
 }

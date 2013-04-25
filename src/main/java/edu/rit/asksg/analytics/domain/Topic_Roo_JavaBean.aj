@@ -9,20 +9,20 @@ import java.util.Set;
 
 privileged aspect Topic_Roo_JavaBean {
 
-    public String Topic.getName() {
-        return this.name;
-    }
+	public String Topic.getName() {
+		return this.name;
+	}
 
-    public void Topic.setName(String name) {
-        this.name = name;
-    }
+	public void Topic.setName(String name) {
+		this.name = name;
+	}
 
-    public Set<String> Topic.getWords() {
-        return this.words;
-    }
+	public Set<String> Topic.getWords() {
+		return this.words;
+	}
 
-    public void Topic.setWords(Set<String> words) {
-        this.words = words;
-    }
+	public void Topic.setWords(Set<String> words) {
+		this.words = words;
+	}
 
 }
