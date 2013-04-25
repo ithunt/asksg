@@ -500,6 +500,10 @@ function ConversationController($scope, $asksg, $log) {
         });
     }
 
+    $scope.doLogout = function() {
+        $asksg.logout();
+    }
+
     /*
      * Set up the default conversation filters.
      */
@@ -568,7 +572,19 @@ function ConversationController($scope, $asksg, $log) {
     };
 
     // Set the user name
-    $scope.localUserName = "Admin"; // this should be replaced by response from server
+    $scope.localUserName = ""; // this should be replaced by response from server
+    $scope.isAdmin = false;
+    $asksg.getCurrentUser()
+            .success(function (data, status, headers, config) {
+                console.log("Retrieved current user from server");
+                console.log(data);
+                var user = angular.fromJson(data[i]);
+                $scope.localUserName = user.userName;
+                $scope.isAdmin = user.role.name == "Admin"; // probably not the best way...
+            }).error(function (data, status, headers, config) {
+                console.log("Failed to retrieve current user");
+                return null;
+            });
 
     // Populate the model with the initial data.
     $scope.refreshConvos();
@@ -616,9 +632,25 @@ AsksgService = function () {
             var rolesUrl = '/asksg/roles';
             var analyticsUrl = '/asksg/analytics/words';
             var subscriptionsUrl = '/asksg/socialsubscriptions';
+            var logoutUrl = "/resources/j_spring_security_logout";
+            var currentUserUrl = '/users/current';
+            var homeUrl = '/asksg/';
 
             // Publish the $asksg API here
             return {
+
+                getCurrentUser: function() {
+                    return $http.get({method: 'GET', url: currentUserUrl});
+                },
+
+                /**
+                 * Handle user logout
+                 */
+                logout: function() {
+                    window.location = homeUrl;
+                    $http.get({method: 'GET', url: logoutUrl});
+                },
+
                 /**
                  * Fetch all conversations with a specified ID (-1 or nil require us to fetch all of them...)
                  *

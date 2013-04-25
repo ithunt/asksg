@@ -64,9 +64,7 @@
             </a>
             <a class="brand" href="/">ASKSG</a>
             <ul class="nav pull-right">
-                <li><a data-toggle="modal" href="#loginModal" class="pull-right login-window">Logout
-                    {{localUserName}}</a>
-                </li>
+                <li><a ng-click="doLogout()" class="pull-right">Logout {{localUserName}}</a></li>
             </ul>
         </div>
     </div>
