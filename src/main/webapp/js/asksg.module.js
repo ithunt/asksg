@@ -433,7 +433,13 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 		//todo : reenable - needs backend support
 		//params.filterString = $scope.refineFilterString;
 		if ($scope.runonce) {
-			params.includeTags = $("#tag-filters").tags().getTags();
+			var tagset = $("#tag-filters").tags().getTags();
+			if (typeof params.includeTags != "undefined") {
+				params.includeTags = $.merge(params.includeTags, tagset);
+			}
+			else{
+				params.includeTags = tagset;
+			}
 		}
 		return params;
 	}
@@ -726,14 +732,15 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 	$scope.filterTagArray['read'] = false;
 	$scope.filterTagArray['unread'] = false;
 
-	/*
-	 * Filter function for the conversations based on their service.
-	 */
-	$scope.filterConvo = function (convo) {
-		if (convo.service != null) {
-			return !($scope.filterConvoArray[convo.service.name]);
+	$scope.excludeService = function(service){
+		var index = $.inArray(service, $scope.excludeServices);
+		if(index === -1){
+			$scope.excludeServices.push(service);
 		}
-		return false;
+		else{
+			$scope.excludeServices.splice(index,1);
+		}
+		$scope.refreshConvos();
 	};
 
 	/*
@@ -827,11 +834,13 @@ app.directive('myDatepicker',function ($parse) {
 				$(function () {
 					whenAddingTag = function (tag) {
 						var invoker = $parse(attrs.ctrlFn);
-						invoker(scope);
+						var params = {};
+						params.includeTags = [tag];
+						invoker(scope, {tagval : params});
 					};
 					tagRemoved = function (tag) {
 						var invoker = $parse(attrs.ctrlFn);
-						invoker(scope);
+						invoker(scope, {tagval : {}});
 					};
 					$(element).tags({
 						whenAddingTag: whenAddingTag,

@@ -10,11 +10,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 privileged aspect TagRepository_Roo_Jpa_Repository {
-
-	declare parents:TagRepository extends JpaRepository<Tag,Long>;
-
-	declare parents:TagRepository extends JpaSpecificationExecutor<Tag>;
-
-	declare @type: TagRepository:@Repository;
-
+    
+    declare parents: TagRepository extends JpaRepository<Tag, Long>;
+    
+    declare parents: TagRepository extends JpaSpecificationExecutor<Tag>;
+    
+    declare @type: TagRepository: @Repository;
+    
 }

@@ -7,25 +7,25 @@ import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.UserRole;
 
 privileged aspect AsksgUser_Roo_JavaBean {
-
-	public String AsksgUser.getUserName() {
-		return this.userName;
-	}
-
-	public void AsksgUser.setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public void AsksgUser.setPassword(String password) {
-		this.password = password;
-	}
-
-	public UserRole AsksgUser.getRole() {
-		return this.role;
-	}
-
-	public void AsksgUser.setRole(UserRole role) {
-		this.role = role;
-	}
-
+    
+    public String AsksgUser.getUserName() {
+        return this.userName;
+    }
+    
+    public void AsksgUser.setUserName(String userName) {
+        this.userName = userName;
+    }
+    
+    public void AsksgUser.setPassword(String password) {
+        this.password = password;
+    }
+    
+    public UserRole AsksgUser.getRole() {
+        return this.role;
+    }
+    
+    public void AsksgUser.setRole(UserRole role) {
+        this.role = role;
+    }
+    
 }

@@ -10,11 +10,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 privileged aspect IdentityRepository_Roo_Jpa_Repository {
-
-	declare parents:IdentityRepository extends JpaRepository<Identity,Long>;
-
-	declare parents:IdentityRepository extends JpaSpecificationExecutor<Identity>;
-
-	declare @type: IdentityRepository:@Repository;
-
+    
+    declare parents: IdentityRepository extends JpaRepository<Identity, Long>;
+    
+    declare parents: IdentityRepository extends JpaSpecificationExecutor<Identity>;
+    
+    declare @type: IdentityRepository: @Repository;
+    
 }
