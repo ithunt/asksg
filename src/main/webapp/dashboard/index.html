@@ -34,6 +34,8 @@
 	<!-- Link in angular and our controller files -->
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script>
 
+    <!-- JS for the busy spinner -->
+    <script src="../js/spin.min.js"></script>
 
 	<!-- ../js/angular/angular.min.js -->
 	<!--<script src="../js/underscore-min.js"></script>-->
@@ -648,29 +650,35 @@
 			</div>
 		</div>
 
-		<!-- Configuration settings -->
-		<div class="tab-content">
-			<div class="tab-pane fade in active" id="analyticsMain">
-				<div class="span8" style="padding-left:20px;">
-					<h2>Main Analytics</h2>
+        <!-- Configuration settings -->
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="analyticsMain">
+                <div class="span8" style="padding-left:20px;">
+                    <h2>Main Analytics</h2>
+                    <div id="analyticsPane">
 
-					<!-- The main analytics graph will go here -->
-					<div id="countAnalytics">
-					</div>
+                        <p id="messagePane">
 
-					<div id="semanticAnalytics">
-					</div>
+                        </p>
 
-					<!-- Maybe a secondary one for interaction goes here? Probably not... -->
-					<!--<div id="secondAnalytics">
-					</div>-->
+                        <!-- The main analytics graph will go here -->
+                        <div id="countAnalytics">
+                        </div>
 
-					<!-- Drop in the D3 rendering script -->
-					<script src="../js/analyticsui.js"></script>
-				</div>
-			</div>
-		</div>
-	</div>
+                        <div id="semanticAnalytics">
+                        </div>
+
+                        <!-- Maybe a secondary one for interaction goes here? Probably not... -->
+                        <!--<div id="secondAnalytics">
+                        </div>-->
+
+                        <!-- Drop in the D3 rendering script -->
+                        <script src="../js/analyticsui.js"></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </div>

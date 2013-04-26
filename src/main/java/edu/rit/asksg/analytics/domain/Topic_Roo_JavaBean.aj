@@ -4,25 +4,24 @@
 package edu.rit.asksg.analytics.domain;
 
 import edu.rit.asksg.analytics.domain.Topic;
-
 import java.util.Set;
 
 privileged aspect Topic_Roo_JavaBean {
-
-	public String Topic.getName() {
-		return this.name;
-	}
-
-	public void Topic.setName(String name) {
-		this.name = name;
-	}
-
-	public Set<String> Topic.getWords() {
-		return this.words;
-	}
-
-	public void Topic.setWords(Set<String> words) {
-		this.words = words;
-	}
-
+    
+    public String Topic.getName() {
+        return this.name;
+    }
+    
+    public void Topic.setName(String name) {
+        this.name = name;
+    }
+    
+    public Set<String> Topic.getWords() {
+        return this.words;
+    }
+    
+    public void Topic.setWords(Set<String> words) {
+        this.words = words;
+    }
+    
 }
