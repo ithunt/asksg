@@ -34,11 +34,23 @@ var opts = {
 /**
  * Message object constructor.
  */
-function Message(author, content, conversationId, privateMessage) {
+function Message(id, author, content, conversationId, privateMessage, tags) {
+	this.id = id;
 	this.author = author;
 	this.content = content;
 	this.privateMessage = privateMessage;
 	this.conversationId = conversationId;
+
+	// Run through the tag list and create the Tag objects
+	this.tags = new Array();
+	for (var i = tags.length - 1; i >= 0; i--) {
+		this.tags[i] = new Tag(tags[i].id, tags[i].name);
+	}
+}
+
+function Tag(id, name) {
+	this.id = id;
+	this.name = name;
 }
 
 /**
@@ -67,7 +79,7 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 	// Run through the messages list and create the appropriate Message objects
 	this.messages = new Array();
 	for (var i = messages.length - 1; i >= 0; i--) {
-		this.messages[i] = new Message(messages[i].author, messages[i].content, id, messages[i].privateMessage);
+		this.messages[i] = new Message(messages[i].id, messages[i].author, messages[i].content, id, messages[i].privateMessage, messages[i].tags);
 	}
 
 	// The message snippet
@@ -161,7 +173,168 @@ function MainController($scope, $asksg, $log) {
  * @param asksg - the custom asksg service
  * @param log - the log (optional, not currently used)
  */
-function ConversationController($scope, $asksg, $log) {
+/**
+ * Create the ASKSG module for the dashboard app.
+ */
+
+// Create the ASKSG module
+var app = angular.module('ASKSG', []);
+
+// Create and inject the asksg service into the ConversationController.
+app.factory('$asksg', function ($http, $log) {
+
+	// Store the service URLs locally here
+	var convoUrl = '/asksg/conversations';
+	var convoSeedUrl = '/asksg/conversations/seed';
+	var messageUrl = '/asksg/messages';
+	var messageSeedUrl = '/asksg/messages/seed';
+	var servicesUrl = '/asksg/services';
+	var usersUrl = '/asksg/users';
+	var rolesUrl = '/asksg/roles';
+	var analyticsUrl = '/asksg/analytics/words';
+	var subscriptionsUrl = '/asksg/socialsubscriptions';
+	var tagsUrl = '/asksg/tags';
+
+	// Publish the $asksg API here
+	return {
+		/**
+		 * Fetch all conversations with a specified ID (-1 or nil require us to fetch all of them...)
+		 *
+		 * @param convoId - target conversation to receive
+		 * @return map of conversation data
+		 */
+		fetchConvos: function (convoId, params) {
+			var paramstring = decodeURIComponent($.param(params));
+			return $http({method: 'GET', url: convoUrl + "?" + paramstring});
+		},
+
+		/**
+		 * Submit a message response to a conversation.
+		 *
+		 * @param message - the message to insert
+		 * @param convoId - the host conversation ID
+		 * @param messageId - TODO:  optional message, which indicates that this is a nested response (a la Reddit)
+		 */
+		postResponse: function (messageResp) {
+			console.log(messageResp);
+			// Return the HTTP response
+			return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
+		},
+
+		/**
+		 * Update a conversation.
+		 *
+		 * @param convo - the conversation to update.
+		 */
+		updateConvo: function (convo) {
+			return $http({method: 'UPDATE', url: convoUrl, data: JSON.stringify(convo)});
+		},
+
+		/**
+		 * Delete a conversation.
+		 *
+		 * @param convo - the conversation to update.
+		 */
+		deleteConvo: function (convoId) {
+			return $http({method: 'DELETE', url: (convoUrl + "/" + convoId)});
+		},
+
+		/**
+		 * Submit a new service to the system.
+		 *
+		 * @param service - new service to add
+		 */
+		postNewService: function (service) {
+			console.log(JSON.stringify(service));
+			return $http({method: 'POST', url: servicesUrl, data: JSON.stringify(service)});
+		},
+
+		/**
+		 * Hit the service controller to add a new subscription.
+		 */
+		addSubscription: function (ssid, ssname, sshandle) {
+			target = servicesUrl + "/subscribe?id=" + ssid + "&name=" + ssname + "&handle=" + sshandle;
+//                    console.log("shipping subscription data off to the server.");
+//                    tmp = JSON.stringify({id: ssid, name: ssname, handle: sshandle});
+//                    console.log(tmp);
+			return $http({method: 'POST', url: target});
+		},
+
+		/**
+		 * Updates a service
+		 * @param service
+		 */
+		updateService: function (service) {
+			return $http({method: 'PUT', url: servicesUrl, data: JSON.stringify(service)});
+		},
+
+		deleteService: function (serviceId) {
+			return $http({method: 'DELETE', url: (servicesUrl + "/" + serviceId)});
+		},
+
+		/**
+		 * Updates a user
+		 * @param user
+		 */
+		updateUser: function (user) {
+			return $http({method: 'PUT', url: usersUrl, data: JSON.stringify(user)});
+		},
+
+		deleteUser: function (userId) {
+			return $http({method: 'DELETE', url: (usersUrl + "/" + userId)});
+		},
+
+		/**
+		 * Fetch the social subscriptions currently in use for the system.
+		 */
+		fetchSubscriptions: function () {
+			return $http({method: 'GET', url: servicesUrl});
+		},
+
+		postNewUser: function (user) {
+			return $http({method: 'POST', url: usersUrl, data: JSON.stringify(user)});
+		},
+
+		/**
+		 * Fetch users and roles on asksg side
+		 */
+		fetchUsers: function () {
+			return $http({method: 'GET', url: usersUrl});
+		},
+
+		fetchRoles: function () {
+			return $http({method: 'GET', url: rolesUrl});
+		},
+
+		/**
+		 * Tag operations
+		 */
+		addTag: function (tagName, messageId) {
+			return $http({method: 'POST', url: tagsUrl + "/create?tagName=" + tagName + "&messageId=" + messageId});
+		},
+
+		deleteTag: function (tagId, messageId) {
+			return $http({method: 'DELETE', url: tagsUrl + "/remove?tagid=" + tagId + "&messageId=" + messageId});
+		},
+
+		authenticateFacebook: function (code, serviceID) {
+			return $http({method: 'POST', url: servicesUrl + "/facebookToken?id=" + serviceID + "&code=" + code});
+		},
+
+		fetchAnalyticsData: function (start, end) {
+			target = analyticsUrl;
+			if (start != null && start.length > 0) {
+				target = target + "?since=" + start;
+				if (end != null && end.lenght > 0) {
+					target = target + "&until=" + end;
+				}
+			}
+			return $http({method: 'GET', url: target});
+		}
+	};
+});
+
+app.controller('ConversationController', ['$scope', '$asksg', '$log', function ($scope, $asksg, $log) {
 
 	/*
 	 * Attempt to render some analytics data
@@ -194,7 +367,6 @@ function ConversationController($scope, $asksg, $log) {
 				return null;
 			});
 	}
-
 	/*
 	 * Refresh the set of conversations on the page
 	 */
@@ -260,6 +432,9 @@ function ConversationController($scope, $asksg, $log) {
 		params.excludeServices = $scope.excludeServices;
 		//todo : reenable - needs backend support
 		//params.filterString = $scope.refineFilterString;
+		if ($scope.runonce) {
+			params.includeTags = $("#tag-filters").tags().getTags();
+		}
 		return params;
 	}
 	/*
@@ -562,19 +737,6 @@ function ConversationController($scope, $asksg, $log) {
 	};
 
 	/*
-	 * Filter function for the conversations based on read/unread tags.
-	 */
-	$scope.filterTag = function (convo) {
-		if ($scope.filterTagArray['read'] && convo.read) {
-			return false;
-		}
-		if ($scope.filterTagArray['unread'] && !(convo.read)) {
-			return false;
-		}
-		return true;
-	};
-
-	/*
 	 * Filter functions...
 	 */
 	$scope.filterRead = function () {
@@ -589,202 +751,102 @@ function ConversationController($scope, $asksg, $log) {
 	// Set the user name
 	$scope.localUserName = "Admin"; // this should be replaced by response from server
 
-	// Populate the model with the initial data.
-	$scope.refreshConvos();
-	$scope.refreshSubscriptions();
-	$scope.refreshUsers();
-	$scope.refreshRoles();
+	$scope.startup = function () {
+		// Populate the model with the initial data.
+		$scope.refreshConvos();
+		$scope.refreshSubscriptions();
+		$scope.refreshUsers();
+		$scope.refreshRoles();
 
-	// Handle facebook authentication
-	var facebookCode = getQueryVariable("code");
-	if (facebookCode != null) {
-		var serviceID = getQueryVariable("state");
-		if (serviceID != null) {
-			$asksg.authenticateFacebook(facebookCode, serviceID);
-			$scope.refreshSubscriptions();
+		// Handle facebook authentication
+		var facebookCode = getQueryVariable("code");
+		if (facebookCode != null) {
+			var serviceID = getQueryVariable("state");
+			if (serviceID != null) {
+				$asksg.authenticateFacebook(facebookCode, serviceID);
+				$scope.refreshSubscriptions();
+			}
 		}
 	}
+
 
 	// Scope vars for start/end dates
 	analyticsStartDate = "";
 	analyticsEndDate = "";
 	socialSubHandle = "";
 	socialSubName = "";
-}
+	$scope.runonce = false;
+	$scope.startup();
+	$scope.runonce = true;
+}]);
 
-/**
- * Create the ASKSG module for the dashboard app.
- */
-AsksgService = function () {
-	// Indicate that we're starting up...
-	console.log("Starting the AsksgService...");
 
-	// Create the ASKSG module
-	var directives = angular.module('ASKSG', [], function ($provide) {
-
-		// Create and inject the asksg service into the ConversationController.
-		$provide.factory('$asksg', function ($http, $log) {
-
-			// Store the service URLs locally here
-			var convoUrl = '/asksg/conversations';
-			var convoSeedUrl = '/asksg/conversations/seed';
-			var messageUrl = '/asksg/messages';
-			var messageSeedUrl = '/asksg/messages/seed';
-			var servicesUrl = '/asksg/services';
-			var usersUrl = '/asksg/users';
-			var rolesUrl = '/asksg/roles';
-			var analyticsUrl = '/asksg/analytics/words';
-			var subscriptionsUrl = '/asksg/socialsubscriptions';
-
-			// Publish the $asksg API here
-			return {
-				/**
-				 * Fetch all conversations with a specified ID (-1 or nil require us to fetch all of them...)
-				 *
-				 * @param convoId - target conversation to receive
-				 * @return map of conversation data
-				 */
-				fetchConvos: function (convoId, params) {
-					var paramstring = decodeURIComponent($.param(params));
-					return $http({method: 'GET', url: convoUrl + "?" + paramstring});
-				},
-
-				/**
-				 * Submit a message response to a conversation.
-				 *
-				 * @param message - the message to insert
-				 * @param convoId - the host conversation ID
-				 * @param messageId - TODO:  optional message, which indicates that this is a nested response (a la Reddit)
-				 */
-				postResponse: function (messageResp) {
-					console.log(messageResp);
-					// Return the HTTP response
-					return $http({method: 'POST', url: messageUrl, data: JSON.stringify(messageResp)});
-				},
-
-				/**
-				 * Update a conversation.
-				 *
-				 * @param convo - the conversation to update.
-				 */
-				updateConvo: function (convo) {
-					return $http({method: 'UPDATE', url: convoUrl, data: JSON.stringify(convo)});
-				},
-
-				/**
-				 * Delete a conversation.
-				 *
-				 * @param convo - the conversation to update.
-				 */
-				deleteConvo: function (convoId) {
-					return $http({method: 'DELETE', url: (convoUrl + "/" + convoId)});
-				},
-
-				/**
-				 * Submit a new service to the system.
-				 *
-				 * @param service - new service to add
-				 */
-				postNewService: function (service) {
-					console.log(JSON.stringify(service));
-					return $http({method: 'POST', url: servicesUrl, data: JSON.stringify(service)});
-				},
-
-				/**
-				 * Hit the service controller to add a new subscription.
-				 */
-				addSubscription: function (ssid, ssname, sshandle) {
-					target = servicesUrl + "/subscribe?id=" + ssid + "&name=" + ssname + "&handle=" + sshandle;
-//                    console.log("shipping subscription data off to the server.");
-//                    tmp = JSON.stringify({id: ssid, name: ssname, handle: sshandle});
-//                    console.log(tmp);
-					return $http({method: 'POST', url: target});
-				},
-
-				/**
-				 * Updates a service
-				 * @param service
-				 */
-				updateService: function (service) {
-					return $http({method: 'PUT', url: servicesUrl, data: JSON.stringify(service)});
-				},
-
-				deleteService: function (serviceId) {
-					return $http({method: 'DELETE', url: (servicesUrl + "/" + serviceId)});
-				},
-
-				/**
-				 * Updates a user
-				 * @param user
-				 */
-				updateUser: function (user) {
-					return $http({method: 'PUT', url: usersUrl, data: JSON.stringify(user)});
-				},
-
-				deleteUser: function (userId) {
-					return $http({method: 'DELETE', url: (usersUrl + "/" + userId)});
-				},
-
-				/**
-				 * Fetch the social subscriptions currently in use for the system.
-				 */
-				fetchSubscriptions: function () {
-					return $http({method: 'GET', url: servicesUrl});
-				},
-
-				postNewUser: function (user) {
-					return $http({method: 'POST', url: usersUrl, data: JSON.stringify(user)});
-				},
-
-				/**
-				 * Fetch users and roles on asksg side
-				 */
-				fetchUsers: function () {
-					return $http({method: 'GET', url: usersUrl});
-				},
-
-				fetchRoles: function () {
-					return $http({method: 'GET', url: rolesUrl});
-				},
-
-				authenticateFacebook: function (code, serviceID) {
-					return $http({method: 'POST', url: servicesUrl + "/facebookToken?id=" + serviceID + "&code=" + code});
-				},
-
-				fetchAnalyticsData: function (start, end) {
-					target = analyticsUrl;
-					if (start != null && start.length > 0) {
-						target = target + "?since=" + start;
-						if (end != null && end.lenght > 0) {
-							target = target + "&until=" + end;
-						}
-					}
-					return $http({method: 'GET', url: target});
+// var directives = angular.module('directives', []);
+app.directive('myDatepicker',function ($parse) {
+	return function (scope, element, attrs, controller) {
+		var ngModel = $parse(attrs.ngModel);
+		$(function () {
+			element.datepicker({
+				inline: true,
+				dateFormat: 'dd.mm.yy',
+				onSelect: function (dateText, inst) {
+					scope.$apply(function (scope) {
+						// Change binded variable
+						ngModel.assign(scope, dateText);
+					});
 				}
-			};
-		});
-	});
-
-	// var directives = angular.module('directives', []);
-	directives.directive('myDatepicker', function ($parse) {
-		return function (scope, element, attrs, controller) {
-			var ngModel = $parse(attrs.ngModel);
-			$(function () {
-				element.datepicker({
-					inline: true,
-					dateFormat: 'dd.mm.yy',
-					onSelect: function (dateText, inst) {
-						scope.$apply(function (scope) {
-							// Change binded variable
-							ngModel.assign(scope, dateText);
-						});
-					}
-				});
 			});
+		});
+	}
+}).directive('myTagbox', ['$asksg', function ($asksg) {
+		return {
+			scope: {message: '='},
+			link: function (scope, element, attributes) {
+				$(function () {
+					whenAddingTag = function (tag) {
+						$asksg.addTag(tag, scope.message.id);
+					};
+					tagRemoved = function (tag) {
+						tagid = _.findWhere(scope.message.tags, {name: tag}).id;
+						$asksg.deleteTag(tagid, scope.message.id);
+					};
+					$(element).tags({
+						whenAddingTag: whenAddingTag,
+						tagRemoved: tagRemoved,
+						tagData: _.map(scope.message.tags, function (tag) {
+							return tag.name
+						}),
+						promptText: "Add a tag..."
+					});
+				});
+			}
+		}
+	}]).directive('searchTagbox', function ($parse) {
+		return {
+			link: function (scope, element, attrs) {
+				$(function () {
+					whenAddingTag = function (tag) {
+						var invoker = $parse(attrs.ctrlFn);
+						invoker(scope);
+					};
+					tagRemoved = function (tag) {
+						var invoker = $parse(attrs.ctrlFn);
+						invoker(scope);
+					};
+					$(element).tags({
+						whenAddingTag: whenAddingTag,
+						tagRemoved: tagRemoved,
+						tagData: [],
+						promptText: "Add a tag to filter"
+					});
+				});
+			}
 		}
 	});
-};
 
-// Invoke the ASKSG service constructor...
-console.log("Jumping into the constructor...");
-AsksgService();
+/*
+ app.run(['ConversationController', function(ConversationController){
+ ConversationController.$scope.startup();
+ }]);
+
+ */

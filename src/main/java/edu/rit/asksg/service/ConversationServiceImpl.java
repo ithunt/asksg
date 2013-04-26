@@ -12,9 +12,8 @@ import edu.rit.asksg.specification.ServiceSpecification;
 import edu.rit.asksg.specification.CreatedSinceSpecification;
 import edu.rit.asksg.specification.CreatedUntilSpecification;
 import edu.rit.asksg.specification.Specification;
+import edu.rit.asksg.specification.TagSpecification;
 import edu.rit.asksg.specification.TrueSpecification;
-import edu.rit.asksg.domain.Tag;
-import edu.rit.asksg.domain.Twitter;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -95,9 +86,9 @@ public class ConversationServiceImpl implements ConversationService {
 			spec = spec.and((new ServiceSpecification<Conversation>(service)).not());
 		}
 
-		if (showRead.isPresent()) spec = spec.and(new EqualSpecification<Conversation>("isRead", showRead.get()));
-
-		//todo: tags
+		for (String tag : includeTags) {
+			spec = spec.or(new TagSpecification<Conversation>(tag));
+		}
 
 		return ((Page<Conversation>) conversationRepository.findAll(
 				spec,

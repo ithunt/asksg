@@ -29,9 +29,6 @@ public class AsksgUser extends Identity implements UserDetails {
 	private static final Logger logger = LoggerFactory.getLogger(AsksgUser.class);
 
 	@NotNull
-	private String name;
-
-	@NotNull
 	private String userName;
 
 	private String password;
@@ -40,10 +37,6 @@ public class AsksgUser extends Identity implements UserDetails {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private UserRole role = new UserRole();
-
-	private String phoneNumber;
-
-	private String email;
 
 	@JSON(include = false)
 	@Override
@@ -92,20 +85,5 @@ public class AsksgUser extends Identity implements UserDetails {
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
-	}
-
-	@Override
-	public String getName() {
-		return this.name;
-	}
-
-	@Override
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	@Override
-	public String getEmail() {
-		return email;
 	}
 }

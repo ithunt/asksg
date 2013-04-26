@@ -27,9 +27,8 @@ import java.util.Set;
 @RequestMapping("/users")
 public class UserController {
 
-	//todo: remvoe and autoinject by roo
 	@Resource(name = "userDetailsService")
-    UserServiceImpl userService;
+	UserServiceImpl userService;
 
 	@Autowired
 	RoleService roleService;
@@ -37,28 +36,28 @@ public class UserController {
 	Logger log;
 
 
-    @RequestMapping(value = "/current")
-    public ResponseEntity<String> currentUser(Principal principal) {
-        AsksgUser user = null;
-        if(principal != null) {
-            String current = principal.getName();
-            if(current != null && current != "") {
-                user = (AsksgUser)userService.loadUserByUsername(current);
-            }
-        }
+	@RequestMapping(value = "/current")
+	public ResponseEntity<String> currentUser(Principal principal) {
+		AsksgUser user = null;
+		if (principal != null) {
+			String current = principal.getName();
+			if (current != null && current != "") {
+				user = (AsksgUser) userService.loadUserByUsername(current);
+			}
+		}
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json");
 
-        if(user == null) user = new AsksgUser();
+		if (user == null) user = new AsksgUser();
 
-        return new ResponseEntity<String>(user.toJson(), headers, HttpStatus.OK);
-    }
+		return new ResponseEntity<String>(user.toJson(), headers, HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "/seed")
 	public ResponseEntity<String> seed() {
 
-        roleService.saveUserRole(new UserRole("Admin"));
+		roleService.saveUserRole(new UserRole("Admin"));
 
 
 		AsksgUser ian = new AsksgUser();

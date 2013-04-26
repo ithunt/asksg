@@ -25,11 +25,13 @@
 	<link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
 	<link rel="stylesheet" href="../css/main.css">
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css"/>
+	<link rel="stylesheet" href="../css/bootstrap-tags.css">
 
 	<!-- le jQuery -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
 	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script src="../js/vendor/bootstrap-tags.js"></script>
 
 	<!-- Link in angular and our controller files -->
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script>
@@ -38,7 +40,7 @@
 	<script src="../js/spin.min.js"></script>
 
 	<!-- ../js/angular/angular.min.js -->
-	<!--<script src="../js/underscore-min.js"></script>-->
+	<script src="../js/underscore-min.js"></script>
 	<script src="../js/asksg.module.js"></script>
 	<script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 
@@ -123,12 +125,15 @@
 						</ul>
 						<!--</div>-->
 						<form class="navbar-search pull-right">
-							<div class="input-append">
-								<!-- Hook up the search bar to the converation filter for the Angular controller -->
-								<div class="input-append"><input ng-model="refineFilterString" type="text"
-								                                 placeholder="Filter" id="" name=""><span
-										class="add-on"><i class="icon-filter"></i></span></div>
+							<div search-tagbox id="tag-filters" ctrl-fn="refreshConvos()" class="tag-list">
+								<div class="tags"></div>
 							</div>
+							<!--<div class="input-append">-->
+							<!-- Hook up the search bar to the converation filter for the Angular controller -->
+							<!--	<div class="input-append"><input ng-model="refineFilterString" type="text"
+								                                 placeholder="Filter" id="" name=""><span
+										class="add-on"><i class="icon-filter"></i></span></div>-->
+							<!--	</div>-->
 						</form>
 					</div>
 				</div>
@@ -155,13 +160,6 @@
 
 							<div class="{{convo.service.name}}-img"
 							     ng-class="{privateMessage: convo.privateConversation}"></div>
-
-							<!-- Display the most recent web contents -->
-							<!--<img ng-show"convo.service.name == 'Facebook'" src="../img/Facebook.png">-->
-							<!--<img ng-show"convo.service.name == 'Twitter'" src="../img/Twitter1.png">-->
-							<!--<img ng-show"convo.service.name == 'Reddit' " src="../img/Reddit.png">-->
-							<!--<i class="icon-envelope" ng-show="convo.service.name == 'Email'">-->
-							<!--<i class="icon-comment" ng-show="convo.service.name == 'Twilio'">-->
 							<h5>
 								<b>{{convo.messages[0].author}}: <i>{{convo.subject}}</i></b>
 							</h5>
@@ -169,10 +167,16 @@
 							<!-- The message/conversation response form -->
 							<div ng-hide="convo.hidden == true">
 								<!-- List the messages -->
-								<p class="msg-header" ng-repeat="message in convo.messages">
+								<div class="msg-header" ng-repeat="message in convo.messages">
+									<div my-tagbox message="message" class="tag-list" style="margin-bottom: 20px">
+										<div class="tags"></div>
+									</div>
+
 									<!-- put the messages in reverse order -->
-									<i class="icon-chevron-right"></i>{{message.author}} : {{message.content}}
-								</p>
+									<p>
+										<i class="icon-chevron-right"></i>{{message.author}} : {{message.content}}
+									</p>
+								</div>
 
 								<!-- Some useful(?) buttons -->
 								<!--<button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>-->

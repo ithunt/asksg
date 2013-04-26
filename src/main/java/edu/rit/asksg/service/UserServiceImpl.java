@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Transactional
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public AsksgUser loadUserByUsername(String username) throws UsernameNotFoundException {
 		//todo support enabled flag
 		//AsksgUser user = this.userRepository.findByUserNameAndEnabled(username);
 		AsksgUser user = this.userRepository.findByUserName(username);

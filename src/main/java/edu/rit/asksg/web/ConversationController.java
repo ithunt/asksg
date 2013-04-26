@@ -120,7 +120,7 @@ public class ConversationController {
 			excludeServices = new String[0];
 		}
 
-		String[] includes = params.getParameterValues("includeTags");
+		String[] includes = params.getParameterValues("includeTags[]");
 		if (includes == null) includes = new String[0];
 
 
@@ -225,7 +225,6 @@ public class ConversationController {
 			ProviderConfig config = new ProviderConfig();
 			config.setIdentifier("rit");
 			reddit.setConfig(config);
-
 
 			SocialSubscription java = new SocialSubscription();
 			java.setHandle("java");

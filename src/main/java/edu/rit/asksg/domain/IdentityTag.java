@@ -9,5 +9,5 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaEntity
 public class IdentityTag extends Tag {
-
+	//todo relate to Identity
 }
