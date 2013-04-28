@@ -71,7 +71,7 @@ public class Email extends Service implements ContentProvider {
                         return new PasswordAuthentication(getConfig().getUsername(), getConfig().getPassword());
                     }
                 });
-        session.setDebug(true);
+        session.setDebug(false);
 
         try {
             MimeMessage m = new MimeMessage(session);
@@ -123,6 +123,8 @@ public class Email extends Service implements ContentProvider {
                 }
             }
 
+            m.setCreated(new LocalDateTime(mimeMessage.getReceivedDate()));
+
             logger.debug("MimeMessage from:" + m.getAuthor() + " - " + m.getContent());
         } catch (MessagingException e) {
             logger.error(e.getLocalizedMessage());
@@ -132,12 +134,15 @@ public class Email extends Service implements ContentProvider {
 
         Conversation c = new Conversation(m);
         m.setConversation(c);
-		try {
-			c.setSubject(mimeMessage.getSubject());
-		} catch (MessagingException e) {
-			c.setSubject("(no subject)");
-		}
-		return c;
+        if (c.getMessages() != null && !c.getMessages().isEmpty())
+            c.setCreated(c.getMessages().get(0).getCreated());
+
+        try {
+            c.setSubject(mimeMessage.getSubject());
+        } catch (MessagingException e) {
+            c.setSubject("(no subject)");
+        }
+        return c;
     }
 
     @JSON(include = false)
@@ -155,7 +160,7 @@ public class Email extends Service implements ContentProvider {
 
         try {
             Session session = Session.getDefaultInstance(props, null);
-            session.setDebug(true);
+            session.setDebug(false);
             store = session.getStore("imaps");
 
             /** USERNAME AND PASSWORD */

@@ -15,4 +15,28 @@ privileged aspect Identity_Roo_JavaBean {
         this.enabled = enabled;
     }
     
+    public String Identity.getName() {
+        return this.name;
+    }
+    
+    public void Identity.setName(String name) {
+        this.name = name;
+    }
+    
+    public String Identity.getEmail() {
+        return this.email;
+    }
+    
+    public void Identity.setEmail(String email) {
+        this.email = email;
+    }
+    
+    public String Identity.getPhoneNumber() {
+        return this.phoneNumber;
+    }
+    
+    public void Identity.setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    
 }

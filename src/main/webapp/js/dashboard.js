@@ -8,7 +8,7 @@ $(document).ready(function () {
 	$('.responseForm').hide();
 
 	// Handle the changing styles for the services item.
-	$('.service-menu-item').click(function () {
+	$('#sidepane div ul').on('click', '.service-menu-item', function () {
 		if ($(this).hasClass("active")) {
 			$(this).removeClass("active");
 		} else {

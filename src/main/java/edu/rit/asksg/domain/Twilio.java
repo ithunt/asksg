@@ -80,39 +80,39 @@ public class Twilio extends Service implements ContentProvider {
         return false;
     }
 
-	public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
+    public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
 
-		Message msg = new Message();
-		msg.setContent(body);
-		msg.setAuthor(from);
-		LocalDateTime now = LocalDateTime.now();
-		msg.setCreated(now);
-		msg.setModified(now);
-		Person person = new Person();
-		person.setName(from);
-		person.setPhoneNumber(from);
-		msg.setIdentity(person);
+        Message msg = new Message();
+        msg.setContent(body);
+        msg.setAuthor(from);
+        LocalDateTime now = LocalDateTime.now();
+        msg.setCreated(now);
+        msg.setModified(now);
+        Person person = new Person();
+        person.setName(from);
+        person.setPhoneNumber(from);
+        msg.setIdentity(person);
 
-		Conversation conv = conversationService.findConversationByRecipient(from);
+        Conversation conv = conversationService.findConversationByRecipient(from);
 
-		if (conv == null) {
-			logger.debug("Twilio: Creating new conversation for message received from " + from);
-			conv = new Conversation(msg);
-			conv.setExternalId(smsSid);
-			conv.setCreated(now);
-			conv.setSubject(body);
-		} else {
-			logger.debug("Twilio: Adding received message from " + from + " to conversation with ID " + conv.getId());
-			conv.getMessages().add(msg);
-		}
+        if (conv == null) {
+            logger.debug("Twilio: Creating new conversation for message received from " + from);
+            conv = new Conversation(msg);
+            conv.setExternalId(smsSid);
+            conv.setCreated(now);
+            conv.setSubject(body);
+        } else {
+            logger.debug("Twilio: Adding received message from " + from + " to conversation with ID " + conv.getId());
+            conv.getMessages().add(msg);
+        }
 
-		conv.setModified(now);
-		conv.setService(this);
+        conv.setModified(now);
+        conv.setService(this);
 
-		msg.setConversation(conv);
+        msg.setConversation(conv);
 
-		conversationService.saveConversation(conv);
-	}
+        conversationService.saveConversation(conv);
+    }
 
     @JSON(include = false)
     public ConversationService getConversationService() {

@@ -11,7 +11,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>ASKSG Dashboard</title>
-    <link rel="icon" href="../img/favicon.png"/>
+	<link rel="icon" href="../img/favicon.png"/>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
 
@@ -24,14 +24,28 @@
 	</style>
 	<link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
 	<link rel="stylesheet" href="../css/main.css">
-	<!--<link rel="stylesheet" href="../bootstrap-toggle-buttons.css">-->
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css"/>
+	<link rel="stylesheet" href="../css/bootstrap-tags.css">
+
+	<!-- le jQuery -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
+	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script src="../js/vendor/bootstrap-tags.js"></script>
 
 	<!-- Link in angular and our controller files -->
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js" ng:autobind></script>
+
+	<!-- JS for the busy spinner -->
+	<script src="../js/spin.min.js"></script>
+
 	<!-- ../js/angular/angular.min.js -->
-	<!--<script src="../js/underscore-min.js"></script>-->
+	<script src="../js/underscore-min.js"></script>
 	<script src="../js/asksg.module.js"></script>
 	<script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+
+	<!-- link in D3 -->
+	<script src="../js/d3.v3.min.js"></script>
 </head>
 <body ng-controller="ConversationController">
 
@@ -65,26 +79,19 @@
 <ul class="nav nav-tabs">
 	<li class="active"><a data-toggle="tab" href="#dashTab">Dashboard</a></li>
 	<li><a data-toggle="tab" href="#configTab">Configuration</a></li>
+	<li><a data-toggle="tab" href="#analyticsTab">Analytics</a></li>
 	<li><a data-toggle="tab" href="#userConfigTab">Users</a></li>
 </ul>
 <div class="tab-content">
 <div class="tab-pane fade in active" id="dashTab">
 	<div class="row-fluid">
-		<div class="span3">
+		<div class="span3" id="sidepane">
 			<div class="well sidebar-nav">
 				<ul class="nav nav-list">
-					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services
-					</li>
-					<li id="service-item-email" class="active service-menu-item" ng-click="filterEmail()">
-						<a href="#"><img src="../img/Email.png"/>&nbsp;Email</a></li>
-					<li id="service-item-sms" class="active service-menu-item" ng-click="filterSms()">
-						<a href="#"><img src="../img/Twilio.png"/>&nbsp;SMS</a></li>
-					<li id="service-item-facebook" class="active service-menu-item" ng-click="filterFacebook()">
-						<a href="#"><img src="../img/Facebook.png"/>&nbsp;Facebook</a></li>
-					<li id="service-item-twitter" class="active service-menu-item" ng-click="filterTwitter()">
-						<a href="#"><img src="../img/Twitter1.png"/>&nbsp;Twitter</a></li>
-					<li id="service-item-reddit" class="active service-menu-item" ng-click="filterReddit()">
-						<a href="#"><img src="../img/Reddit.png"/>&nbsp;Reddit</a></li>
+					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services</li>
+					<li ng-repeat="service in serviceList" id="service-item-{{service}}"
+					    class="active service-menu-item" ng-click="excludeService(service)">
+						<a href="#"><img src="../img/{{service}}.png">&nbsp;{{service}}</a>
 				</ul>
 			</div>
 			<!-- well sidebar-nav -->
@@ -118,19 +125,22 @@
 						</ul>
 						<!--</div>-->
 						<form class="navbar-search pull-right">
-							<div class="input-append">
-								<!-- Hook up the search bar to the converation filter for the Angular controller -->
-								<div class="input-append"><input ng-model="refineFilterString" type="text"
-								                                 placeholder="Filter" id="" name=""><span
-										class="add-on"><i class="icon-filter"></i></span></div>
+							<div search-tagbox id="tag-filters" ctrl-fn="getConversations(tagval)" class="tag-list">
+								<div class="tags"></div>
 							</div>
+							<!--<div class="input-append">-->
+							<!-- Hook up the search bar to the converation filter for the Angular controller -->
+							<!--	<div class="input-append"><input ng-model="refineFilterString" type="text"
+								                                 placeholder="Filter" id="" name=""><span
+										class="add-on"><i class="icon-filter"></i></span></div>-->
+							<!--	</div>-->
 						</form>
 					</div>
 				</div>
 
 				<ul class="convo-list infinite-scroll">
 					<li class="convo-list-item-msg"
-					    ng-repeat="convo in convos | filter:filterConvo | filter:filterTag | filter:refineFilterString">
+					    ng-repeat="convo in convos">
 						<div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
 
 							<!-- Options menu for the conversation -->
@@ -144,18 +154,12 @@
 									                           tabindex="-1" href="#">Hide/Unhide</a></li>
 									<li role="presentation" class="divider"></li>
 									<li role="presentation"><a ng-click="deleteConvo(convo.id)" role="menuitem"
-									                            tabindex="-1" href="#">Delete</a></li>
+									                           tabindex="-1" href="#">Delete</a></li>
 								</ul>
 							</div>
 
-							<div class="{{convo.service.name}}-img" ng-class="{privateMessage: convo.privateConversation}"></div>
-
-							<!-- Display the most recent web contents -->
-							<!--<img ng-show"convo.service.name == 'Facebook'" src="../img/Facebook.png">-->
-							<!--<img ng-show"convo.service.name == 'Twitter'" src="../img/Twitter1.png">-->
-							<!--<img ng-show"convo.service.name == 'Reddit' " src="../img/Reddit.png">-->
-							<!--<i class="icon-envelope" ng-show="convo.service.name == 'Email'">-->
-							<!--<i class="icon-comment" ng-show="convo.service.name == 'Twilio'">-->
+							<div class="{{convo.service.name}}-img"
+							     ng-class="{privateMessage: convo.privateConversation}"></div>
 							<h5>
 								<b>{{convo.messages[0].author}}: <i>{{convo.subject}}</i></b>
 							</h5>
@@ -163,14 +167,17 @@
 							<!-- The message/conversation response form -->
 							<div ng-hide="convo.hidden == true">
 								<!-- List the messages -->
-								<p class="msg-header" ng-repeat="message in convo.messages">
-									<!-- put the messages in reverse order -->
-									<i class="icon-chevron-right"></i>{{message.author}} : {{message.content}}
-								</p>
+								<div class="msg-header" ng-repeat="message in convo.messages">
+									<div my-tagbox message="message" class="tag-list" style="margin-bottom: 20px">
+										<div class="tags"></div>
+									</div>
 
-								<!-- Some useful(?) buttons -->
-								<!--<button class="btn" onclick="renderTree({{convo}}, {{convo.id}})">Show More</button>-->
-								<button class="btn" onclick="showResponseForm(convo.id)">Reply</button>
+									<!-- put the messages in reverse order -->
+									<p>
+										<i class="icon-chevron-right"></i>{{message.author}} : {{message.content}}
+									</p>
+								</div>
+
 								Created: {{convo.created_at.toLocaleString();}}
 
 								<!-- The message/conversation response form -->
@@ -185,6 +192,8 @@
 					</li>
 				</ul>
 			</div>
+			<button class="btn left" type="submit" ng-click="previousConvos()">Newer</button>
+			<button class="btn pull-right" type="submit" ng-click="nextConvos()">Older</button>
 		</div>
 		<!-- span8 -->
 	</div>
@@ -288,6 +297,20 @@
 				Enabled: {{service.enabled}}
 			</p>
 		</div>
+		<div>
+			<ul ng-repeat="sub in service.config.subscriptions">
+				<li>
+					<div>{{sub.handle}}</div>
+					<div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
+				</li>
+			</ul>
+			<form ng-submit="addSocialSubscription(service.id, socialSubHandle, socialSubName)">
+				<label for="handle">Handle:</label> <input class="input-xlarge focused"
+				                                           ng-model="socialSubHandle"/><br/>
+				<label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
+				<input class="btn-primary" type="submit" value="Add">
+			</form>
+		</div>
 	</div>
 
 	<a data-toggle="modal" href="#emailModal" class="btn">Add Service</a>
@@ -339,7 +362,20 @@
 				Enabled: {{service.enabled}}
 			</p>
 		</div>
-
+		<div>
+			<ul ng-repeat="sub in service.config.subscriptions">
+				<li>
+					<div>{{sub.handle}}</div>
+					<div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
+				</li>
+			</ul>
+			<form ng-submit="addSocialSubscription(service.id, socialSubHandle, socialSubName)">
+				<label for="handle">Handle:</label> <input class="input-xlarge focused"
+				                                           ng-model="socialSubHandle"/><br/>
+				<label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
+				<input class="btn-primary" type="submit" value="Add">
+			</form>
+		</div>
 	</div>
 
 	<a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>
@@ -405,7 +441,20 @@
 				   class="btn">Authenticate</a>
 			</p>
 		</div>
-
+		<div>
+			<ul ng-repeat="sub in service.config.subscriptions">
+				<li>
+					<div>{{sub.handle}}</div>
+					<div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
+				</li>
+			</ul>
+			<form ng-submit="addSocialSubscription(service.id, socialSubHandle, socialSubName)">
+				<label for="handle">Handle:</label> <input class="input-xlarge focused"
+				                                           ng-model="socialSubHandle"/><br/>
+				<label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
+				<input class="btn-primary" type="submit" value="Add">
+			</form>
+		</div>
 	</div>
 
 	<a data-toggle="modal" href="#facebookModal" class="btn">Add Service</a>
@@ -570,6 +619,70 @@
 	</div>
 </div>
 
+<!--- analytics tab -->
+<div id="analyticsTab" class="tab-pane fade">
+	<div class="row-fluid">
+		<div class="span3">
+			<div class="well sidebar-nav">
+				<ul class="nav nav-list">
+					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Options</li>
+					<li class="active"><a data-toggle="tab" href="#analyticsMain">Main</a></li>
+				</ul>
+			</div>
+
+			<div class="well">
+				<h4 style="text-align:center">Display Parameters</h4>
+				<label for="StartDate"> Start Date: </label>
+				<input type="text" name="StartDate" my-datepicker ng-model="analyticsStartDate"/>
+				<label for="EndDate"> End Date: </label>
+				<input type="text" name="EndDate" my-datepicker ng-model="analyticsEndDate"/>
+
+				<p>
+					Time span:
+				</p>
+
+				<p>
+					{{analyticsStartDate}} - {{analyticsEndDate}}
+				</p>
+				<!-- Staples button -->
+				<form style="text-align:center" ng-submit="renderAnalyticsData()">
+					<input class="btn-primary" type="submit" value="Render Analytics Data">
+				</form>
+			</div>
+		</div>
+
+		<!-- Configuration settings -->
+		<div class="tab-content">
+			<div class="tab-pane fade in active" id="analyticsMain">
+				<div class="span8" style="padding-left:20px;">
+					<h2>Main Analytics</h2>
+
+					<div id="analyticsPane">
+
+						<p id="messagePane">
+
+						</p>
+
+						<!-- The main analytics graph will go here -->
+						<div id="countAnalytics">
+						</div>
+
+						<div id="semanticAnalytics">
+						</div>
+
+						<!-- Maybe a secondary one for interaction goes here? Probably not... -->
+						<!--<div id="secondAnalytics">
+						</div>-->
+
+						<!-- Drop in the D3 rendering script -->
+						<script src="../js/analyticsui.js"></script>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 </div>
 
 <hr>
@@ -581,26 +694,6 @@
 </div>
 <!-- configTab -->
 </div> <!-- container -->
-
-<!-- le jQuery -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
-
-<!-- le infinite scroll -->
-<script src="../js/jquery.jscroll.min.js"></script>
-<script>
-	//$('.infinite-scroll').jscroll();
-
-	// customize the infinite scroll options as follows
-	/*
-	 $('.infinite-scroll').jscroll({
-	 loadingHtml: '<img src="loading.gif" alt="Loading" /> Loading...',
-	 padding: 20,
-	 nextSelector: 'a.jscroll-next:last',
-	 contentSelector: 'li'
-	 });
-	 */
-</script>
 
 <!-- le Bootstrap -->
 <script src="../js/vendor/bootstrap.min.js"></script>

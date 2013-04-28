@@ -9,10 +9,7 @@ public abstract class Identity {
 
 	private boolean enabled = true;
 
-	public abstract String getName();
-
-	public abstract String getEmail();
-
-	public abstract String getPhoneNumber();
-
+	private String name;
+	private String email;
+	private String phoneNumber;
 }

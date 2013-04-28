@@ -5,6 +5,7 @@ import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.UserRole;
 import edu.rit.asksg.service.RoleService;
 import edu.rit.asksg.service.UserService;
+import edu.rit.asksg.service.UserServiceImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,17 +27,37 @@ import java.util.Set;
 @RequestMapping("/users")
 public class UserController {
 
-	//todo: remvoe and autoinject by roo
 	@Resource(name = "userDetailsService")
-	UserService userService;
+	UserServiceImpl userService;
 
 	@Autowired
 	RoleService roleService;
 	@Log
 	Logger log;
 
+
+	@RequestMapping(value = "/current")
+	public ResponseEntity<String> currentUser(Principal principal) {
+		AsksgUser user = null;
+		if (principal != null) {
+			String current = principal.getName();
+			if (current != null && current != "") {
+				user = (AsksgUser) userService.loadUserByUsername(current);
+			}
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json");
+
+		if (user == null) user = new AsksgUser();
+
+		return new ResponseEntity<String>(user.toJson(), headers, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/seed")
 	public ResponseEntity<String> seed() {
+
+		roleService.saveUserRole(new UserRole("Admin"));
 
 
 		AsksgUser ian = new AsksgUser();

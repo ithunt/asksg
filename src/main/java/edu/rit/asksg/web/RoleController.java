@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RoleController {
 	@RequestMapping(value = "/seed")
 	public ResponseEntity<String> seed() {
-
-		UserRole role1 = new UserRole();
-		role1.setName("Admin");
-		UserRole role2 = new UserRole();
-		role2.setName("Senator");
-		roleService.saveUserRole(role1);
-		roleService.saveUserRole(role2);
-
+		if (roleService.findUserRole("Senator") == null) {
+			UserRole role1 = new UserRole();
+			role1.setName("Admin");
+			UserRole role2 = new UserRole();
+			role2.setName("Senator");
+			roleService.saveUserRole(role1);
+			roleService.saveUserRole(role2);
+		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("content_type", "text/plain");
 

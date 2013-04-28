@@ -3,18 +3,18 @@
 
 package edu.rit.asksg.repository;
 
-import edu.rit.asksg.domain.Person;
-import edu.rit.asksg.repository.PersonRepository;
+import edu.rit.asksg.domain.Identity;
+import edu.rit.asksg.repository.IdentityRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-privileged aspect PersonRepository_Roo_Jpa_Repository {
+privileged aspect IdentityRepository_Roo_Jpa_Repository {
     
-    declare parents: PersonRepository extends JpaRepository<Person, Long>;
+    declare parents: IdentityRepository extends JpaRepository<Identity, Long>;
     
-    declare parents: PersonRepository extends JpaSpecificationExecutor<Person>;
+    declare parents: IdentityRepository extends JpaSpecificationExecutor<Identity>;
     
-    declare @type: PersonRepository: @Repository;
+    declare @type: IdentityRepository: @Repository;
     
 }

@@ -12,5 +12,13 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson(deepSerialize = true)
 public class UserRole {
 
+    public UserRole() {
+
+    }
+
+    public UserRole(String name) {
+        this.name = name;
+    }
+
     private String name;
 }

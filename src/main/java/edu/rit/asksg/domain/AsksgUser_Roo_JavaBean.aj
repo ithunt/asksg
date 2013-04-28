@@ -8,10 +8,6 @@ import edu.rit.asksg.domain.UserRole;
 
 privileged aspect AsksgUser_Roo_JavaBean {
     
-    public void AsksgUser.setName(String name) {
-        this.name = name;
-    }
-    
     public String AsksgUser.getUserName() {
         return this.userName;
     }
@@ -30,14 +26,6 @@ privileged aspect AsksgUser_Roo_JavaBean {
     
     public void AsksgUser.setRole(UserRole role) {
         this.role = role;
-    }
-    
-    public void AsksgUser.setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-    
-    public void AsksgUser.setEmail(String email) {
-        this.email = email;
     }
     
 }

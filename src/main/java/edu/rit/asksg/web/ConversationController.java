@@ -115,24 +115,17 @@ public class ConversationController {
 		if (b != null)
 			read = Optional.of(Boolean.parseBoolean(b));
 
-		List<Long> excludes = new ArrayList<Long>();
-		String[] e = params.getParameterValues("excludeServices");    //services
-		if (e != null) {
-			for (String id : e) {
-				try {
-					excludes.add(Long.parseLong(id));
-				} catch (Exception ex) {
-					logger.error(ex.getLocalizedMessage(), ex);
-				}
-			}
+		String[] excludeServices = params.getParameterValues("excludeServices[]");
+		if (excludeServices == null) {
+			excludeServices = new String[0];
 		}
 
-		String[] includes = params.getParameterValues("includeTags");    //tags
+		String[] includes = params.getParameterValues("includeTags[]");
 		if (includes == null) includes = new String[0];
 
 
 		List<Conversation> conversations = conversationService.findAllConversations(
-				since, until, excludes.toArray(new Long[excludes.size()]), includes, read, count);
+				since, until, excludeServices, includes, read, count);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json; charset=utf-8");
@@ -180,15 +173,15 @@ public class ConversationController {
 
 			twitter.setConfig(twitterConfig);
 
-			SocialSubscription ritsg = new SocialSubscription();
-			ritsg.setHandle("RIT_SG");
-
-			SocialSubscription ritHash = new SocialSubscription();
-			ritHash.setHandle("#RIT");
-
 			Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
-			subscriptions.add(ritsg);
-			subscriptions.add(ritHash);
+			subscriptions.add(new SocialSubscription("SG", "RIT_SG"));
+			subscriptions.add(new SocialSubscription("rithash", "#RIT"));
+			subscriptions.add(new SocialSubscription("news hash", "#RITNews"));
+			subscriptions.add(new SocialSubscription("cab", "ritcab"));
+			subscriptions.add(new SocialSubscription("SpringFest Hash", "#RITSF"));
+			subscriptions.add(new SocialSubscription("Academic Affairs", "RIT_AcadAffairs"));
+			subscriptions.add(new SocialSubscription("Imagine RIT", "Imagine_RIT"));
+			subscriptions.add(new SocialSubscription("RIT Sports", "RITsports"));
 
 			twitterConfig.setSubscriptions(subscriptions);
 
@@ -233,7 +226,6 @@ public class ConversationController {
 			config.setIdentifier("rit");
 			reddit.setConfig(config);
 
-
 			SocialSubscription java = new SocialSubscription();
 			java.setHandle("java");
 			Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
@@ -276,5 +268,4 @@ public class ConversationController {
 
 		return new ResponseEntity<String>("Refresh Requested", headers, HttpStatus.OK);
 	}
-
 }

@@ -16,10 +16,6 @@ privileged aspect Tag_Roo_Json {
         return new JSONSerializer().exclude("*.class").serialize(this);
     }
     
-    public static Tag Tag.fromJsonToTag(String json) {
-        return new JSONDeserializer<Tag>().use(null, Tag.class).deserialize(json);
-    }
-    
     public static String Tag.toJsonArray(Collection<Tag> collection) {
         return new JSONSerializer().exclude("*.class").serialize(collection);
     }
