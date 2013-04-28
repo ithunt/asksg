@@ -10,6 +10,7 @@ import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
 import edu.rit.asksg.service.ConversationService;
+import edu.rit.asksg.service.IdentityService;
 import flexjson.JSON;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
@@ -33,6 +34,9 @@ public class Twilio extends Service implements ContentProvider {
 
     @Autowired
     private transient ConversationService conversationService;
+
+	@Autowired
+	private transient IdentityService identityService;
 
     private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
@@ -88,10 +92,16 @@ public class Twilio extends Service implements ContentProvider {
         LocalDateTime now = LocalDateTime.now();
         msg.setCreated(now);
         msg.setModified(now);
-        Person person = new Person();
-        person.setName(from);
-        person.setPhoneNumber(from);
-        msg.setIdentity(person);
+
+		Person person;
+		Optional<Identity> result = identityService.searchIdentity(from);
+		if (result.isPresent()) {
+			person = (Person)result.get();
+		} else {
+			person = new Person();
+			person.setPhoneNumber(from);
+		}
+		msg.setIdentity(person);
 
 		Conversation conv = conversationService.findConversationByRecipientSince(from, LocalDateTime.now().minusWeeks(1));
 
