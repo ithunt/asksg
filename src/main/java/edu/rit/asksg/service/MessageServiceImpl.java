@@ -44,10 +44,4 @@ public class MessageServiceImpl implements MessageService {
         final Service service = message.getConversation().getService();
         return service.postContent(message);
     }
-
-	public Message findMessageByAuthorSince(final String author, final LocalDateTime since) {
-		ModifiedSinceSpecification sinceSpec = new ModifiedSinceSpecification(since);
-		AuthorSpecification authorSpec = new AuthorSpecification(author);
-		return messageRepository.findOne(new AndSpecification(sinceSpec, authorSpec));
-	}
 }

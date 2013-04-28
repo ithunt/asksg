@@ -4,8 +4,10 @@ import edu.rit.asksg.common.Log;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Email;
+import edu.rit.asksg.domain.Identity;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.service.ConversationService;
+import edu.rit.asksg.service.IdentityService;
 import edu.rit.asksg.service.ProviderService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +41,9 @@ public class MessageController {
     @Autowired
     ConversationService conversationService;
 
+	@Autowired
+	IdentityService identityService;
+
     @Log
     Logger logger;
 
@@ -60,35 +65,15 @@ public class MessageController {
         Conversation conversation = conversationService.findConversation(conversationId);
         Message message = new Message();
         message.setContent(content);
-        message.setAuthor(principal.getName());
+
+		Identity identity = identityService.findOrCreate(principal.getName());
+        message.setIdentity(identity);
         message.setConversation(conversation);
 
         conversation.getMessages().add(message);
         messageService.saveMessage(message);
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
-
-    @RequestMapping(value = "/test")
-    public ResponseEntity<String> test() {
-
-        Conversation c = new Conversation();
-        c.setId(1L);
-        c.setService(providerService.findServiceByTypeAndIdentifierEquals(Email.class, "ritasksg@gmail.com"));
-
-        Message m = new Message();
-        m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
-        m.setAuthor("Mark Twain");
-        m.setConversation(c);
-
-        messageService.saveMessage(m);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("content_type", "text/plain");
-
-        return new ResponseEntity<String>("Did it work?", headers, HttpStatus.OK);
-
-    }
-
 
     @RequestMapping(value = "/seed")
     public ResponseEntity<String> seed() {
@@ -99,7 +84,8 @@ public class MessageController {
 
         Message m = new Message();
         m.setContent("Education is the path from cocky ignorance to miserable uncertainty");
-        m.setAuthor("Mark Twain");
+		Identity identity = identityService.findOrCreate("Mark Twain");
+        m.setIdentity(identity);
         m.setConversation(convo);
 
         messages.add(m);

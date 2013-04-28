@@ -35,9 +35,6 @@ public class Twilio extends Service implements ContentProvider {
     @Autowired
     private transient ConversationService conversationService;
 
-	@Autowired
-	private transient IdentityService identityService;
-
     private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
     @JSON(include = false)
@@ -67,7 +64,6 @@ public class Twilio extends Service implements ContentProvider {
             Sms sms = smsFactory.create(vars);
             //TODO: Twilio can use a callback to POST information to if sending fails
         } catch (TwilioRestException e) {
-            //logger.error("Failed to send outgoing message to " + message.getAuthor(), e);
             logger.error(e.getLocalizedMessage(), e);
             return false;
         }
@@ -86,40 +82,31 @@ public class Twilio extends Service implements ContentProvider {
 
     public void handleMessage(String smsSid, String accountSid, String from, String to, String body) {
 
-        Message msg = new Message();
-        msg.setContent(body);
-        msg.setAuthor(from);
+        Message message = new Message();
+        message.setContent(body);
+		Identity identity = getIdentityService().findOrCreate(from);
+		message.setIdentity(identity);
         LocalDateTime now = LocalDateTime.now();
-        msg.setCreated(now);
-        msg.setModified(now);
-
-		Person person;
-		Optional<Identity> result = identityService.searchIdentity(from);
-		if (result.isPresent()) {
-			person = (Person)result.get();
-		} else {
-			person = new Person();
-			person.setPhoneNumber(from);
-		}
-		msg.setIdentity(person);
+        message.setCreated(now);
+        message.setModified(now);
 
 		Conversation conv = conversationService.findConversationByRecipientSince(from, LocalDateTime.now().minusWeeks(1));
 
         if (conv == null) {
             logger.debug("Twilio: Creating new conversation for message received from " + from);
-            conv = new Conversation(msg);
+            conv = new Conversation(message);
             conv.setExternalId(smsSid);
             conv.setCreated(now);
             conv.setSubject(body);
         } else {
             logger.debug("Twilio: Adding received message from " + from + " to conversation with ID " + conv.getId());
-            conv.getMessages().add(msg);
+            conv.getMessages().add(message);
         }
 
         conv.setModified(now);
         conv.setService(this);
 
-        msg.setConversation(conv);
+        message.setConversation(conv);
 
         conversationService.saveConversation(conv);
     }

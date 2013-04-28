@@ -5,9 +5,12 @@ import edu.rit.asksg.common.Log;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
+import edu.rit.asksg.specification.AndSpecification;
+import edu.rit.asksg.specification.AuthorSpecification;
 import edu.rit.asksg.specification.EqualSpecification;
 import edu.rit.asksg.specification.IdSinceSpecification;
 import edu.rit.asksg.specification.IdUntilSpecification;
+import edu.rit.asksg.specification.ModifiedSinceSpecification;
 import edu.rit.asksg.specification.ServiceSpecification;
 import edu.rit.asksg.specification.CreatedSinceSpecification;
 import edu.rit.asksg.specification.CreatedUntilSpecification;
@@ -100,11 +103,8 @@ public class ConversationServiceImpl implements ConversationService {
 
 	@Override
 	public Conversation findConversationByRecipientSince(String recipient, LocalDateTime since) {
-		Message message = messageService.findMessageByAuthorSince(recipient, since);
-		if (message != null) {
-			return message.getConversation();
-		} else {
-			return null;
-		}
+		ModifiedSinceSpecification<Conversation> sinceSpec = new ModifiedSinceSpecification<Conversation>(since);
+		AuthorSpecification<Conversation> authorSpec = new AuthorSpecification<Conversation>(recipient);
+		return conversationRepository.findOne(sinceSpec.and(authorSpec));
 	}
 }

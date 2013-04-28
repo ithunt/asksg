@@ -8,5 +8,4 @@ import java.util.List;
 
 @RooService(domainTypes = { edu.rit.asksg.domain.Message.class })
 public interface MessageService {
-	public Message findMessageByAuthorSince(String author, LocalDateTime since);
 }
