@@ -93,7 +93,7 @@ public class Twilio extends Service implements ContentProvider {
         person.setPhoneNumber(from);
         msg.setIdentity(person);
 
-        Conversation conv = conversationService.findConversationByRecipient(from);
+		Conversation conv = conversationService.findConversationByRecipientSince(from, LocalDateTime.now().minusWeeks(1));
 
         if (conv == null) {
             logger.debug("Twilio: Creating new conversation for message received from " + from);

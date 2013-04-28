@@ -99,10 +99,10 @@ public class ConversationServiceImpl implements ConversationService {
 	}
 
 	@Override
-	public Conversation findConversationByRecipient(String recipient) {
-		List<Message> messages = messageService.findMessagesByAuthor(recipient);
-		if (!messages.isEmpty()) {
-			return messages.get(0).getConversation();
+	public Conversation findConversationByRecipientSince(String recipient, LocalDateTime since) {
+		Message message = messageService.findMessageByAuthorSince(recipient, since);
+		if (message != null) {
+			return message.getConversation();
 		} else {
 			return null;
 		}

@@ -2,6 +2,11 @@ package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Service;
+import edu.rit.asksg.specification.AndSpecification;
+import edu.rit.asksg.specification.AuthorSpecification;
+import edu.rit.asksg.specification.CreatedSinceSpecification;
+import edu.rit.asksg.specification.ModifiedSinceSpecification;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +45,9 @@ public class MessageServiceImpl implements MessageService {
         return service.postContent(message);
     }
 
-	public List<Message> findMessagesByAuthor(final String author) {
-		Specification<Message> specification = new Specification<Message>() {
-			@Override
-			public Predicate toPredicate(Root<Message> messageRoot, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				return criteriaBuilder.equal(messageRoot.get("author"), author);
-			}
-		};
-		return messageRepository.findAll(specification);
+	public Message findMessageByAuthorSince(final String author, final LocalDateTime since) {
+		ModifiedSinceSpecification sinceSpec = new ModifiedSinceSpecification(since);
+		AuthorSpecification authorSpec = new AuthorSpecification(author);
+		return messageRepository.findOne(new AndSpecification(sinceSpec, authorSpec));
 	}
 }
