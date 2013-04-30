@@ -5,7 +5,6 @@ package edu.rit.asksg.service;
 
 import edu.rit.asksg.repository.ServiceRepository;
 import edu.rit.asksg.service.ProviderServiceImpl;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,18 +24,6 @@ privileged aspect ProviderServiceImpl_Roo_Service {
     
     public void ProviderServiceImpl.deleteService(edu.rit.asksg.domain.Service service) {
         serviceRepository.delete(service);
-    }
-    
-    public edu.rit.asksg.domain.Service ProviderServiceImpl.findService(Long id) {
-        return serviceRepository.findOne(id);
-    }
-    
-    public List<edu.rit.asksg.domain.Service> ProviderServiceImpl.findAllServices() {
-        return serviceRepository.findAll();
-    }
-    
-    public List<edu.rit.asksg.domain.Service> ProviderServiceImpl.findServiceEntries(int firstResult, int maxResults) {
-        return serviceRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
     
     public void ProviderServiceImpl.saveService(edu.rit.asksg.domain.Service service) {

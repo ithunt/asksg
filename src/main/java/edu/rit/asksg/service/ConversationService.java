@@ -25,8 +25,6 @@ public interface ConversationService {
 
 	List<Conversation> findByService(Service service, LocalDateTime since, LocalDateTime until);
 
-	Conversation findConversationByRecipient(
-			String recipient
-	);
+	public Conversation findConversationByRecipientSince(String recipient, LocalDateTime since);
 
 }

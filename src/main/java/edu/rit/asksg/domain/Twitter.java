@@ -3,10 +3,12 @@ package edu.rit.asksg.domain;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.dataio.SubscriptionProvider;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
+import edu.rit.asksg.service.IdentityService;
 import flexjson.JSON;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
@@ -73,16 +75,17 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 
         final List<Conversation> conversations = new ArrayList<Conversation>();
         for (DirectMessage dm : messages) {
-            Message m = new Message();
-            m.setAuthor(dm.getSender().getName());
-            m.setCreated(new LocalDateTime(dm.getCreatedAt()));
-            m.setContent(dm.getText());
+            Message message = new Message();
+			Identity identity = getIdentityService().findOrCreate(dm.getSender().getName());
+			message.setIdentity(identity);
+            message.setCreated(new LocalDateTime(dm.getCreatedAt()));
+            message.setContent(dm.getText());
 
-            Conversation c = new Conversation(m);
+            Conversation c = new Conversation(message);
             c.setPrivateConversation(true);
             c.setService(this);
             c.setExternalId(String.valueOf(dm.getId()));
-            m.setConversation(c);
+            message.setConversation(c);
 
             if (c.getMessages() != null && !c.getMessages().isEmpty())
                 c.setCreated(c.getMessages().get(0).getCreated());
@@ -97,23 +100,24 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
         final List<Conversation> convos = new ArrayList<Conversation>();
 
         for (Tweet tweet : tweets) {
-            Message m = new Message();
-            m.setAuthor(tweet.getFromUser());
-            m.setPosted(true);
-            m.setContent(tweet.getText());
-            m.setUrl(tweet.getSource());
-            m.setCreated(new LocalDateTime(tweet.getCreatedAt()));
+            Message message = new Message();
+			Identity identity = getIdentityService().findOrCreate(tweet.getFromUser());
+			message.setIdentity(identity);
+            message.setPosted(true);
+            message.setContent(tweet.getText());
+            message.setUrl(tweet.getSource());
+            message.setCreated(new LocalDateTime(tweet.getCreatedAt()));
 
-            Conversation c = new Conversation(m);
-            m.setConversation(c);
+            Conversation c = new Conversation(message);
+            message.setConversation(c);
             c.setService(this);
             if (c.getMessages() != null && !c.getMessages().isEmpty())
                 c.setCreated(c.getMessages().get(0).getCreated());
 
-            c.setSubject(m.getSnippet());
+            c.setSubject(tweet.getText());
             convos.add(c);
 
-            logger.debug("New Tweet:" + m.toString());
+            logger.debug("New Tweet:" + message.toString());
 
         }
         return convos;

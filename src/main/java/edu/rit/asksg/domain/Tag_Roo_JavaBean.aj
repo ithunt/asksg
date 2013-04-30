@@ -13,10 +13,6 @@ privileged aspect Tag_Roo_JavaBean {
         return this.name;
     }
     
-    public void Tag.setName(String name) {
-        this.name = name;
-    }
-    
     public void Tag.setCreatedBy(Set<AsksgUser> createdBy) {
         this.createdBy = createdBy;
     }

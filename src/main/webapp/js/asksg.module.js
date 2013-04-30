@@ -64,7 +64,7 @@ function MessageResp(content, conversation) {
 /**
  * Conversation object constructor.
  */
-function Conversation(id, author, subject, snippet, messages, created, modified, service, read, hidden, privateConversation) {
+function Conversation(id, author, subject, messages, created, modified, service, read, hidden, privateConversation) {
 	this.id = id;
 	this.author = author;
 	this.subject = subject;
@@ -81,9 +81,6 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
 	for (var i = messages.length - 1; i >= 0; i--) {
 		this.messages[i] = new Message(messages[i].id, messages[i].author, messages[i].content, id, messages[i].privateMessage, messages[i].tags);
 	}
-
-	// The message snippet
-	this.snippet = snippet;
 
 	// Function to set this conversation as "active" in the UI
 	this.setActive = function (flag) {
@@ -409,8 +406,7 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 
 						// Create the object and store it
 						$scope.convos[i] = new Conversation(conversation.id,
-							conversation.author, conversation.subject,
-							conversation.snippet, conversation.messages,
+							conversation.author, conversation.subject, conversation.messages,
 							createdDate, modifiedDate,
 							conversation.service, conversation.read, conversation.hidden,
 							conversation.privateConversation);
@@ -811,7 +807,10 @@ app.directive('myDatepicker',function ($parse) {
 			link: function (scope, element, attributes) {
 				$(function () {
 					whenAddingTag = function (tag) {
-						$asksg.addTag(tag, scope.message.id);
+						$asksg.addTag(tag, scope.message.id).
+							success(function (data, status, headers, config) {
+								scope.message.tags.push(new Tag(data[0].id, data[0].name));
+							});
 					};
 					tagRemoved = function (tag) {
 						tagid = _.findWhere(scope.message.tags, {name: tag}).id;

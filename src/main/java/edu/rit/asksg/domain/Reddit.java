@@ -3,6 +3,7 @@ package edu.rit.asksg.domain;
 import com.google.common.collect.Iterables;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.dataio.SubscriptionProvider;
+import edu.rit.asksg.service.IdentityService;
 import flexjson.JSON;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
@@ -12,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
@@ -102,36 +104,36 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
         return c;
     }
 
-    protected static Message parsePost(JSONObject post) {
-        Message m = new Message();
+    protected Message parsePost(JSONObject post) {
+        Message message = new Message();
 
         if (post.containsKey("selftext")) {
-            m.setContent((String) post.get("selftext"));
+            message.setContent((String) post.get("selftext"));
         } else {
-            m.setContent((String) post.get("url"));
+            message.setContent((String) post.get("url"));
         }
 
-        m.setUrl("http://reddit.com" + post.get("permalink"));
-        m.setAuthor((String) post.get("author"));
+        message.setUrl("http://reddit.com" + post.get("permalink"));
+		Identity identity = getIdentityService().findOrCreate((String)post.get("author"));
+        message.setIdentity(identity);
 
+        message.setCreated(new LocalDateTime(((Double) post.get("created_utc")).longValue() * 1000L, DateTimeZone.UTC));
 
-        m.setCreated(new LocalDateTime(((Double) post.get("created_utc")).longValue() * 1000L, DateTimeZone.UTC));
-
-        return m;
+        return message;
     }
 
-    protected static Message parseComment(JSONObject comment) {
-        Message m = new Message();
+    protected Message parseComment(JSONObject comment) {
+        Message message = new Message();
+		Identity identity = getIdentityService().findOrCreate((String)comment.get("author"));
+		message.setIdentity(identity);
+        message.setContent((String) comment.get("body"));
+        message.setCreated(new LocalDateTime(((Double) comment.get("created_utc")).longValue() * 1000L, DateTimeZone.UTC));
 
-        m.setAuthor((String) comment.get("author"));
-        m.setContent((String) comment.get("body"));
-        m.setCreated(new LocalDateTime(((Double) comment.get("created_utc")).longValue() * 1000L, DateTimeZone.UTC));
-
-        return m;
+        return message;
     }
 
     @JSON(include = false)
-    protected static JSONArray getTopLevelComments(String permalink) throws IOException, ParseException {
+    protected JSONArray getTopLevelComments(String permalink) throws IOException, ParseException {
         JSONArray arr = (JSONArray) getJSONResponse(new URL(permalink + "/.json"));
         JSONArray retVal = new JSONArray();
 
@@ -147,13 +149,13 @@ public class Reddit extends Service implements ContentProvider, SubscriptionProv
     }
 
     @JSON(include = false)
-    protected static JSONArray getPostsFromSubreddit(String subreddit) throws IOException, ParseException {
+    protected JSONArray getPostsFromSubreddit(String subreddit) throws IOException, ParseException {
         JSONObject object = (JSONObject) getJSONResponse(new URL(subreddit + "/.json"));
         return (JSONArray) ((JSONObject) object.get("data")).get("children");
     }
 
     @JSON(include = false)
-    protected static Object getJSONResponse(URL url) throws IOException, ParseException {
+    protected Object getJSONResponse(URL url) throws IOException, ParseException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
 

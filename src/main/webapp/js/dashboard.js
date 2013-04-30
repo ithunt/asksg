@@ -94,22 +94,6 @@ $(document).ready(function () {
 
 });
 
-function showResponseForm(id) {
-	if ($responseForms.indexOf('#response-form-' + id) != -1) {
-		$responseForms.push('#response-form-' + id);
-		$responseForms['#response-form-' + id] = true;
-		$('#response-form-' + id).show();
-	} else {
-		if ($responseForms['#response-form-' + id] == true) {
-			$responseForms['#response-form-' + id] = false;
-			$('#response-form-' + id).hide();
-		} else {
-			$responseForms['#response-form-' + id] = true;
-			$('#response-form-' + id).show();
-		}
-	}
-}
-
 function renderTree(obj, id) {
 	if (obj != null) {
 		console.log("Trying to render the reply tree");

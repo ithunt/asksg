@@ -2,6 +2,7 @@ package edu.rit.asksg.service;
 
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Message;
+import edu.rit.asksg.domain.Person;
 import edu.rit.asksg.domain.Twilio;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
@@ -37,7 +38,9 @@ public class TwilioIntegrationTest {
         Conversation c = new Conversation(message);
         message.setConversation(c);
         message.setContent("Test message to Twilio...");
-        message.setAuthor("6109990037");
+		Person identity = new Person();
+		identity.setPhoneNumber("6109990037");
+        message.setIdentity(identity);
         assertTrue(twilio.postContent(message));
     }
 

@@ -3,10 +3,12 @@ package edu.rit.asksg.domain;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.dataio.SubscriptionProvider;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
+import edu.rit.asksg.service.IdentityService;
 import flexjson.JSON;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
@@ -96,14 +98,16 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
             message.setContent(postMessage);
             // Subject snippet will be the first 40 characters plus a "...", unless it's shorter than that
             conversation.setSubject(postMessage.length() > 40 ? postMessage.substring(0, 40) + "..." : postMessage);
-            message.setAuthor(facebookApi.userOperations().getUserProfile(post.getFrom().getId()).getName());
+			Identity identity = getIdentityService().findOrCreate(facebookApi.userOperations().getUserProfile(post.getFrom().getId()).getName());
+            message.setIdentity(identity);
             message.setCreated(new LocalDateTime(post.getCreatedTime()));
             if (post.getComments() != null) {
                 for (Comment comment : post.getComments()) {
                     Message commentMsg = new Message();
                     commentMsg.setConversation(conversation);
                     commentMsg.setContent(comment.getMessage());
-                    commentMsg.setAuthor(facebookApi.userOperations().getUserProfile(comment.getFrom().getId()).getName());
+					Identity commentIdentity = getIdentityService().findOrCreate(facebookApi.userOperations().getUserProfile(comment.getFrom().getId()).getName());
+                    commentMsg.setIdentity(commentIdentity);
                     commentMsg.setCreated(new LocalDateTime(comment.getCreatedTime()));
                     conversation.getMessages().add(commentMsg);
                 }

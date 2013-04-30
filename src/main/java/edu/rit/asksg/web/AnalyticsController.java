@@ -13,6 +13,7 @@ import edu.rit.asksg.service.AnalyticsServiceImpl;
 import edu.rit.asksg.service.ProviderService;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -50,13 +51,24 @@ public class AnalyticsController {
 
 
     @RequestMapping(value = "/csv")
-    public ResponseEntity<String> buildCsv() {
+    public ResponseEntity<String> buildCsv(WebRequest params) {
+        String s = params.getParameter("since");
+        String u = params.getParameter("until");
+        LocalDateTime since = null;
+        LocalDateTime until = null;
+
+        //todo: is failed parse just null?
+        if (s != null) since = LocalDateTime.parse(s);
+        if (s != null) until = LocalDateTime.parse(u);
+
+        if (since == null) since = LocalDateTime.now().minusWeeks(1);
+        if (until == null) until = LocalDateTime.now();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "text/plain; charset=utf-8");
+        headers.add("Content-Type", "text/csv; charset=utf-8");
+		headers.add("Content-Disposition", "attachment;filename=ASKSGDataExport-" + until.toString() + ".csv");
 
-        return new ResponseEntity<String>(analyticsService.buildCSV(LocalDateTime.now().minusWeeks(1),
-                LocalDateTime.now()), headers, HttpStatus.OK);
+        return new ResponseEntity<String>(analyticsService.buildCSV(since, until), headers, HttpStatus.OK);
 
     }
 

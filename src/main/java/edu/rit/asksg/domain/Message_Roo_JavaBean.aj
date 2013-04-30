@@ -13,14 +13,6 @@ import org.joda.time.LocalDateTime;
 
 privileged aspect Message_Roo_JavaBean {
     
-    public String Message.getAuthor() {
-        return this.author;
-    }
-    
-    public void Message.setAuthor(String author) {
-        this.author = author;
-    }
-    
     public String Message.getContent() {
         return this.content;
     }
@@ -75,14 +67,6 @@ privileged aspect Message_Roo_JavaBean {
     
     public void Message.setPosted(Boolean posted) {
         this.posted = posted;
-    }
-    
-    public String Message.getSnippet() {
-        return this.snippet;
-    }
-    
-    public void Message.setSnippet(String snippet) {
-        this.snippet = snippet;
     }
     
     public Set<Tag> Message.getTags() {
