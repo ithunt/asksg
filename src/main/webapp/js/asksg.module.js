@@ -807,7 +807,10 @@ app.directive('myDatepicker',function ($parse) {
 			link: function (scope, element, attributes) {
 				$(function () {
 					whenAddingTag = function (tag) {
-						$asksg.addTag(tag, scope.message.id);
+						$asksg.addTag(tag, scope.message.id).
+							success(function (data, status, headers, config) {
+								scope.message.tags.push(new Tag(data[0].id, data[0].name));
+							});
 					};
 					tagRemoved = function (tag) {
 						tagid = _.findWhere(scope.message.tags, {name: tag}).id;
