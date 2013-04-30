@@ -13,6 +13,7 @@ import edu.rit.asksg.service.AnalyticsServiceImpl;
 import edu.rit.asksg.service.ProviderService;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -52,11 +53,13 @@ public class AnalyticsController {
     @RequestMapping(value = "/csv")
     public ResponseEntity<String> buildCsv() {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "text/plain; charset=utf-8");
+		LocalDateTime now = LocalDateTime.now();
 
-        return new ResponseEntity<String>(analyticsService.buildCSV(LocalDateTime.now().minusWeeks(1),
-                LocalDateTime.now()), headers, HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "text/csv; charset=utf-8");
+		headers.add("Content-Disposition", "attachment;filename=ASKSGDataExport-" + now.toString() + ".csv");
+
+        return new ResponseEntity<String>(analyticsService.buildCSV(now.minusWeeks(1), now), headers, HttpStatus.OK);
 
     }
 
