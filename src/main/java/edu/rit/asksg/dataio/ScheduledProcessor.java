@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Component
-public class ScheduledPocessor {
+public class ScheduledProcessor {
 
     @Log
     Logger log;
@@ -68,7 +68,7 @@ public class ScheduledPocessor {
     }
 
     //Runs everyday, starts 5mins after startup
-    @Scheduled(fixedDelay = 86400, initialDelay = 300)
+//    @Scheduled(fixedDelay = 86400, initialDelay = 300)
     public void executeWordCount() {
         log.debug("Start execution of word counting");
 
@@ -80,18 +80,12 @@ public class ScheduledPocessor {
             start = last.getCreated();
         }
 
-        List<Service> services = providerService.findAllServices();
         List<DateTime> days = AnalyticsServiceImpl.getDaySpan(start, LocalDateTime.now());
-        for (edu.rit.asksg.domain.Service service : services) {
-            if (service.isEnabled()) {
-                for (DateTime d : days) {
-                    wordCounter.work(service, new LocalDateTime(d), new LocalDateTime(d.plusDays(1)));
-                }
-            }
+        for (DateTime d : days) {
+            wordCounter.work(new LocalDateTime(d));
         }
-
-
     }
+
 
 
 }
