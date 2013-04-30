@@ -63,17 +63,15 @@ function Conversation(id, author, subject, snippet, messages, created, modified,
  * Provider config provider object constructor.
  */
     //TODO: RENAME FUCKER
-function ProviderConfig(id, authenticated, enabled, config, name, version, maxcalls, updatefreq, lastupdate, currentcalls) {
+function ProviderConfig(id, authenticated, enabled, config, name) {
     this.id = id;
     this.authenticated = authenticated;
     this.name = name;
     this.enabled = enabled;
     this.config = config;
-    this.version = version;
-    this.maxcalls = maxcalls;
-    this.updatefreq = updatefreq;
-    this.lastupdate = lastupdate;
-    this.currentcalls = currentcalls;
+    this.config.counterRefresh = new Date(config.counterRefresh.localMillis);
+    this.config.lastUpdate = new Date(config.lastUpdate.localMillis);
+    this.config.updateFrequency = config.updateFrequency.minutes;
 }
 
 function Twilio(providerConfig, authenticated) {
@@ -177,7 +175,7 @@ function ConversationController($scope, $asksg, $log) {
                 for (var i = 0; i < data.length; i++) {
                     var conversation = angular.fromJson(data[i]);
 
-                    var createdDate = new Date(conversation.created.localMillis)
+                    var createdDate = new Date(conversation.created.localMillis);
                     var modifiedDate = new Date(conversation.modified.localMillis);
                     console.log(createdDate);
 
@@ -219,8 +217,7 @@ function ConversationController($scope, $asksg, $log) {
                     console.log($scope.subscriptions[subData.name]);
                     $scope.subscriptions[subData.name].push(
                         new ProviderConfig(subData.id, subData.authenticated, subData.enabled, subData.config,
-                            subData.name, subData.version, subData.maxCalls, subData.updateFrequency,
-                            subData.lastUpdate, subData.currentCalls));
+                            subData.name));
                 }
 
                 // debug
@@ -420,9 +417,9 @@ function ConversationController($scope, $asksg, $log) {
      * Update the update limits of the config
      */
     $scope.updateApiLimits = function (config, maxcalls, updateFreq) {
-        config.maxcalls = maxcalls;
-        config.updatefreq = updateFreq;
-        $asksg.updateConfig(config)
+        config.maxCalls = maxcalls;
+        config.updateFrequency = updateFreq;
+        $asksg.updateConfig(config);
     }
 
     /*
@@ -589,7 +586,6 @@ AsksgService = function () {
             var convoUrl = '/asksg/conversations';
             var convoSeedUrl = '/asksg/conversations/seed';
             var messageUrl = '/asksg/messages';
-            var messageSeedUrl = '/asksg/messages/seed';
             var servicesUrl = '/asksg/services';
             var usersUrl = '/asksg/users';
             var rolesUrl = '/asksg/roles';

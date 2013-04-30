@@ -36,15 +36,15 @@ public class ProviderConfig {
 
 	private int port;
 
-	private LocalDateTime lastUpdate;
+	private LocalDateTime lastUpdate = LocalDateTime.now();
 
-	private int maxCalls;
+	private int maxCalls = 0;
 
-	private int currentCalls;
+	private int currentCalls = 0;
 
-	private Minutes updateFrequency;
+	private Minutes updateFrequency = Minutes.minutes(30);
 
-	private LocalDateTime counterRefresh;
+	private LocalDateTime counterRefresh = LocalDateTime.now();
 
 	@ManyToOne
 	private AsksgUser createdBy;

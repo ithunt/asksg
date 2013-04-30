@@ -155,9 +155,6 @@ public class ConversationController {
             twilioconfig.setPhoneNumber("15852865275");
             twilioconfig.setUsername("AC932da9adfecf700aba37dba458fc9621");
             twilioconfig.setAuthenticationToken("9cda6e23aa46651c9759492b625e3f35");
-			twilioconfig.setCounterRefresh(now);
-			twilioconfig.setLastUpdate(now);
-			twilioconfig.setUpdateFrequency(Minutes.ZERO);
 			twilio.setConfig(twilioconfig);
             providerService.saveService(twilio);
         }
@@ -170,9 +167,6 @@ public class ConversationController {
             emailConfig.setUsername("ritasksg@gmail.com");
             emailConfig.setPassword("allHailSpring");
             emailConfig.setHost("gmail.com");
-			emailConfig.setCounterRefresh(now);
-			emailConfig.setLastUpdate(now);
-			emailConfig.setUpdateFrequency(Minutes.ZERO);
             email.setConfig(emailConfig);
             providerService.saveService(email);
         }
@@ -187,9 +181,6 @@ public class ConversationController {
             twitterConfig.setConsumerSecret("rMxrTP9nqPzwU6UHIQufKR23be4w4NHIqY7VbwfzU");
             twitterConfig.setAccessToken("15724679-FUz0huThLIpEzm66QySG7exllaV1CWV9VqXxXeTOw");
             twitterConfig.setAccessTokenSecret("rFTEFz8tNX71V2nCo6pDtF38LhDEfO2f692xxzQxaA");
-			twitterConfig.setCounterRefresh(now);
-			twitterConfig.setLastUpdate(now);
-			twitterConfig.setUpdateFrequency(Minutes.ZERO);
 
             twitter.setConfig(twitterConfig);
 
@@ -212,9 +203,6 @@ public class ConversationController {
             Service facebook = new Facebook();
             SpringSocialConfig fbConfig = new SpringSocialConfig();
             fbConfig.setIdentifier("asksgfbapp");
-			fbConfig.setCounterRefresh(now);
-			fbConfig.setLastUpdate(now);
-			fbConfig.setUpdateFrequency(Minutes.ZERO);
 
             facebook.setConfig(fbConfig);
 
@@ -246,9 +234,6 @@ public class ConversationController {
             Service reddit = new Reddit();
             ProviderConfig redditconfig = new ProviderConfig();
             redditconfig.setIdentifier("rit");
-			redditconfig.setCounterRefresh(now);
-			redditconfig.setLastUpdate(now);
-			redditconfig.setUpdateFrequency(Minutes.ZERO);
             reddit.setConfig(redditconfig);
 
 

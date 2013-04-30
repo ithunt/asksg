@@ -246,17 +246,17 @@
                 Authentication Token: {{service.config.authenticationToken}} <br/>
                 Phone Number: {{service.config.phoneNumber}} <br/>
                 Enabled: {{service.enabled}} <br/>
-                API limit last update: {{service.config.lastupdate}} <br/>
-                Calls made so far: {{service.config.currentcalls}}
+                API limit last update: {{service.config.lastUpdate.toLocaleString();}} <br/>
+                Calls made so far: {{service.config.currentCalls}}
             </p>
         </div>
     </div>
 
     <a data-toggle="modal" href="#twilioModal" class="btn">Add Service</a>
     <div>
-        <form ng-submit="updateApiLimits(service.config, maxcalls, updateFreq)">
-            <label for="updateFreq">Length of API limit count period:</label> <input class="input-xlarge focused"
-                                                                                     ng-model="updatefreq"/>
+        <form ng-submit="updateApiLimits(service.config, maxcalls, updateFrequency)">
+            <label for="updateFreq">Update frequency (minutes):</label> <input class="input-xlarge focused"
+                                                                                     ng-model="updateFrequency"/>
             <label for="maxcalls">Maximum calls per period:</label> <input class="input-xlarge"
                                                                            ng-model="maxcalls" /><br />
             <input class="btn-primary" type="submit" value="Change API Limits"/>
@@ -374,14 +374,14 @@
                 Access Token: {{service.config.accesstoken}} <br/>
                 Access Token Secret: {{service.config.accesstokensecret}} <br/>
                 Enabled: {{service.enabled}} <br/>
-                API limit last update: {{service.config.lastupdate}} <br/>
-                Calls made so far: {{service.config.currentcalls}}
+                API limit last update: {{service.config.lastUpdate.toLocaleString();}} <br/>
+                Calls made so far: {{service.config.currentCalls}}
             </p>
         </div>
         <div>
-            <form ng-submit="updateApiLimits(service.config, maxcalls, updateFreq)">
+            <form ng-submit="updateApiLimits(service.config, maxcalls, updateFrequency)">
                 <label for="updateFreq">Length of API limit count period:</label> <input class="input-xlarge focused"
-                                                                                         ng-model="updateFreq"/>
+                                                                                         ng-model="updateFrequency"/>
                 <label for="maxcalls">Maximum calls per period:</label> <input class="input-xlarge"
                                                                                ng-model="maxcalls" /><br />
                 <input class="btn-primary" type="submit" value="Change API Limits"/>
@@ -461,8 +461,8 @@
                 Access Token: {{service.config.accessToken}} <br/>
                 Access Token Secret: {{service.config.accessTokenSecret}} <br/>
                 Enabled: {{service.enabled}} <br/>
-                API limit last update: {{service.config.lastupdate}} <br/>
-                Calls made so far: {{service.config.currentcalls}}
+                API limit last update: {{service.config.lastUpdate.toLocaleString();}} <br/>
+                Calls made so far: {{service.config.currentCalls}}
             </p>
             <p>
                 <a ng-show="service.config.facebookAccessToken == null" data-toggle="modal"
@@ -471,9 +471,9 @@
             </p>
         </div>
         <div>
-            <form ng-submit="updateApiLimits(service.config, maxcalls, updateFreq)">
+            <form ng-submit="updateApiLimits(service.config, maxcalls, updateFrequency)">
                 <label for="updateFreq">Length of API limit count period:</label> <input class="input-xlarge focused"
-                                                                                         ng-model="updateFreq"/>
+                                                                                         ng-model="updateFrequency"/>
                 <label for="maxcalls">Maximum calls per period:</label> <input class="input-xlarge"
                                                                                ng-model="maxcalls" /><br />
                 <input class="btn-primary" type="submit" value="Change API Limits"/>
