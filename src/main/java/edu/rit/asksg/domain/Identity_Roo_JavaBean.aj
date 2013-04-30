@@ -27,16 +27,8 @@ privileged aspect Identity_Roo_JavaBean {
         return this.email;
     }
     
-    public void Identity.setEmail(String email) {
-        this.email = email;
-    }
-    
     public String Identity.getPhoneNumber() {
         return this.phoneNumber;
-    }
-    
-    public void Identity.setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
     
 }

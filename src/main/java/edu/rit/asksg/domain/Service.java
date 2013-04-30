@@ -6,6 +6,7 @@ import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.RedditConfig;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
+import edu.rit.asksg.service.IdentityService;
 import flexjson.JSON;
 import flexjson.JSONDeserializer;
 import org.joda.time.LocalDateTime;
@@ -33,6 +34,8 @@ public class Service implements ContentProvider {
 	private ProviderConfig config;
 
 	private boolean enabled = true;
+
+	private transient IdentityService identityService;
 
 	public String getName() {
 		return this.getClass().getSimpleName();
@@ -76,5 +79,15 @@ public class Service implements ContentProvider {
 			s = new JSONDeserializer<Service>().use(null, Service.class).deserialize(json);
 		}
 		return s;
+	}
+
+	// Provided to exclude identity service from serialization
+	@JSON(include = false)
+	public IdentityService getIdentityService() {
+		return identityService;
+	}
+
+	public void setIdentityService(IdentityService identityService) {
+		this.identityService = identityService;
 	}
 }

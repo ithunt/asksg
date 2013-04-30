@@ -54,26 +54,6 @@ public class UserController {
 		return new ResponseEntity<String>(user.toJson(), headers, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/seed")
-	public ResponseEntity<String> seed() {
-
-		roleService.saveUserRole(new UserRole("Admin"));
-
-
-		AsksgUser ian = new AsksgUser();
-		ian.setName("ian");
-		ian.setUserName("ian");
-		ian.setPassword("ian");
-		ian.setRole(roleService.findUserRole("Admin"));
-		userService.saveAsksgUser(ian);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("content_type", "text/plain");
-
-		return new ResponseEntity<String>("Created user ian", headers, HttpStatus.OK);
-
-	}
-
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> createFromJson(@RequestBody String json) {
 		AsksgUser asksgUser = AsksgUser.fromJsonToAsksgUser(json);

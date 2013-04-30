@@ -297,20 +297,6 @@
 				Enabled: {{service.enabled}}
 			</p>
 		</div>
-		<div>
-			<ul ng-repeat="sub in service.config.subscriptions">
-				<li>
-					<div>{{sub.handle}}</div>
-					<div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
-				</li>
-			</ul>
-			<form ng-submit="addSocialSubscription(service.id, socialSubHandle, socialSubName)">
-				<label for="handle">Handle:</label> <input class="input-xlarge focused"
-				                                           ng-model="socialSubHandle"/><br/>
-				<label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
-				<input class="btn-primary" type="submit" value="Add">
-			</form>
-		</div>
 	</div>
 
 	<a data-toggle="modal" href="#emailModal" class="btn">Add Service</a>

@@ -6,6 +6,7 @@ import edu.rit.asksg.dataio.ScheduledPocessor;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Email;
 import edu.rit.asksg.domain.Facebook;
+import edu.rit.asksg.domain.Identity;
 import edu.rit.asksg.domain.Message;
 import edu.rit.asksg.domain.Reddit;
 import edu.rit.asksg.domain.Service;
@@ -16,6 +17,7 @@ import edu.rit.asksg.domain.config.EmailConfig;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
+import edu.rit.asksg.service.IdentityService;
 import edu.rit.asksg.service.ProviderService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,9 @@ public class ConversationController {
 	ProviderService providerService;
 
 	@Autowired
+	IdentityService identityService;
+
+	@Autowired
 	ScheduledPocessor scheduledPocessor;
 
 	@RequestMapping(value = "seed")
@@ -58,11 +63,13 @@ public class ConversationController {
 
 		Conversation c = new Conversation();
 		Message m1 = new Message();
-		m1.setAuthor("Socrates");
+		Identity identity1 = identityService.findOrCreate("Socrates");
+		m1.setIdentity(identity1);
 		m1.setContent("For the unexamined life is not worth living");
 		m1.setConversation(c);
 		Message m2 = new Message();
-		m2.setAuthor("Tyrion Lannister");
+		Identity identity2 = identityService.findOrCreate("Tyrion Lannister");
+		m2.setIdentity(identity2);
 		m2.setContent("Sorcery is the sauce fools spoon over failure to hide the flavor of the their own incompetence");
 		m2.setConversation(c);
 		List<Message> messages = new ArrayList<Message>();
@@ -130,6 +137,11 @@ public class ConversationController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json; charset=utf-8");
 
+		try {
+			Conversation.toJsonArray(conversations);
+		} catch (Exception e) {
+			logger.error("Conversation failed to serialize!", e);
+		}
 
 		return new ResponseEntity<String>(Conversation.toJsonArray(conversations), headers, HttpStatus.OK);
 	}

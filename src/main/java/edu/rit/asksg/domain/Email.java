@@ -3,6 +3,7 @@ package edu.rit.asksg.domain;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.service.ConversationService;
+import edu.rit.asksg.service.IdentityService;
 import flexjson.JSON;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
@@ -102,14 +103,17 @@ public class Email extends Service implements ContentProvider {
     }
 
 
-    public static Conversation makeConversation(javax.mail.Message mimeMessage) {
-        Message m = new Message();
+    public Conversation makeConversation(javax.mail.Message mimeMessage) {
+        Message message = new Message();
 
         try {
             final String sender = mimeMessage.getFrom()[0].toString();
 
             //Look for email address. Sender can be of format: Jon Doe <jd@gmail.com>
-            m.setAuthor((sender.contains("<") ? sender.substring(sender.indexOf('<') + 1, sender.indexOf('>')) : sender));
+
+            Identity identity = getIdentityService().findOrCreate(
+					(sender.contains("<") ? sender.substring(sender.indexOf('<') + 1, sender.indexOf('>')) : sender));
+			message.setIdentity(identity);
 
             if (mimeMessage.getContent() instanceof MimeMultipart) {
                 MimeMultipart body = (MimeMultipart) mimeMessage.getContent();
@@ -117,23 +121,23 @@ public class Email extends Service implements ContentProvider {
                 for (int i = 0; i < body.getCount(); i++) {
                     BodyPart part = body.getBodyPart(i);
                     if (part.isMimeType("text/plain")) {
-                        m.setContent(mimeMessage.getSubject() + " - " + part.getContent());
+                        message.setContent(mimeMessage.getSubject() + " - " + part.getContent());
                         break;
                     }
                 }
             }
 
-            m.setCreated(new LocalDateTime(mimeMessage.getReceivedDate()));
+            message.setCreated(new LocalDateTime(mimeMessage.getReceivedDate()));
 
-            logger.debug("MimeMessage from:" + m.getAuthor() + " - " + m.getContent());
+            logger.debug("MimeMessage from:" + message.getIdentity().getName() + " - " + message.getContent());
         } catch (MessagingException e) {
             logger.error(e.getLocalizedMessage());
         } catch (IOException e) {
             logger.error(e.getLocalizedMessage());
         }
 
-        Conversation c = new Conversation(m);
-        m.setConversation(c);
+        Conversation c = new Conversation(message);
+        message.setConversation(c);
         if (c.getMessages() != null && !c.getMessages().isEmpty())
             c.setCreated(c.getMessages().get(0).getCreated());
 

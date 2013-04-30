@@ -61,7 +61,7 @@ public class Conversation {
 
     public String getRecipient() {
         if (!messages.isEmpty()) {
-            return messages.get(0).getAuthor();
+            return messages.get(0).getIdentity().getName();
         }
         throw new IllegalStateException("Conversation object was not constructed properly, there must be at least one message");
     }

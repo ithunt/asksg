@@ -7,6 +7,7 @@ import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.RedditConfig;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class RedditIntegrationTest {
 
 
     @Test
+	@Ignore
     public void testRedditDateParse() {
        List<Conversation> convos = reddit.getNewContent();
 

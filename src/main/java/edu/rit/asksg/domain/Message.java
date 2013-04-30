@@ -29,9 +29,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class Message {
 
 	@NotNull
-	private String author;
-
-	@NotNull
 	@Column(length = 2000)
 	@Size(max = 2000)
 	private String content;
@@ -57,11 +54,13 @@ public class Message {
 	@NotNull
 	private Boolean posted = Boolean.FALSE;
 
-	private String snippet;
-
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Tag> tags = new HashSet<Tag>();
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
 	private Identity identity;
+
+	public String getAuthor() {
+		return identity.getName();
+	}
 }
