@@ -17,6 +17,8 @@ import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
 import edu.rit.asksg.service.ProviderService;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -143,6 +145,8 @@ public class ConversationController {
 
     private void bootstrapProviders() {
 
+		LocalDateTime now = LocalDateTime.now();
+
         final Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, "15852865275");
         if (twiloprovider == null) {
             Service twilio = new Twilio();
@@ -151,7 +155,10 @@ public class ConversationController {
             twilioconfig.setPhoneNumber("15852865275");
             twilioconfig.setUsername("AC932da9adfecf700aba37dba458fc9621");
             twilioconfig.setAuthenticationToken("9cda6e23aa46651c9759492b625e3f35");
-            twilio.setConfig(twilioconfig);
+			twilioconfig.setCounterRefresh(now);
+			twilioconfig.setLastUpdate(now);
+			twilioconfig.setUpdateFrequency(Minutes.ZERO);
+			twilio.setConfig(twilioconfig);
             providerService.saveService(twilio);
         }
 
@@ -163,6 +170,9 @@ public class ConversationController {
             emailConfig.setUsername("ritasksg@gmail.com");
             emailConfig.setPassword("allHailSpring");
             emailConfig.setHost("gmail.com");
+			emailConfig.setCounterRefresh(now);
+			emailConfig.setLastUpdate(now);
+			emailConfig.setUpdateFrequency(Minutes.ZERO);
             email.setConfig(emailConfig);
             providerService.saveService(email);
         }
@@ -177,6 +187,9 @@ public class ConversationController {
             twitterConfig.setConsumerSecret("rMxrTP9nqPzwU6UHIQufKR23be4w4NHIqY7VbwfzU");
             twitterConfig.setAccessToken("15724679-FUz0huThLIpEzm66QySG7exllaV1CWV9VqXxXeTOw");
             twitterConfig.setAccessTokenSecret("rFTEFz8tNX71V2nCo6pDtF38LhDEfO2f692xxzQxaA");
+			twitterConfig.setCounterRefresh(now);
+			twitterConfig.setLastUpdate(now);
+			twitterConfig.setUpdateFrequency(Minutes.ZERO);
 
             twitter.setConfig(twitterConfig);
 
@@ -185,7 +198,6 @@ public class ConversationController {
             subscriptions.add(new SocialSubscription("rithash", "#RIT"));
             subscriptions.add(new SocialSubscription("news hash", "#RITNews"));
             subscriptions.add(new SocialSubscription("cab", "ritcab"));
-            subscriptions.add(new SocialSubscription("SpringFest Hash", "#RITSF"));
             subscriptions.add(new SocialSubscription("Academic Affairs", "RIT_AcadAffairs"));
             subscriptions.add(new SocialSubscription("Imagine RIT", "Imagine_RIT"));
             subscriptions.add(new SocialSubscription("RIT Sports", "RITsports"));
@@ -200,6 +212,9 @@ public class ConversationController {
             Service facebook = new Facebook();
             SpringSocialConfig fbConfig = new SpringSocialConfig();
             fbConfig.setIdentifier("asksgfbapp");
+			fbConfig.setCounterRefresh(now);
+			fbConfig.setLastUpdate(now);
+			fbConfig.setUpdateFrequency(Minutes.ZERO);
 
             facebook.setConfig(fbConfig);
 
@@ -229,17 +244,20 @@ public class ConversationController {
         final Service redditProvider = providerService.findServiceByTypeAndIdentifierEquals(Reddit.class, "rit");
         if (redditProvider == null) {
             Service reddit = new Reddit();
-            ProviderConfig config = new ProviderConfig();
-            config.setIdentifier("rit");
-            reddit.setConfig(config);
+            ProviderConfig redditconfig = new ProviderConfig();
+            redditconfig.setIdentifier("rit");
+			redditconfig.setCounterRefresh(now);
+			redditconfig.setLastUpdate(now);
+			redditconfig.setUpdateFrequency(Minutes.ZERO);
+            reddit.setConfig(redditconfig);
 
 
             SocialSubscription java = new SocialSubscription();
-            java.setHandle("java");
+            java.setHandle("rit");
             Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
             subscriptions.add(java);
 
-            config.setSubscriptions(subscriptions);
+            redditconfig.setSubscriptions(subscriptions);
 
             providerService.saveService(reddit);
 

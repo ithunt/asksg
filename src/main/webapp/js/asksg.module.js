@@ -219,8 +219,8 @@ function ConversationController($scope, $asksg, $log) {
                     console.log($scope.subscriptions[subData.name]);
                     $scope.subscriptions[subData.name].push(
                         new ProviderConfig(subData.id, subData.authenticated, subData.enabled, subData.config,
-                            subData.name, subData.version, subData.maxcalls, subData.updatefreq,
-                            subData.lastupdate, subData.currentcalls));
+                            subData.name, subData.version, subData.maxCalls, subData.updateFrequency,
+                            subData.lastUpdate, subData.currentCalls));
                 }
 
                 // debug
