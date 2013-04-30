@@ -131,6 +131,12 @@ function Reddit(providerConfig, authenticated) {
 	this.name = "Reddit";
 }
 
+function Chatterbox(providerConfig, authenticated) {
+    this.authenticated = authenticated;
+    this.config = providerConfig;
+    this.name = "Chatterbox";
+}
+
 function User(id, name, username, password, phoneNumber, email, role, enabled) {
 	this.id = id;
 	this.name = name;
@@ -601,6 +607,28 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 		$scope.facebookConsumerSecret = '';
 
 	};
+
+    /**
+     * Invoke the ASKSG service post function.
+     */
+    $scope.doAddServiceChatterbox = function() {
+        config = {url: "", consumerKey: "", consumerSecret: "", accessToken: "", accessTokenSecret: "",
+            authenticationToken: $scope.chatterboxAuthenticationToken, createBy: null, host: "",
+            password: "", username: ""};
+        newService = new Chatterbox(config, false);
+        $asksg.postNewService(newService).
+            success(function(data, status, headers, config) {
+                console.log("Success adding the new service!");
+                console.log(data);
+                console.log(status);
+                var newService = angular.fromJson(data[0]);
+                $scope.refreshSubscriptions();
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error... :(");
+            });
+        $scope.chatterboxAuthenticationToken = '';
+    };
 
 	$scope.addUser = function () {
 		$asksg.postNewUser(new User(null, $scope.userName, $scope.userUsername, $scope.userPassword, $scope.userPhone, $scope.userEmail, $scope.userRole, true)).

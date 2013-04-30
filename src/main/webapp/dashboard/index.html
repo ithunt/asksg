@@ -468,6 +468,48 @@
 	</div>
 </div>
 
+<div class="well">
+    <h4>Chatterbox Subscriptions</h4>
+
+    <div ng-repeat="service in subscriptions['Chatterbox']">
+        <!-- Options menu for the service -->
+        <div class="dropdown delete pull-right" showonhoverparent>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
+                                           tabindex="-1" href="#">Enable/Disable</a></li>
+
+                <li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+                                           tabindex="-1" href="#">Delete</a></li>
+            </ul>
+        </div>
+        <div>
+            <p>
+                Authentication Token: {{service.config.authenticationToken}} <br/>
+                Enabled: {{service.enabled}}
+            </p>
+        </div>
+    </div>
+
+    <a data-toggle="modal" href="#chatterboxModal" class="btn">Add Service</a>
+
+    <div class="modal hide" id="chatterboxModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">x</button>
+            <h3>Configure new Chatterbox service</h3>
+        </div>
+        <div class="modal-body">
+            <form ng-submit="doAddServiceChatterbox()">
+                <div style="float:left;margin-right:20px;">
+                    <label for="chatterboxAuthenticationToken">Chatterbox authentication token:</label>
+                    <input class="input-xlarge focused" ng-model="chatterboxAuthenticationToken"/>
+                </div>
+                <button class="btn" type="submit" data-dismiss="modal" ng-click="doAddServiceChatterbox()">Go</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- TODO: PUT BACK IN WHEN REDDIT API IS WORKING
 <div class="well">
 <h4>Reddit Subscriptions</h4>
