@@ -36,4 +36,8 @@ public abstract class Tag {
 		return this.createdBy;
 	}
 
+	public void setName(String name) {
+		this.name = name.trim();
+	}
+
 }

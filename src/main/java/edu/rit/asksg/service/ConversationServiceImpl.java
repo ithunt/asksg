@@ -88,9 +88,14 @@ public class ConversationServiceImpl implements ConversationService {
 		for (String service : excludeServices) {
 			spec = spec.and((new ServiceSpecification<Conversation>(service)).not());
 		}
-
+		boolean first = true;
 		for (String tag : includeTags) {
-			spec = spec.or(new TagSpecification<Conversation>(tag));
+			if(first){
+				spec = spec.and(new TagSpecification<Conversation>(tag));
+				first = false;
+			} else {
+				spec = spec.or(new TagSpecification<Conversation>(tag));
+			}
 		}
 
 		return ((Page<Conversation>) conversationRepository.findAll(
