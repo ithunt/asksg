@@ -4,7 +4,6 @@ import edu.rit.asksg.common.Log;
 import edu.rit.asksg.domain.AsksgUser;
 import edu.rit.asksg.domain.UserRole;
 import edu.rit.asksg.service.RoleService;
-import edu.rit.asksg.service.UserService;
 import edu.rit.asksg.service.UserServiceImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import java.security.Principal;
-import java.util.HashSet;
-import java.util.Set;
 
 @RooWebJson(jsonObject = AsksgUser.class)
 @Controller
@@ -53,6 +50,20 @@ public class UserController {
 
 		return new ResponseEntity<String>(user.toJson(), headers, HttpStatus.OK);
 	}
+
+    @RequestMapping(value = "/seed")
+    public ResponseEntity<String> seed(){
+        AsksgUser u = new AsksgUser();
+        u.setUserName("asksg");
+        u.setName("asksg");
+        u.setPassword("asksg");
+        u.setRole(new UserRole("Admin"));
+        userService.saveAsksgUser(u);
+
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+
 
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
 	public ResponseEntity<String> createFromJson(@RequestBody String json) {
