@@ -59,7 +59,7 @@ public class ServiceController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        if(!userService.isAdmin(principal.getName()))
+        if(principal == null || !userService.isAdmin(principal.getName()))
             return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
 
         Service service = Service.fromJsonToService(json);
@@ -93,9 +93,8 @@ public class ServiceController {
 
         if (service == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        } else {
-            if(!userService.isAdmin(principal.getName()))
-                service.setConfig(new ProviderConfig());
+        } else if (principal == null || !userService.isAdmin(principal.getName())) {
+            service.setConfig(new ProviderConfig());
         }
         return new ResponseEntity<String>(service.toJson(), headers, HttpStatus.OK);
     }
@@ -106,7 +105,7 @@ public class ServiceController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         List<Service> result = providerService.findAllServices();
-        if(!userService.isAdmin(principal.getName())) {
+        if(principal == null || !userService.isAdmin(principal.getName())) {
             for(Service s : result) {
                 s.setConfig(new ProviderConfig());
             }
@@ -119,7 +118,7 @@ public class ServiceController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        if(!userService.isAdmin(principal.getName()))
+        if(principal == null || !userService.isAdmin(principal.getName()))
             return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
 
         for (Service service: Service.fromJsonArrayToServices(json)) {
@@ -132,7 +131,7 @@ public class ServiceController {
     public ResponseEntity<String> updateFromJson(@RequestBody String json, Principal principal) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        if(!userService.isAdmin(principal.getName()))
+        if(principal == null || !userService.isAdmin(principal.getName()))
             return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
 
         Service service = Service.fromJsonToService(json);
@@ -147,7 +146,7 @@ public class ServiceController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        if(!userService.isAdmin(principal.getName()))
+        if(principal == null || !userService.isAdmin(principal.getName()))
             return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
 
         for (Service service: Service.fromJsonArrayToServices(json)) {
@@ -163,7 +162,7 @@ public class ServiceController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        if(!userService.isAdmin(principal.getName()))
+        if(principal == null || !userService.isAdmin(principal.getName()))
             return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
 
         Service service = providerService.findService(id);
