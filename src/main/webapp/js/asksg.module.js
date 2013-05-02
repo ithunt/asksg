@@ -416,10 +416,8 @@ function ConversationController($scope, $asksg, $log) {
     /*
      * Update the update limits of the config
      */
-    $scope.updateApiLimits = function (config, maxcalls, updateFreq) {
-        config.maxCalls = maxcalls;
-        config.updateFrequency = updateFreq;
-        $asksg.updateConfig(config);
+    $scope.updateApiLimits = function (configId, updatedMaxCalls, updatedUpdateFrequency) {
+        $asksg.updateConfig(configId, updatedMaxCalls, updatedUpdateFrequency);
     }
 
     /*
@@ -567,6 +565,10 @@ function ConversationController($scope, $asksg, $log) {
     analyticsEndDate = "";
     socialSubHandle = "";
     socialSubName = "";
+
+    // Scope values for API limit updating
+    updatedMaxCalls = "";
+    updatedUpdateFrequency = "";
 }
 
 /**
@@ -678,8 +680,9 @@ AsksgService = function () {
                     return $http({method: 'DELETE', url: (servicesUrl + "/" + serviceId)});
                 },
 
-                updateConfig: function(updatedConfig) {
-                    return $http({method: 'PUT', url: configsUrl, data: JSON.stringify(updatedConfig)});
+                updateConfig: function(configId, maxCalls, updateFrequency) {
+                    return $http({method: 'POST',
+                        url: configsUrl + "/updateLimits?id=" + configId + "&maxCalls=" + maxCalls + "&updateFrequency=" + updateFrequency});
                 },
 
                 /**
