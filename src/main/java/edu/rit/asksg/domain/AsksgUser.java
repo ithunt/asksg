@@ -35,7 +35,7 @@ public class AsksgUser extends Identity implements UserDetails {
 
 	private transient Optional<List<GrantedAuthority>> authorities = Optional.absent();
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private UserRole role = new UserRole();
 
 	@JSON(include = false)
