@@ -103,6 +103,7 @@ public class Twilio extends Service implements ContentProvider {
             conv.getMessages().add(message);
         }
 
+		conv.setPrivateConversation(true);
         conv.setModified(now);
         conv.setService(this);
 

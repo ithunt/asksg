@@ -146,6 +146,7 @@ public class Email extends Service implements ContentProvider {
         } catch (MessagingException e) {
             c.setSubject("(no subject)");
         }
+		c.setPrivateConversation(true);
         return c;
     }
 
