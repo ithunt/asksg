@@ -242,6 +242,10 @@ app.factory('$asksg', function ($http, $log) {
 			return $http({method: 'DELETE', url: (convoUrl + "/" + convoId)});
 		},
 
+        refreshConversationData: function() {
+            return $http({method: 'GET', url: (convoUrl + "/refresh")});
+        },
+
 		/**
 		 * Submit a new service to the system.
 		 *
@@ -677,6 +681,16 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 				return null;
 			});
 	}
+
+    $scope.refreshConversations = function() {
+        $asksg.refreshConversationData()
+            .success(function (data, status, headers) {
+                $("#refreshConvosButton").hide();
+                $("#convosRefreshedMessage").show();
+            }).error(function (data, status, headers, config) {
+                // do nothing
+            });
+    }
 
 	/*
 	 * Add a new social subscription...
