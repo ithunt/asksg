@@ -251,11 +251,11 @@
             </p>
         </div>
         <div>
-            <form ng-submit="updateApiLimits(service.config.id, updatedMaxCalls, updatedUpdateFrequency)">
-                <label for="updatedMaxCalls">Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
-                                                                                      ng-model="updatedMaxCalls" /><br />
-                <label for="updatedUpdateFrequency">Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
-                                                                                               ng-model="updatedUpdateFrequency"/>
+            <form ng-submit="updateApiLimits(service.config.id, service.config.maxCalls, service.config.updateFrequency)">
+                <label>Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
+                                                                                      ng-model="service.config.maxCalls" /><br />
+                <label>Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
+                                                                                               ng-model="service.config.updateFrequency"/>
                 <input class="btn-primary" type="submit" value="Change API Limits"/>
             </form>
         </div>
@@ -379,11 +379,11 @@
             </p>
         </div>
         <div>
-            <form ng-submit="updateApiLimits(service.config.id, maxCalls, updateFrequency)">
-                <label for="updateFrequency">Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
-                                                                                        ng-model="updateFrequency"/>
-                <label for="maxCalls">Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
-                                                                               ng-model="maxCalls" /><br />
+            <form ng-submit="updateApiLimits(service.config.id, updatedMaxCalls, updatedUpdateFrequency)">
+                <label>Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
+                                                                ng-model="service.config.maxCalls" /><br />
+                <label>Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
+                                                                  ng-model="service.config.updateFrequency"/>
                 <input class="btn-primary" type="submit" value="Change API Limits"/>
             </form>
         </div>
@@ -471,11 +471,11 @@
             </p>
         </div>
         <div>
-            <form ng-submit="updateApiLimits(service.config.id, maxCalls, updateFrequency)">
-                <label for="updateFrequency">Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
-                                                                                        ng-model="updateFrequency"/>
-                <label for="maxCalls">Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
-                                                                               ng-model="maxCalls" /><br />
+            <form ng-submit="updateApiLimits(service.config.id, updatedMaxCalls, updatedUpdateFrequency)">
+                <label>Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
+                                                                ng-model="service.config.maxCalls" /><br />
+                <label>Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
+                                                                  ng-model="service.config.updateFrequency"/>
                 <input class="btn-primary" type="submit" value="Change API Limits"/>
             </form>
         </div>
