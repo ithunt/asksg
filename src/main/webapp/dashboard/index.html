@@ -422,10 +422,10 @@
 		</div>
 		<div>
 			<p>
-				Consumer Key: {{service.config.consumerKey}} <br/>
-				Consumer Secret: {{service.config.consumerSecret}} <br/>
-				Access Token: {{service.config.accessToken}} <br/>
-				Access Token Secret: {{service.config.accessTokenSecret}} <br/>
+				App ID/API Key: {{service.config.consumerKey}} <br/>
+				App Secret: {{service.config.consumerSecret}} <br/>
+				Authorization Code: {{service.config.accessToken}} <br/>
+				Access Token: {{service.config.accessTokenSecret}} <br/>
 				Enabled: {{service.enabled}} <br/>
 				<a ng-show="service.config.facebookAccessToken == null" data-toggle="modal"
 				   href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox"
@@ -458,11 +458,11 @@
 		<div class="modal-body">
 			<form ng-submit="doAddServiceFacebook()">
 				<div style="float:left;margin-right:20px;">
-					<label for="name">Consumer Key</label>
+					<label for="name">App ID/API Key</label>
 					<input class="input-xlarge focused" ng-model="facebookConsumerKey"/>
 				</div>
 				<div style="float:left;margin-right:20px;">
-					<label for="name">Consumer Secret</label>
+					<label for="name">App Secret</label>
 					<input class="input-xlarge focused" ng-model="facebookConsumerSecret"/>
 				</div>
 				<button class="btn" type="submit" data-dismiss="modal" ng-click="doAddServiceFacebook()">
