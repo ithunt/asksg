@@ -136,8 +136,12 @@ public class Email extends Service implements ContentProvider {
             logger.error(e.getLocalizedMessage());
         }
 
+		LocalDateTime now = LocalDateTime.now();
+
         Conversation c = new Conversation(message);
         message.setConversation(c);
+		c.setCreated(now);
+		c.setModified(now);
         if (c.getMessages() != null && !c.getMessages().isEmpty())
             c.setCreated(c.getMessages().get(0).getCreated());
 

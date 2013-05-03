@@ -100,7 +100,8 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
             conversation.setSubject(postMessage.length() > 40 ? postMessage.substring(0, 40) + "..." : postMessage);
 			Identity identity = getIdentityService().findOrCreate(facebookApi.userOperations().getUserProfile(post.getFrom().getId()).getName());
             message.setIdentity(identity);
-            message.setCreated(new LocalDateTime(post.getCreatedTime()));
+			LocalDateTime created = new LocalDateTime(post.getCreatedTime());
+            message.setCreated(created);
             if (post.getComments() != null) {
                 for (Comment comment : post.getComments()) {
                     Message commentMsg = new Message();
@@ -113,9 +114,8 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
                 }
             }
             conversation.setExternalId(post.getId());
-
-            if (conversation.getMessages() != null && !conversation.getMessages().isEmpty())
-                conversation.setCreated(conversation.getMessages().get(0).getCreated());
+			conversation.setCreated(created);
+			conversation.setModified(created);
 
             conversations.add(conversation);
         }

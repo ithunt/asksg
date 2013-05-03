@@ -78,19 +78,24 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             Message message = new Message();
 			Identity identity = getIdentityService().findOrCreate(dm.getSender().getName());
 			message.setIdentity(identity);
-            message.setCreated(new LocalDateTime(dm.getCreatedAt()));
+			LocalDateTime created = new LocalDateTime(dm.getCreatedAt());
+            message.setCreated(created);
+			message.setModified(created);
             message.setContent(dm.getText());
 
-            Conversation c = new Conversation(message);
-            c.setPrivateConversation(true);
-            c.setService(this);
-            c.setExternalId(String.valueOf(dm.getId()));
-            message.setConversation(c);
+            Conversation conversation = new Conversation(message);
+            conversation.setPrivateConversation(true);
+            conversation.setService(this);
+            conversation.setExternalId(String.valueOf(dm.getId()));
+			conversation.setCreated(created);
+			conversation.setModified(created);
 
-            if (c.getMessages() != null && !c.getMessages().isEmpty())
-                c.setCreated(c.getMessages().get(0).getCreated());
+            message.setConversation(conversation);
 
-            conversations.add(c);
+            if (conversation.getMessages() != null && !conversation.getMessages().isEmpty())
+                conversation.setCreated(conversation.getMessages().get(0).getCreated());
+
+            conversations.add(conversation);
         }
 
         return conversations;
@@ -106,16 +111,20 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             message.setPosted(true);
             message.setContent(tweet.getText());
             message.setUrl(tweet.getSource());
-            message.setCreated(new LocalDateTime(tweet.getCreatedAt()));
+			LocalDateTime created = new LocalDateTime(tweet.getCreatedAt());
+            message.setCreated(created);
+			message.setModified(created);
 
-            Conversation c = new Conversation(message);
-            message.setConversation(c);
-            c.setService(this);
-            if (c.getMessages() != null && !c.getMessages().isEmpty())
-                c.setCreated(c.getMessages().get(0).getCreated());
+            Conversation conversation = new Conversation(message);
+            message.setConversation(conversation);
+            conversation.setService(this);
+            if (conversation.getMessages() != null && !conversation.getMessages().isEmpty())
+                conversation.setCreated(conversation.getMessages().get(0).getCreated());
 
-            c.setSubject(tweet.getText());
-            convos.add(c);
+            conversation.setSubject(tweet.getText());
+			conversation.setCreated(created);
+			conversation.setModified(created);
+            convos.add(conversation);
 
             logger.debug("New Tweet:" + message.toString());
 
