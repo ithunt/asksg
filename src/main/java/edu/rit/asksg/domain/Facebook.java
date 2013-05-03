@@ -98,13 +98,13 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 			LocalDateTime created = new LocalDateTime(post.getCreatedTime());
 			message.setCreated(created);
 
-			Conversation conversation = getConversationService().findConversationByRecipientSince(message.getAuthor(), created.minusWeeks(1));
+			Conversation conversation = getConversationService().findConversationByExternalId(post.getId());
 			if (conversation == null) {
 				conversation = new Conversation(message);
+				conversation.setExternalId(post.getId());
 				conversation.setCreated(created);
 			}
             conversation.setService(this);
-			conversation.setExternalId(post.getId());
 			conversation.setModified(created);
 
             message.setConversation(conversation);
