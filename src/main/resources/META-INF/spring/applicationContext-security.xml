@@ -10,12 +10,24 @@
 		            default-target-url="/dashboard/index.html" authentication-failure-url="/test/fail.html"/>
 		<logout logout-url="/resources/j_spring_security_logout"/>
 		<!-- Configure these elements to secure URIs in your application -->
-		<intercept-url pattern="/dashboard/**" access="permitAll"/>
+
 		<!-- access="hasRole('Admin')" -->
-		<intercept-url pattern="/choices/**" access="hasRole('Admin')"/>
-		<intercept-url pattern="/member/**" access="isAuthenticated()"/>
+		<!--<intercept-url pattern="/choices/**" access="hasRole('Admin')"/>-->
+		<!--<intercept-url pattern="/member/**" access="isAuthenticated()"/>-->
 		<intercept-url pattern="/resources/**" access="permitAll"/>
-		<intercept-url pattern="/**" access="permitAll"/>
+        <intercept-url pattern="/dashboard/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/index.html" access="permitAll" />
+        <intercept-url pattern="/users/seed" access="permitAll" />
+        <intercept-url pattern="/twilios/**" access="permitAll" />
+		<intercept-url pattern="/conversations/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/socialsubscriptions/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/tags/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/testtwitter/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/messages/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/services/**" access="hasRole('Admin')" />
+        <intercept-url pattern="/users/**" access="hasRole('Admin')" />
+        <intercept-url pattern="/roles/**" access="hasRole('Admin')" />
+        <intercept-url pattern="/providerconfigs/**" access="hasRole('Admin')" />
 	</http>
 
 	<beans:bean id="userDetailsService" class="edu.rit.asksg.service.UserServiceImpl"/>

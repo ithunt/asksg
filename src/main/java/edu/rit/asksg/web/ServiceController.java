@@ -54,21 +54,6 @@ public class ServiceController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromJson(@RequestBody String json, Principal principal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-
-        if(principal == null || !userService.isAdmin(principal.getName()))
-            return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
-
-        Service service = Service.fromJsonToService(json);
-        providerService.saveService(service);
-        return new ResponseEntity<String>(service.toJson(), headers, HttpStatus.CREATED);
-
-    }
-
-
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
     public ResponseEntity<String> subscribe(@RequestParam("id") final String id,
                                             @RequestParam("name") final String name,
@@ -77,100 +62,6 @@ public class ServiceController {
         providerService.addSubscriptionToService(Long.parseLong(id), name, handle);
 
         return new ResponseEntity<String>(HttpStatus.CREATED);
-    }
-
-
-    /**
-     * Overrides to add security
-     */
-    @RequestMapping(value = "/{id}", headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<String> showJson(@PathVariable("id") Long id, Principal principal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-
-        Service service = providerService.findService(id);
-
-        if (service == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        } else if (principal == null || !userService.isAdmin(principal.getName())) {
-            service.setConfig(new ProviderConfig());
-        }
-        return new ResponseEntity<String>(service.toJson(), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(headers = "Accept=application/json")
-    @ResponseBody
-    public ResponseEntity<String> listJson(Principal principal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-8");
-        List<Service> result = providerService.findAllServices();
-        if(principal == null || !userService.isAdmin(principal.getName())) {
-            for(Service s : result) {
-                s.setConfig(new ProviderConfig());
-            }
-        }
-        return new ResponseEntity<String>(Service.toJsonArray(result), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> createFromJsonArray(@RequestBody String json, Principal principal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-
-        if(principal == null || !userService.isAdmin(principal.getName()))
-            return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
-
-        for (Service service: Service.fromJsonArrayToServices(json)) {
-            providerService.saveService(service);
-        }
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
-    }
-
-    @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> updateFromJson(@RequestBody String json, Principal principal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        if(principal == null || !userService.isAdmin(principal.getName()))
-            return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
-
-        Service service = Service.fromJsonToService(json);
-        if (providerService.updateService(service) == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/jsonArray", method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> updateFromJsonArray(@RequestBody String json, Principal principal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-
-        if(principal == null || !userService.isAdmin(principal.getName()))
-            return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
-
-        for (Service service: Service.fromJsonArrayToServices(json)) {
-            if (providerService.updateService(service) == null) {
-                return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-            }
-        }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public ResponseEntity<String> deleteFromJson(@PathVariable("id") Long id, Principal principal) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-
-        if(principal == null || !userService.isAdmin(principal.getName()))
-            return new ResponseEntity<String>("not authorized", headers, HttpStatus.FORBIDDEN);
-
-        Service service = providerService.findService(id);
-        if (service == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        }
-        providerService.deleteService(service);
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
 
 
