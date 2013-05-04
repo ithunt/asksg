@@ -51,8 +51,8 @@
 
 <!--[if lt IE 7]>
 <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-	your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to
-	improve your experience.</p>
+    your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to
+    improve your experience.</p>
 <![endif]-->
 
 <!-- Service selector controller -->
@@ -233,19 +233,30 @@
 				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
 				                           tabindex="-1" href="#">Enable/Disable</a></li>
 
-				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
-				                           tabindex="-1" href="#">Delete</a></li>
-			</ul>
-		</div>
-		<div>
-			<p>
-				Account SID: {{service.config.username}} <br/>
-				Authentication Token: {{service.config.authenticationToken}} <br/>
-				Phone Number: {{service.config.phoneNumber}} <br/>
-				Enabled: {{service.enabled}}
-			</p>
-		</div>
-	</div>
+                <li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+                                           tabindex="-1" href="#">Delete</a></li>
+            </ul>
+        </div>
+        <div>
+            <p>
+                Account SID: {{service.config.username}} <br/>
+                Authentication Token: {{service.config.authenticationToken}} <br/>
+                Phone Number: {{service.config.phoneNumber}} <br/>
+                Enabled: {{service.enabled}} <br/>
+                API limit last update: {{service.config.lastUpdate.toLocaleString();}} <br/>
+                Calls made so far: {{service.config.currentCalls}}
+            </p>
+        </div>
+        <div>
+            <form ng-submit="updateApiLimits(service.config.id, service.config.maxCalls, service.config.updateFrequency)">
+                <label>Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
+                                                                                      ng-model="service.config.maxCalls" /><br />
+                <label>Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
+                                                                                               ng-model="service.config.updateFrequency"/>
+                <input class="btn-primary" type="submit" value="Change API Limits"/>
+            </form>
+        </div>
+    </div>
 
 	<a data-toggle="modal" href="#twilioModal" class="btn">Add Service</a>
 
@@ -334,35 +345,46 @@
 				<li role="presentation"><a ng-click="toggleEnabledService(service)" role="menuitem"
 				                           tabindex="-1" href="#">Enable/Disable</a></li>
 
-				<li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
-				                           tabindex="-1" href="#">Delete</a></li>
-			</ul>
-		</div>
-		<div>
-			<p>
-				Identifier (URL): {{service.config.url}} <br/>
-				Consumer Key: {{service.config.consumerkey}} <br/>
-				Consumer Secret: {{service.config.consumersecret}} <br/>
-				Access Token: {{service.config.accesstoken}} <br/>
-				Access Token Secret: {{service.config.accesstokensecret}} <br/>
-				Enabled: {{service.enabled}}
-			</p>
-		</div>
-		<div>
-			<ul ng-repeat="sub in service.config.subscriptions">
-				<li>
-					<div>{{sub.handle}}</div>
-					<div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
-				</li>
-			</ul>
-			<form ng-submit="addSocialSubscription(service.id, socialSubHandle, socialSubName)">
-				<label for="handle">Handle:</label> <input class="input-xlarge focused"
-				                                           ng-model="socialSubHandle"/><br/>
-				<label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
-				<input class="btn-primary" type="submit" value="Add">
-			</form>
-		</div>
-	</div>
+                <li role="presentation"><a ng-click="deleteService(service.id)" role="menuitem"
+                                           tabindex="-1" href="#">Delete</a></li>
+            </ul>
+        </div>
+        <div>
+            <p>
+                Identifier (URL): {{service.config.url}} <br/>
+                Consumer Key: {{service.config.consumerkey}} <br/>
+                Consumer Secret: {{service.config.consumersecret}} <br/>
+                Access Token: {{service.config.accesstoken}} <br/>
+                Access Token Secret: {{service.config.accesstokensecret}} <br/>
+                Enabled: {{service.enabled}} <br/>
+                API limit last update: {{service.config.lastUpdate.toLocaleString();}} <br/>
+                Calls made so far: {{service.config.currentCalls}}
+            </p>
+        </div>
+        <div>
+            <form ng-submit="updateApiLimits(service.config.id, updatedMaxCalls, updatedUpdateFrequency)">
+                <label>Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
+                                                                ng-model="service.config.maxCalls" /><br />
+                <label>Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
+                                                                  ng-model="service.config.updateFrequency"/>
+                <input class="btn-primary" type="submit" value="Change API Limits"/>
+            </form>
+        </div>
+        <div>
+            <ul ng-repeat="sub in service.config.subscriptions">
+                <li>
+                    <div>{{sub.handle}}</div>
+                    <div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
+                </li>
+            </ul>
+            <form ng-submit="addSocialSubscription(service.id, socialSubHandle, socialSubName)">
+                <label for="handle">Handle:</label> <input class="input-xlarge focused"
+                                                           ng-model="socialSubHandle"/><br/>
+                <label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
+                <input class="btn-primary" type="submit" value="Add">
+            </form>
+        </div>
+    </div>
 
 	<a data-toggle="modal" href="#twitterModal" class="btn">Add Service</a>
 
@@ -485,9 +507,28 @@
         </div>
         <div>
             <p>
-                Authentication Token: {{service.config.authenticationToken}} <br/>
-                Enabled: {{service.enabled}}
+                Consumer Key: {{service.config.consumerKey}} <br/>
+                Consumer Secret: {{service.config.consumerSecret}} <br/>
+                Access Token: {{service.config.accessToken}} <br/>
+                Access Token Secret: {{service.config.accessTokenSecret}} <br/>
+                Enabled: {{service.enabled}} <br/>
+                API limit last update: {{service.config.lastUpdate.toLocaleString();}} <br/>
+                Calls made so far: {{service.config.currentCalls}}
             </p>
+            <p>
+                <a ng-show="service.config.facebookAccessToken == null" data-toggle="modal"
+                   href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox"
+                   class="btn">Authenticate</a>
+            </p>
+        </div>
+        <div>
+            <form ng-submit="updateApiLimits(service.config.id, updatedMaxCalls, updatedUpdateFrequency)">
+                <label>Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
+                                                                ng-model="service.config.maxCalls" /><br />
+                <label>Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
+                                                                  ng-model="service.config.updateFrequency"/>
+                <input class="btn-primary" type="submit" value="Change API Limits"/>
+            </form>
         </div>
     </div>
 
