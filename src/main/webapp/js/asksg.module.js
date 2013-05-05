@@ -99,6 +99,9 @@ function ProviderConfig(id, authenticated, enabled, config, name, version) {
 	this.enabled = enabled;
 	this.config = config;
 	this.version = version;
+    this.config.counterRefresh = new Date(config.counterRefresh.localMillis);
+    this.config.lastUpdate = new Date(config.lastUpdate.localMillis);
+    this.config.updateFrequency = config.updateFrequency.minutes;
 }
 
 function Twilio(providerConfig, authenticated) {

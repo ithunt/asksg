@@ -449,11 +449,22 @@
 				Authorization Code: {{service.config.accessToken}} <br/>
 				Access Token: {{service.config.accessTokenSecret}} <br/>
 				Enabled: {{service.enabled}} <br/>
+                API limit last update: {{service.config.lastUpdate.toLocaleString();}} <br/>
+                Calls made so far: {{service.config.currentCalls}}
 				<a ng-show="service.config.facebookAccessToken == null" data-toggle="modal"
 				   href="https://www.facebook.com/dialog/oauth?client_id={{service.config.consumerKey}}&redirect_uri=http://watchmen.se.rit.edu:8080/asksg/dashboard/index.html&state={{service.id}}&scope=offline_access,publish_actions,read_stream,read_mailbox"
 				   class="btn">Authenticate</a>
 			</p>
 		</div>
+        <div>
+            <form ng-submit="updateApiLimits(service.config.id, updatedMaxCalls, updatedUpdateFrequency)">
+                <label>Maximum calls per period:</label> <input class="input-xlarge" value="{{service.config.maxCalls}}"
+                                                                ng-model="service.config.maxCalls" /><br />
+                <label>Update frequency (minutes):</label> <input class="input-xlarge focused" value="{{service.config.updateFrequency}}"
+                                                                  ng-model="service.config.updateFrequency"/>
+                <input class="btn-primary" type="submit" value="Change API Limits"/>
+            </form>
+        </div>
 		<div>
 			<ul ng-repeat="sub in service.config.subscriptions">
 				<li>
