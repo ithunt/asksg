@@ -27,4 +27,6 @@ public interface ConversationService {
 
 	public Conversation findConversationByRecipientSince(String recipient, LocalDateTime since);
 
+	public Conversation findConversationByExternalId(String externalId);
+
 }

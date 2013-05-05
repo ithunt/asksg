@@ -78,26 +78,33 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             Message message = new Message();
 			Identity identity = getIdentityService().findOrCreate(dm.getSender().getName());
 			message.setIdentity(identity);
-            message.setCreated(new LocalDateTime(dm.getCreatedAt()));
+			LocalDateTime created = new LocalDateTime(dm.getCreatedAt());
+            message.setCreated(created);
+			message.setModified(created);
             message.setContent(dm.getText());
 
-            Conversation c = new Conversation(message);
-            c.setPrivateConversation(true);
-            c.setService(this);
-            c.setExternalId(String.valueOf(dm.getId()));
-            message.setConversation(c);
+			Conversation conversation = getConversationService().findConversationByRecipientSince(message.getAuthor(), created.minusWeeks(1));
 
-            if (c.getMessages() != null && !c.getMessages().isEmpty())
-                c.setCreated(c.getMessages().get(0).getCreated());
+			if (conversation == null) {
+				conversation = new Conversation(message);
+				conversation.setCreated(created);
+			}
+			conversation.setPrivateConversation(true);
+            conversation.setService(this);
+            conversation.setExternalId(String.valueOf(dm.getId()));
+			conversation.setModified(created);
+			conversation.getMessages().add(message);
 
-            conversations.add(c);
+            message.setConversation(conversation);
+
+            conversations.add(conversation);
         }
 
         return conversations;
     }
 
     protected List<Conversation> parseTweets(List<Tweet> tweets) {
-        final List<Conversation> convos = new ArrayList<Conversation>();
+        final List<Conversation> conversations = new ArrayList<Conversation>();
 
         for (Tweet tweet : tweets) {
             Message message = new Message();
@@ -106,21 +113,25 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             message.setPosted(true);
             message.setContent(tweet.getText());
             message.setUrl(tweet.getSource());
-            message.setCreated(new LocalDateTime(tweet.getCreatedAt()));
+			LocalDateTime created = new LocalDateTime(tweet.getCreatedAt());
+            message.setCreated(created);
+			message.setModified(created);
 
-            Conversation c = new Conversation(message);
-            message.setConversation(c);
-            c.setService(this);
-            if (c.getMessages() != null && !c.getMessages().isEmpty())
-                c.setCreated(c.getMessages().get(0).getCreated());
 
-            c.setSubject(tweet.getText());
-            convos.add(c);
+			Conversation conversation = getConversationService().findConversationByRecipientSince(message.getAuthor(), created.minusWeeks(1));
 
-            logger.debug("New Tweet:" + message.toString());
-
+			if (conversation == null) {
+				conversation = new Conversation(message);
+				conversation.setCreated(created);
+			}
+			conversation.setService(this);
+			conversation.setExternalId(String.valueOf(tweet.getId()));
+			conversation.setModified(created);
+			conversation.getMessages().add(message);
+            conversations.add(conversation);
         }
-        return convos;
+
+        return conversations;
     }
 
     @Override

@@ -16,11 +16,15 @@ public class ProviderServiceImpl implements ProviderService {
 	@Autowired
 	private IdentityService identityService;
 
+	@Autowired
+	private ConversationService conversationService;
+
 
     public <T extends Service> T findServiceByTypeAndIdentifierEquals(Class<T> type, String identifier) {
         T service = serviceRepository.findServiceByTypeAndIdentifierEquals(type.getSimpleName(), identifier);
 		if (service != null) {
 			service.setIdentityService(identityService);
+			service.setConversationService(conversationService);
 		}
 		return service;
     }
@@ -29,6 +33,7 @@ public class ProviderServiceImpl implements ProviderService {
 		Service service = serviceRepository.findOne(id);
 		if (service != null) {
 			service.setIdentityService(identityService);
+			service.setConversationService(conversationService);
 		}
 		return service;
 	}
@@ -37,6 +42,7 @@ public class ProviderServiceImpl implements ProviderService {
 		List<Service> services = serviceRepository.findAll();
 		for (Service service : services) {
 			service.setIdentityService(identityService);
+			service.setConversationService(conversationService);
 		}
 		return services;
 	}
@@ -45,6 +51,7 @@ public class ProviderServiceImpl implements ProviderService {
 		List<Service> services = serviceRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
 		for (Service service : services) {
 			service.setIdentityService(identityService);
+			service.setConversationService(conversationService);
 		}
 		return services;
 	}
