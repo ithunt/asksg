@@ -198,6 +198,8 @@ app.factory('$asksg', function ($http, $log) {
     var subscriptionsUrl = '/asksg/socialsubscriptions';
     var tagsUrl = '/asksg/tags';
     var configsUrl = '/asksg/providerconfigs';
+    var exportUrl = '/asksg/analytics/csv'
+    var topicUrl = '/asksg/analytics/topics';
 
     // Publish the $asksg API here
     return {
@@ -330,15 +332,32 @@ app.factory('$asksg', function ($http, $log) {
             return $http({method: 'POST', url: servicesUrl + "/facebookToken?id=" + serviceID + "&code=" + code});
         },
 
-        fetchAnalyticsData: function (start, end) {
-            target = analyticsUrl;
+        fetchAnalyticsData: function (start, end, includeList) {
+            console.log(includeList);
+            var target = analyticsUrl;
             if (start != null && start.length > 0) {
                 target = target + "?since=" + start;
-                if (end != null && end.lenght > 0) {
+                if (end != null && end.length > 0) {
                     target = target + "&until=" + end;
                 }
             }
             return $http({method: 'GET', url: target});
+        },
+
+        exportAnalyticsData: function (start, end) {
+            var target = exportUrl;
+            if (start != null && start.length > 0) {
+                target = target + "?since=" + start;
+                if (end != null && end.length > 0) {
+                    target = target + "&until=" + end;
+                }
+            }
+            console.log(target);
+            window.location = target;
+        },
+
+        fetchTopics: function() {
+            return $http({method: 'GET', url: topicUrl});
         }
     };
 });
@@ -354,7 +373,7 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
         $('.messagePaneError').remove();
         var target = document.getElementById('messagePane');
         var spinner = new Spinner(opts).spin(target);
-        $asksg.fetchAnalyticsData(analyticsStartDate, analyticsEndDate).
+        $asksg.fetchAnalyticsData(analyticsStartDate, analyticsEndDate, $scope.includeList).
             success(function (data, status, headers, config) {
                 console.log("Got analytics data back from the server");
                 console.log(data);
@@ -376,12 +395,39 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
                 return null;
             });
     }
+
+    $scope.exportData = function(exportStartDate, exportEndDate) {
+        console.log("invoking the export analytics method...");
+        console.log(exportStartDate);
+        console.log(exportEndDate);
+        $asksg.exportAnalyticsData(exportStartDate, exportEndDate).
+            success(function (data, status, headers, config) {
+                console.log(data);
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error");
+                console.log(data);
+            });
+    }
+
     /*
      * Refresh the set of conversations on the page
      */
     $scope.refreshConvos = function () {
         $scope.getConversations({});
     };
+
+    $scope.refreshTopics = function () {
+        $asksg.fetchTopics().success(function (data, status, headers, config) {
+                console.log("Got topics...");
+                console.log(data);
+                $scope.includeList = [];
+                $scope.omitList = [{"id": 5, "topic": "T6"},{"id": 6,"topic": "T7"}];
+                for (var i = 0; i < data.length; i++) {
+                    // TODO: push topic into the include list as an object with ID and topic name...
+                }
+            });
+    }
 
     $scope.nextConvos = function () {
         var params = {};
@@ -754,6 +800,50 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
             $scope.refreshUsers();
         });
     }
+ 
+
+ // Test data for topic selection
+    $scope.includeList = [
+        {
+            "id": 1,
+            "topic": "T1"
+        },
+        {
+            "id": 2,
+            "topic": "T2"
+        },
+        {
+            "id": 3,
+            "topic": "T3"
+        },
+        {
+            "id": 4,
+            "topic": "T4"
+        }
+    ];
+ 
+    $scope.omitList = [
+        {
+            "id": 7,
+            "topic": "T8"
+        },
+        {
+            "id": 8,
+            "topic": "T9"
+        }
+    ];
+ 
+    // watch, use 'true' to also receive updates when values
+    // change, instead of just the reference
+    $scope.$watch("model", function(value) {
+        console.log("Model: " + value.map(function(e){return e.id}).join(','));
+    },true);
+ 
+    // watch, use 'true' to also receive updates when values
+    // change, instead of just the reference
+    $scope.$watch("source", function(value) {
+        console.log("Source: " + value.map(function(e){return e.id}).join(','));
+    },true);
 
     /*
      * Set up the default conversation filters.
@@ -813,10 +903,11 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
         }
     }
 
-
     // Scope vars for start/end dates
     analyticsStartDate = "";
     analyticsEndDate = "";
+    exportStartDate = "";
+    exportEndDate = "";
     socialSubHandle = "";
     socialSubName = "";
     $scope.runonce = false;
@@ -891,7 +982,69 @@ app.directive('myDatepicker',function ($parse) {
                 });
             }
         }
-    });
+    }).directive('dndBetweenList', function($parse) {
+ 
+    return function(scope, element, attrs) {
+ 
+        // contains the args for this component
+        var args = attrs.dndBetweenList.split(',');
+        // contains the args for the target
+        var targetArgs = $('#'+args[1]).attr('dnd-between-list').split(',');
+ 
+        // variables used for dnd
+        var toUpdate;
+        var target;
+        var startIndex = -1;
+        var toTarget = true;
+ 
+        // watch the model, so we always know what element
+        // is at a specific position
+        scope.$watch(args[0], function(value) {
+            toUpdate = value;
+        },true);
+ 
+        // also watch for changes in the target list
+        scope.$watch(targetArgs[0], function(value) {
+            target = value;
+        },true);
+ 
+        // use jquery to make the element sortable (dnd). This is called
+        // when the element is rendered
+        $(element[0]).sortable({
+            items:'li',
+            start:function (event, ui) {
+                // on start we define where the item is dragged from
+                startIndex = ($(ui.item).index());
+                toTarget = false;
+            },
+            stop:function (event, ui) {
+                var newParent = ui.item[0].parentNode.id;
+ 
+                // on stop we determine the new index of the
+                // item and store it there
+                var newIndex = ($(ui.item).index());
+                var toMove = toUpdate[startIndex];
+ 
+                // we need to remove him from the configured model
+                toUpdate.splice(startIndex,1);
+ 
+                if (newParent == args[1]) {
+                    // and add it to the linked list
+                    target.splice(newIndex,0,toMove);
+                }  else {
+                    toUpdate.splice(newIndex,0,toMove);
+                }
+ 
+                // we move items in the array, if we want
+                // to trigger an update in angular use $apply()
+                // since we're outside angulars lifecycle
+                scope.$apply(targetArgs[0]);
+                scope.$apply(args[0]);
+            },
+            connectWith:'#'+args[1]
+        })
+    }
+});
 
 /*
  app.run(['ConversationController', function(ConversationController){
