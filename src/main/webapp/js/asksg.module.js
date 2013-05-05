@@ -197,6 +197,7 @@ app.factory('$asksg', function ($http, $log) {
 	var analyticsUrl = '/asksg/analytics/words';
 	var subscriptionsUrl = '/asksg/socialsubscriptions';
 	var tagsUrl = '/asksg/tags';
+    var configsUrl = '/asksg/providerconfigs';
 
 	// Publish the $asksg API here
 	return {
@@ -278,6 +279,11 @@ app.factory('$asksg', function ($http, $log) {
 		deleteService: function (serviceId) {
 			return $http({method: 'DELETE', url: (servicesUrl + "/" + serviceId)});
 		},
+
+        updateConfig: function(configId, maxCalls, updateFrequency) {
+            return $http({method: 'POST',
+                url: configsUrl + "/updateLimits?id=" + configId + "&maxCalls=" + maxCalls + "&updateFrequency=" + updateFrequency});
+        },
 
 		/**
 		 * Updates a user
@@ -702,6 +708,13 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 			});
 	}
 
+    /*
+     * Update the update limits of the config
+     */
+    $scope.updateApiLimits = function (configId, updatedMaxCalls, updatedUpdateFrequency) {
+        $asksg.updateConfig(configId, updatedMaxCalls, updatedUpdateFrequency);
+    }
+
 	/*
 	 * Delete a conversation.
 	 */
@@ -833,7 +846,7 @@ app.directive('myDatepicker',function ($parse) {
 		$(function () {
 			element.datepicker({
 				inline: true,
-				dateFormat: 'dd.mm.yy',
+				dateFormat: 'mm/dd/yy',
 				onSelect: function (dateText, inst) {
 					scope.$apply(function (scope) {
 						// Change binded variable

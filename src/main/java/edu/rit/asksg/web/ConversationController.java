@@ -19,6 +19,8 @@ import edu.rit.asksg.domain.config.SpringSocialConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
 import edu.rit.asksg.service.IdentityService;
 import edu.rit.asksg.service.ProviderService;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -106,9 +108,8 @@ public class ConversationController {
 		Optional<Integer> until = Optional.absent();
 		Optional<Boolean> read = Optional.absent();
 
-
-		//todo:not here
-		Integer count = DEFAULT_COUNT;
+        //todo:not here
+        Integer count = DEFAULT_COUNT;
 
 		if (s != null)
 			since = Optional.of(Integer.parseInt(s));
@@ -147,6 +148,8 @@ public class ConversationController {
 	}
 
 	private void bootstrapProviders() {
+
+		LocalDateTime now = LocalDateTime.now();
 
 		final Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, "15852865275");
 		if (twiloprovider == null) {
@@ -238,12 +241,13 @@ public class ConversationController {
 			config.setIdentifier("rit");
 			reddit.setConfig(config);
 
-			SocialSubscription java = new SocialSubscription();
-			java.setHandle("java");
-			Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
-			subscriptions.add(java);
+            SocialSubscription java = new SocialSubscription();
+            java.setHandle("rit");
+            Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
+            subscriptions.add(java);
 
 			config.setSubscriptions(subscriptions);
+            config.setSubscriptions(subscriptions);
 
 			providerService.saveService(reddit);
 
