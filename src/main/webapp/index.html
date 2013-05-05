@@ -141,14 +141,14 @@
     <div class="modal hide" id="loginModal">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">x</button>
-            <h3>Login to ASKSG</h3>
+            <h3>Log In to ASKSG</h3>
         </div>
         <div class="modal-body">
             <form method="POST" action="/asksg/resources/j_spring_security_check" onsubmit="forceHttpsOnSubmit(this)"
-                  name="login_form"> <!-- ng-submit="login()" -->
+                  name="login_form">
                 <p>
                     <input ng-model="localUserName" type="text" class="span3" name="j_username" id="email"
-                           placeholder="Username">
+                           placeholder="ASKSG Username">
                 </p>
 
                 <p>

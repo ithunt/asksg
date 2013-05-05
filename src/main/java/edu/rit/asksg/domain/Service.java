@@ -7,6 +7,7 @@ import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.RedditConfig;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
+import edu.rit.asksg.service.ConversationService;
 import edu.rit.asksg.service.IdentityService;
 import flexjson.JSON;
 import flexjson.JSONDeserializer;
@@ -37,6 +38,8 @@ public class Service implements ContentProvider {
 	private boolean enabled = true;
 
 	private transient IdentityService identityService;
+
+	private transient ConversationService conversationService;
 
 	public String getName() {
 		return this.getClass().getSimpleName();
@@ -92,5 +95,15 @@ public class Service implements ContentProvider {
 
 	public void setIdentityService(IdentityService identityService) {
 		this.identityService = identityService;
+	}
+
+	// Provided to exclude conversation service from serialization
+	@JSON(include = false)
+	public ConversationService getConversationService() {
+		return conversationService;
+	}
+
+	public void setConversationService(ConversationService conversationService) {
+		this.conversationService = conversationService;
 	}
 }

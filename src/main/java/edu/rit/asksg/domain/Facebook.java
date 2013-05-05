@@ -91,16 +91,30 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
                 continue; // skip posts with no text content to save
             }
             Message message = new Message();
-            Conversation conversation = new Conversation(message);
+			Identity identity = getIdentityService().findOrCreate(facebookApi.userOperations().getUserProfile(post.getFrom().getId()).getName());
+			message.setIdentity(identity);
+			String postMessage = post.getMessage();
+			message.setContent(postMessage);
+			LocalDateTime created = new LocalDateTime(post.getCreatedTime());
+			message.setCreated(created);
+
+			Conversation conversation = getConversationService().findConversationByExternalId(post.getId());
+			if (conversation == null) {
+				conversation = new Conversation(message);
+				conversation.setExternalId(post.getId());
+				conversation.setCreated(created);
+			}
             conversation.setService(this);
+			conversation.setModified(created);
+
             message.setConversation(conversation);
+<<<<<<< HEAD
             String postMessage = post.getMessage();
             message.setContent(postMessage);
+=======
+>>>>>>> ba6fd256db30050725a9ca0e82a142a5ce0eeeff
             // Subject snippet will be the first 40 characters plus a "...", unless it's shorter than that
             conversation.setSubject(postMessage.length() > 40 ? postMessage.substring(0, 40) + "..." : postMessage);
-			Identity identity = getIdentityService().findOrCreate(facebookApi.userOperations().getUserProfile(post.getFrom().getId()).getName());
-            message.setIdentity(identity);
-            message.setCreated(new LocalDateTime(post.getCreatedTime()));
             if (post.getComments() != null) {
                 for (Comment comment : post.getComments()) {
                     Message commentMsg = new Message();
@@ -112,10 +126,6 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
                     conversation.getMessages().add(commentMsg);
                 }
             }
-            conversation.setExternalId(post.getId());
-
-            if (conversation.getMessages() != null && !conversation.getMessages().isEmpty())
-                conversation.setCreated(conversation.getMessages().get(0).getCreated());
 
             conversations.add(conversation);
         }

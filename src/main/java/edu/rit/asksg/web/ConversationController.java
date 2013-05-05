@@ -111,9 +111,12 @@ public class ConversationController {
         //todo:not here
         Integer count = DEFAULT_COUNT;
 
+<<<<<<< HEAD
 		//todo:not here
 		// Integer count = DEFAULT_COUNT;
 
+=======
+>>>>>>> ba6fd256db30050725a9ca0e82a142a5ce0eeeff
 		if (s != null)
 			since = Optional.of(Integer.parseInt(s));
 
