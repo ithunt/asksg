@@ -692,27 +692,31 @@
 <div id="analyticsTab" class="tab-pane fade">
 	<div class="row-fluid">
 		<div class="span3">
-			<div class="well sidebar-nav">
-				<ul class="nav nav-list">
-					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Options</li>
-					<li class="active"><a data-toggle="tab" href="#analyticsMain">Main</a></li>
-				</ul>
+			<div class="well">
+				<h4 style="text-align:center">Topic Selection</h4>
+				<div class="row" style="margin-left:2px"> <!-- style="margin:0; padding:0;" -->
+				    <div class="span4 offset2" style="padding-left: 2px;">
+				    	<h5 style="text-align:center;">Include</h5>
+				        <ul id="sourceList" dnd-between-list="includeList,targetList" style="list-style-type: none;margin: 0; padding: 0;">
+				            <li class="alert alert-error nomargin"
+				                ng-repeat="item in includeList">{{item.topic}}</li>
+				        </ul>
+				    </div>
+				    <div class="span4" style="padding-left: 2px;">
+				    	<h5 style="text-align:center;">Omit</h5>
+				        <ul id="targetList" dnd-between-list="omitList,sourceList" style="list-style-type: none;margin: 0; padding: 0;">
+				            <li class="alert alert-info nomargin"
+				                ng-repeat="item in omitList">{{item.topic}}</li>
+				        </ul>
+				    </div>
+				</div>
 			</div>
-
 			<div class="well">
 				<h4 style="text-align:center">Display Parameters</h4>
 				<label for="StartDate"> Start Date: </label>
 				<input type="text" name="StartDate" my-datepicker ng-model="analyticsStartDate"/>
 				<label for="EndDate"> End Date: </label>
 				<input type="text" name="EndDate" my-datepicker ng-model="analyticsEndDate"/>
-
-				<p>
-					Time span:
-				</p>
-
-				<p>
-					{{analyticsStartDate}} - {{analyticsEndDate}}
-				</p>
 				<!-- Staples button -->
 				<form style="text-align:center" ng-submit="renderAnalyticsData()">
 					<input class="btn-primary" type="submit" value="Render Analytics Data">
@@ -721,9 +725,14 @@
 
             <div class="well">
                 <h4 style="text-align: center">Data Export</h4>
-                <p>
-                    <a href="../analytics/csv">Download export data (for past week) to CSV</a>
-                </p>
+                <label for="StartDate"> Start Date: </label>
+				<input type="text" name="StartDate" my-datepicker ng-model="exportStartDate"/>
+				<label for="EndDate"> End Date: </label>
+				<input type="text" name="EndDate" my-datepicker ng-model="exportEndDate"/>
+				<!-- Staples button -->
+				<form style="text-align:center" ng-submit="exportData(exportStartDate, exportEndDate)">
+					<input class="btn-primary" type="submit" value="Export Data">
+				</form>
             </div>
 		</div>
 
@@ -731,8 +740,7 @@
 		<div class="tab-content">
 			<div class="tab-pane fade in active" id="analyticsMain">
 				<div class="span8" style="padding-left:20px;">
-					<h2>Main Analytics</h2>
-
+					<!-- <h2>Main Analytics</h2> -->
 					<div id="analyticsPane">
 
 						<p id="messagePane">
