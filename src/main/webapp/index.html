@@ -191,18 +191,18 @@
 <script>
     var fill = d3.scale.category20();
 
-    // console.log(["Hello", "world", "normally", "you", "want", "more", "words","than", "this"].map(function(d) {
-    //                 return {text: d, size: 10 + Math.random() * 90}}));
-
     // Fetch the content and put it in the word cloud
     $.get('/asksg/analytics/words', function(data) {
-        d3.layout.cloud().size([300, 300])
-            .words(stripWordCount(data))
-            .rotate(function() { return ~~(Math.random() * 2) * 90; })
-            .font("Impact")
-            .fontSize(function(d) { return d.size; })
-            .on("end", draw)
-            .start();
+        console.log("Displaying: " + stripWordCount(data));
+        if (data.length != 0) {
+            d3.layout.cloud().size([300, 300])
+                .words(stripWordCount(data))
+                .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                .font("Impact")
+                .fontSize(function(d) { return d.size; })
+                .on("end", draw)
+                .start();
+        }
     });
 
     function draw(words) {

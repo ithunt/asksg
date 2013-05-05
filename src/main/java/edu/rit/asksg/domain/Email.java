@@ -140,7 +140,7 @@ public class Email extends Service implements ContentProvider {
 
 		Conversation conversation;
 
-		conversation = getConversationService().findConversationByRecipientSince(message.getAuthor(), now.minusWeeks(1)));
+		conversation = getConversationService().findConversationByRecipientSince(message.getAuthor(), now.minusWeeks(1));
 		if (conversation == null) {
 			conversation = new Conversation(message);
 			conversation.setCreated(message.getCreated());

@@ -108,11 +108,7 @@ public class Facebook extends Service implements ContentProvider, SubscriptionPr
 			conversation.setModified(created);
 
             message.setConversation(conversation);
-<<<<<<< HEAD
-            String postMessage = post.getMessage();
-            message.setContent(postMessage);
-=======
->>>>>>> ba6fd256db30050725a9ca0e82a142a5ce0eeeff
+
             // Subject snippet will be the first 40 characters plus a "...", unless it's shorter than that
             conversation.setSubject(postMessage.length() > 40 ? postMessage.substring(0, 40) + "..." : postMessage);
             if (post.getComments() != null) {
