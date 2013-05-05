@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,30 +41,23 @@ public class WordCounter {
     @Autowired
     ProviderService providerService;
 
-    @Async
+    @Transactional
     public void work(final LocalDateTime day) {
 
         //for reuse
         final List<Topic> topics = topicRepository.findAll();
-        final Map<String, Topic> topicMap = new HashMap<String, Topic>();
-        for (Topic t : topics) {
-            for (String s : t.getWords()) {
-                topicMap.put(s, t);
-            }
-        }
-
 
         List<Service> services = providerService.findAllServices();
 
         for(Service s : services) {
             if(s.isEnabled()) {
                 List<Conversation> conversations = conversationService.findByService(s, day, day.plusDays(1));
-                Map<String, WordCount> countMap = buildCountMapWithService(conversations, s, topicMap, day);
+                Map<Topic, WordCount> countMap = buildCountMapWithService(conversations, s, topics, day);
 
                 //Add zero values on this day
                 List<WordCount> wordCounts = addZeroCounts(new ArrayList<WordCount>(countMap.values()), topics, s, day);
 
-                logger.info("preparing to persist " + wordCounts.size() + " word counts for " + s.getName());
+//                logger.info("preparing to persist " + wordCounts.size() + " word counts for " + s.getName());
 
                 try {
                     wordCountRepository.save(wordCounts);
@@ -107,50 +101,44 @@ public class WordCounter {
      *  in the topic map
      * @param conversations
      * @param service
-     * @param topicMap
+     * @param topics
      * @param day
      * @return
      */
-    protected Map<String, WordCount> buildCountMapWithService(
+    protected Map<Topic, WordCount> buildCountMapWithService(
             final List<Conversation> conversations,
             final Service service,
-            final Map<String, Topic> topicMap,
+            final List<Topic> topics,
             final LocalDateTime day) {
 
-        Map<String, WordCount> countMap = new HashMap<String, WordCount>();
+        Map<Topic, WordCount> countMap = new HashMap<Topic, WordCount>();
+
         for (Conversation c : conversations) {
             for (Message m : c.getMessages()) {
-                for (String s : m.getContent().split("\\n| |\\r|;|\\(|\\)")) {
-                    try {
+                String content = m.getContent();
+                if(content != null) {
+                    for(Topic t : topics) {
+                        for(String word : t.getWords()) {
+                            if(content.contains(word)) {
+                                if (countMap.containsKey(t)) {
 
-                        //remove trailing punctuation , could be more here?
-                        if (s.endsWith(".") || s.endsWith(",")) s = s.substring(0, s.length() - 1);
-                        s = s.toLowerCase();
+                                    WordCount wc = countMap.get(t);
+                                    wc.setWordCount(wc.getWordCount() + 1L);
 
-                        //Only count words we care about
-                        if (topicMap.containsKey(s)) {
-                            logger.debug("Found topic word: " + s);
-                            if (countMap.containsKey(s)) {
-
-                                WordCount wc = countMap.get(s);
-                                wc.setWordCount(wc.getWordCount() + 1L);
-
-                            } else {
-                                WordCount wc = new WordCount();
-                                wc.setTopic(topicMap.get(s));
-                                wc.setWordCount(1L);
-                                wc.setCreated(day);
-                                wc.setService(service);
-                                countMap.put(s, wc);
+                                } else {
+                                    WordCount wc = new WordCount();
+                                    wc.setTopic(t);
+                                    wc.setWordCount(1L);
+                                    wc.setCreated(day);
+                                    wc.setService(service);
+                                    countMap.put(t, wc);
+                                }
                             }
-                        }
-
-                    } catch (Error e) {
-                        logger.error(e.getLocalizedMessage(), e);
-                    }
+                        } //end for all words
+                    } // end for all topics
                 }
-            }
-        }
+            } //end for all messages in a convo
+        } //end for all convos
         return countMap;
     }
 

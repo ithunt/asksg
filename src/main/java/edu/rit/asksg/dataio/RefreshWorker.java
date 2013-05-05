@@ -24,10 +24,10 @@ public class RefreshWorker implements AsyncWorker {
 	 *
 	 * @param service
 	 */
-	@Async
+//	@Async
 	public void work(final Service service) {
 		final String threadName = Thread.currentThread().getName();
-		log.debug("Pull worker executing on " + threadName + " for service " + service.toString());
+		log.debug("Pull worker executing on " + threadName + " for service " + service.getName());
 
 		try {
 			conversationService.saveConversations(service.getNewContent());
@@ -35,7 +35,7 @@ public class RefreshWorker implements AsyncWorker {
 			log.error(e.getLocalizedMessage(), e);
 		}
 
-		log.debug("Pull worker on " + threadName + " for service " + service.toString() + " completed.");
+		log.debug("Pull worker on " + threadName + " for service " + service.getName() + " completed.");
 	}
 
 

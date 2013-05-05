@@ -129,11 +129,11 @@ public class Email extends Service implements ContentProvider {
 
             message.setCreated(new LocalDateTime(mimeMessage.getReceivedDate()));
 
-            logger.debug("MimeMessage from:" + message.getIdentity().getName() + " - " + message.getContent());
+//            logger.debug("MimeMessage from:" + message.getIdentity().getName() + " - " + message.getContent());
         } catch (MessagingException e) {
-            logger.error(e.getLocalizedMessage());
+            logger.error(e.getLocalizedMessage(), e);
         } catch (IOException e) {
-            logger.error(e.getLocalizedMessage());
+            logger.error(e.getLocalizedMessage(), e);
         }
 
         Conversation c = new Conversation(message);
@@ -184,16 +184,16 @@ public class Email extends Service implements ContentProvider {
                     conversations.add(c);
 
                 } catch (Exception e) {
-                    logger.error(e.getLocalizedMessage());
+                    logger.error(e.getLocalizedMessage(), e);
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
+            logger.error(e.getLocalizedMessage(), e);
         } finally {
             try {
                 store.close();
             } catch (MessagingException e) {
-                e.printStackTrace();
+                logger.error(e.getLocalizedMessage(), e);
             }
         }
         return conversations;

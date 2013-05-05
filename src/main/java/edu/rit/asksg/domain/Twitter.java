@@ -117,7 +117,7 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             c.setSubject(tweet.getText());
             convos.add(c);
 
-            logger.debug("New Tweet:" + message.toString());
+//            logger.debug("New Tweet:" + message.toString());
 
         }
         return convos;

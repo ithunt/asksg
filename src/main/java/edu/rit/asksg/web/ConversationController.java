@@ -55,6 +55,16 @@ public class ConversationController {
 	@Autowired
 	ScheduledProcessor scheduledProcessor;
 
+    @RequestMapping(value = "services")
+    public ResponseEntity<String> services() {
+        bootstrapProviders();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content_type", "text/plain");
+
+        return new ResponseEntity<String>("up by your bootstraps", headers, HttpStatus.OK);
+    }
+
 	@RequestMapping(value = "seed")
 	public ResponseEntity<String> seed() {
 
