@@ -1,5 +1,6 @@
 package edu.rit.asksg.domain;
 
+import edu.rit.asksg.analytics.Chatterbox;
 import edu.rit.asksg.dataio.ContentProvider;
 import edu.rit.asksg.domain.config.EmailConfig;
 import edu.rit.asksg.domain.config.ProviderConfig;
@@ -75,6 +76,8 @@ public class Service implements ContentProvider {
 			s = new JSONDeserializer<Service>().use(null, Twitter.class).use("config", SpringSocialConfig.class).deserialize(json);
 		} else if (json.contains("\"name\":\"Reddit\"")) {
 			s = new JSONDeserializer<Service>().use(null, Reddit.class).use("config", RedditConfig.class).deserialize(json);
+		} else if (json.contains("\"name\":\"Chatterbox\"")) {
+			s = new JSONDeserializer<Service>().use(null, Chatterbox.class).use("config", ProviderConfig.class).deserialize(json);
 		} else {
 			s = new JSONDeserializer<Service>().use(null, Service.class).deserialize(json);
 		}
