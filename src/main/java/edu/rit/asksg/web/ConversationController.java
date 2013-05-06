@@ -17,10 +17,11 @@ import edu.rit.asksg.domain.config.EmailConfig;
 import edu.rit.asksg.domain.config.ProviderConfig;
 import edu.rit.asksg.domain.config.SpringSocialConfig;
 import edu.rit.asksg.domain.config.TwilioConfig;
+import edu.rit.asksg.service.ConversationService;
 import edu.rit.asksg.service.IdentityService;
 import edu.rit.asksg.service.ProviderService;
+import edu.rit.asksg.service.UserService;
 import org.joda.time.LocalDateTime;
-import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +34,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.annotation.Resource;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +50,9 @@ public class ConversationController {
 
 	@Log
 	private Logger logger;
+
+    @Autowired
+    ConversationService conversationService;
 
 	@Autowired
 	ProviderService providerService;
@@ -66,6 +72,9 @@ public class ConversationController {
 
         return new ResponseEntity<String>("up by your bootstraps", headers, HttpStatus.OK);
     }
+
+    @Resource(name="userDetailsService")
+    UserService userService;
 
 	@RequestMapping(value = "seed")
 	public ResponseEntity<String> seed() {
@@ -101,13 +110,13 @@ public class ConversationController {
 	}
 
 	//Prevent roo from autogenerating method (hiding listJson with WebRequest)
-	private ResponseEntity<String> listJson() {
-		return listJson(new ServletWebRequest(null));
+	private ResponseEntity<String> listJson(Principal principal) {
+		return listJson(new ServletWebRequest(null), principal);
 	}
 
 	@RequestMapping(headers = "Accept=application/json")
 	@ResponseBody
-	public ResponseEntity<String> listJson(WebRequest params) {
+	public ResponseEntity<String> listJson(WebRequest params, Principal principal) {
 		String s = params.getParameter("since");
 		String u = params.getParameter("until");
 		String c = params.getParameter("count");
@@ -143,6 +152,13 @@ public class ConversationController {
 
 		List<Conversation> conversations = conversationService.findAllConversations(
 				since, until, excludeServices, includes, read, count);
+
+        if(principal == null || !userService.isAdmin(principal.getName())) {
+            for(Conversation conversation : conversations) {
+                conversation.getService().setConfig(new ProviderConfig());
+            }
+        }
+
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "application/json; charset=utf-8");
@@ -293,4 +309,8 @@ public class ConversationController {
 
 		return new ResponseEntity<String>("Refresh Requested", headers, HttpStatus.OK);
 	}
+
+
+
+
 }
