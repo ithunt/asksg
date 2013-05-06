@@ -51,6 +51,7 @@ public class Conversation {
     private Boolean privateConversation = Boolean.FALSE;
 
     public Conversation() {
+        this.messages = new ArrayList<Message>();
     }
 
     public Conversation(Message m) {

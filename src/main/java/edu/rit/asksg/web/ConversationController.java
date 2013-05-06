@@ -2,7 +2,7 @@ package edu.rit.asksg.web;
 
 import com.google.common.base.Optional;
 import edu.rit.asksg.common.Log;
-import edu.rit.asksg.dataio.ScheduledPocessor;
+import edu.rit.asksg.dataio.ScheduledProcessor;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Email;
 import edu.rit.asksg.domain.Facebook;
@@ -21,6 +21,7 @@ import edu.rit.asksg.service.ConversationService;
 import edu.rit.asksg.service.IdentityService;
 import edu.rit.asksg.service.ProviderService;
 import edu.rit.asksg.service.UserService;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,10 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
@@ -63,7 +61,17 @@ public class ConversationController {
 	IdentityService identityService;
 
 	@Autowired
-	ScheduledPocessor scheduledPocessor;
+	ScheduledProcessor scheduledProcessor;
+
+    @RequestMapping(value = "services")
+    public ResponseEntity<String> services() {
+        bootstrapProviders();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content_type", "text/plain");
+
+        return new ResponseEntity<String>("up by your bootstraps", headers, HttpStatus.OK);
+    }
 
     @Resource(name="userDetailsService")
     UserService userService;
@@ -118,9 +126,8 @@ public class ConversationController {
 		Optional<Integer> until = Optional.absent();
 		Optional<Boolean> read = Optional.absent();
 
-
-		//todo:not here
-		Integer count = DEFAULT_COUNT;
+        //todo:not here
+        Integer count = DEFAULT_COUNT;
 
 		if (s != null)
 			since = Optional.of(Integer.parseInt(s));
@@ -166,6 +173,8 @@ public class ConversationController {
 	}
 
 	private void bootstrapProviders() {
+
+		LocalDateTime now = LocalDateTime.now();
 
 		final Service twiloprovider = providerService.findServiceByTypeAndIdentifierEquals(Twilio.class, "15852865275");
 		if (twiloprovider == null) {
@@ -257,12 +266,13 @@ public class ConversationController {
 			config.setIdentifier("rit");
 			reddit.setConfig(config);
 
-			SocialSubscription java = new SocialSubscription();
-			java.setHandle("java");
-			Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
-			subscriptions.add(java);
+            SocialSubscription java = new SocialSubscription();
+            java.setHandle("rit");
+            Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
+            subscriptions.add(java);
 
 			config.setSubscriptions(subscriptions);
+            config.setSubscriptions(subscriptions);
 
 			providerService.saveService(reddit);
 
@@ -285,8 +295,8 @@ public class ConversationController {
 	}
 
 	protected void pullContent() {
-		scheduledPocessor.executeRefresh();
-		scheduledPocessor.executeSubscriptions();
+		scheduledProcessor.executeRefresh();
+		scheduledProcessor.executeSubscriptions();
 	}
 
 

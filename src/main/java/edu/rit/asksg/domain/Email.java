@@ -129,24 +129,32 @@ public class Email extends Service implements ContentProvider {
 
             message.setCreated(new LocalDateTime(mimeMessage.getReceivedDate()));
 
-            logger.debug("MimeMessage from:" + message.getIdentity().getName() + " - " + message.getContent());
+//            logger.debug("MimeMessage from:" + message.getIdentity().getName() + " - " + message.getContent());
         } catch (MessagingException e) {
-            logger.error(e.getLocalizedMessage());
+            logger.error(e.getLocalizedMessage(), e);
         } catch (IOException e) {
-            logger.error(e.getLocalizedMessage());
+            logger.error(e.getLocalizedMessage(), e);
         }
 
-        Conversation c = new Conversation(message);
-        message.setConversation(c);
-        if (c.getMessages() != null && !c.getMessages().isEmpty())
-            c.setCreated(c.getMessages().get(0).getCreated());
+		LocalDateTime now = LocalDateTime.now();
+
+		Conversation conversation;
+
+		conversation = getConversationService().findConversationByRecipientSince(message.getAuthor(), now.minusWeeks(1));
+		if (conversation == null) {
+			conversation = new Conversation(message);
+			conversation.setCreated(message.getCreated());
+		}
+		message.setConversation(conversation);
+		conversation.getMessages().add(message);
+		conversation.setModified(message.getCreated());
 
         try {
-            c.setSubject(mimeMessage.getSubject());
+			conversation.setSubject(mimeMessage.getSubject());
         } catch (MessagingException e) {
-            c.setSubject("(no subject)");
+			conversation.setSubject("(no subject)");
         }
-        return c;
+        return conversation;
     }
 
     @JSON(include = false)
@@ -184,16 +192,16 @@ public class Email extends Service implements ContentProvider {
                     conversations.add(c);
 
                 } catch (Exception e) {
-                    logger.error(e.getLocalizedMessage());
+                    logger.error(e.getLocalizedMessage(), e);
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
+            logger.error(e.getLocalizedMessage(), e);
         } finally {
             try {
                 store.close();
             } catch (MessagingException e) {
-                e.printStackTrace();
+                logger.error(e.getLocalizedMessage(), e);
             }
         }
         return conversations;

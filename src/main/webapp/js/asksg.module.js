@@ -99,6 +99,9 @@ function ProviderConfig(id, authenticated, enabled, config, name, version) {
 	this.enabled = enabled;
 	this.config = config;
 	this.version = version;
+    this.config.counterRefresh = new Date(config.counterRefresh.localMillis);
+    this.config.lastUpdate = new Date(config.lastUpdate.localMillis);
+    this.config.updateFrequency = config.updateFrequency.minutes;
 }
 
 function Twilio(providerConfig, authenticated) {
@@ -197,6 +200,7 @@ app.factory('$asksg', function ($http, $log) {
 	var analyticsUrl = '/asksg/analytics/words';
 	var subscriptionsUrl = '/asksg/socialsubscriptions';
 	var tagsUrl = '/asksg/tags';
+    var configsUrl = '/asksg/providerconfigs';
 
 	// Publish the $asksg API here
 	return {
@@ -242,6 +246,10 @@ app.factory('$asksg', function ($http, $log) {
 			return $http({method: 'DELETE', url: (convoUrl + "/" + convoId)});
 		},
 
+        refreshConversationData: function() {
+            return $http({method: 'GET', url: (convoUrl + "/refresh")});
+        },
+
 		/**
 		 * Submit a new service to the system.
 		 *
@@ -274,6 +282,11 @@ app.factory('$asksg', function ($http, $log) {
 		deleteService: function (serviceId) {
 			return $http({method: 'DELETE', url: (servicesUrl + "/" + serviceId)});
 		},
+
+        updateConfig: function(configId, maxCalls, updateFrequency) {
+            return $http({method: 'POST',
+                url: configsUrl + "/updateLimits?id=" + configId + "&maxCalls=" + maxCalls + "&updateFrequency=" + updateFrequency});
+        },
 
 		/**
 		 * Updates a user
@@ -678,6 +691,16 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 			});
 	}
 
+    $scope.refreshConversations = function() {
+        $asksg.refreshConversationData()
+            .success(function (data, status, headers) {
+                $("#refreshConvosButton").hide();
+                $("#convosRefreshedMessage").show();
+            }).error(function (data, status, headers, config) {
+                // do nothing
+            });
+    }
+
 	/*
 	 * Add a new social subscription...
 	 */
@@ -687,6 +710,13 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 				$scope.refreshSubscriptions();
 			});
 	}
+
+    /*
+     * Update the update limits of the config
+     */
+    $scope.updateApiLimits = function (configId, updatedMaxCalls, updatedUpdateFrequency) {
+        $asksg.updateConfig(configId, updatedMaxCalls, updatedUpdateFrequency);
+    }
 
 	/*
 	 * Delete a conversation.
@@ -819,7 +849,7 @@ app.directive('myDatepicker',function ($parse) {
 		$(function () {
 			element.datepicker({
 				inline: true,
-				dateFormat: 'dd.mm.yy',
+				dateFormat: 'mm/dd/yy',
 				onSelect: function (dateText, inst) {
 					scope.$apply(function (scope) {
 						// Change binded variable

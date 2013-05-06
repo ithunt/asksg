@@ -10,6 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import flexjson.JSON;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Minutes;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
@@ -33,9 +36,24 @@ public class ProviderConfig {
 
 	private int port;
 
+	private LocalDateTime lastUpdate = LocalDateTime.now();
+
+	private int maxCalls = 0;
+
+	private int currentCalls = 0;
+
+	private Minutes updateFrequency = Minutes.minutes(30);
+
+	private LocalDateTime counterRefresh = LocalDateTime.now();
+
 	@ManyToOne
 	private AsksgUser createdBy;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
+
+	@JSON(include = false)
+	public void incrementCalls() {
+		currentCalls++;
+	}
 }
