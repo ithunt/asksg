@@ -2,7 +2,7 @@ package edu.rit.asksg.web;
 
 import com.google.common.base.Optional;
 import edu.rit.asksg.common.Log;
-import edu.rit.asksg.dataio.ScheduledPocessor;
+import edu.rit.asksg.dataio.ScheduledProcessor;
 import edu.rit.asksg.domain.Conversation;
 import edu.rit.asksg.domain.Email;
 import edu.rit.asksg.domain.Facebook;
@@ -29,7 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
@@ -56,7 +55,17 @@ public class ConversationController {
 	IdentityService identityService;
 
 	@Autowired
-	ScheduledPocessor scheduledPocessor;
+	ScheduledProcessor scheduledProcessor;
+
+    @RequestMapping(value = "services")
+    public ResponseEntity<String> services() {
+        bootstrapProviders();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content_type", "text/plain");
+
+        return new ResponseEntity<String>("up by your bootstraps", headers, HttpStatus.OK);
+    }
 
 	@RequestMapping(value = "seed")
 	public ResponseEntity<String> seed() {
@@ -270,8 +279,8 @@ public class ConversationController {
 	}
 
 	protected void pullContent() {
-		scheduledPocessor.executeRefresh();
-		scheduledPocessor.executeSubscriptions();
+		scheduledProcessor.executeRefresh();
+		scheduledProcessor.executeSubscriptions();
 	}
 
 

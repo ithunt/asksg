@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Component
-public class ScheduledPocessor {
+public class ScheduledProcessor {
 
     @Log
     Logger log;
@@ -42,7 +42,7 @@ public class ScheduledPocessor {
     /**
      * Launch async workers to update services.
      */
-    @Scheduled(fixedDelay = 900000, initialDelay = 1000)
+    @Scheduled(fixedDelay = 900000, initialDelay = 60000)
     public void executeRefresh() {
         log.debug("Start execution of dataio refresh");
         List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
@@ -55,7 +55,7 @@ public class ScheduledPocessor {
     }
 
 
-    @Scheduled(fixedDelay = 1100000, initialDelay = 10000)
+    @Scheduled(fixedDelay = 1100000, initialDelay = 90000)
     public void executeSubscriptions() {
         log.debug("Start execution of subscription pull");
         List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
@@ -67,8 +67,8 @@ public class ScheduledPocessor {
         log.debug("Scheduler finished subscription pull");
     }
 
-    //Runs everyday, starts 5mins after startup
-    @Scheduled(fixedDelay = 86400, initialDelay = 300)
+    //Runs everyday, starts 3mins after startup
+    @Scheduled(fixedDelay = 86400000, initialDelay = 180000)
     public void executeWordCount() {
         log.debug("Start execution of word counting");
 
@@ -80,18 +80,14 @@ public class ScheduledPocessor {
             start = last.getCreated();
         }
 
-        List<Service> services = providerService.findAllServices();
         List<DateTime> days = AnalyticsServiceImpl.getDaySpan(start, LocalDateTime.now());
-        for (edu.rit.asksg.domain.Service service : services) {
-            if (service.isEnabled()) {
-                for (DateTime d : days) {
-                    wordCounter.work(service, new LocalDateTime(d), new LocalDateTime(d.plusDays(1)));
-                }
-            }
+        for (DateTime d : days) {
+            wordCounter.work(new LocalDateTime(d));
         }
 
-
+        log.debug("Finished execution of word counting");
     }
+
 
 
 }
