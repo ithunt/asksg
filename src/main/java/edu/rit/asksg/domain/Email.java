@@ -136,17 +136,25 @@ public class Email extends Service implements ContentProvider {
             logger.error(e.getLocalizedMessage(), e);
         }
 
-        Conversation c = new Conversation(message);
-        message.setConversation(c);
-        if (c.getMessages() != null && !c.getMessages().isEmpty())
-            c.setCreated(c.getMessages().get(0).getCreated());
+		LocalDateTime now = LocalDateTime.now();
+
+		Conversation conversation;
+
+		conversation = getConversationService().findConversationByRecipientSince(message.getAuthor(), now.minusWeeks(1));
+		if (conversation == null) {
+			conversation = new Conversation(message);
+			conversation.setCreated(message.getCreated());
+		}
+		message.setConversation(conversation);
+		conversation.getMessages().add(message);
+		conversation.setModified(message.getCreated());
 
         try {
-            c.setSubject(mimeMessage.getSubject());
+			conversation.setSubject(mimeMessage.getSubject());
         } catch (MessagingException e) {
-            c.setSubject("(no subject)");
+			conversation.setSubject("(no subject)");
         }
-        return c;
+        return conversation;
     }
 
     @JSON(include = false)

@@ -35,9 +35,6 @@ public class ServiceController {
         final Facebook facebook = (Facebook) providerService.findService(Long.parseLong(id));
         final SpringSocialConfig fbConfig = ((SpringSocialConfig) facebook.getConfig());
         fbConfig.setAccessToken(code);
-        SocialSubscription ritsg = new SocialSubscription();
-        ritsg.setHandle("ritstudentgov"); // TODO: still hard-coded
-        fbConfig.getSubscriptions().add(ritsg);
         facebookService.makeAccessTokenRequest(facebook);
         providerService.updateService(facebook);
         return new ResponseEntity<String>(HttpStatus.OK);

@@ -32,6 +32,11 @@
     <!-- ../js/angular/angular.min.js -->
     <script src="./js/asksg.module.js"></script>
 
+    <!-- D3 and wordcloud -->
+    <script src="./js/d3.v3.min.js"></script>
+    <script src="./js/d3.layout.cloud.js"></script>
+    <script src="./js/wordcount.js"></script>
+
     <!-- login -->
     <script language="javascript">
         function forceHttpsOnSubmit(objForm) {
@@ -60,10 +65,6 @@
             <a class="brand" href="/">ASKSG</a>
 
             <div class="nav-collapse collapse">
-                <ul class="nav">
-                    <!--<li><a href="/students/index.html">Students</a></li>-->
-                    <li><a class="scrollToLearnMore" href="#learn-more">Learn More</a></li>
-                </ul>
                 <ul class="nav pull-right">
                     <!--<li><a href="/students/index.html">Students</a></li>-->
                     <!--<li><a class="scrollToLearnMore" href="#learn-more">Learn More</a></li>-->
@@ -86,6 +87,9 @@
         <p style="text-align:center">The RIT community overlay that brings your thoughts and opinions to light.</p>
         <br/>
 
+        <div id="wordcloud" style="text-align:center">
+        </div>
+
         <p style="text-align:center"><a class="btn btn-primary btn-large scrollToLearnMore" href="#learn-more">Learn
             more &darr;</a></p>
     </div>
@@ -93,6 +97,8 @@
     <div id="learn-more" class="row-fluid">
         <div class="span12" style="text-align:center">
             <ul class="inside-list">
+<!--                 <li id="wordcloud" class="inside-list-item-info" style="text-align:center">
+                </li> -->
                 <li class="inside-list-item-info">
                     <h3 style="text-align:center">
                         Ask questions that are sent directly to RIT Student Government representatives.
@@ -112,7 +118,7 @@
                         <img src="img/asksg.png"/>
                     </div>
                 </li>
-                <li class="inside-list-item-info inside-list-item-lock">
+                <li class="inside-list-item-info">
                     <h3 class="text-warning" style="text-align:center">
                         Don't worry, your messages are 100% Private &amp; Confidential. We won't share or persist any of
                         your personal information.
@@ -135,14 +141,14 @@
     <div class="modal hide" id="loginModal">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">x</button>
-            <h3>Login to ASKSG</h3>
+            <h3>Log In to ASKSG</h3>
         </div>
         <div class="modal-body">
             <form method="POST" action="/asksg/resources/j_spring_security_check" onsubmit="forceHttpsOnSubmit(this)"
-                  name="login_form"> <!-- ng-submit="login()" -->
+                  name="login_form">
                 <p>
                     <input ng-model="localUserName" type="text" class="span3" name="j_username" id="email"
-                           placeholder="Username">
+                           placeholder="ASKSG Username">
                 </p>
 
                 <p>
@@ -181,6 +187,43 @@
 
 <!-- le prettify script - should this code just be put in main.js? -->
 <script src="js/prettify.js"></script>
+
+<script>
+    var fill = d3.scale.category20();
+
+    // Fetch the content and put it in the word cloud
+    $.get('/asksg/analytics/words', function(data) {
+        console.log("Displaying: " + stripWordCount(data));
+        if (data.length != 0) {
+            d3.layout.cloud().size([300, 300])
+                .words(stripWordCount(data))
+                .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                .font("Impact")
+                .fontSize(function(d) { return d.size; })
+                .on("end", draw)
+                .start();
+        }
+    });
+
+    function draw(words) {
+        d3.select("#wordcloud").append("svg")
+        .attr("width", 300)
+        .attr("height", 300)
+        .append("g")
+        .attr("transform", "translate(150,150)")
+        .selectAll("text")
+        .data(words)
+        .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; });
+    }
+</script>
 
 <!-- le Analytics -->
 <script>
