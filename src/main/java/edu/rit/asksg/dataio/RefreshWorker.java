@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- */
+@Component
 public class RefreshWorker implements AsyncWorker {
 
 	@Log
@@ -26,7 +26,8 @@ public class RefreshWorker implements AsyncWorker {
 	 *
 	 * @param service
 	 */
-//	@Async
+	@Async
+    @Transactional
 	public void work(final Service service) {
 		final String threadName = Thread.currentThread().getName();
 		log.debug("Pull worker executing on " + threadName + " for service " + service.getName());

@@ -42,6 +42,7 @@ public class WordCounter {
     ProviderService providerService;
 
     @Transactional
+    @Async
     public void work(final LocalDateTime day) {
 
         //for reuse

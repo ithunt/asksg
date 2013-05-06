@@ -17,7 +17,13 @@
 		<intercept-url pattern="/resources/**" access="permitAll"/>
         <intercept-url pattern="/dashboard/**" access="isAuthenticated()"/>
         <intercept-url pattern="/index.html" access="permitAll" />
+
+
         <intercept-url pattern="/users/seed" access="permitAll" />
+        <intercept-url pattern="/conversations/services" access="permitAll" />
+        <intercept-url pattern="/analytics/topics" access="permitAll" />
+
+
         <intercept-url pattern="/twilios/**" access="permitAll" />
 		<intercept-url pattern="/conversations/**" access="isAuthenticated()"/>
         <intercept-url pattern="/socialsubscriptions/**" access="isAuthenticated()"/>
