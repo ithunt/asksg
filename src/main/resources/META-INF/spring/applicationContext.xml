@@ -54,8 +54,8 @@
     <!-- Enable @Scheduled and @Async, configure for dataio -->
     <task:annotation-driven executor="dataioExecutor" scheduler="dataioScheduler"/>
 
-    <task:executor id="dataioExecutor" pool-size="8" queue-capacity="150"/>
-    <task:scheduler id="dataioScheduler" pool-size="10"/>
+    <task:executor id="dataioExecutor" pool-size="4" queue-capacity="250"/>
+    <task:scheduler id="dataioScheduler" pool-size="3"  />
 
     <!-- Persistence configuration -->
     <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>

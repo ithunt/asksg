@@ -4,7 +4,7 @@
 	<!-- appenders -->
 	<appender name="hibernateFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>WARN</level>
+			<level>ERROR</level>
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>logs/hibernate.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
