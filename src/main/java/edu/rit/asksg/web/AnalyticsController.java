@@ -125,6 +125,8 @@ public class AnalyticsController {
     @RequestMapping(value = "/topics")
     public ResponseEntity<String> topicTest() {
 
+        if(topicRepository.count() > 0) return new ResponseEntity<String>(HttpStatus.OK);
+
         List<Topic> topics = new ArrayList<Topic>();
 
         Topic t = new Topic("rit", "#rit,#ritnews");
