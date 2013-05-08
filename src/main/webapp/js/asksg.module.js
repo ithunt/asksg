@@ -203,9 +203,24 @@ app.factory('$asksg', function ($http, $log) {
     var configsUrl = '/asksg/providerconfigs';
     var exportUrl = '/asksg/analytics/csv'
     var topicUrl = '/asksg/analytics/topics';
+    var logoutUrl = "/resources/j_spring_security_logout";
+    var currentUserUrl = '/users/current';
+    var homeUrl = '/asksg/';
 
 	// Publish the $asksg API here
 	return {
+        getCurrentUser: function() {
+            return $http.get({method: 'GET', url: currentUserUrl});
+        },
+
+        /**
+         * Handle user logout
+         */
+        logout: function() {
+            window.location = homeUrl;
+            $http.get({method: 'GET', url: logoutUrl});
+        },
+
 		/**
 		 * Fetch all conversations with a specified ID (-1 or nil require us to fetch all of them...)
 		 *
@@ -815,9 +830,12 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
             $scope.refreshUsers();
         });
     }
- 
 
- // Test data for topic selection
+    $scope.doLogout = function() {
+        $asksg.logout();
+    }
+
+    // Topic selection buffers
     $scope.includeList = [];
     $scope.omitList = [];
  
@@ -879,6 +897,7 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
         $scope.refreshSubscriptions();
         $scope.refreshUsers();
         $scope.refreshRoles();
+        $scope.refreshTopics();
 
         // Handle facebook authentication
         var facebookCode = getQueryVariable("code");
