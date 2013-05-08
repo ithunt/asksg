@@ -201,6 +201,8 @@ app.factory('$asksg', function ($http, $log) {
 	var subscriptionsUrl = '/asksg/socialsubscriptions';
 	var tagsUrl = '/asksg/tags';
     var configsUrl = '/asksg/providerconfigs';
+    var exportUrl = '/asksg/analytics/csv'
+    var topicUrl = '/asksg/analytics/topics';
 
 	// Publish the $asksg API here
 	return {
@@ -346,12 +348,27 @@ app.factory('$asksg', function ($http, $log) {
 				}
 			}
 			return $http({method: 'GET', url: target});
-		}
+		}, 
+
+        exportAnalyticsData: function (start, end) {
+            var target = exportUrl;
+            if (start != null && start.length > 0) {
+                target = target + "?since=" + start;
+                if (end != null && end.length > 0) {
+                    target = target + "&until=" + end;
+                }
+            }
+            console.log(target);
+            window.location = target;
+        },
+
+        fetchTopics: function() {
+            return $http({method: 'GET', url: topicUrl});
+        }
 	};
 });
 
 app.controller('ConversationController', ['$scope', '$asksg', '$log', function ($scope, $asksg, $log) {
-
 	/*
 	 * Attempt to render some analytics data
 	 */
@@ -383,6 +400,33 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 				return null;
 			});
 	}
+
+    $scope.exportData = function(exportStartDate, exportEndDate) {
+        console.log("invoking the export analytics method...");
+        console.log(exportStartDate);
+        console.log(exportEndDate);
+        $asksg.exportAnalyticsData(exportStartDate, exportEndDate).
+            success(function (data, status, headers, config) {
+                console.log(data);
+            }).
+            error(function (data, status, headers, config) {
+                console.log("Error");
+                console.log(data);
+            });
+    }
+
+    $scope.refreshTopics = function () {
+        $asksg.fetchTopics().success(function (data, status, headers, config) {
+                console.log("Got topics...");
+                console.log(data);
+                $scope.includeList = [];
+                $scope.omitList = [{"id": 5, "topic": "T6"},{"id": 6,"topic": "T7"}];
+                for (var i = 0; i < data.length; i++) {
+                    $scope.includeList.push(data[i]); // just an array of strings
+                }
+            });
+    }
+
 	/*
 	 * Refresh the set of conversations on the page
 	 */
@@ -718,127 +762,145 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
         $asksg.updateConfig(configId, updatedMaxCalls, updatedUpdateFrequency);
     }
 
-	/*
-	 * Delete a conversation.
-	 */
-	$scope.deleteConvo = function (convoId) {
-		$asksg.deleteConvo(convoId);
-		$scope.refreshConvos();
-	};
+    /*
+     * Delete a conversation.
+     */
+    $scope.deleteConvo = function (convoId) {
+        $asksg.deleteConvo(convoId);
+        $scope.refreshConvos();
+    };
 
-	/*
-	 * Determine if a conversation is active.
-	 */
-	$scope.isConvoActive = function (convoId) {
-		return $scope.convoMap[convoId].active;
-	}
+    /*
+     * Determine if a conversation is active.
+     */
+    $scope.isConvoActive = function (convoId) {
+        return $scope.convoMap[convoId].active;
+    }
 
-	$scope.toggleReadConvo = function (convoId) {
-		$scope.convoMap[convoId].read = !$scope.convoMap[convoId].read;
-		$asksg.updateConvo($scope.convoMap[convoId]);
-	}
+    $scope.toggleReadConvo = function (convoId) {
+        $scope.convoMap[convoId].read = !$scope.convoMap[convoId].read;
+        $asksg.updateConvo($scope.convoMap[convoId]);
+    }
 
-	/*
-	 * Hide the specified conversation (mark as read).
-	 */
-	$scope.toggleHideConvo = function (convoId) {
-		$scope.convoMap[convoId].hidden = !$scope.convoMap[convoId].hidden;
-		$asksg.updateConvo($scope.convoMap[convoId]);
-	}
+    /*
+     * Hide the specified conversation (mark as read).
+     */
+    $scope.toggleHideConvo = function (convoId) {
+        $scope.convoMap[convoId].hidden = !$scope.convoMap[convoId].hidden;
+        $asksg.updateConvo($scope.convoMap[convoId]);
+    }
 
-	$scope.toggleEnabledService = function (service) {
-		service.enabled = !service.enabled;
-		$asksg.updateService(service).success(function () {
-			$scope.refreshSubscriptions();
-		});
-	}
+    $scope.toggleEnabledService = function (service) {
+        service.enabled = !service.enabled;
+        $asksg.updateService(service).success(function () {
+            $scope.refreshSubscriptions();
+        });
+    }
 
-	$scope.deleteService = function (serviceId) {
-		$asksg.deleteService(serviceId).success(function () {
-			$scope.refreshSubscriptions();
-		});
-	}
+    $scope.deleteService = function (serviceId) {
+        $asksg.deleteService(serviceId).success(function () {
+            $scope.refreshSubscriptions();
+        });
+    }
 
-	$scope.toggleEnabledUser = function (user) {
-		user.enabled = !user.enabled;
-		$asksg.updateUser(user).success(function () {
-			$scope.refreshUsers();
-		});
-	}
+    $scope.toggleEnabledUser = function (user) {
+        user.enabled = !user.enabled;
+        $asksg.updateUser(user).success(function () {
+            $scope.refreshUsers();
+        });
+    }
 
-	$scope.deleteUser = function (userId) {
-		$asksg.deleteUser(userId).success(function () {
-			$scope.refreshUsers();
-		});
-	}
+    $scope.deleteUser = function (userId) {
+        $asksg.deleteUser(userId).success(function () {
+            $scope.refreshUsers();
+        });
+    }
+ 
 
-	/*
-	 * Set up the default conversation filters.
-	 */
-	$scope.convoCategory = "";
-	$scope.convoFilter = "";
+ // Test data for topic selection
+    $scope.includeList = [];
+    $scope.omitList = [];
+ 
+    // watch, use 'true' to also receive updates when values
+    // change, instead of just the reference
+    $scope.$watch("model", function(value) {
+        console.log("Model: " + value.map(function(e){return e.id}).join(','));
+    },true);
+ 
+    // watch, use 'true' to also receive updates when values
+    // change, instead of just the reference
+    $scope.$watch("source", function(value) {
+        console.log("Source: " + value.map(function(e){return e.id}).join(','));
+    },true);
 
-	// Array to store the state of active conversation filters
-	$scope.excludeServices = Array();
+    /*
+     * Set up the default conversation filters.
+     */
+    $scope.convoCategory = "";
+    $scope.convoFilter = "";
 
-	// Array to store the state of the active tag filters
-	$scope.filterTagArray = Array();
-	$scope.filterTagArray['read'] = false;
-	$scope.filterTagArray['unread'] = false;
+    // Array to store the state of active conversation filters
+    $scope.excludeServices = Array();
 
-	$scope.excludeService = function(service){
-		var index = $.inArray(service, $scope.excludeServices);
-		if(index === -1){
-			$scope.excludeServices.push(service);
-		}
-		else{
-			$scope.excludeServices.splice(index,1);
-		}
-		$scope.refreshConvos();
-	};
+    // Array to store the state of the active tag filters
+    $scope.filterTagArray = Array();
+    $scope.filterTagArray['read'] = false;
+    $scope.filterTagArray['unread'] = false;
 
-	/*
-	 * Filter functions...
-	 */
-	$scope.filterRead = function () {
-		$scope.filterTagArray['read'] = !$scope.filterTagArray['read'];
-		$scope.refreshConvos();
-	};
-	$scope.filterUnread = function () {
-		$scope.filterTagArray['unread'] = !$scope.filterTagArray['unread'];
-		$scope.refreshConvos();
-	};
+    $scope.excludeService = function(service){
+        var index = $.inArray(service, $scope.excludeServices);
+        if(index === -1){
+            $scope.excludeServices.push(service);
+        }
+        else{
+            $scope.excludeServices.splice(index,1);
+        }
+        $scope.refreshConvos();
+    };
 
-	// Set the user name
-	$scope.localUserName = "Admin"; // this should be replaced by response from server
+    /*
+     * Filter functions...
+     */
+    $scope.filterRead = function () {
+        $scope.filterTagArray['read'] = !$scope.filterTagArray['read'];
+        $scope.refreshConvos();
+    };
+    $scope.filterUnread = function () {
+        $scope.filterTagArray['unread'] = !$scope.filterTagArray['unread'];
+        $scope.refreshConvos();
+    };
 
-	$scope.startup = function () {
-		// Populate the model with the initial data.
-		$scope.refreshConvos();
-		$scope.refreshSubscriptions();
-		$scope.refreshUsers();
-		$scope.refreshRoles();
+    // Set the user name
+    $scope.localUserName = "Admin"; // this should be replaced by response from server
 
-		// Handle facebook authentication
-		var facebookCode = getQueryVariable("code");
-		if (facebookCode != null) {
-			var serviceID = getQueryVariable("state");
-			if (serviceID != null) {
-				$asksg.authenticateFacebook(facebookCode, serviceID);
-				$scope.refreshSubscriptions();
-			}
-		}
-	}
+    $scope.startup = function () {
+        // Populate the model with the initial data.
+        $scope.refreshConvos();
+        $scope.refreshSubscriptions();
+        $scope.refreshUsers();
+        $scope.refreshRoles();
 
+        // Handle facebook authentication
+        var facebookCode = getQueryVariable("code");
+        if (facebookCode != null) {
+            var serviceID = getQueryVariable("state");
+            if (serviceID != null) {
+                $asksg.authenticateFacebook(facebookCode, serviceID);
+                $scope.refreshSubscriptions();
+            }
+        }
+    }
 
-	// Scope vars for start/end dates
-	analyticsStartDate = "";
-	analyticsEndDate = "";
-	socialSubHandle = "";
-	socialSubName = "";
-	$scope.runonce = false;
-	$scope.startup();
-	$scope.runonce = true;
+    // Scope vars for start/end dates
+    analyticsStartDate = "";
+    analyticsEndDate = "";
+    exportStartDate = "";
+    exportEndDate = "";
+    socialSubHandle = "";
+    socialSubName = "";
+    $scope.runonce = false;
+    $scope.startup();
+    $scope.runonce = true;
 }]);
 
 
@@ -860,59 +922,119 @@ app.directive('myDatepicker',function ($parse) {
 		});
 	}
 }).directive('myTagbox', ['$asksg', function ($asksg) {
-		return {
-			scope: {message: '='},
-			link: function (scope, element, attributes) {
-				$(function () {
-					whenAddingTag = function (tag) {
-						$asksg.addTag(tag, scope.message.id).
-							success(function (data, status, headers, config) {
-								scope.message.tags.push(new Tag(data[0].id, data[0].name));
-							});
-					};
-					tagRemoved = function (tag) {
-						tagid = _.findWhere(scope.message.tags, {name: tag}).id;
-						$asksg.deleteTag(tagid, scope.message.id);
-					};
-					$(element).tags({
-						whenAddingTag: whenAddingTag,
-						tagRemoved: tagRemoved,
-						tagData: _.map(scope.message.tags, function (tag) {
-							return tag.name
-						}),
-						promptText: "Add a tag..."
-					});
-				});
-			}
-		}
-	}]).directive('searchTagbox', function ($parse) {
-		return {
-			link: function (scope, element, attrs) {
-				$(function () {
-					whenAddingTag = function (tag) {
-						var invoker = $parse(attrs.ctrlFn);
-						var params = {};
-						params.includeTags = [tag];
-						invoker(scope, {tagval : params});
-					};
-					tagRemoved = function (tag) {
-						var invoker = $parse(attrs.ctrlFn);
-						invoker(scope, {tagval : {}});
-					};
-					$(element).tags({
-						whenAddingTag: whenAddingTag,
-						tagRemoved: tagRemoved,
-						tagData: [],
-						promptText: "Add a tag to filter"
-					});
-				});
-			}
-		}
-	});
+        return {
+            scope: {message: '='},
+            link: function (scope, element, attributes) {
+                $(function () {
+                    whenAddingTag = function (tag) {
+                        $asksg.addTag(tag, scope.message.id).
+                            success(function (data, status, headers, config) {
+                                scope.message.tags.push(new Tag(data[0].id, data[0].name));
+                            });
+                    };
+                    tagRemoved = function (tag) {
+                        tagid = _.findWhere(scope.message.tags, {name: tag}).id;
+                        $asksg.deleteTag(tagid, scope.message.id);
+                    };
+                    $(element).tags({
+                        whenAddingTag: whenAddingTag,
+                        tagRemoved: tagRemoved,
+                        tagData: _.map(scope.message.tags, function (tag) {
+                            return tag.name
+                        }),
+                        promptText: "Add a tag..."
+                    });
+                });
+            }
+        }
+    }]).directive('searchTagbox', function ($parse) {
+        return {
+            link: function (scope, element, attrs) {
+                $(function () {
+                    whenAddingTag = function (tag) {
+                        var invoker = $parse(attrs.ctrlFn);
+                        var params = {};
+                        params.includeTags = [tag];
+                        invoker(scope, {tagval : params});
+                    };
+                    tagRemoved = function (tag) {
+                        var invoker = $parse(attrs.ctrlFn);
+                        invoker(scope, {tagval : {}});
+                    };
+                    $(element).tags({
+                        whenAddingTag: whenAddingTag,
+                        tagRemoved: tagRemoved,
+                        tagData: [],
+                        promptText: "Add a tag to filter"
+                    });
+                });
+            }
+        }
+    }).directive('dndBetweenList', function($parse) {
+ 
+    return function(scope, element, attrs) {
+ 
+        // contains the args for this component
+        var args = attrs.dndBetweenList.split(',');
+        // contains the args for the target
+        var targetArgs = $('#' + args[1]).attr('dnd-between-list').split(',');
+ 
+        // variables used for dnd
+        var toUpdate;
+        var target;
+        var startIndex = -1;
+        var toTarget = true;
+ 
+        // watch the model, so we always know what element
+        // is at a specific position
+        scope.$watch(args[0], function(value) {
+            toUpdate = value;
+        }, true);
+ 
+        // also watch for changes in the target list
+        scope.$watch(targetArgs[0], function(value) {
+            target = value;
+        }, true);
+ 
+        // use jquery to make the element sortable (dnd). This is called
+        // when the element is rendered
+        $(element[0]).sortable({
+            items:'li',
+            start:function (event, ui) {
+                // on start we define where the item is dragged from
+                startIndex = ($(ui.item).index());
+                toTarget = false;
+            },
+            stop:function (event, ui) {
+                var newParent = ui.item[0].parentNode.id;
+ 
+                // on stop we determine the new index of the
+                // item and store it there
+                var newIndex = ($(ui.item).index());
+                var toMove = toUpdate[startIndex];
+ 
+                // we need to remove him from the configured model
+                toUpdate.splice(startIndex,1);
+ 
+                if (newParent == args[1]) {
+                    // and add it to the linked list
+                    target.splice(newIndex,0,toMove);
+                }  else {
+                    toUpdate.splice(newIndex,0,toMove);
+                }
+ 
+                // we move items in the array, if we want
+                // to trigger an update in angular use $apply()
+                // since we're outside angulars lifecycle
+                scope.$apply(targetArgs[0]);
+                scope.$apply(args[0]);
+            }, connectWith:'#' + args[1]
+        })
+    }
+});
 
 /*
  app.run(['ConversationController', function(ConversationController){
  ConversationController.$scope.startup();
  }]);
-
  */
