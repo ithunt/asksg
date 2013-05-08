@@ -43,7 +43,7 @@ public class SubscriptionWorker implements AsyncWorker {
 						serviceConfig.setCurrentCalls(0);
 					}
 
-					if (serviceConfig.getCurrentCalls() < serviceConfig.getMaxCalls()) {
+					if (serviceConfig.getCurrentCalls() < serviceConfig.getMaxCalls() || serviceConfig.getMaxCalls() == 0) {
 						// We can still make calls to this service, but count this call
 						serviceConfig.incrementCalls();
 						conversationService.saveConversations(((SubscriptionProvider) service).getContentFor(socialSubscription));
