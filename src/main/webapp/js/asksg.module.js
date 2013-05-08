@@ -434,10 +434,10 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
         $asksg.fetchTopics().success(function (data, status, headers, config) {
                 console.log("Got topics...");
                 console.log(data);
+                var topics = angular.fromJson(data);
                 $scope.includeList = [];
-                $scope.omitList = [{"id": 5, "topic": "T6"},{"id": 6,"topic": "T7"}];
-                for (var i = 0; i < data.length; i++) {
-                    $scope.includeList.push(data[i]); // just an array of strings
+                for (var i = 0; i < topics.length; i++) {
+                    $scope.includeList.push(topics[i].name); // just an array of strings
                 }
             });
     }
