@@ -436,7 +436,7 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
                 console.log(data);
                 $scope.includeList = [];
                 for (var i = 0; i < data.length; i++) {
-                    $scope.includeList.push(data[i]); // just an array of strings
+                    $scope.includeList.push(data[i].name); // just an array of strings
                 }
             });
     }
