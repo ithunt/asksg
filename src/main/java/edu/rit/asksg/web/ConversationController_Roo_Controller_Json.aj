@@ -4,9 +4,7 @@
 package edu.rit.asksg.web;
 
 import edu.rit.asksg.domain.Conversation;
-import edu.rit.asksg.service.ConversationService;
 import edu.rit.asksg.web.ConversationController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 privileged aspect ConversationController_Roo_Controller_Json {
-    
-    @Autowired
-    ConversationService ConversationController.conversationService;
     
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody

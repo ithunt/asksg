@@ -46,7 +46,7 @@ public class Message {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Analytics analytics = new Analytics();
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Conversation conversation;
 
 	private String url;

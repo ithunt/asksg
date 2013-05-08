@@ -8,6 +8,7 @@ import edu.rit.asksg.domain.Service;
 import edu.rit.asksg.specification.AndSpecification;
 import edu.rit.asksg.specification.AuthorSpecification;
 import edu.rit.asksg.specification.EqualSpecification;
+import edu.rit.asksg.specification.ExternalIdSpecification;
 import edu.rit.asksg.specification.IdSinceSpecification;
 import edu.rit.asksg.specification.IdUntilSpecification;
 import edu.rit.asksg.specification.ModifiedSinceSpecification;
@@ -111,5 +112,11 @@ public class ConversationServiceImpl implements ConversationService {
 		ModifiedSinceSpecification<Conversation> sinceSpec = new ModifiedSinceSpecification<Conversation>(since);
 		AuthorSpecification<Conversation> authorSpec = new AuthorSpecification<Conversation>(recipient);
 		return conversationRepository.findOne(sinceSpec.and(authorSpec));
+	}
+
+	@Override
+	public Conversation findConversationByExternalId(String externalId) {
+		ExternalIdSpecification<Conversation> idSpec = new ExternalIdSpecification<Conversation>(externalId);
+		return conversationRepository.findOne(idSpec);
 	}
 }

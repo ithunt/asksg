@@ -23,7 +23,7 @@ public class WordCount {
     @ManyToOne(fetch = FetchType.EAGER)
     private Topic topic;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Service service;
 
     private Long wordCount;

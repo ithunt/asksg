@@ -41,4 +41,13 @@ public class Topic {
 
     }
 
+    @Override
+    public Topic clone() {
+        Topic t = new Topic(this.name);
+        t.setWords(new HashSet<String>(this.words));
+        return t;
+    }
+
+
+
 }

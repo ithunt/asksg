@@ -32,9 +32,6 @@ import java.util.Map;
 @RooJson
 public class Twilio extends Service implements ContentProvider {
 
-    @Autowired
-    private transient ConversationService conversationService;
-
     private transient static final Logger logger = LoggerFactory.getLogger(Twilio.class);
 
     @JSON(include = false)
@@ -90,7 +87,7 @@ public class Twilio extends Service implements ContentProvider {
         message.setCreated(now);
         message.setModified(now);
 
-		Conversation conv = conversationService.findConversationByRecipientSince(from, LocalDateTime.now().minusWeeks(1));
+		Conversation conv = getConversationService().findConversationByRecipientSince(from, now.minusWeeks(1));
 
         if (conv == null) {
             logger.debug("Twilio: Creating new conversation for message received from " + from);
@@ -98,25 +95,14 @@ public class Twilio extends Service implements ContentProvider {
             conv.setExternalId(smsSid);
             conv.setCreated(now);
             conv.setSubject(body);
-        } else {
-            logger.debug("Twilio: Adding received message from " + from + " to conversation with ID " + conv.getId());
-            conv.getMessages().add(message);
         }
+        conv.getMessages().add(message);
 
         conv.setModified(now);
         conv.setService(this);
 
         message.setConversation(conv);
 
-        conversationService.saveConversation(conv);
-    }
-
-    @JSON(include = false)
-    public ConversationService getConversationService() {
-        return conversationService;
-    }
-
-    public void setConversationService(ConversationService conversationService) {
-        this.conversationService = conversationService;
+        getConversationService().saveConversation(conv);
     }
 }

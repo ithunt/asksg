@@ -4,7 +4,7 @@ import com.google.common.base.Joiner;
 import edu.rit.asksg.analytics.domain.GraphData;
 import edu.rit.asksg.analytics.domain.Topic;
 import edu.rit.asksg.analytics.domain.WordCount;
-import edu.rit.asksg.dataio.ScheduledPocessor;
+import edu.rit.asksg.dataio.ScheduledProcessor;
 import edu.rit.asksg.repository.TopicRepository;
 import edu.rit.asksg.repository.WordCountRepository;
 import edu.rit.asksg.specification.CreatedSinceSpecification;
@@ -18,10 +18,11 @@ import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -35,7 +36,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     WordCountRepository wordCountRepository;
 
     @Autowired
-    ScheduledPocessor scheduledPocessor;
+    ScheduledProcessor scheduledProcessor;
 
 
     @Override
@@ -59,7 +60,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public void count() {
-        scheduledPocessor.executeWordCount();
+        scheduledProcessor.executeWordCount();
     }
 
     @Override
@@ -67,7 +68,17 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         List<String> csv = new ArrayList<String>();
         csv.add("word,service,count,date,sentiment,synonyms");
         for (Topic t : topicRepository.findAll()) {
-            for (WordCount wc : findWordCountsWith(t, since, until)) {
+            List<WordCount> counts = findWordCountsWith(t, since, until);
+            Collections.sort(counts, new Comparator<WordCount>() {
+                @Override
+                public int compare(WordCount wordCount, WordCount wordCount2) {
+                    int i = wordCount.getService().getName().compareTo(wordCount2.getService().getName());
+                    if(i == 0) i = wordCount.getCreated().compareTo(wordCount2.getCreated());
+                    return i;
+                }
+            });
+
+            for (WordCount wc : counts) {
                 csv.add(t.getName() + "," +
                         wc.getService().getName() + "," +
                         wc.getWordCount() + "," +

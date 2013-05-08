@@ -23,4 +23,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 		return user;
 	}
+
+    @Transactional
+    public boolean isAdmin(String username) {
+        if(username == null) return false;
+        AsksgUser user = this.userRepository.findByUserName(username);
+        if(user != null) {
+            return user.getRole().getName().equals("Admin");
+        }
+        return false;
+    }
 }

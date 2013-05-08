@@ -17,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 
-/**
- */
+@Component
 public class SubscriptionWorker implements AsyncWorker {
 
 	@Log
@@ -28,9 +27,10 @@ public class SubscriptionWorker implements AsyncWorker {
 	ConversationService conversationService;
 
 	@Async
+    @Transactional
 	public void work(final Service service) {
 		final String threadName = Thread.currentThread().getName();
-		log.debug("Subscription worker executing on " + threadName + " for service " + service.toString());
+		log.debug("Subscription worker executing on " + threadName + " for service " + service.getName());
 
 		if (service instanceof SubscriptionProvider) {
 			for (SocialSubscription socialSubscription : service.getConfig().getSubscriptions()) {
@@ -49,14 +49,14 @@ public class SubscriptionWorker implements AsyncWorker {
 						conversationService.saveConversations(((SubscriptionProvider) service).getContentFor(socialSubscription));
 					} else {
 						// We can't make calls, so bail out of this function.
-						log.debug("Subscription worker on " + threadName + " for service " + service.toString() + " operation canceled -- API limit reached.");
+						log.debug("Subscription worker on " + threadName + " for service " + service.getName() + " operation canceled -- API limit reached.");
 					}
 				} catch (Exception e) {
 					log.error(e.getLocalizedMessage(), e);
 				}
 			}
 		}
-		log.debug("Subscription worker on " + threadName + " for service " + service.toString() + " completed.");
+		log.debug("Subscription worker on " + threadName + " for service " + service.getName() + " completed.");
 
 
 	}

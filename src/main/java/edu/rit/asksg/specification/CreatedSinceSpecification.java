@@ -19,6 +19,6 @@ public class CreatedSinceSpecification<T> extends AbstractSpecification<T> imple
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         final Path<LocalDateTime> date = root.get("created");
-        return cb.greaterThan(date, since);
+        return cb.greaterThanOrEqualTo(date, since);
     }
 }

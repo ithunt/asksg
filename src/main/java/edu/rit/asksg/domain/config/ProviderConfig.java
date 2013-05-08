@@ -49,7 +49,7 @@ public class ProviderConfig {
 	@ManyToOne
 	private AsksgUser createdBy;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<SocialSubscription> subscriptions = new HashSet<SocialSubscription>();
 
 	@JSON(include = false)
