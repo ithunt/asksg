@@ -435,7 +435,6 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
                 console.log("Got topics...");
                 console.log(data);
                 $scope.includeList = [];
-                $scope.omitList = [{"id": 5, "topic": "T6"},{"id": 6,"topic": "T7"}];
                 for (var i = 0; i < data.length; i++) {
                     $scope.includeList.push(data[i]); // just an array of strings
                 }
