@@ -707,25 +707,6 @@
 	<div class="row-fluid">
 		<div class="span3">
 			<div class="well">
-				<h4 style="text-align:center">Topic Selection</h4>
-				<div class="row" style="margin-left:2px"> <!-- style="margin:0; padding:0;" -->
-				    <div class="span4 offset2" style="padding-left: 2px;">
-				    	<h5 style="text-align:center;">Include</h5>
-				        <ul id="sourceList" dnd-between-list="includeList,targetList" style="list-style-type: none;margin: 0; padding: 0;">
-				            <li class="alert alert-error nomargin"
-				                ng-repeat="item in includeList">{{item.topic}}</li>
-				        </ul>
-				    </div>
-				    <div class="span4" style="padding-left: 2px;">
-				    	<h5 style="text-align:center;">Omit</h5>
-				        <ul id="targetList" dnd-between-list="omitList,sourceList" style="list-style-type: none;margin: 0; padding: 0;">
-				            <li class="alert alert-info nomargin"
-				                ng-repeat="item in omitList">{{item.topic}}</li>
-				        </ul>
-				    </div>
-				</div>
-			</div>
-			<div class="well">
 				<h4 style="text-align:center">Display Parameters</h4>
 				<label for="StartDate"> Start Date: </label>
 				<input type="text" name="StartDate" my-datepicker ng-model="analyticsStartDate"/>
@@ -751,6 +732,7 @@
 		</div>
 
 		<!-- Configuration settings -->
+		<div class="span6">
 		<div class="tab-content">
 			<div class="tab-pane fade in active" id="analyticsMain">
 				<div class="span8" style="padding-left:20px;">
@@ -775,6 +757,29 @@
 						<!-- Drop in the D3 rendering script -->
 						<script src="../js/analyticsui.js"></script>
 					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+
+		<div class="span3">
+			<div class="well">
+				<h4 style="text-align:center">Topic Selection</h4>
+				<div class="row" style="margin-left:2px"> <!-- style="margin:0; padding:0;" -->
+				    <div class="span4 offset2" style="padding-left: 2px;">
+				    	<h5 style="text-align:center;">Include</h5>
+				        <ul id="sourceList" dnd-between-list="includeList,targetList" ng-class="{'minimalList':includeEmpty()}" style="list-style-type: none;margin: 0; padding: 0;">
+				            <li class="alert alert-info nomargin"
+				                ng-repeat="item in includeList">{{item.topic}}</li>
+				        </ul>
+				    </div>
+				    <div class="span4" style="padding-left: 2px;">
+				    	<h5 style="text-align:center;">Omit</h5>
+				        <ul id="targetList" dnd-between-list="omitList,sourceList" ng-class="{'minimalList':omitEmpty()}" style="list-style-type: none;margin: 0; padding: 0;">
+				            <li class="alert alert-error nomargin"
+				                ng-repeat="item in omitList">{{item.topic}}</li>
+				        </ul>
+				    </div>
 				</div>
 			</div>
 		</div>

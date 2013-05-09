@@ -542,3 +542,7 @@ li.active {
     stroke: steelblue;
     stroke-width: 1.5px;
 }
+
+.minimalList {
+    min-height: 100px;
+};

@@ -368,8 +368,8 @@ app.factory('$asksg', function ($http, $log) {
 		}, 
 
         exportAnalyticsData: function (start, end) {
-            start = start.replace("/",".");
-            end = end.replace("/",".");
+            start = start.replace("/",".").replace("/",".");
+            end = end.replace("/",".").replace("/",".");
             var target = exportUrl;
             if (start != null && start.length > 0) {
                 target = target + "?since=" + start;
@@ -439,6 +439,7 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
                 console.log("Got topics...");
                 console.log(data);
                 $scope.includeList = [];
+                $scope.omitList = [];
                 for (var i = 0; i < data.length; i++) {
                     console.log(data[i].name);
                     $scope.includeList.push({"id": i, "topic": data[i].name}); // just an array of strings
@@ -845,15 +846,22 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
  
     // watch, use 'true' to also receive updates when values
     // change, instead of just the reference
-    $scope.$watch("model", function(value) {
-        console.log("Model: " + value.map(function(e){return e.id}).join(','));
+    $scope.$watch("includeList", function(value) {
+        console.log("Include: " + value.map(function(e){return e.id}).join(','));
     },true);
  
     // watch, use 'true' to also receive updates when values
     // change, instead of just the reference
-    $scope.$watch("source", function(value) {
-        console.log("Source: " + value.map(function(e){return e.id}).join(','));
+    $scope.$watch("omitList", function(value) {
+        console.log("Omit: " + value.map(function(e){return e.id}).join(','));
     },true);
+
+    $scope.includeEmpty = function() {
+        return $scope.includeList.length == 0;
+    }
+    $scope.omitEmpty = function() {
+        return $scope.omitList.length == 0;
+    }
 
     /*
      * Set up the default conversation filters.
@@ -1000,7 +1008,7 @@ app.directive('myDatepicker',function ($parse) {
         // contains the args for this component
         var args = attrs.dndBetweenList.split(',');
         // contains the args for the target
-        var targetArgs = $('#' + args[1]).attr('dnd-between-list').split(',');
+        var targetArgs = $('#'+args[1]).attr('dnd-between-list').split(',');
  
         // variables used for dnd
         var toUpdate;
@@ -1012,12 +1020,12 @@ app.directive('myDatepicker',function ($parse) {
         // is at a specific position
         scope.$watch(args[0], function(value) {
             toUpdate = value;
-        }, true);
+        },true);
  
         // also watch for changes in the target list
         scope.$watch(targetArgs[0], function(value) {
             target = value;
-        }, true);
+        },true);
  
         // use jquery to make the element sortable (dnd). This is called
         // when the element is rendered
@@ -1025,10 +1033,12 @@ app.directive('myDatepicker',function ($parse) {
             items:'li',
             start:function (event, ui) {
                 // on start we define where the item is dragged from
+                console.log("INSIDE START");
                 startIndex = ($(ui.item).index());
                 toTarget = false;
             },
             stop:function (event, ui) {
+                console.log("INSIDE STOP");
                 var newParent = ui.item[0].parentNode.id;
  
                 // on stop we determine the new index of the
@@ -1051,7 +1061,8 @@ app.directive('myDatepicker',function ($parse) {
                 // since we're outside angulars lifecycle
                 scope.$apply(targetArgs[0]);
                 scope.$apply(args[0]);
-            }, connectWith:'#' + args[1]
+            },
+            connectWith:'#'+args[1]
         })
     }
 });
