@@ -439,10 +439,10 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
                 console.log("Got topics...");
                 console.log(data);
                 $scope.includeList = [];
-                $scope.omitList = [];
+                $scope.omitList = [{"id": 0, "topic": "ritchie"}];
                 for (var i = 0; i < data.length; i++) {
                     console.log(data[i].name);
-                    $scope.includeList.push({"id": i, "topic": data[i].name}); // just an array of strings
+                    $scope.includeList.push({"id": i+1, "topic": data[i].name}); // just an array of strings
                 }
             });
     }
@@ -1048,8 +1048,12 @@ app.directive('myDatepicker',function ($parse) {
  
                 // we need to remove him from the configured model
                 toUpdate.splice(startIndex,1);
- 
-                if (newParent == args[1]) {
+                console.log(target.length);
+
+                if (target.length == 0) {
+                    target = [toMove];
+                }
+                else if (newParent == args[1]) {
                     // and add it to the linked list
                     target.splice(newIndex,0,toMove);
                 }  else {
