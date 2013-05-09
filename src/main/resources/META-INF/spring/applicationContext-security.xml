@@ -15,7 +15,7 @@
 		<!--<intercept-url pattern="/choices/**" access="hasRole('Admin')"/>-->
 		<!--<intercept-url pattern="/member/**" access="isAuthenticated()"/>-->
 		<intercept-url pattern="/resources/**" access="permitAll"/>
-        <intercept-url pattern="/dashboard/**" access="isAuthenticated()"/>
+        <!-- <intercept-url pattern="/dashboard/**" access="isAuthenticated()"/> -->
         <intercept-url pattern="/index.html" access="permitAll" />
 
 

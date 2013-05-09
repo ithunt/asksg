@@ -355,8 +355,8 @@ app.factory('$asksg', function ($http, $log) {
 		},
 
 		fetchAnalyticsData: function (start, end) {
-            start = start.replace("/",".");
-            end = end.replace("/",".");
+            start = start.replace("/",".").replace("/",".");
+            end = end.replace("/",".").replace("/",".");
 			target = analyticsUrl;
 			if (start != null && start.length > 0) {
 				target = target + "?since=" + start;
@@ -441,7 +441,7 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
                 $scope.includeList = [];
                 for (var i = 0; i < data.length; i++) {
                     console.log(data[i].name);
-                    $scope.includeList.push(data[i].name); // just an array of strings
+                    $scope.includeList.push({"id": i, "topic": data[i].name}); // just an array of strings
                 }
             });
     }
