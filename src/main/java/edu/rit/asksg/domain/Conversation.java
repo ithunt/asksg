@@ -19,7 +19,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooJpaEntity
+@RooJpaEntity()
 @RooJson(deepSerialize = true)
 public class Conversation {
 

@@ -119,7 +119,13 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
             message.setCreated(created);
 			message.setModified(created);
 
-			Conversation conversation = getConversationService().findConversationByRecipientSince(message.getAuthor(), created.minusWeeks(1));
+
+			Conversation conversation = null;
+//            try {
+//                conversation = getConversationService().findConversationByRecipientSince(message.getAuthor(), created.minusWeeks(1));
+//            } catch (Exception e) {
+//                logger.error(e.getLocalizedMessage(), e);
+//            }
 
 			if (conversation == null) {
 				conversation = new Conversation(message);
@@ -130,6 +136,7 @@ public class Twitter extends Service implements ContentProvider, SubscriptionPro
 			conversation.setExternalId(String.valueOf(tweet.getId()));
 			conversation.setModified(created);
 			conversation.getMessages().add(message);
+
             conversations.add(conversation);
 
         }
