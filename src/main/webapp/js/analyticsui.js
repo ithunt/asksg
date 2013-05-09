@@ -1,20 +1,30 @@
-// TODO: comment later...
+function contains(a, obj) {
+    var i = a.length;
+    while (i--) {
+       if (a[i] === obj) {
+           return true;
+       }
+    }
+    return false;
+}
+
+// Render the analytics plots on the dashboard
 function updateAnalytics(data) {
     console.log(data);
 
     // Clear the current graphs
     d3.select("svg").remove();
 
-    var margin = {top: 30, right: 80, bottom: 50, left: 50},
+    var margin = {top: 50, right: 100, bottom: 120, left: 80},
         width = 640 - margin.left - margin.right,
-        height = 380 - margin.top - margin.bottom;
+        height = 400 - margin.top - margin.bottom;
+
+    var colorscale = d3.scale.category10();
 
     // Pull out the time range
     // Relies on sorting in the dates array, and assumes all data objects have the same time span...
     var minDate = data[0].dates[0];
     var maxDate = data[0].dates[data[0].dates.length - 1];
-    console.log(minDate);
-    console.log(maxDate);
 
     // var x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
     var x = d3.scale.linear().domain([minDate, maxDate]).range([0, width]);
@@ -29,7 +39,8 @@ function updateAnalytics(data) {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .tickFormat(d3.format('d'))
+        // .tickFormat(d3.format('d'))
+        .tickFormat(function(d){return d3.time.format('%I:%M %d-%b')(new Date(d));})
         .orient("bottom");
 
     var yAxis = d3.svg.axis()
@@ -57,7 +68,14 @@ function updateAnalytics(data) {
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
+        .call(xAxis)
+        .selectAll("text")  
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)" 
+                });
     svg.append("text")
         .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
         .style("text-anchor", "middle")
@@ -70,7 +88,7 @@ function updateAnalytics(data) {
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 0 - margin.left) // 0 - margin.left
-        .attr("x", 0 - ((height / 2) - margin.bottom))
+        .attr("x", 0 - ((height / 2) - margin.bottom + 80))
         .attr("dy", "1em")
         .style("text-anchor", "end")
         .text("Word Count");
@@ -85,11 +103,10 @@ function updateAnalytics(data) {
             lastX = topic.dates[i];
             lastY = topic.wordCounts[i];
         }
-        lineData.push(tmp);
-
         // Pull out the name and then get ready to plot them...
         topicName = topic.topic;
 
+        lineData.push(tmp);
         console.log(lastX);
         console.log(x(lastX));
         console.log(lastY);
@@ -97,10 +114,10 @@ function updateAnalytics(data) {
         console.log(topicName);
 
         svg.append("text")
-            .attr("transform", "rotate(-90)")
             .attr("y", y(lastY)) // 0 - margin.left
-            .attr("x", x(lastX))
+            .attr("x", x(lastX + topicName.length))
             .attr("dy", "1em")
+            // .attr("stroke", function(d, i) { return colorscale(i); });
             .style("text-anchor", "end")
             .text(topicName);
     });
@@ -127,7 +144,7 @@ function updateAnalytics(data) {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .tickFormat(d3.format('d'))
+        .tickFormat(function(d){return d3.time.format('%I:%M %d-%b')(new Date(d));})
         .orient("bottom");
 
     var yAxis = d3.svg.axis()
@@ -143,30 +160,37 @@ function updateAnalytics(data) {
             return y(d.yVal);
         });
 
-    var svg = d3.select("#semanticAnalytics").append("svg")
+    var svg2 = d3.select("#semanticAnalytics").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // Append the x-axis and a label
-    svg.append("g")
+    svg2.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-    svg.append("text")
+        .call(xAxis)
+        .selectAll("text")  
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)" 
+                });
+    svg2.append("text")
         .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
         .style("text-anchor", "middle")
         .text("Date");
 
     // Append the y-axis and a label
-    svg.append("g")
+    svg2.append("g")
         .attr("class", "y axis")
         .call(yAxis);
-    svg.append("text")
+    svg2.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 0 - margin.left) // 0 - margin.left
-        .attr("x", 0 - ((height / 2) - margin.bottom))
+        .attr("x", 0 - ((height / 2) - margin.bottom + 80))
         .attr("dy", "1em")
         .style("text-anchor", "end")
         .text("Semantic Score");
@@ -181,29 +205,22 @@ function updateAnalytics(data) {
             lastX = topic.dates[i];
             lastY = topic.sentiments[i];
         }
-        lineData.push(tmp);
-
         // Pull out the name and then get ready to plot them...
         topicName = topic.topic;
 
-        console.log(lastX);
-        console.log(x(lastX));
-        console.log(lastY);
-        console.log(y(lastY));
-        console.log(topicName);
+        lineData.push(tmp);
 
-        svg.append("text")
-            .attr("transform", "rotate(-90)")
+        svg2.append("text")
             .attr("y", y(lastY)) // 0 - margin.left
-            .attr("x", x(lastX))
+            .attr("x", x(lastX + topicName.length))
             .attr("dy", "1em")
+            // .attr("stroke", function(d, i) { return colorscale(i); });
             .style("text-anchor", "end")
             .text(topicName);
     });
-    console.log(lineData);
 
     // Add the semantic lines...
-    svg.selectAll(".line").data(lineData)
+    svg2.selectAll(".line").data(lineData)
         .enter().append("path")
         .attr("class", "line")
         .attr("d", line);
