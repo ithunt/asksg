@@ -121,9 +121,21 @@ public class AnalyticsController {
         return new ResponseEntity<String>(GraphData.toJsonArray(data), headers, HttpStatus.OK);
     }
 
-
     @RequestMapping(value = "/topics")
+    public ResponseEntity<String> topics() {
+        List<Topic> topics = topicRepository.findAll();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+
+        return new ResponseEntity<String>(Topic.toJsonArray(topics), headers, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/maketopics")
     public ResponseEntity<String> topicTest() {
+
+        if(topicRepository.count() > 0) return new ResponseEntity<String>(HttpStatus.OK);
 
         List<Topic> topics = new ArrayList<Topic>();
 
