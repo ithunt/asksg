@@ -83,7 +83,7 @@ public class Twilio extends Service implements ContentProvider {
         message.setContent(body);
 		Identity identity = getIdentityService().findOrCreate(from);
 		message.setIdentity(identity);
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().plusHours(4);
         message.setCreated(now);
         message.setModified(now);
 
