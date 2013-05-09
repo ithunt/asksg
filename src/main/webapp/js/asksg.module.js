@@ -355,6 +355,8 @@ app.factory('$asksg', function ($http, $log) {
 		},
 
 		fetchAnalyticsData: function (start, end) {
+            start = start.replace("/",".");
+            end = end.replace("/",".");
 			target = analyticsUrl;
 			if (start != null && start.length > 0) {
 				target = target + "?since=" + start;
@@ -366,6 +368,8 @@ app.factory('$asksg', function ($http, $log) {
 		}, 
 
         exportAnalyticsData: function (start, end) {
+            start = start.replace("/",".");
+            end = end.replace("/",".");
             var target = exportUrl;
             if (start != null && start.length > 0) {
                 target = target + "?since=" + start;
