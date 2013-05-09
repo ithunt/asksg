@@ -42,7 +42,7 @@ public class ScheduledProcessor {
     /**
      * Launch async workers to update services.
      */
-    @Scheduled(fixedDelay = 900000, initialDelay = 120000)
+    @Scheduled(fixedDelay = 86400000, initialDelay = 120000)
     public void executeRefresh() {
         log.debug("Start execution of dataio refresh");
         List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();
@@ -55,7 +55,7 @@ public class ScheduledProcessor {
     }
 
 
-    @Scheduled(fixedDelay = 1100000, initialDelay = 180000)
+    @Scheduled(fixedDelay = 86400000, initialDelay = 180000)
     public void executeSubscriptions() {
         log.debug("Start execution of subscription pull");
         List<edu.rit.asksg.domain.Service> services = providerService.findAllServices();

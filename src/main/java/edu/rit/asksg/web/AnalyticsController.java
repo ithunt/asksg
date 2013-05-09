@@ -58,8 +58,14 @@ public class AnalyticsController {
         LocalDateTime until = null;
 
         //todo: is failed parse just null?
-        if (s != null) since = LocalDateTime.parse(s);
-        if (s != null) until = LocalDateTime.parse(u);
+        if (s != null) {
+
+            since = LocalDateTime.parse(s.trim());
+        }
+        if (u != null) {
+
+            until = LocalDateTime.parse(u.trim());
+        }
 
         if (since == null) since = LocalDateTime.now().minusWeeks(1);
         if (until == null) until = LocalDateTime.now();

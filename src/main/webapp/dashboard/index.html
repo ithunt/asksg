@@ -105,8 +105,8 @@
 			</div>
 
             <div class="well sidebar-nav">
-                <button id="refreshConvosButton" class="btn-primary" onclick="refreshConversations()">Refresh Conversations Now</button>
-                <p id="convosRefreshedMessage" ng-hide="true">Conversations refreshed. Reload the page to see new data.</p>
+                <button id="refreshConvosButton" class="btn-primary" ng-click="refreshConversations()">Refresh Conversations Now</button>
+                <p id="convosRefreshedMessage" ng-hide="true">Conversations refreshing. Please wait a few minutes and reload the page to see new data.</p>
             </div>
 			<!-- well sidebar-nav -->
 		</div>
@@ -195,8 +195,8 @@
 					</li>
 				</ul>
 			</div>
-			<button class="btn left" type="submit" ng-click="previousConvos()">Newer</button>
-			<button class="btn pull-right" type="submit" ng-click="nextConvos()">Older</button>
+			<button class="btn left" type="submit" ng-click="nextConvos()">Newer</button>
+            <button class="btn pull-right" type="submit" ng-click="previousConvos()">Older</button>
 		</div>
 		<!-- span8 -->
 	</div>
@@ -307,7 +307,7 @@
 		<div>
 			<p>
 				Username: {{service.config.username}} <br/>
-				Password: {{service.config.password}} <br/>
+				<!--Password: {{service.config.password}} <br/>-->
 				Enabled: {{service.enabled}}
 			</p>
 		</div>
@@ -380,7 +380,7 @@
                     <div ng-hide="sub.name == null || sub.name.length == 0">{{sub.name}}</div>
                 </li>
             </ul>
-            <form ng-submit="addSocialSubscription(service.id, socialSubHandle, socialSubName)">
+            <form ng-submit="addSocialSubscription(service.id, socialSubName, socialSubHandle)">
                 <label for="handle">Handle:</label> <input class="input-xlarge focused"
                                                            ng-model="socialSubHandle"/><br/>
                 <label for="name">Name:</label> <input class="input-xlarge focused" ng-model="socialSubName"/><br/>
@@ -709,9 +709,9 @@
 			<div class="well">
 				<h4 style="text-align:center">Display Parameters</h4>
 				<label for="StartDate"> Start Date: </label>
-				<input type="text" name="StartDate" my-datepicker ng-model="analyticsStartDate"/>
+				<input class="input-medium" type="text" name="StartDate" my-datepicker ng-model="analyticsStartDate"/>
 				<label for="EndDate"> End Date: </label>
-				<input type="text" name="EndDate" my-datepicker ng-model="analyticsEndDate"/>
+				<input class="input-medium" type="text" name="EndDate" my-datepicker ng-model="analyticsEndDate"/>
 				<!-- Staples button -->
 				<form style="text-align:center" ng-submit="renderAnalyticsData()">
 					<input class="btn-primary" type="submit" value="Render Analytics Data">
@@ -721,9 +721,9 @@
             <div class="well">
                 <h4 style="text-align: center">Data Export</h4>
                 <label for="StartDate"> Start Date: </label>
-				<input type="text" name="StartDate" my-datepicker ng-model="exportStartDate"/>
+				<input class="input-medium" type="text" name="StartDate" my-datepicker ng-model="exportStartDate"/>
 				<label for="EndDate"> End Date: </label>
-				<input type="text" name="EndDate" my-datepicker ng-model="exportEndDate"/>
+				<input class="input-medium" type="text" name="EndDate" my-datepicker ng-model="exportEndDate"/>
 				<!-- Staples button -->
 				<form style="text-align:center" ng-submit="exportData(exportStartDate, exportEndDate)">
 					<input class="btn-primary" type="submit" value="Export Data">
@@ -765,19 +765,22 @@
 		<div class="span3">
 			<div class="well">
 				<h4 style="text-align:center">Topic Selection</h4>
-				<div class="row" style="margin-left:2px"> <!-- style="margin:0; padding:0;" -->
-				    <div class="span4 offset2" style="padding-left: 2px;">
-				    	<h5 style="text-align:center;">Include</h5>
+				<div class="row" style="padding-left: 7px;"> <!-- style="margin:0; padding:0;" -->
+				    <div class="span4" style="margin-right:0px;width:48%;">
+				    	<h5 style="text-align:center">Include</h5>
 				        <ul id="sourceList" dnd-between-list="includeList,targetList" ng-class="{'minimalList':includeEmpty()}" style="list-style-type: none;margin: 0; padding: 0;">
 				            <li class="alert alert-info nomargin"
-				                ng-repeat="item in includeList">{{item.topic}}</li>
+				                ng-repeat="item in includeList"
+                                style="padding-left: 5;"
+                                     >{{item.topic}}</li>
 				        </ul>
 				    </div>
-				    <div class="span4" style="padding-left: 2px;">
+				    <div class="span4" style="margin-right:0px;width:48%;">
 				    	<h5 style="text-align:center;">Omit</h5>
 				        <ul id="targetList" dnd-between-list="omitList,sourceList" ng-class="{'minimalList':omitEmpty()}" style="list-style-type: none;margin: 0; padding: 0;">
 				            <li class="alert alert-error nomargin"
-				                ng-repeat="item in omitList">{{item.topic}}</li>
+				                ng-repeat="item in omitList"
+                                style="padding-left: 5;">{{item.topic}}</li>
 				        </ul>
 				    </div>
 				</div>

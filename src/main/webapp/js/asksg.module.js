@@ -26,7 +26,8 @@ var opts = {
 	shadow: false, // Whether to render a shadow
 	hwaccel: false, // Whether to use hardware acceleration
 	className: 'spinner', // The CSS class to assign to the spinner
-	zIndex: 2e9, // The z-index (defaults to 2000000000)
+    zIndex: 1,
+	//zIndex: 2e9, // The z-index (defaults to 2000000000)
 	top: 'auto', // Top position relative to parent in px
 	left: 'auto' // Left position relative to parent in px
 };
@@ -281,7 +282,7 @@ app.factory('$asksg', function ($http, $log) {
 		 * Hit the service controller to add a new subscription.
 		 */
 		addSubscription: function (ssid, ssname, sshandle) {
-			target = servicesUrl + "/subscribe?id=" + ssid + "&name=" + ssname + "&handle=" + sshandle;
+			target = servicesUrl + "/subscribe?id=" + ssid + "&name=" + encodeURIComponent(ssname) + "&handle=" + encodeURIComponent(sshandle);
 //                    console.log("shipping subscription data off to the server.");
 //                    tmp = JSON.stringify({id: ssid, name: ssname, handle: sshandle});
 //                    console.log(tmp);
@@ -368,8 +369,8 @@ app.factory('$asksg', function ($http, $log) {
 		}, 
 
         exportAnalyticsData: function (start, end) {
-            start = start.replace("/",".").replace("/",".");
-            end = end.replace("/",".").replace("/",".");
+            //start = start.replace("",".").replace("/",".");
+            //end = end.replace("/",".").replace("/",".");
             var target = exportUrl;
             if (start != null && start.length > 0) {
                 target = target + "?since=" + start;
@@ -942,7 +943,7 @@ app.directive('myDatepicker',function ($parse) {
 		$(function () {
 			element.datepicker({
 				inline: true,
-				dateFormat: 'mm/dd/yy',
+				dateFormat: 'yy-mm-dd   ',
 				onSelect: function (dateText, inst) {
 					scope.$apply(function (scope) {
 						// Change binded variable

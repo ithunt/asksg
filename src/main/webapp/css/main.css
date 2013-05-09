@@ -47,6 +47,7 @@ body {
     padding-bottom: 25px;
 }
 
+
 li.service-menu-item {
     background-color: #0000;
     background-image: none;
@@ -514,6 +515,10 @@ li.active {
 	-moz-border-radius: 6px;  
 	border-radius: 6px;  
 }*/
+
+.well {
+    width: 10;
+}
 
 /*.nav-header {  
 	font-size: 20px;  

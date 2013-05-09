@@ -70,8 +70,8 @@ public class ConversationServiceImpl implements ConversationService {
                 if (m.getContent().length() > 2000) m.setContent(m.getContent().substring(0, 2000));
 
                 //Check to see if this message already exists in the system, based on content and creation time
-                Specification<Message> spec = new EqualSpecification<Message>("content", m.getContent()); //would this be faster as a hash?
-                spec = spec.and(new EqualSpecification<Message>("created", m.getCreated()));
+                Specification<Message> spec = new EqualSpecification<Message>("created", m.getCreated());
+                //spec = spec.and(new EqualSpecification<Message>("identity", m.getIdentity()));
                 List<Message> ms = messageRepository.findAll(spec);
 
                 if (ms.size() == 0) {
