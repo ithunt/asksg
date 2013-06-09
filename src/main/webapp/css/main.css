@@ -49,13 +49,17 @@ body {
 
 
 li.service-menu-item {
-    background-color: #0000;
     background-image: none;
     border-bottom-color: #FFF;
     border-bottom-style: solid;
     border-bottom-width: 3px;
-    /*	padding-top: 5px;
-        padding-bottom: 5px;*/
+}
+
+li.read-menu-item {
+    background-image: none;
+    border-bottom-color: #FFF;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
 }
 
 .delete {
@@ -534,8 +538,8 @@ li.active {
 
     fill: none;
     stroke: black;
-    stroke-width;
-    1;
+    stroke-width: 1.0px;
+
 }
 
 .x.axis path {

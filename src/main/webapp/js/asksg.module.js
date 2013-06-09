@@ -65,15 +65,14 @@ function MessageResp(content, conversation) {
 /**
  * Conversation object constructor.
  */
-function Conversation(id, author, subject, messages, created, modified, service, read, hidden, privateConversation) {
+function Conversation(id, subject, messages, created, modified, service, read, hidden, privateConversation) {
 	this.id = id;
-	this.author = author;
 	this.subject = subject;
 	this.created_at = created;
 	this.modified_at = modified;
-	this.active = false;
 	this.service = service;
-	this.read = read;
+	this.service.config.updateFrequency = this.service.config.updateFrequency.minutes;
+	this.isRead = read;
 	this.hidden = hidden; // hidden
 	this.privateConversation = privateConversation;
 
@@ -82,17 +81,11 @@ function Conversation(id, author, subject, messages, created, modified, service,
 	for (var i = messages.length - 1; i >= 0; i--) {
 		this.messages[i] = new Message(messages[i].id, messages[i].author, messages[i].content, id, messages[i].privateMessage, messages[i].tags);
 	}
-
-	// Function to set this conversation as "active" in the UI
-	this.setActive = function (flag) {
-		this.active = flag;
-	}
 }
 
 /**
  * Provider config provider object constructor.
  */
-	//TODO: RENAME
 function ProviderConfig(id, authenticated, enabled, config, name, version) {
 	this.id = id;
 	this.authenticated = authenticated;
@@ -252,7 +245,9 @@ app.factory('$asksg', function ($http, $log) {
 		 * @param convo - the conversation to update.
 		 */
 		updateConvo: function (convo) {
-			return $http({method: 'UPDATE', url: convoUrl, data: JSON.stringify(convo)});
+			//drop service to allow conversation to be deserialized cleanly. (service is immutable from Conversation)
+			convo.service = null;
+			return $http({method: 'PUT', url: convoUrl, data: JSON.stringify(convo)});
 		},
 
 		/**
@@ -396,7 +391,7 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 		console.log("invoking the update analytics method...");
 		$('#messagePane').remove('.messagePaneError');
 		$('.messagePaneError').remove();
-		var target = document.getElementById('messagePane');
+		var target = document.getElementById('analytics-spinner');
 		var spinner = new Spinner(opts).spin(target);
 		$asksg.fetchAnalyticsData(analyticsStartDate, analyticsEndDate).
 			success(function (data, status, headers, config) {
@@ -411,11 +406,11 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 					console.log("Error occured while trying to render graphs...");
 				}
 				spinner.stop();
-				$('#messagePane').remove('.spinner');
+				$('#analytics-spinner').remove('.spinner');
 			}).
 			error(function (data, status, headers, config) {
 				spinner.stop();
-				$('#messagePane').remove('.spinner');
+				$('#analytics-spinner').remove('.spinner');
 				console.log("Failed grabbing the social subscriptions");
 				return null;
 			});
@@ -480,7 +475,7 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 				// Parse the JSON response data and create a list of Conversation objects to store in the scope
 				if (data.length > 0) {
 					$scope.convos = new Array();
-					$scope.convoMap = new Array();
+					$scope.convoMap = {};
 					for (var i = 0; i < data.length; i++) {
 						var conversation = angular.fromJson(data[i]);
 
@@ -489,10 +484,9 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 						console.log(createdDate);
 
 						// Create the object and store it
-						$scope.convos[i] = new Conversation(conversation.id,
-							conversation.author, conversation.subject, conversation.messages,
+						$scope.convos[i] = new Conversation(conversation.id, conversation.subject, conversation.messages,
 							createdDate, modifiedDate,
-							conversation.service, conversation.read, conversation.hidden,
+							conversation.service, conversation.isRead, conversation.hidden,
 							conversation.privateConversation);
 						$scope.convoMap[conversation.id] = $scope.convos[i];
 					}
@@ -507,9 +501,9 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
 	$scope.buildConversationParams = function (params) {
 		//build filters
 		if ($scope.filterTagArray['read'] || $scope.filterTagArray['unread']) {
-			params.showRead = $scope.filterTagArray['unread'];
+			params.showRead = !$scope.filterTagArray['unread'];
 		}
-		params.excludeServices = $scope.excludeServices;
+		params.includeServices = $scope.includeServices;
 		//todo : reenable - needs backend support
 		//params.filterString = $scope.refineFilterString;
 		if ($scope.runonce) {
@@ -791,17 +785,17 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
         $scope.refreshConvos();
     };
 
-    /*
-     * Determine if a conversation is active.
-     */
-    $scope.isConvoActive = function (convoId) {
-        return $scope.convoMap[convoId].active;
-    }
-
-    $scope.toggleReadConvo = function (convoId) {
-        $scope.convoMap[convoId].read = !$scope.convoMap[convoId].read;
-        $asksg.updateConvo($scope.convoMap[convoId]);
-    }
+	$scope.toggleReadConvo = function (convoId) {
+		$scope.convoMap[convoId].isRead = !$scope.convoMap[convoId].isRead;
+		$asksg.updateConvo($scope.convoMap[convoId]).success(function (data, status, headers, config){
+			if($scope.filterTagArray['read'] || $scope.filterTagArray['unread']){
+				$scope.convos = _.reject($scope.convos, function(convo){
+					return convo.id == convoId;
+				});
+			}
+			//todoupdate current pos (newer / older), get 1 more conversation
+		});
+	}
 
     /*
      * Hide the specified conversation (mark as read).
@@ -871,35 +865,52 @@ app.controller('ConversationController', ['$scope', '$asksg', '$log', function (
     $scope.convoFilter = "";
 
     // Array to store the state of active conversation filters
-    $scope.excludeServices = Array();
+	$scope.includeServices = Array();
 
     // Array to store the state of the active tag filters
     $scope.filterTagArray = Array();
     $scope.filterTagArray['read'] = false;
-    $scope.filterTagArray['unread'] = false;
+	$scope.filterTagArray['unread'] = true;
 
-    $scope.excludeService = function(service){
-        var index = $.inArray(service, $scope.excludeServices);
-        if(index === -1){
-            $scope.excludeServices.push(service);
-        }
-        else{
-            $scope.excludeServices.splice(index,1);
-        }
-        $scope.refreshConvos();
-    };
+	$scope.includeService = function(service){
+		var index = $.inArray(service, $scope.includeServices);
+		if(index === -1){
+			$scope.includeServices.push(service);
+		}
+		else{
+			$scope.includeServices.splice(index,1);
+		}
+		$scope.refreshConvos();
+	};
 
     /*
      * Filter functions...
      */
-    $scope.filterRead = function () {
-        $scope.filterTagArray['read'] = !$scope.filterTagArray['read'];
-        $scope.refreshConvos();
-    };
-    $scope.filterUnread = function () {
-        $scope.filterTagArray['unread'] = !$scope.filterTagArray['unread'];
-        $scope.refreshConvos();
-    };
+	$scope.filterRead = function () {
+		$scope.filterTagArray['read'] = true;
+		$scope.filterTagArray['unread'] = false;
+		$("#service-item-unread").removeClass('active');
+		$("#service-item-read").addClass('active');
+		$("#service-item-readandunread").removeClass('active');
+		$scope.refreshConvos();
+	};
+	$scope.filterUnread = function () {
+		$scope.filterTagArray['read'] = false;
+		$scope.filterTagArray['unread'] = true;
+		$("#service-item-unread").addClass('active');
+		$("#service-item-read").removeClass('active');
+		$("#service-item-readandunread").removeClass('active');
+		$scope.refreshConvos();
+	};
+
+	$scope.filterReadAndUnread = function(){
+		$scope.filterTagArray['read'] = false;
+		$scope.filterTagArray['unread'] = false;
+		$("#service-item-unread").removeClass('active');
+		$("#service-item-read").removeClass('active');
+		$("#service-item-readandunread").addClass('active');
+		$scope.refreshConvos();
+	};
 
     // Set the user name
     $scope.localUserName = "Admin"; // this should be replaced by response from server
@@ -1002,7 +1013,20 @@ app.directive('myDatepicker',function ($parse) {
                 });
             }
         }
-    }).directive('dndBetweenList', function($parse) {
+    }).directive('showonhoverparent', function(){
+		return {
+			link: function(scope, element, attrs){
+				element.parent().parent().bind('mouseenter', function() {
+					element.show();
+					element.css('visibility','visible');
+				});
+				element.parent().parent().bind('mouseleave', function() {
+					element.hide();
+					element.css('visibility','visible');
+				});
+			}
+		}
+	}).directive('dndBetweenList', function($parse) {
  
     return function(scope, element, attrs) {
  

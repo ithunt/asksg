@@ -26,7 +26,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public class ConversationServiceImpl implements ConversationService {
@@ -113,7 +115,7 @@ public class ConversationServiceImpl implements ConversationService {
 	public List<Conversation> findAllConversations(
 			final Optional<Integer> since,
 			final Optional<Integer> until,
-			final String[] excludeServices,
+			final String[] includeServices,
 			final String[] includeTags,
 			final Optional<Boolean> showRead,
 			final int count) {
@@ -124,16 +126,19 @@ public class ConversationServiceImpl implements ConversationService {
 		if (until.isPresent()) spec = spec.and(new IdUntilSpecification<Conversation>(until.get()));
 		if (showRead.isPresent()) spec = spec.and(new EqualSpecification<Conversation>("isRead", showRead.get()));
 
-		for (String service : excludeServices) {
-			spec = spec.and((new ServiceSpecification<Conversation>(service)).not());
+		Iterator<String> serviceIterator = Arrays.asList(includeServices).iterator();
+		if(serviceIterator.hasNext()){
+			spec = spec.and(new ServiceSpecification<Conversation>(serviceIterator.next()));
+			while (serviceIterator.hasNext()){
+				spec = spec.or(new ServiceSpecification<Conversation>(serviceIterator.next()));
+			}
 		}
-		boolean first = true;
-		for (String tag : includeTags) {
-			if(first){
-				spec = spec.and(new TagSpecification<Conversation>(tag));
-				first = false;
-			} else {
-				spec = spec.or(new TagSpecification<Conversation>(tag));
+
+		Iterator<String> tagIterator = Arrays.asList(includeTags).iterator();
+		if(tagIterator.hasNext()){
+			spec = spec.and(new TagSpecification<Conversation>(tagIterator.next()));
+			while(tagIterator.hasNext()){
+				spec = spec.or(new TagSpecification<Conversation>(tagIterator.next()));
 			}
 		}
 

@@ -88,7 +88,7 @@
 				<ul class="nav nav-list">
 					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Services</li>
 					<li ng-repeat="service in serviceList" id="service-item-{{service}}"
-					    class="active service-menu-item" ng-click="excludeService(service)">
+					    class="service-menu-item" ng-click="includeService(service)">
 						<a href="#"><img src="../img/{{service}}.png">&nbsp;{{service}}</a>
 				</ul>
 			</div>
@@ -97,10 +97,9 @@
 			<div class="well sidebar-nav">
 				<ul class="nav nav-list">
 					<li class="nav-header" style="color:black; font-size:24px;padding-bottom:20px;">Filters</li>
-					<li id="service-item-read" class="service-menu-item" ng-click="filterRead()"><a
-							href="#">Read</a></li>
-					<li id="service-item-unread" class="active service-menu-item" ng-click="filterUnread()"><a
-							href="#">Unread</a></li>
+					<li id="service-item-readandunread" class="read-menu-item" ng-click="filterReadAndUnread()"><a href="#">All</a></li>
+					<li id="service-item-read" class="read-menu-item" ng-click="filterRead()"><a href="#">Read</a></li>
+					<li id="service-item-unread" class="active read-menu-item" ng-click="filterUnread()"><a	href="#">Unread</a></li>
 				</ul>
 			</div>
 
@@ -144,51 +143,53 @@
 				<ul class="convo-list infinite-scroll">
 					<li class="convo-list-item-msg"
 					    ng-repeat="convo in convos">
-						<div ng-mouseenter="convo.setActive(true)" ng-mouseleave="convo.setActive(false)">
-
-							<!-- Options menu for the conversation -->
-							<div class="dropdown delete pull-right" showonhoverparent>
-								<!-- ng-show="isConvoActive(convo.id)" -->
-								<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
-								<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-									<li role="presentation"><a ng-click="toggleReadConvo(convo.id)" role="menuitem"
-									                           tabindex="-1" href="#">Mark as Read/Unread</a></li>
-									<li role="presentation"><a ng-click="toggleHideConvo(convo.id)" role="menuitem"
-									                           tabindex="-1" href="#">Hide/Unhide</a></li>
-									<li role="presentation" class="divider"></li>
-									<li role="presentation"><a ng-click="deleteConvo(convo.id)" role="menuitem"
-									                           tabindex="-1" href="#">Delete</a></li>
-								</ul>
-							</div>
-
-							<div class="{{convo.service.name}}-img"
-							     ng-class="{privateMessage: convo.privateConversation}"></div>
-							<h5>
-								<b>{{convo.messages[0].author}}: <i>{{convo.subject}}</i></b>
-							</h5>
-
-							<!-- The message/conversation response form -->
-							<div ng-hide="convo.hidden == true">
-								<!-- List the messages -->
-								<div class="msg-header" ng-repeat="message in convo.messages">
-									<div my-tagbox message="message" class="tag-list" style="margin-bottom: 20px">
-										<div class="tags"></div>
-									</div>
-
-									<!-- put the messages in reverse order -->
-									<p>
-										<i class="icon-chevron-right"></i>{{message.author}} : {{message.content}}
-									</p>
+						<div class="row-fluid" style="margin-top: 8px">
+							<div class="pull-right span2">
+								<button ng-hide="convo.isRead" ng-click="toggleReadConvo(convo.id)" class="btn">Mark Read</button>
+								<!-- Options menu for the conversation -->
+								<div class="dropdown delete hidden" showonhoverparent>
+									<a class="dropdown-toggle" data-toggle="dropdown" href="#">Options</a>
+									<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+										<li role="presentation"><a ng-click="toggleReadConvo(convo.id)" role="menuitem"
+										                           tabindex="-1" href="#">Mark as Read/Unread</a></li>
+										<li role="presentation"><a ng-click="toggleHideConvo(convo.id)" role="menuitem"
+										                           tabindex="-1" href="#">Hide/Unhide</a></li>
+										<li role="presentation" class="divider"></li>
+										<li role="presentation"><a ng-click="deleteConvo(convo.id)" role="menuitem"
+										                           tabindex="-1" href="#">Delete</a></li>
+									</ul>
 								</div>
-
-								Created: {{convo.created_at.toLocaleString();}}
+							</div>
+							<div class="span10">
+								<div class="{{convo.service.name}}-img"
+								     ng-class="{privateMessage: convo.privateConversation}"></div>
+								<h5>
+									<b>{{convo.messages[0].author}}: <i>{{convo.subject}}</i></b>
+								</h5>
 
 								<!-- The message/conversation response form -->
-								<div id="response-form-{{convo.id}}" class="responseForm">
-									<form ng-submit="doPostMessage(messageResp, convo.id)">
-										<input class="input-xlarge focused" ng-model="messageResp"/>
-										<button class="btn" type="submit">Submit Message</button>
-									</form>
+								<div ng-hide="convo.hidden == true">
+									<!-- List the messages -->
+									<div class="msg-header" ng-repeat="message in convo.messages">
+										<div my-tagbox message="message" class="tag-list" style="margin-bottom: 20px">
+											<div class="tags"></div>
+										</div>
+
+										<!-- put the messages in reverse order -->
+										<p>
+											<i class="icon-chevron-right"></i>{{message.author}} : {{message.content}}
+										</p>
+									</div>
+
+									Created: {{convo.created_at.toLocaleString();}}
+
+									<!-- The message/conversation response form -->
+									<div id="response-form-{{convo.id}}" class="responseForm">
+										<form ng-submit="doPostMessage(messageResp, convo.id)">
+											<input class="input-xlarge focused" ng-model="messageResp"/>
+											<button class="btn" type="submit">Submit Message</button>
+										</form>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -738,7 +739,8 @@
 				<div class="span8" style="padding-left:20px;">
 					<!-- <h2>Main Analytics</h2> -->
 					<div id="analyticsPane">
-
+						<div id="analytics-spinner">
+						</div>
 						<p id="messagePane">
 
 						</p>

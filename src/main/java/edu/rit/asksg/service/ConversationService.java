@@ -16,7 +16,7 @@ public interface ConversationService {
 	List<Conversation> findAllConversations(
 			Optional<Integer> since,
 			Optional<Integer> until,
-			String[] excludeServices,
+			String[] includeServices,
 			String[] includeTags,
 			Optional<Boolean> showRead,
 			int count);

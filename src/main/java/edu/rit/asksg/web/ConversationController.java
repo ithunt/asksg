@@ -29,7 +29,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.roo.addon.web.mvc.controller.json.RooWebJson;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
@@ -141,9 +143,9 @@ public class ConversationController {
 		if (b != null)
 			read = Optional.of(Boolean.parseBoolean(b));
 
-		String[] excludeServices = params.getParameterValues("excludeServices[]");
-		if (excludeServices == null) {
-			excludeServices = new String[0];
+		String[] includeServices = params.getParameterValues("includeServices[]");
+		if (includeServices == null) {
+			includeServices = new String[0];
 		}
 
 		String[] includes = params.getParameterValues("includeTags[]");
@@ -151,7 +153,7 @@ public class ConversationController {
 
 
 		List<Conversation> conversations = conversationService.findAllConversations(
-				since, until, excludeServices, includes, read, count);
+				since, until, includeServices, includes, read, count);
 
         if(principal == null || !userService.isAdmin(principal.getName())) {
             for(Conversation conversation : conversations) {
@@ -170,6 +172,25 @@ public class ConversationController {
 		}
 
 		return new ResponseEntity<String>(Conversation.toJsonArray(conversations), headers, HttpStatus.OK);
+	}
+
+	/**
+	 * Override put method, only copy the hidden and read attributes over to the new conversation
+	 * @param json Conversation to update
+	 * @return Updated conversation object
+	 */
+	@RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
+	public ResponseEntity<String> updateFromJson(@RequestBody String json) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json");
+		Conversation conversation = Conversation.fromJsonToConversation(json);
+		Conversation target = conversationService.findConversation(conversation.getId());
+		target.setHidden(conversation.getHidden());
+		target.setIsRead(conversation.getIsRead());
+		if (conversationService.updateConversation(target) == null) {
+			return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>(headers, HttpStatus.OK);
 	}
 
 	private void bootstrapProviders() {

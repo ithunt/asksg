@@ -47,17 +47,6 @@ privileged aspect ConversationController_Roo_Controller_Json {
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
     
-    @RequestMapping(method = RequestMethod.PUT, headers = "Accept=application/json")
-    public ResponseEntity<String> ConversationController.updateFromJson(@RequestBody String json) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        Conversation conversation = Conversation.fromJsonToConversation(json);
-        if (conversationService.updateConversation(conversation) == null) {
-            return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
-    }
-    
     @RequestMapping(value = "/jsonArray", method = RequestMethod.PUT, headers = "Accept=application/json")
     public ResponseEntity<String> ConversationController.updateFromJsonArray(@RequestBody String json) {
         HttpHeaders headers = new HttpHeaders();
